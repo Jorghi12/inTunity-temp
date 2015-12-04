@@ -1,0 +1,45 @@
+  
+<link rel="stylesheet" type="text/css" href="/app/style.css">
+
+<!--NAVBAR-->
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="logo">
+      <a ng-click="home()" href = ""><img src="images/logo.png" height="50px"></a>
+      <div class="navbar-links">
+        <a ng-click = "logout()" href = ""><h3 id="logout">Logout, {{owner}}</h3></a>
+        <a ng-click = "addSong()" href = ""><h3 id = "navbar-link">Add a Song</h3></a>
+    <!--     <a ng-click = "about()"><h3>About</h3></a> -->
+      </div>
+    </div>
+  </div>
+</nav>
+
+    <!--PAGE CONTENTS-->
+<div class = "bkg" style = "height:100%; width:100%; position:absolute">
+  <div class="content">
+    <div class="col-sm-12 text-center">
+      <h2>What is your motivation today? Tell a story with music!</h2>
+      <span class="search-line">
+        <h3>Search:&nbsp;</h3>
+        <input type = "search" name="findSong" ng-model="search" ng-model-options='{ debounce: 500 }' ng-change="findSong()">
+      </span>
+      <!--<input type="button" id="btnSearch" value="Search" ng-click="findSong()">-->
+      <br>
+      <hr>
+      <div id = "searchResults">
+        <h3>Please Enter a Search Query</h3>
+      </div>
+      <br>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class = "container">
+          <div id="putTheWidgetHere"></div>
+      </div>
+  </div>
+  
+</div>    
+
+

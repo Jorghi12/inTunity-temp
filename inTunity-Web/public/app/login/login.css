@@ -1,0 +1,76 @@
+#bkgImage {
+    background: url("/images/splashscreen/back1.jpg")  no-repeat center center fixed;
+    height:100%;
+    width:100%;
+    position:fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin: 0;
+}
+
+/* This is all used to center the text in the very middle */
+#phrase {
+    height:100%;
+    position: absolute;
+    top:40%;
+    width:100%;
+    text-align: center;
+    font-size: 60px;
+    color:white;
+}
+
+.logo {
+    line-height:50px;
+}
+
+.logo a{
+    color:black;
+}
+
+.logo img {
+    float:left;
+    vertical-align: middle;
+}
+
+.navbar-links a {
+    float:right;
+    padding-top: 0px;
+    color:black;
+    margin-left:5%;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Archivo Narrow', sans-serif;
+}
+
+.navbar-fixed-top {
+    background-color: #F5F5F5;
+}
+
+.navbar-fixed-top {
+    background-color: #F5F5F5;
+    border: 1px solid #202020;
+    -webkit-box-shadow: 0px 0px 8px 2px #000000;
+    -moz-box-shadow:    0px 0px 8px 2px #000000;
+    box-shadow:         0px 0px 8px 2px #000000;
+}
+
+.navbar-links a {
+    float:right;
+    padding-top: 0px;
+    color:black;
+    margin-left:5%;
+    text-decoration: none;
+}
+
+.navbar-links h3 {
+    margin-top: 10px;
+}
+
+.container {
+    width:85%;
+}

@@ -1,0 +1,19 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="logo">
+      <a ng-click="home()" href = ""><img src="images/logo.png" height="50px"></a>
+      <div class="navbar-links">
+        <a ng-click = "logout()" href = ""><h3 id="logout">Logout, {{owner}}</h3></a>
+        <a ng-click = "addSong()" href = ""><h3 id = "navbar-link">Add a Song</h3></a>
+    <!--     <a ng-click = "about()"><h3>About</h3></a> -->
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section>
+
+	<h2>Hi, this is the profile page!</h2>
+   <h1>{{users[whichItem].nickname}}</h1>
+
+</section>

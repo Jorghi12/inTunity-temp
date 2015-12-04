@@ -1,0 +1,71 @@
+
+<link rel="stylesheet" type="text/css" href="/app/style.css">
+
+
+<!--NAVBAR-->
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="logo">
+    	<a ng-click = "home()" href = ""><img src="images/logo.png" height="50px"></a>
+    	<div class="navbar-links">
+        <a ng-click = "logout()" href = ""><h3 id="logout">Logout, {{owner}}</h3></a>
+        <a ng-click = "addSong()" href = ""><h3 id = "navbar-link">Add a Song</h3></a>
+<!--     		<a ng-click= "about()"><h3>About</h3></a> -->
+    	</div>
+    </div>
+  </div>
+</nav>
+
+<!--PAGE CONTENTS-->
+<div class = "bkg" style = "width:100%; height:100%; position:absolute">
+  <div class="content">
+    <div class="col-sm-12 text-center">
+      <h2>What is your motivation today? Tell a story with music:</h2>
+      <div class="add-button">
+        <a ng-click = "addSong()" href = "">
+          <h2>Add a Song</h2>
+        </a>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <div class = "container" id = "wallfeed" ng-repeat = "item in users">
+        <hr>
+        <div class = "row" id = "song{{users.indexOf(item)}}">
+          <div class = "col-md-6 text-center album">
+            <button class = "playButton" ng-click = 'playSpecificSong(users.indexOf(item))'>
+              <img style = "width:250px; height:250px;"ng-src = "{{item.song.song_album_pic}}">
+            </button>  
+          </div>
+          <div class = "col-md-6 text-center info">
+            <h2>{{item.song.song_title}}</h2>
+            <div class="col-md-4">
+              <a href = "#/profile/{{users.indexOf(item)}}"> 
+                <img class = "img-circle" ng-src = "{{item.picture}}">
+              </a>
+            </div>
+
+            <div class = "col-md-8 text-center prof-info">
+              <h3>{{item.nickname}}</h3>
+              <h4>{{item.song.timeStamp}} | {{item.song.dayStamp}}</h4>
+            </div>
+          </div>
+        </div>
+
+ 
+
+
+      </div> 
+    </div>
+  </div>
+
+
+  <div id="footer">
+    <div class = "container" >
+          <div id="putTheWidgetHere"></div>
+      </div>
+  </div>
+</div>
+
+
+
