@@ -68,7 +68,7 @@ angular.module( 'inTunity.about', [
       $location.path("/");
 
 
-    $http.post('http://localhost:3001/secured/account', {data: user_account}, { 
+    $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/account', {data: user_account}, { 
         headers: {
         'Accept' : '*/*',
         'Content-Type': 'application/json'
