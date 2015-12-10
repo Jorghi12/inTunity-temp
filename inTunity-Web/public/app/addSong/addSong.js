@@ -124,7 +124,7 @@ angular.module( 'inTunity.addSong', [
     console.log(artwork)
     console.log(title);
 
-    var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+    var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
 
     var today = new Date();
     var month = monthNames[today.getMonth()];
@@ -146,9 +146,13 @@ angular.module( 'inTunity.addSong', [
     }
 
 
+
     if (hour.length == 1) {
       hour = "0" + hour;
     }
+
+
+
     if (min.length == 1) {
       min = "0" + min;
     }

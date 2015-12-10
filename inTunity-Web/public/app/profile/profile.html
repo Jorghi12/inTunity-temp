@@ -11,9 +11,21 @@
   </div>
 </nav>
 
-<section>
+<div>
 
-	<h2>Hi, this is the profile page!</h2>
-   <h1>{{users[whichItem].nickname}}</h1>
 
-</section>
+  <h1 style = "margin-top:50px">{{users[whichItem].nickname}}</h1>
+
+    
+  <div id = "song-list" ng-repeat = "item in users[whichItem].song_history">
+    <p>{{item}}</p>
+  </div>
+
+
+
+
+ 
+
+
+
+</div>

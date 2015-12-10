@@ -48,7 +48,19 @@ angular.module( 'inTunity.profile', [
     $scope.users = (response["data"]["songs"]);
     $scope.whichItem = $routeParams.itemId;
 
+    console.log($scope.users);
+
+
+    var container = document.getElementById("song-list");
+
+
+
+
+
   }); // end of http get
+
+
+
 
 
 

@@ -40,7 +40,7 @@ app.all('/api/*', cors(cors_options));
 app.set('port', 3005);
 
 var User = require('./model/User.js');
-// var Doctor = require('./model/Doctor.js');
+var SongHistory = require('./model/SongHistory.js');
 // var Event = require('./model/Event.js');
 
 //routes
@@ -127,7 +127,7 @@ router.get('/api/accounts/' , function (req, res, next) {
 	  		"Dec" : 11,
 	  		"Nov" : 10,
 	  		"Oct" : 9,
-	  		"Sept": 8,
+	  		"Sep" : 8,
 	  		"Aug" : 7,
 	  		"Jul" : 6,
 	  		"Jun" : 5,
@@ -144,19 +144,21 @@ router.get('/api/accounts/' , function (req, res, next) {
 
 	  		var year = parseInt(day.substring(7));
 	  		var month = months[(day.substring(0,3))];
-	  		var day = parseInt(day.substring(4,5));
+	  		var comma = day.indexOf(",");
+	  		var day = parseInt(day.substring(4,comma));
 
-	  		var hours = parseInt(time.substring(0,2));
-	  		var min = parseInt(time.substring(3,5));
 
-	  		var am_pm = time.substring(6);
+	  		// getting all the individual time components
+	  		var colon = time.indexOf(":");
+	  		var space = time.indexOf(" ");
+	  		var hours = parseInt(time.substring(0,colon));
+	  		var min = parseInt(time.substring(colon + 1,space));
+	  		var am_pm = time.substring(space + 1);
 
 	  		if (am_pm == "PM") {
 	  			hours = hours + 12;
 	  		}
 
-
-	  		console.log("Hour: " + hours + " Min: " + min);
 
 	  		var song_created_at_date = new Date(year, month, day, hours, min).getTime()/1000;
 	  		console.log(song_created_at_date);
@@ -165,7 +167,7 @@ router.get('/api/accounts/' , function (req, res, next) {
 	  		console.log(todayTime - song_created_at_date);
 
 	  		// a diff of 600 is about 10 min
-	  		if (todayTime - song_created_at_date >= 1440) {
+	  		if (todayTime - song_created_at_date >= 86400) {
 	  			console.log("past expiration time");
 
 	  			userObj[i].today_song.created_at_time = '';
@@ -182,14 +184,7 @@ router.get('/api/accounts/' , function (req, res, next) {
 	                 	console.log('song got updated');
 	           		}
 	         	});
-
-
-
 	  		}
-
-
-
-
 	  	}
 
 	  	console.log(userObj);
@@ -219,28 +214,29 @@ router.post('/api/accounts/updateSong' , function (req, res, next) {
 	  	userObj.today_song.created_at_time = req.body.timeStamp;
 	  	userObj.today_song.created_at_day = req.body.timeDay;
 
+
+	  	var song = new SongHistory({
+		   	song_title: req.body.song_title,
+			song_album_pic: req.body.song_artwork,
+			song_url: req.body.song_url,
+			created_at_time: req.body.timeStamp,
+			created_at_day: req.body.timeDay
+	    });
+
+	  	userObj.song_history.push(song);
+
 	    userObj.save(function(err) {
 	    	if (err) {
 	    		throw err;
 	    	}	
-    		console.log('successfully updated user song!');
     		res.sendStatus(200);
   		});	
 
 
-  		console.log(userObj);
+  		console.log("Updated user after posting song" + userObj);
 	  } 
 	});
 });	
-
-
-
-
-	
-
-
-
-
 
 
 app.use(router);
