@@ -6,12 +6,12 @@ var User = new Schema({
 	nickname: String,
 	picture: String,
 	email: String,
-	song: {
+	today_song: {
 		song_title: String,
 		song_album_pic: String,
 		song_url: String,
-		timeStamp: String,
-		dayStamp: String,
+		created_at_time: String,
+		created_at_day: String,
 
 	}
 	

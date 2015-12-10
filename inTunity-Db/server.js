@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 
 var dbName = 'inTunity';
 
-mongoose.connect('mongodb://ec2-52-35-92-198.us-west-2.compute.amazonaws.com/' + dbName);
+mongoose.connect('mongodb://localhost:27017/' + dbName);
 
 app.use(session({
 	secret: 'inTunity',
@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 
-var whitelist = ['http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:8100'];
+var whitelist = ['http://localhost:8100'];
 var cors_options = {
 	origin: function (origin, callback) {
 		var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
@@ -48,45 +48,58 @@ var router = express.Router();
 
 
 router.post('/api/accounts', function (req, res, next) {
-
-
-
 	console.log("about to post a user!!!");
 
+	  // User.find({  }, function(err, user) {
+   //    if (err) {
+   //            throw err;
+   //    }
+
+   //    console.log("delete");
+   //      // delete him
+   //     User.remove(function(err) {
+   //    if (err) {
+   //            throw err;
+   //    }
+   //    console.log('User successfully deleted!');
+   //    res.send(200);
+   //    });
+   //  });
+
+
 	var newUser = new User({
-                user_id: req.body.user_id,
-                nickname: req.body.nickname,
-                picture: req.body.picture,
-                email: req.body.email,
-                song: {
-                        song_name: "",
-                        song_album_pic: "",
-                        song_url: ""
-                }
-        });
+	    user_id: req.body.user_id,
+	    nickname: req.body.nickname,
+	    picture: req.body.picture,
+	    email: req.body.email,
+	    today_song: {
+	            song_name: "",
+	            song_album_pic: "",
+	            song_url: "",
+	            created_at_time: "",
+				created_at_day: "",
+	    }
+    });
 
-         User.findOne({user_id: req.body.user_id}, function (err, userObj) {
-            if (err) {
-              console.log(err);
-              res.sendStatus(500);
-            } else if (userObj) {
-              console.log('Found:', userObj);
-              res.sendStatus(500);
-            } else {
-              console.log('User not found!');
-
-                newUser.save(function(err) {
-                   if (err) {
-                         throw err;
-                   }     else {
-                         console.log('User created!');
-                         res.sendStatus(200);
-                   }
-                 });
-            }
-          });
-
-
+	 User.findOne({user_id: req.body.user_id}, function (err, userObj) {
+	    if (err) {
+	      console.log(err);
+	      res.sendStatus(500);
+	    } else if (userObj) {
+	      console.log('Found:', userObj);
+	      res.sendStatus(500);
+	    } else {
+	      console.log('User not found!');
+	        newUser.save(function(err) {
+	           if (err) {
+	                 throw err;
+	           }     else {
+	                 console.log('User created!');
+	                 res.sendStatus(200);
+	           }
+	         });
+	    }
+	  });
 });
 
 
@@ -97,6 +110,89 @@ router.get('/api/accounts/' , function (req, res, next) {
 	    console.log(err);
 	    res.sendStatus(500);
 	  } else if(userObj) {
+
+	  	console.log(userObj.length);
+
+
+	  	// update the timer in here after expiration
+	  	// if expired, make that entry null in the db
+
+	  	var today = new Date();
+
+	  	// unix time 
+	  	var todayTime = today.getTime()/1000;
+	  	console.log(todayTime);
+
+	  	var months = {
+	  		"Dec" : 11,
+	  		"Nov" : 10,
+	  		"Oct" : 9,
+	  		"Sept": 8,
+	  		"Aug" : 7,
+	  		"Jul" : 6,
+	  		"Jun" : 5,
+	  		"May" : 4,
+	  		"Apr" : 3,
+	  		"Mar" : 2,
+	  		"Feb" : 1,
+	  		"Jan" : 0
+	  	}
+
+	  	for (var i = 0; i < userObj.length; i++) {
+	  		var time = userObj[i].today_song.created_at_time;
+	  		var day = userObj[i].today_song.created_at_day;
+
+	  		var year = parseInt(day.substring(7));
+	  		var month = months[(day.substring(0,3))];
+	  		var day = parseInt(day.substring(4,5));
+
+	  		var hours = parseInt(time.substring(0,2));
+	  		var min = parseInt(time.substring(3,5));
+
+	  		var am_pm = time.substring(6);
+
+	  		if (am_pm == "PM") {
+	  			hours = hours + 12;
+	  		}
+
+
+	  		console.log("Hour: " + hours + " Min: " + min);
+
+	  		var song_created_at_date = new Date(year, month, day, hours, min).getTime()/1000;
+	  		console.log(song_created_at_date);
+
+
+	  		console.log(todayTime - song_created_at_date);
+
+	  		// a diff of 600 is about 10 min
+	  		if (todayTime - song_created_at_date >= 1440) {
+	  			console.log("past expiration time");
+
+	  			userObj[i].today_song.created_at_time = '';
+	  			userObj[i].today_song.created_at_day = '';
+	  			userObj[i].today_song.song_title = '';
+	  			userObj[i].today_song.song_url = '';
+	  			userObj[i].today_song.song_album_pic = '';
+
+
+	  			userObj[i].save(function(err) {
+	           		if (err) {
+	             		throw err;
+	           		} else {
+	                 	console.log('song got updated');
+	           		}
+	         	});
+
+
+
+	  		}
+
+
+
+
+	  	}
+
+	  	console.log(userObj);
 
 	  	res.send(userObj);
 	  } 
@@ -116,11 +212,12 @@ router.post('/api/accounts/updateSong' , function (req, res, next) {
 	    res.sendStatus(500);
 	  } else if(userObj) {
 
-	  	userObj.song.song_title = req.body.song_title;
-	  	userObj.song.song_url = req.body.song_url;
-	  	userObj.song.song_album_pic = req.body.song_artwork;
-	  	userObj.song.timeStamp = req.body.timeStamp;
-	  	userObj.song.dayStamp = req.body.timeDay;
+	  	console.log("updating...");
+	  	userObj.today_song.song_title = req.body.song_title;
+	  	userObj.today_song.song_url = req.body.song_url;
+	  	userObj.today_song.song_album_pic = req.body.song_artwork;
+	  	userObj.today_song.created_at_time = req.body.timeStamp;
+	  	userObj.today_song.created_at_day = req.body.timeDay;
 
 	    userObj.save(function(err) {
 	    	if (err) {
@@ -129,9 +226,14 @@ router.post('/api/accounts/updateSong' , function (req, res, next) {
     		console.log('successfully updated user song!');
     		res.sendStatus(200);
   		});	
+
+
+  		console.log(userObj);
 	  } 
 	});
 });	
+
+
 
 
 	

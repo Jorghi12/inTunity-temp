@@ -58,7 +58,7 @@ angular.module( 'inTunity.home', [
 
 
   $http({
-    url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/accounts' ,
+    url: 'http://localhost:3001/secured/accounts' ,
     method: 'GET'
   }).then(function(response) {  
     songdata = (response["data"]["songs"]);
@@ -68,10 +68,27 @@ angular.module( 'inTunity.home', [
     song_index = 0;
     window.song_array = [];
 
-    $scope.users = response["data"]["songs"];
+    var users = response["data"]["songs"];
 
+    // this array has users who only have songs with it
+    var correctUsers= [];
+  
+    // makes sure we only show users who have songs
+    for (var i = 0; i < users.length; i++) {
+      if (users[i]["today_song"]["song_url"] != "") {
+        console.log("user has a song for today");
+        correctUsers.push(users[i]);
+      } else {
+        console.log("user does not have a song for today");
+      }
+    }
+
+    $scope.users = correctUsers;
+
+
+    // adding all the songs to arr
     for (var i = 0; i < songdata.length; i++) {
-      songUrl = songdata[i]["song"]["song_url"];
+      songUrl = songdata[i]["today_song"]["song_url"];
       var entry = {
         url: songUrl
       }
@@ -81,18 +98,20 @@ angular.module( 'inTunity.home', [
 
     SC.initialize({
       client_id: '87be5093d25e70cbe11e0e4e6ae82ce7',
-      redirect_uri: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3000'
+      redirect_uri: 'http://localhost:3000'
     });
 
-   function findPos(obj) {
-  	var curtop = 0;
-  	if (obj.offsetParent) {
-  		do {
-  			curtop += obj.offsetTop - 50;
-  		} while (obj = obj.offsetParent);
-  	return [curtop];
-  	}
-   }
+
+    // goes to the correct position in the screen when songs changes
+    function findPos(obj) {
+        var curtop = 0;
+  	    if (obj.offsetParent) {
+  		      do {
+  			       curtop += obj.offsetTop - 50;
+  		      } while (obj = obj.offsetParent);
+            return [curtop];
+        }
+     }
 
 
     masterPlayer(song_array[0]["url"]);
@@ -126,17 +145,17 @@ angular.module( 'inTunity.home', [
 
       	//this is for resetting all the background color to its natural settings
       	for (var i = 0; i < song_array.length; i ++) {
-      	     var row = document.getElementById("song" + i);
-      	     row.style.backgroundColor = "#f5f5f5";
+      	   var row = document.getElementById("song" + i);
+      	   row.style.backgroundColor = "#f5f5f5";
       	}
 
         
-          widget.getCurrentSound(function (currentSound) {
+        widget.getCurrentSound(function (currentSound) {
             console.log(currentSound);
             var rowCurrent = document.getElementById("song"+song_index);
             rowCurrent.style.backgroundColor = "#ffe4c4";
 	          window.scroll(0,findPos(rowCurrent));
-        })
+        });
 
       }
 
@@ -151,10 +170,7 @@ angular.module( 'inTunity.home', [
         iframe = document.getElementsByTagName("iframe")[0];
         widget = SC.Widget(iframe); 
         widget.url= new_song;
-        console.log(widget);
-
-
-
+        // console.log(widget);
 
         masterPlayer(new_song["url"]);
       }
