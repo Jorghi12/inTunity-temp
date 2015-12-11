@@ -87,8 +87,8 @@ angular.module( 'inTunity.home', [
 
 
     // adding all the songs to arr
-    for (var i = 0; i < songdata.length; i++) {
-      songUrl = songdata[i]["today_song"]["song_url"];
+    for (var i = 0; i < correctUsers.length; i++) {
+      songUrl = correctUsers[i]["today_song"]["song_url"];
       var entry = {
         url: songUrl
       }
