@@ -138,54 +138,54 @@ router.get('/api/accounts/' , function (req, res, next) {
 	  		"Jan" : 0
 	  	}
 
-	  	for (var i = 0; i < userObj.length; i++) {
-	  		var time = userObj[i].today_song.created_at_time;
-	  		var day = userObj[i].today_song.created_at_day;
+	  	// for (var i = 0; i < userObj.length; i++) {
+	  	// 	var time = userObj[i].today_song.created_at_time;
+	  	// 	var day = userObj[i].today_song.created_at_day;
 
-	  		var year = parseInt(day.substring(7));
-	  		var month = months[(day.substring(0,3))];
-	  		var comma = day.indexOf(",");
-	  		var day = parseInt(day.substring(4,comma));
-
-
-	  		// getting all the individual time components
-	  		var colon = time.indexOf(":");
-	  		var space = time.indexOf(" ");
-	  		var hours = parseInt(time.substring(0,colon));
-	  		var min = parseInt(time.substring(colon + 1,space));
-	  		var am_pm = time.substring(space + 1);
-
-	  		if (am_pm == "PM") {
-	  			hours = hours + 12;
-	  		}
+	  	// 	var year = parseInt(day.substring(7));
+	  	// 	var month = months[(day.substring(0,3))];
+	  	// 	var comma = day.indexOf(",");
+	  	// 	var day = parseInt(day.substring(4,comma));
 
 
-	  		var song_created_at_date = new Date(year, month, day, hours, min).getTime()/1000;
-	  		console.log(song_created_at_date);
+	  	// 	// getting all the individual time components
+	  	// 	var colon = time.indexOf(":");
+	  	// 	var space = time.indexOf(" ");
+	  	// 	var hours = parseInt(time.substring(0,colon));
+	  	// 	var min = parseInt(time.substring(colon + 1,space));
+	  	// 	var am_pm = time.substring(space + 1);
+
+	  	// 	if (am_pm == "PM") {
+	  	// 		hours = hours + 12;
+	  	// 	}
 
 
-	  		console.log(todayTime - song_created_at_date);
-
-	  		// a diff of 600 is about 10 min
-	  		if (todayTime - song_created_at_date >= 86400) {
-	  			console.log("past expiration time");
-
-	  			userObj[i].today_song.created_at_time = '';
-	  			userObj[i].today_song.created_at_day = '';
-	  			userObj[i].today_song.song_title = '';
-	  			userObj[i].today_song.song_url = '';
-	  			userObj[i].today_song.song_album_pic = '';
+	  	// 	var song_created_at_date = new Date(year, month, day, hours, min).getTime()/1000;
+	  	// 	console.log(song_created_at_date);
 
 
-	  			userObj[i].save(function(err) {
-	           		if (err) {
-	             		throw err;
-	           		} else {
-	                 	console.log('song got updated');
-	           		}
-	         	});
-	  		}
-	  	}
+	  	// 	console.log(todayTime - song_created_at_date);
+
+	  	// 	// a diff of 600 is about 10 min
+	  	// 	if (todayTime - song_created_at_date >= 86400) {
+	  	// 		console.log("past expiration time");
+
+	  	// 		userObj[i].today_song.created_at_time = '';
+	  	// 		userObj[i].today_song.created_at_day = '';
+	  	// 		userObj[i].today_song.song_title = '';
+	  	// 		userObj[i].today_song.song_url = '';
+	  	// 		userObj[i].today_song.song_album_pic = '';
+
+
+	  	// 		userObj[i].save(function(err) {
+	   //         		if (err) {
+	   //           		throw err;
+	   //         		} else {
+	   //               	console.log('song got updated');
+	   //         		}
+	   //       	});
+	  	// 	}
+	  	// }
 
 	  	console.log(userObj);
 
