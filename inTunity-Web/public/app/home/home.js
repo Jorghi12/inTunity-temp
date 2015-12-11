@@ -113,7 +113,7 @@ angular.module( 'inTunity.home', [
         }
      }
 
-
+    console.log(song_array[0]["url"]);
     masterPlayer(song_array[0]["url"]);
     song_count +=1;
 
