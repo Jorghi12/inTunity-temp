@@ -138,6 +138,8 @@ router.get('/api/accounts/' , function (req, res, next) {
 	  		"Jan" : 0
 	  	}
 
+	  	console.log(userObj);
+
 	  	for (var i = 0; i < userObj.length; i++) {
 	  		var time = userObj[i].today_song.created_at_time;
 	  		var day = userObj[i].today_song.created_at_day;
@@ -147,10 +149,10 @@ router.get('/api/accounts/' , function (req, res, next) {
 	  		var comma = day.indexOf(",");
 	  		var whatday = parseInt(day.substring(4,comma));
 
-	  		console.log("dayStamp:" +  day)
-	  		console.log("year: " + year);
-	  		console.log("month: " + month);
-	  		console.log("day: " + whatday);
+	  		// console.log("dayStamp:" +  day)
+	  		// console.log("year: " + year);
+	  		// console.log("month: " + month);
+	  		// console.log("day: " + whatday);
 
 
 	  		// getting all the individual time components
@@ -166,10 +168,10 @@ router.get('/api/accounts/' , function (req, res, next) {
 
 
 	  		var song_created_at_date = new Date(year, month, whatday, hours, min).getTime()/1000;
-	  		console.log(song_created_at_date);
+	  		// console.log(song_created_at_date);
 
 
-	  		console.log(todayTime - song_created_at_date);
+	  		// console.log(todayTime - song_created_at_date);
 
 	  		// a diff of 600 is about 10 min
 	  		if (todayTime - song_created_at_date >= 86400) {
