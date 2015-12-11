@@ -145,11 +145,12 @@ router.get('/api/accounts/' , function (req, res, next) {
 	  		var year = parseInt(day.substring(7));
 	  		var month = months[(day.substring(0,3))];
 	  		var comma = day.indexOf(",");
-	  		var day = parseInt(day.substring(4,comma));
+	  		var whatday = parseInt(day.substring(4,comma));
 
+	  		console.log("dayStamp:" day)
 	  		console.log("year: " + year);
 	  		console.log("month: " + month);
-	  		console.log("day: " + day);
+	  		console.log("day: " + whatday);
 
 
 	  		// getting all the individual time components
@@ -164,7 +165,7 @@ router.get('/api/accounts/' , function (req, res, next) {
 	  		}
 
 
-	  		var song_created_at_date = new Date(year, month, day, hours, min).getTime()/1000;
+	  		var song_created_at_date = new Date(year, month, whatday, hours, min).getTime()/1000;
 	  		console.log(song_created_at_date);
 
 
