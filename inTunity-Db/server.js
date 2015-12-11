@@ -141,58 +141,63 @@ router.get('/api/accounts/' , function (req, res, next) {
 	  	console.log(userObj);
 
 	  	for (var i = 0; i < userObj.length; i++) {
-	  		var time = userObj[i].today_song.created_at_time;
-	  		var day = userObj[i].today_song.created_at_day;
 
-	  		var year = parseInt(day.substring(7));
-	  		var month = months[(day.substring(0,3))];
-	  		var comma = day.indexOf(",");
-	  		var whatday = parseInt(day.substring(4,comma));
+	  		if(userObj[i].today_song.song_url != '') {
+	  			var time = userObj[i].today_song.created_at_time;
+		  		var day = userObj[i].today_song.created_at_day;
 
-	  		// console.log("dayStamp:" +  day)
-	  		// console.log("year: " + year);
-	  		// console.log("month: " + month);
-	  		// console.log("day: " + whatday);
+		  		var year = parseInt(day.substring(7));
+		  		var month = months[(day.substring(0,3))];
+		  		var comma = day.indexOf(",");
+		  		var whatday = parseInt(day.substring(4,comma));
+
+		  		// console.log("dayStamp:" +  day)
+		  		// console.log("year: " + year);
+		  		// console.log("month: " + month);
+		  		// console.log("day: " + whatday);
 
 
-	  		// getting all the individual time components
-	  		var colon = time.indexOf(":");
-	  		var space = time.indexOf(" ");
-	  		var hours = parseInt(time.substring(0,colon));
-	  		var min = parseInt(time.substring(colon + 1,space));
-	  		var am_pm = time.substring(space + 1);
+		  		// getting all the individual time components
+		  		var colon = time.indexOf(":");
+		  		var space = time.indexOf(" ");
+		  		var hours = parseInt(time.substring(0,colon));
+		  		var min = parseInt(time.substring(colon + 1,space));
+		  		var am_pm = time.substring(space + 1);
 
-	  		if (am_pm == "PM") {
-	  			hours = hours + 12;
+		  		if (am_pm == "PM") {
+		  			hours = hours + 12;
+		  		}
+
+
+		  		var song_created_at_date = new Date(year, month, whatday, hours, min).getTime()/1000;
+		  		console.log(song_created_at_date);
+
+
+		  		console.log(todayTime - song_created_at_date);
+
+		  		// a diff of 600 is about 10 min
+		  		if (todayTime - song_created_at_date >= 86400) {
+		  			console.log("past expiration time");
+
+		  			userObj[i].today_song.created_at_time = '';
+		  			userObj[i].today_song.created_at_day = '';
+		  			userObj[i].today_song.song_title = '';
+		  			userObj[i].today_song.song_url = '';
+		  			userObj[i].today_song.song_album_pic = '';
+
+
+		  			userObj[i].save(function(err) {
+		           		if (err) {
+		             		throw err;
+		           		} else {
+		                 	console.log('song got updated');
+		           		}
+		         	});
+		  		}
 	  		}
 
-
-	  		var song_created_at_date = new Date(year, month, whatday, hours, min).getTime()/1000;
-	  		// console.log(song_created_at_date);
-
-
-	  		// console.log(todayTime - song_created_at_date);
-
-	  		// a diff of 600 is about 10 min
-	  		if (todayTime - song_created_at_date >= 86400) {
-	  			console.log("past expiration time");
-
-	  			userObj[i].today_song.created_at_time = '';
-	  			userObj[i].today_song.created_at_day = '';
-	  			userObj[i].today_song.song_title = '';
-	  			userObj[i].today_song.song_url = '';
-	  			userObj[i].today_song.song_album_pic = '';
-
-
-	  			userObj[i].save(function(err) {
-	           		if (err) {
-	             		throw err;
-	           		} else {
-	                 	console.log('song got updated');
-	           		}
-	         	});
-	  		}
-	  	}
+	  		
+	  	} // end of for loop
 
 	  	// console.log(userObj);
 
