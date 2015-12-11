@@ -147,7 +147,7 @@ router.get('/api/accounts/' , function (req, res, next) {
 	  		var comma = day.indexOf(",");
 	  		var whatday = parseInt(day.substring(4,comma));
 
-	  		console.log("dayStamp:" day)
+	  		console.log("dayStamp:" +  day)
 	  		console.log("year: " + year);
 	  		console.log("month: " + month);
 	  		console.log("day: " + whatday);
