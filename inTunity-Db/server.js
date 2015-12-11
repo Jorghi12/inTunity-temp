@@ -138,7 +138,7 @@ router.get('/api/accounts/' , function (req, res, next) {
 	  		"Jan" : 0
 	  	}
 
-	  	console.log(userObj);
+	  	// console.log(userObj);
 
 	  	for (var i = 0; i < userObj.length; i++) {
 
@@ -151,10 +151,10 @@ router.get('/api/accounts/' , function (req, res, next) {
 		  		var comma = day.indexOf(",");
 		  		var whatday = parseInt(day.substring(4,comma));
 
-		  		// console.log("dayStamp:" +  day)
-		  		// console.log("year: " + year);
-		  		// console.log("month: " + month);
-		  		// console.log("day: " + whatday);
+		  		console.log("dayStamp:" +  day)
+		  		console.log("year: " + year);
+		  		console.log("month: " + month);
+		  		console.log("day: " + whatday);
 
 
 		  		// getting all the individual time components
@@ -167,6 +167,10 @@ router.get('/api/accounts/' , function (req, res, next) {
 		  		if (am_pm == "PM") {
 		  			hours = hours + 12;
 		  		}
+
+		  		console.log("am or pm: " + am_pm);
+		  		console.log("hours: " + hours);
+		  		console.log("min: " + min);
 
 
 		  		var song_created_at_date = new Date(year, month, whatday, hours, min).getTime()/1000;
