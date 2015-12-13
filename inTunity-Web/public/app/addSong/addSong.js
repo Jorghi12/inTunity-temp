@@ -18,10 +18,7 @@ angular.module( 'inTunity.addSong', [
   
 
 
-  SC.initialize({
-    client_id: '87be5093d25e70cbe11e0e4e6ae82ce7',
-    redirect_uri: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3000'
-  });
+
 
   $scope.logout = function() {
     auth.signout();
@@ -37,6 +34,8 @@ angular.module( 'inTunity.addSong', [
   $scope.about = function() {
     $location.path('/about');
   }
+
+
 
 
  
@@ -59,9 +58,6 @@ angular.module( 'inTunity.addSong', [
       }).then(function(tracks) {
         var obj =(tracks);
         
-
-
-        console.log(tracks);
         for (var i = 0; i < obj.length; i++) {
 
           var albumArtwork;
@@ -73,8 +69,7 @@ angular.module( 'inTunity.addSong', [
              albumArtwork = "/images/no-art.png";
           }
 
-
-
+          
           var songContainer = document.createElement('div');
           songContainer.className = "col-md-6 search-result";
 
@@ -100,6 +95,7 @@ angular.module( 'inTunity.addSong', [
 
               var playbutton = "<div class='intunity-button play-button'><a href='' ng-click = 'boss(" + '"' + obj[i]['permalink_url'] + '"' + ")'><h4>" + "Sample Song" + "</h4></a></div>";
               var newbutton = "<div class='intunity-button choose-button'><a href='' ng-click = 'selectSong(" + '"' + obj[i]['permalink_url']  +  '"' + ', ' + '"' + obj[i]['artwork_url'] + '"'  + ', ' +   '"' + obj[i]['title']    + '"'        + ")'><h4>"+ "Confirm Song"  + "</h4></a></div>";
+            
               var playElement = $compile(playbutton)($scope)[0];
               var newElement = $compile(newbutton)($scope)[0];
 
@@ -117,6 +113,8 @@ angular.module( 'inTunity.addSong', [
       });
     }
   }
+
+
 
 
   $scope.selectSong = function(url, artwork, title) {
@@ -181,7 +179,7 @@ angular.module( 'inTunity.addSong', [
 
      console.log(song);
     
-    $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
+    $http.post('http://localhost:3001/secured/songs', {data: song}, { 
         headers: {
         'Accept' : '*/*',
         'Content-Type': 'application/json'
@@ -195,17 +193,55 @@ angular.module( 'inTunity.addSong', [
   } 
 
   $scope.boss = function(url){
-    console.log(url);
+
+    SC.initialize({
+      client_id: '87be5093d25e70cbe11e0e4e6ae82ce7',
+      redirect_uri: 'http://localhost:3000'
+    });
+
+   
+
+
+  
+
     SC.oEmbed(url, {
       auto_play: true,
       element: document.getElementById('putTheWidgetHere')
     }).then(function(embed){
+
+  
+
         iframe = document.getElementsByTagName("iframe")[0];
         widget = SC.Widget(iframe); 
         widget.bind(SC.Widget.Events.FINISH, endSC);
         widget.bind(SC.Widget.Events.PLAY, playSC);
+        iframe.height = 125;
+
     });
-  }
+
+    function playSC(){
+        var container = document.getElementById("widgetContainer");
+        container.style.height = "125px";
+
+        iframe = document.getElementsByTagName("iframe")[0];
+        iframe.height = 125;
+        widget = SC.Widget(iframe); 
+    }
+
+    function endSC(){
+        iframe = document.getElementsByTagName("iframe")[0];
+        iframe.height = 0;
+
+        var container = document.getElementById("widgetContainer");
+        container.style.height = "0px";
+
+
+    }
+
+  } // end of boss function
+
+  
+
 
 });
 

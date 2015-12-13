@@ -4,6 +4,7 @@ angular.module( 'inTunity.login', [
 .controller( 'LoginCtrl', function LoginController( $scope, auth, $location, store, $http ) {
 
   $scope.about = function() {
+    console.log("about");
     $location.path('/about');
   }
 
@@ -47,7 +48,7 @@ angular.module( 'inTunity.login', [
            $location.path("/");
 
     console.log("posting..");
-    $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/account', {data: user_account}, { 
+    $http.post('http://localhost:3001/secured/account', {data: user_account}, { 
         headers: {
         'Accept' : '*/*',
         'Content-Type': 'application/json'
