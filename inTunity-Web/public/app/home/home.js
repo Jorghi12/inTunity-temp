@@ -132,6 +132,8 @@ angular.module( 'inTunity.home', [
         auto_play: true,
         element: document.getElementById('putTheWidgetHere')
       }).then(function(embed){
+          var container = document.getElementById("widgetContainer");
+          container.style.height = "125px";
           iframe = document.getElementsByTagName("iframe")[0];
           widget = SC.Widget(iframe); 
           widget.bind(SC.Widget.Events.FINISH, endSC);
@@ -139,6 +141,8 @@ angular.module( 'inTunity.home', [
       });
 
       function playSC(){
+
+
         iframe = document.getElementsByTagName("iframe")[0];
         iframe.height = 125;
         widget = SC.Widget(iframe); 

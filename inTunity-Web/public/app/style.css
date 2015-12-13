@@ -242,6 +242,11 @@ hr {
 	padding:5px;
 }
 
+.confirmSong {
+	font-family: 'Archivo Narrow', sans-serif;
+	cursor: pointer;
+}
+
 .row {
 	margin:0px;
 	padding:10px;

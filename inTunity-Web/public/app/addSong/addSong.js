@@ -69,6 +69,8 @@ angular.module( 'inTunity.addSong', [
              albumArtwork = "/images/no-art.png";
           }
 
+
+
           
           var songContainer = document.createElement('div');
           songContainer.className = "col-md-6 search-result";
@@ -94,16 +96,34 @@ angular.module( 'inTunity.addSong', [
               likes.innerHTML = "Soundcloud likes: " + obj[i]["likes_count"];
 
               var playbutton = "<div class='intunity-button play-button'><a href='' ng-click = 'boss(" + '"' + obj[i]['permalink_url'] + '"' + ")'><h4>" + "Sample Song" + "</h4></a></div>";
-              var newbutton = "<div class='intunity-button choose-button'><a href='' ng-click = 'selectSong(" + '"' + obj[i]['permalink_url']  +  '"' + ', ' + '"' + obj[i]['artwork_url'] + '"'  + ', ' +   '"' + obj[i]['title']    + '"'        + ")'><h4>"+ "Confirm Song"  + "</h4></a></div>";
-            
+             
+              var confirmSong = document.createElement("div");
+              confirmSong.innerHTML = "<h4>Confirm</h4>";
+
+
+
+
+              confirmSong.onclick = function() {
+                console.log("hi");
+                console.log(this.id);
+                console.log(tracks[this.id]);
+                var selectedSong = tracks[this.id];
+                $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"]);
+
+              }
+              confirmSong.className = 'intunity-button play-button confirmSong';
+              confirmSong.id = i;
+              
+
+
               var playElement = $compile(playbutton)($scope)[0];
-              var newElement = $compile(newbutton)($scope)[0];
+    
 
 
             col2.appendChild(songTitle);
             col2.appendChild(likes);  
             col2.appendChild(playElement);
-            col2.appendChild(newElement);
+            col2.appendChild(confirmSong);
 
             songContainer.appendChild(col1);
             songContainer.appendChild(col2);
@@ -177,7 +197,7 @@ angular.module( 'inTunity.addSong', [
         song_artwork: updatedSongPic, 
         song_title: title});
 
-     console.log(song);
+     // console.log(song);
     
     $http.post('http://localhost:3001/secured/songs', {data: song}, { 
         headers: {
