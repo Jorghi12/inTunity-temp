@@ -58,7 +58,7 @@ angular.module( 'inTunity.home', [
 
 
   $http({
-    url: 'http://localhost:3001/secured/accounts' ,
+    url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/accounts' ,
     method: 'GET'
   }).then(function(response) {  
     songdata = (response["data"]["songs"]);
@@ -127,7 +127,7 @@ angular.module( 'inTunity.home', [
 
     SC.initialize({
       client_id: '87be5093d25e70cbe11e0e4e6ae82ce7',
-      redirect_uri: 'http://localhost:3000'
+      redirect_uri: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3000'
     });
 
 
