@@ -90,6 +90,7 @@ app.post('/secured/songs', function(req, res) {
     },
     body: req.body["data"]
   }, function(error, response, body) {
+      console.log("updating song...");
       if(error) {
           console.log(error);
       } else {
