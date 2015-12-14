@@ -62,7 +62,6 @@ angular.module( 'inTunity.home', [
     method: 'GET'
   }).then(function(response) {  
     songdata = (response["data"]["songs"]);
-    console.log(songdata);
 
     song_count = 0;
     song_index = 0;
@@ -76,12 +75,10 @@ angular.module( 'inTunity.home', [
     // makes sure we only show users who have songs
     for (var i = 0; i < users.length; i++) {
       if (users[i]["today_song"]["song_url"] != "") {
-        console.log("user has a song for today");
 
         var date = new Date(users[i]["today_song"]["unix_time"] * 1000);
 
         var year = date.getFullYear();
-        console.log(year);
         var month = date.getMonth();
         var day = date.getDate();
         var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
@@ -89,6 +86,7 @@ angular.module( 'inTunity.home', [
         var formmatedDay = monthNames[month] + " " + day + ", " + year;
 
         var hours = date.getHours();
+
         var minutes = "0" + date.getMinutes();
         var am_pm = "AM";
 
@@ -96,10 +94,12 @@ angular.module( 'inTunity.home', [
           hours = hours - 12;
           am_pm = "PM";
         }
+        if (hours == 0) {
+          hours = 12;
+        }
+
+
         var formattedTime = hours + ':' + minutes.substr(-2) +  " " + am_pm;
-        console.log(formattedTime);
-
-
         correctUsers.push(new Array(users[i], formattedTime, formmatedDay));
       } else {
         console.log("user does not have a song for today");
@@ -111,23 +111,6 @@ angular.module( 'inTunity.home', [
     $scope.users = correctUsers;
 
    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -201,7 +184,6 @@ angular.module( 'inTunity.home', [
 
         
         widget.getCurrentSound(function (currentSound) {
-            console.log(currentSound);
             var rowCurrent = document.getElementById("song"+song_index);
             rowCurrent.style.backgroundColor = "#ffe4c4";
 	          window.scroll(0,findPos(rowCurrent));

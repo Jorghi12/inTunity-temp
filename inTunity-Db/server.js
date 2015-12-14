@@ -117,7 +117,6 @@ router.get('/api/accounts/' , function (req, res, next) {
 
 	  	// update the timer in here after expiration
 	  	// if expired, make that entry null in the db
-
 	  	var today = new Date();
 
 	  	// unix time 
@@ -155,11 +154,17 @@ router.get('/api/accounts/' , function (req, res, next) {
 	  		
 	  	} // end of for loop
 
-	  	// console.log(userObj);
 
+
+
+	  	// console.log(userObj);
 	  	res.send(userObj);
+
+
 	  } 
-	});
+	}).sort({'today_song.unix_time': -1});
+
+
 });
 
 

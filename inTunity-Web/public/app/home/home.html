@@ -38,9 +38,9 @@
             </button>  
           </div>
           <div class = "col-md-6 text-center info">
-            <h2>{{item.today_song.song_title}}</h2>
+            <h2>{{item[0].today_song.song_title}}</h2>
             <div class="col-md-4">
-              <a href = "#/profile/{{users[0].indexOf(item)}}"> 
+              <a href = "#/profile/{{users.indexOf(item)}}"> 
                 <img class = "img-circle" ng-src = "{{item[0].picture}}">
               </a>
             </div>
