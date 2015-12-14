@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 
 var dbName = 'inTunity';
 
-mongoose.connect('mongodb://http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com/' + dbName);
+mongoose.connect('mongodb://ec2-52-35-92-198.us-west-2.compute.amazonaws.com/' + dbName);
 
 app.use(session({
 	secret: 'inTunity',
