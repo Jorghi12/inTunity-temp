@@ -58,7 +58,7 @@ angular.module( 'inTunity.home', [
 
 
   $http({
-    url: 'http://localhost:3001/secured/accounts' ,
+    url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/accounts' ,
     method: 'GET'
   }).then(function(response) {  
     songdata = (response["data"]["songs"]);
@@ -127,7 +127,7 @@ angular.module( 'inTunity.home', [
 
     SC.initialize({
       client_id: '87be5093d25e70cbe11e0e4e6ae82ce7',
-      redirect_uri: 'http://localhost:3000'
+      redirect_uri: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3000'
     });
 
 
@@ -166,6 +166,7 @@ angular.module( 'inTunity.home', [
         show_user: false,
         enable_api: true,
         single_active: false,
+        liking:false,
         element: document.getElementById('putTheWidgetHere')
       }).then(function(embed){
           var container = document.getElementById("widgetContainer");
@@ -174,6 +175,8 @@ angular.module( 'inTunity.home', [
           widget = SC.Widget(iframe); 
           // widget.bind(SC.Widget.Events.PLAY, playSC);
           // widget.bind(SC.Widget.Events.FINISH, endSC);
+
+
 
           widget.bind(SC.Widget.Events.READY, function() {
             iframe = document.getElementsByTagName("iframe")[0];
@@ -193,60 +196,11 @@ angular.module( 'inTunity.home', [
                 window.scroll(0,findPos(rowCurrent));
             });
 
-
-            
-
-
-            widget.bind(SC.Widget.Events.PLAY, function() {
-              
-
-            });
-
-            // widget.bind(SC.Widget.Events.PLAY_PROGRESS, function() {
-              
-            //   widget.getDuration(function(duration) {
-   
-            //       widget.getPosition(function(position) {
-      
-            //         if(duration - position <= 50) {
-            //           console.log("end of song");
-            //           new_song = song_array[song_count % song_array.length];
-            //           song_index = song_count % song_array.length;
-
-            //           song_count +=1;
-
-                      
-            //           // iframe = document.getElementsByTagName("iframe")[0];
-            //           // widget = SC.Widget(iframe); 
-            //           // widget.url= new_song;
-
-
-            //           masterPlayer(new_song["url"]);
-
-
-
-
-            //         }
-            //       });
-
-            //   });
-
-
-            // });
-
-            
-
             widget.bind(SC.Widget.Events.FINISH, function() {
               new_song = song_array[song_count % song_array.length];
               song_index = song_count % song_array.length;
 
               song_count +=1;
-
-              
-              // iframe = document.getElementsByTagName("iframe")[0];
-              // widget = SC.Widget(iframe); 
-              // widget.url= new_song;
-
 
               masterPlayer(new_song["url"]);
             });
@@ -260,46 +214,6 @@ angular.module( 'inTunity.home', [
       });
 
 
-    
-
-      // function playSC(){
-
-
-      //   iframe = document.getElementsByTagName("iframe")[0];
-      //   iframe.height = 125;
-      //   widget = SC.Widget(iframe); 
-
-      // 	//this is for resetting all the background color to its natural settings
-      // 	for (var i = 0; i < song_array.length; i ++) {
-      // 	   var row = document.getElementById("song" + i);
-      // 	   row.style.backgroundColor = "#f5f5f5";
-      // 	}
-
-        
-      //   widget.getCurrentSound(function (currentSound) {
-      //       var rowCurrent = document.getElementById("song"+song_index);
-      //       rowCurrent.style.backgroundColor = "#ffe4c4";
-	     //      window.scroll(0,findPos(rowCurrent));
-      //   });
-
-      // }
-
-      // function endSC(){
-      //   console.log("end song");
-      //   new_song = song_array[song_count % song_array.length];
-      //   song_index = song_count % song_array.length;
-
-
-      //   song_count +=1;
-
-        
-      //   iframe = document.getElementsByTagName("iframe")[0];
-      //   widget = SC.Widget(iframe); 
-      //   widget.url= new_song;
-      //   // console.log(widget);
-
-      //   masterPlayer(new_song["url"]);
-      // }
     } // end of master play function
 
   }); // end of http get

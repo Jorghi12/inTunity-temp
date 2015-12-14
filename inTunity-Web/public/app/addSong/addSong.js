@@ -35,6 +35,11 @@ angular.module( 'inTunity.addSong', [
     $location.path('/about');
   }
 
+  function millisToMinutesAndSeconds(millis) {
+    var minutes = Math.floor(millis / 60000);
+    var seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+  }
 
 
 
@@ -57,6 +62,8 @@ angular.module( 'inTunity.addSong', [
         limit: page_size 
       }).then(function(tracks) {
         var obj =(tracks);
+
+        console.log(tracks);
         
         for (var i = 0; i < obj.length; i++) {
 
@@ -95,6 +102,9 @@ angular.module( 'inTunity.addSong', [
               var likes = document.createElement('h5');
               likes.innerHTML = "Soundcloud likes: " + obj[i]["likes_count"];
 
+              var duration = document.createElement("h5");
+              duration.innerHTML = "Time: " + millisToMinutesAndSeconds(obj[i]["duration"]);
+
               var playbutton = "<div class='intunity-button play-button'><a href='' ng-click = 'boss(" + '"' + obj[i]['permalink_url'] + '"' + ")'><h4>" + "Sample Song" + "</h4></a></div>";
              
               var confirmSong = document.createElement("div");
@@ -121,7 +131,8 @@ angular.module( 'inTunity.addSong', [
 
 
             col2.appendChild(songTitle);
-            col2.appendChild(likes);  
+            col2.appendChild(likes); 
+            col2.appendChild(duration); 
             col2.appendChild(playElement);
             col2.appendChild(confirmSong);
 
@@ -162,7 +173,7 @@ angular.module( 'inTunity.addSong', [
 
      // console.log(song);
     
-    $http.post('http://localhost:3001/secured/songs', {data: song}, { 
+    $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
         headers: {
         'Accept' : '*/*',
         'Content-Type': 'application/json'
@@ -179,7 +190,7 @@ angular.module( 'inTunity.addSong', [
 
     SC.initialize({
       client_id: '87be5093d25e70cbe11e0e4e6ae82ce7',
-      redirect_uri: 'http://localhost:3000'
+      redirect_uri: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3000'
     });
 
    
@@ -189,7 +200,14 @@ angular.module( 'inTunity.addSong', [
 
     SC.oEmbed(url, {
       auto_play: true,
+      buying: false,
+      sharing: false,
+      download: false,
+      show_comments: false,
+      show_user: false,
+      enable_api: true,
       single_active: false,
+      liking:false,
       element: document.getElementById('putTheWidgetHere')
     }).then(function(embed){
 
