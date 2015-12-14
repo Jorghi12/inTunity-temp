@@ -76,8 +76,7 @@ router.post('/api/accounts', function (req, res, next) {
 	            song_name: "",
 	            song_album_pic: "",
 	            song_url: "",
-	            created_at_time: "",
-				created_at_day: "",
+				unix_time: ""
 	    }
     });
 
@@ -113,6 +112,8 @@ router.get('/api/accounts/' , function (req, res, next) {
 
 	  	console.log(userObj.length);
 
+	
+
 
 	  	// update the timer in here after expiration
 	  	// if expired, make that entry null in the db
@@ -123,71 +124,22 @@ router.get('/api/accounts/' , function (req, res, next) {
 	  	var todayTime = today.getTime()/1000;
 	  	console.log(todayTime);
 
-	  	var months = {
-	  		"Dec" : 11,
-	  		"Nov" : 10,
-	  		"Oct" : 9,
-	  		"Sep" : 8,
-	  		"Aug" : 7,
-	  		"Jul" : 6,
-	  		"Jun" : 5,
-	  		"May" : 4,
-	  		"Apr" : 3,
-	  		"Mar" : 2,
-	  		"Feb" : 1,
-	  		"Jan" : 0
-	  	}
-
-	  	// console.log(userObj);
 
 	  	for (var i = 0; i < userObj.length; i++) {
 
 	  		if(userObj[i].today_song.song_url != '') {
-	  			var time = userObj[i].today_song.created_at_time;
-		  		var day = userObj[i].today_song.created_at_day;
-
-		  		var year = parseInt(day.substring(7));
-		  		var month = months[(day.substring(0,3))];
-		  		var comma = day.indexOf(",");
-		  		var whatday = parseInt(day.substring(4,comma));
-
-		  		console.log("dayStamp:" +  day)
-		  		console.log("year: " + year);
-		  		console.log("month: " + month);
-		  		console.log("day: " + whatday);
-
-
-		  		// getting all the individual time components
-		  		var colon = time.indexOf(":");
-		  		var space = time.indexOf(" ");
-		  		var hours = parseInt(time.substring(0,colon));
-		  		var min = parseInt(time.substring(colon + 1,space));
-		  		var am_pm = time.substring(space + 1);
-
-		  		if (am_pm == "PM") {
-		  			hours = hours + 12;
-		  		}
-
-		  		console.log("am or pm: " + am_pm);
-		  		console.log("hours: " + hours);
-		  		console.log("min: " + min);
-
-
-		  		var song_created_at_date = new Date(year, month, whatday, hours, min).getTime()/1000;
-		  		console.log(song_created_at_date);
-
+	  			
 		  		console.log("time difference");
-		  		console.log(todayTime - song_created_at_date);
+		  		console.log(todayTime - userObj[i].today_song.unix_time);
 
 		  		// a diff of 600 is about 10 min
-		  		if (todayTime - song_created_at_date >= 86400) {
+		  		if (todayTime - userObj[i].today_song.unix_time >= 86400) {
 		  			console.log("past expiration time");
 
-		  			userObj[i].today_song.created_at_time = '';
-		  			userObj[i].today_song.created_at_day = '';
 		  			userObj[i].today_song.song_title = '';
 		  			userObj[i].today_song.song_url = '';
 		  			userObj[i].today_song.song_album_pic = '';
+		  			userObj[i].today_song.unix_time = '';
 
 
 		  			userObj[i].save(function(err) {
@@ -227,16 +179,14 @@ router.post('/api/accounts/updateSong' , function (req, res, next) {
 	  	userObj.today_song.song_title = req.body.song_title;
 	  	userObj.today_song.song_url = req.body.song_url;
 	  	userObj.today_song.song_album_pic = req.body.song_artwork;
-	  	userObj.today_song.created_at_time = req.body.timeStamp;
-	  	userObj.today_song.created_at_day = req.body.timeDay;
+	  	userObj.today_song.unix_time = req.body.unix_time;
 
 
 	  	var song = new SongHistory({
 		   	song_title: req.body.song_title,
 			song_album_pic: req.body.song_artwork,
 			song_url: req.body.song_url,
-			created_at_time: req.body.timeStamp,
-			created_at_day: req.body.timeDay
+			unix_time: req.body.unix_time
 	    });
 
 	  	userObj.song_history.push(song);

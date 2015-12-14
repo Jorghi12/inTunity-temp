@@ -142,45 +142,6 @@ angular.module( 'inTunity.addSong', [
     console.log(artwork)
     console.log(title);
 
-    var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
-
-    var today = new Date();
-    var month = monthNames[today.getMonth()];
-    var day = today.getDate().toString();
-    var year = today.getFullYear().toString();
-
-
-
-    var hour = today.getHours().toString();
-    var min = today.getMinutes().toString();
-
-    var am_pm = "AM";
-    if (hour > 12) {
-      hour = hour - 12;
-      am_pm = "PM";
-    } 
-    if (hour == 0) {
-      hour = 12;
-    }
-
-
-
-    if (hour.length == 1) {
-      hour = "0" + hour;
-    }
-
-
-
-    if (min.length == 1) {
-      min = "0" + min;
-    }
-
-
-    var time = hour + ":" + min + " " + am_pm;
-    var todayday = month + day + ", " + year; 
-
-
-
     if (artwork != "null") {
       var index = artwork.indexOf("large");
       updatedSongPic = artwork.substring(0,index) + "t500x500.jpg";
@@ -189,13 +150,15 @@ angular.module( 'inTunity.addSong', [
     } 
 
 
+     var today = new Date();
      var song = JSON.stringify({
         user_id: id,
-        timeStamp: time,
-        timeDay: todayday,
+        // timeStamp: time,
+        // timeDay: todayday,
         song_url:url, 
         song_artwork: updatedSongPic, 
-        song_title: title});
+        song_title: title,
+        unix_time: today.getTime()/1000});
 
      // console.log(song);
     

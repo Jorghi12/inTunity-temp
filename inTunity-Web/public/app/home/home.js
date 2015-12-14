@@ -77,18 +77,64 @@ angular.module( 'inTunity.home', [
     for (var i = 0; i < users.length; i++) {
       if (users[i]["today_song"]["song_url"] != "") {
         console.log("user has a song for today");
-        correctUsers.push(users[i]);
+
+        var date = new Date(users[i]["today_song"]["unix_time"] * 1000);
+
+        var year = date.getFullYear();
+        console.log(year);
+        var month = date.getMonth();
+        var day = date.getDate();
+        var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+
+        var formmatedDay = monthNames[month] + " " + day + ", " + year;
+
+        var hours = date.getHours();
+        var minutes = "0" + date.getMinutes();
+        var am_pm = "AM";
+
+        if (hours > 12) {
+          hours = hours - 12;
+          am_pm = "PM";
+        }
+        var formattedTime = hours + ':' + minutes.substr(-2) +  " " + am_pm;
+        console.log(formattedTime);
+
+
+        correctUsers.push(new Array(users[i], formattedTime, formmatedDay));
       } else {
         console.log("user does not have a song for today");
       }
     }
 
+    console.log(correctUsers);
+
     $scope.users = correctUsers;
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // adding all the songs to arr
     for (var i = 0; i < correctUsers.length; i++) {
-      songUrl = correctUsers[i]["today_song"]["song_url"];
+      songUrl = correctUsers[i][0]["today_song"]["song_url"];
       var entry = {
         url: songUrl
       }
