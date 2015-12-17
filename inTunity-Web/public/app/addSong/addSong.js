@@ -118,7 +118,8 @@ angular.module( 'inTunity.addSong', [
                 console.log(this.id);
                 console.log(tracks[this.id]);
                 var selectedSong = tracks[this.id];
-                $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"]);
+                var id = (selectedSong["id"]);
+                $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id);
 
               }
               confirmSong.className = 'intunity-button play-button confirmSong';
@@ -148,12 +149,15 @@ angular.module( 'inTunity.addSong', [
 
 
 
-  $scope.selectSong = function(url, artwork, title) {
+  $scope.selectSong = function(url, artwork, title, trackid) {
     console.log(url);
     console.log(artwork)
     console.log(title);
+    console.log(trackid);
+  
 
-    if (artwork != "null") {
+    console.log(artwork);
+    if (artwork != null) {
       var index = artwork.indexOf("large");
       updatedSongPic = artwork.substring(0,index) + "t500x500.jpg";
     } else {
@@ -164,12 +168,14 @@ angular.module( 'inTunity.addSong', [
      var today = new Date();
      var song = JSON.stringify({
         user_id: id,
-        // timeStamp: time,
-        // timeDay: todayday,
         song_url:url, 
         song_artwork: updatedSongPic, 
         song_title: title,
-        unix_time: today.getTime()/1000});
+        unix_time: today.getTime()/1000,
+        track_id: trackid
+    });
+
+     console.log(song);
 
      // console.log(song);
     
@@ -190,7 +196,7 @@ angular.module( 'inTunity.addSong', [
 
     SC.initialize({
       client_id: '87be5093d25e70cbe11e0e4e6ae82ce7',
-      redirect_uri: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3000'
+      redirect_uri: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3000/callback'
     });
 
    
