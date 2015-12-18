@@ -73,7 +73,7 @@ angular.module( 'inTunity.addSong', [
         }
 
         console.log(streamableSongs);
-        var obj =(streamableSongs);
+        var obj =(tracks);
 
 
         
