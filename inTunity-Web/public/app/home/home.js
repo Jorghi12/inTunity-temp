@@ -232,7 +232,7 @@ angular.module( 'inTunity.home', [
         console.log("hi");
 
         globalPlayer.on('play-start', function () {
-          // globalPlayer.seek(0);
+          globalPlayer.seek(0);
           // globalPlayer.play();
 
     
