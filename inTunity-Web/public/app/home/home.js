@@ -223,8 +223,8 @@ angular.module( 'inTunity.home', [
         
         globalPlayer.on('finish', function () {
           song_count++;
-          song_index++;
           new_song = trackarray[song_count % trackarray.length];
+          song_index = song_count % trackarray.length;
           console.log("Starting New " + new_song);
           new_url = '/tracks/' + new_song;
           startStream(new_url);
