@@ -61,9 +61,21 @@ angular.module( 'inTunity.addSong', [
         q: name,
         limit: page_size 
       }).then(function(tracks) {
-        var obj =(tracks);
+   
 
-        console.log(tracks);
+        // console.log(tracks);
+
+        var streamableSongs = [];
+        for (var i = 0; i < tracks.length; i++) {
+          if (tracks[i]["streamable"] == true) {
+            streamableSongs.push(tracks[i]);
+          }
+        }
+
+        console.log(streamableSongs);
+        var obj =(streamableSongs);
+
+
         
         for (var i = 0; i < obj.length; i++) {
 
@@ -179,7 +191,7 @@ angular.module( 'inTunity.addSong', [
 
      // console.log(song);
     
-    $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
+    $http.post('http://localhost:3001/secured/songs', {data: song}, { 
         headers: {
         'Accept' : '*/*',
         'Content-Type': 'application/json'
@@ -196,7 +208,7 @@ angular.module( 'inTunity.addSong', [
 
     SC.initialize({
       client_id: '87be5093d25e70cbe11e0e4e6ae82ce7',
-      redirect_uri: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3000/callback'
+      redirect_uri: 'http://localhost:3000/callback'
     });
 
    
