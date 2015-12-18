@@ -45,6 +45,17 @@ angular.module( 'inTunity.home', [
     $location.path('/about');
   }
 
+  // goes to the correct position in the screen when songs changes
+  function findPos(obj) {
+    var curtop = 0;
+    if (obj.offsetParent) {
+        do {
+           curtop += obj.offsetTop - 50;
+        } while (obj = obj.offsetParent);
+        return [curtop];
+    }
+  }
+
 
   var username;
   var profilepic;
@@ -140,7 +151,9 @@ angular.module( 'inTunity.home', [
     var url = '/tracks/' + trackid;
     startStream(url);
 
+    var paused = false;
     var song_count = 0;
+    var song_index = 0;
 
     // this is for skipping to the previous song
     $scope.prevPlayer = function() {
@@ -163,6 +176,21 @@ angular.module( 'inTunity.home', [
       startStream(new_url);
     }
 
+
+    $scope.pause = function() {
+      console.log("hi");
+      var pauseButton = document.getElementById('pauseButton');
+      if (paused == false) {
+        globalPlayer.pause();
+        paused = true;
+        pauseButton.innerHTML = "Play";
+      } else {
+        globalPlayer.play();
+        paused = false;
+        pauseButton.innerHTML = "Pause";
+      }
+    }
+
     
     function startStream(newSoundUrl) {
       SC.stream(newSoundUrl).then(function (player) {
@@ -174,39 +202,40 @@ angular.module( 'inTunity.home', [
         globalPlayer.on('play-start', function () {
           globalPlayer.seek(0);
           globalPlayer.play();
+
+          //this is for resetting all the background color to its natural settings
+          for (var i = 0; i < trackarray.length; i ++) {
+             var row = document.getElementById("song" + i);
+             row.style.backgroundColor = "#f5f5f5";
+          }
+
+          // this targets which row to highlight
+          var rowCurrent = document.getElementById("song"+song_index);
+          rowCurrent.style.backgroundColor = "#ffe4c4";
+          window.scroll(0,findPos(rowCurrent));
+
+
         }); 
+
+      
 
         
         globalPlayer.on('finish', function () {
           song_count++;
+          song_index++;
           new_song = trackarray[song_count % trackarray.length];
           console.log("Starting New " + new_song);
           new_url = '/tracks/' + new_song;
-        
-
-
           startStream(new_url);
         }); 
       });
     }
 
 
-    // SC.initialize({
-    //   client_id: '87be5093d25e70cbe11e0e4e6ae82ce7',
-    //   redirect_uri: 'http://localhost:3000'
-    // });
 
 
-    // // goes to the correct position in the screen when songs changes
-    // function findPos(obj) {
-    //     var curtop = 0;
-    //     if (obj.offsetParent) {
-    //         do {
-    //            curtop += obj.offsetTop - 50;
-    //         } while (obj = obj.offsetParent);
-    //         return [curtop];
-    //     }
-    //  }
+
+  
 
 
    
