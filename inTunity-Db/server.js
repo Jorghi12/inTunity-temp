@@ -77,7 +77,8 @@ router.post('/api/accounts', function (req, res, next) {
             song_album_pic: "",
             song_url: "",
 			unix_time: "",
-			track_id: ""
+			track_id: "",
+			song_duration: ""
 	    }
     });
 
@@ -141,6 +142,7 @@ router.get('/api/accounts/' , function (req, res, next) {
 		  			userObj[i].today_song.song_album_pic = '';
 		  			userObj[i].today_song.unix_time = '';
 		  			userObj[i].today_song.track_id= '';
+		  			userObj[i].today_song.song_duration= '';
 
 
 		  			userObj[i].save(function(err) {
@@ -190,6 +192,7 @@ router.post('/api/accounts/updateSong' , function (req, res, next) {
 	  	userObj.today_song.song_album_pic = req.body.song_artwork;
 	  	userObj.today_song.unix_time = req.body.unix_time;
 	  	userObj.today_song.track_id = req.body.track_id;
+	  	userObj.today_song.song_duration = req.body.song_duration;
 
 
 	  	var song = new SongHistory({
@@ -197,7 +200,8 @@ router.post('/api/accounts/updateSong' , function (req, res, next) {
 			song_album_pic: req.body.song_artwork,
 			song_url: req.body.song_url,
 			unix_time: req.body.unix_time,
-			track_id: req.body.track_id
+			track_id: req.body.track_id,
+			song_duration: req.body.song_duration
 		
 	    });
 

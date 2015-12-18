@@ -131,7 +131,7 @@ angular.module( 'inTunity.addSong', [
                 console.log(tracks[this.id]);
                 var selectedSong = tracks[this.id];
                 var id = (selectedSong["id"]);
-                $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id);
+                $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
 
               }
               confirmSong.className = 'intunity-button play-button confirmSong';
@@ -161,7 +161,7 @@ angular.module( 'inTunity.addSong', [
 
 
 
-  $scope.selectSong = function(url, artwork, title, trackid) {
+  $scope.selectSong = function(url, artwork, title, trackid, duration) {
     console.log(url);
     console.log(artwork)
     console.log(title);
@@ -184,7 +184,8 @@ angular.module( 'inTunity.addSong', [
         song_artwork: updatedSongPic, 
         song_title: title,
         unix_time: today.getTime()/1000,
-        track_id: trackid
+        track_id: trackid,
+        song_duration: duration
     });
 
      console.log(song);

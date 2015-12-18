@@ -69,6 +69,7 @@ angular.module( 'inTunity.home', [
 
     song_count = 0;
     song_index = 0;
+
     window.song_array = [];
 
     var users = response["data"]["songs"];
@@ -127,7 +128,7 @@ angular.module( 'inTunity.home', [
 
     var trackarray = [];
     for (var i = 0; i < correctUsers.length; i++) {
-      trackarray.push(new Array(correctUsers[i][0]["today_song"]["track_id"], correctUsers[i][0]["today_song"]["song_album_pic"], correctUsers[i][0]["today_song"]["song_title"]));
+      trackarray.push(new Array(correctUsers[i][0]["today_song"]["track_id"], correctUsers[i][0]["today_song"]["song_album_pic"], correctUsers[i][0]["today_song"]["song_title"], correctUsers[i][0]["today_song"]["song_duration"]));
     }
 
     console.log(trackarray);
@@ -135,8 +136,7 @@ angular.module( 'inTunity.home', [
 
 
     SC.initialize({
-        client_id: '87be5093d25e70cbe11e0e4e6ae82ce7',
-        redirect_uri: 'http://localhost:3000'
+        client_id: '87be5093d25e70cbe11e0e4e6ae82ce7'
     });
         
 
@@ -145,8 +145,16 @@ angular.module( 'inTunity.home', [
     startStream(url);
 
     var paused = false;
-    var song_count = 0;
-    var song_index = 0;
+    song_count = 0;
+
+    // when you press on album pic, it will play that song
+    $scope.playSpecificSong = function(index) {
+      song_index = index;
+      song_count = song_index + 1;
+      new_song = trackarray[song_count % trackarray.length][0];
+      var new_url = '/tracks/' + new_song;
+      startStream(new_url);
+    }
 
     // this is for skipping to the previous song
     $scope.prevPlayer = function() {
@@ -200,6 +208,8 @@ angular.module( 'inTunity.home', [
       }
     }
 
+
+
     var progressBall = document.getElementById('playHead');
     var time = document.getElementById('time');
     
@@ -207,20 +217,23 @@ angular.module( 'inTunity.home', [
     
     function startStream(newSoundUrl) {
 
-      var songJSON = SC.get(newSoundUrl);
-      songDuration = songJSON['duration'];
+
+      songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
+      console.log(songDuration);
+
 
       SC.stream(newSoundUrl).then(function (player) {
         console.log("Starting New " + newSoundUrl);
         globalPlayer = player;
 
-        globalPlayer.setVolume(1);
+        globalPlayer.setVolume(0.05);
 
         globalPlayer.play();
+        console.log("hi");
 
         globalPlayer.on('play-start', function () {
-          globalPlayer.seek(0);
-          globalPlayer.play();
+          // globalPlayer.seek(0);
+          // globalPlayer.play();
 
     
           //this is for resetting all the background color to its natural settings
@@ -239,30 +252,44 @@ angular.module( 'inTunity.home', [
 
           var title = document.getElementById("songtitle");
           title.innerHTML = trackarray[song_count % trackarray.length][2];
-
-
         }); 
 
       
 
         
+        
+
+        globalPlayer.on('time', function() {
+          songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
+          var percent = Math.floor((100 / songDuration) * globalPlayer.currentTime());
+          progressBall.style.marginLeft = percent + "%";
+        });
+
+
         globalPlayer.on('finish', function () {
           globalPlayer.pause();
-          song_count++;
+         
           
-          new_song = trackarray[song_count % trackarray.length][0];
-          song_index = song_count % trackarray.length;
-          new_url = '/tracks/' + new_song;
-          startStream(new_url);
+          // new_song = trackarray[song_count % trackarray.length][0];
+          // song_index = song_count % trackarray.length;
+          // new_url = '/tracks/' + new_song;
+          startStream(newSoundUrl);
+        }); // end of finish
 
-          globalPlayer.on('time', function() {
-            var percent = Math.floor((100 / songDuration) * globalPlayer.currentTime());
-            progressBall.style.marginLeft = percent + "%";
-          });
 
-        }); 
+
+
+
+
+
       });
     }
+
+
+
+
+
+
 
      //Handles the progress bar.
     var time = document.getElementById("time");
@@ -270,7 +297,8 @@ angular.module( 'inTunity.home', [
     var timelineWidth = time.offsetWidth - playHead.offsetWidth;
     
     function clickPercentage(click) {
-        return (click.pageX - time.offsetLeft) / timelineWidth;
+      var perct = (click.pageX - time.offsetLeft) / timelineWidth;
+      return (click.pageX - time.offsetLeft) / timelineWidth;
     }
     
     time.addEventListener('click', function (event) {

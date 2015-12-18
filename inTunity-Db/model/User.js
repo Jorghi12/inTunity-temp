@@ -6,7 +6,8 @@ var SongHistory = new Schema({
 	song_album_pic: String,
 	song_url: String,
 	unix_time: String,
-	track_id: String
+	track_id: String,
+	song_duration: String
 });
 
 var User = new Schema({
@@ -19,7 +20,8 @@ var User = new Schema({
 		song_album_pic: String,
 		song_url: String,
 		unix_time: String,
-		track_id: String
+		track_id: String,
+		song_duration: String
 	},
 	song_history: [SongHistory]
 
