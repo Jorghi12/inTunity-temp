@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 
 var dbName = 'inTunity';
 
-mongoose.connect('mongodb://ec2-52-35-92-198.us-west-2.compute.amazonaws.com/' + dbName);
+mongoose.connect('mongodb://localhost:27017/' + dbName);
 
 app.use(session({
 	secret: 'inTunity',
@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 
-var whitelist = ['http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:8100'];
+var whitelist = ['http://localhost:8100'];
 var cors_options = {
 	origin: function (origin, callback) {
 		var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
@@ -73,10 +73,11 @@ router.post('/api/accounts', function (req, res, next) {
 	    picture: req.body.picture,
 	    email: req.body.email,
 	    today_song: {
-	            song_name: "",
-	            song_album_pic: "",
-	            song_url: "",
-				unix_time: ""
+            song_name: "",
+            song_album_pic: "",
+            song_url: "",
+			unix_time: "",
+			track_id: ""
 	    }
     });
 
@@ -139,6 +140,7 @@ router.get('/api/accounts/' , function (req, res, next) {
 		  			userObj[i].today_song.song_url = '';
 		  			userObj[i].today_song.song_album_pic = '';
 		  			userObj[i].today_song.unix_time = '';
+		  			userObj[i].today_song.track_id= '';
 
 
 		  			userObj[i].save(function(err) {
@@ -174,6 +176,8 @@ router.get('/api/accounts/' , function (req, res, next) {
 
 
 router.post('/api/accounts/updateSong' , function (req, res, next) {
+
+
 	User.findOne({user_id: req.body.user_id}, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
@@ -185,13 +189,16 @@ router.post('/api/accounts/updateSong' , function (req, res, next) {
 	  	userObj.today_song.song_url = req.body.song_url;
 	  	userObj.today_song.song_album_pic = req.body.song_artwork;
 	  	userObj.today_song.unix_time = req.body.unix_time;
+	  	userObj.today_song.track_id = req.body.track_id;
 
 
 	  	var song = new SongHistory({
 		   	song_title: req.body.song_title,
 			song_album_pic: req.body.song_artwork,
 			song_url: req.body.song_url,
-			unix_time: req.body.unix_time
+			unix_time: req.body.unix_time,
+			track_id: req.body.track_id
+		
 	    });
 
 	  	userObj.song_history.push(song);

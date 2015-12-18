@@ -7,12 +7,18 @@ angular.module( 'inTunity.home', [
 
   $scope.auth = auth;
   $scope.tgState = false;
-
   var prof = (store.get('profile'));
-
-  // console.log(prof);
-
   $scope.owner;
+  
+  //Global Variables for the iframe and widget
+  // var iframe = document.getElementById("sc-widget");
+  //var widget = SC.Widget(iframe);
+  var globalPlayer;
+  /*global SC*/
+  
+
+
+
   if (prof["given_name"] != null) {
     $scope.owner = prof["given_name"];
   } else {
@@ -51,14 +57,8 @@ angular.module( 'inTunity.home', [
 
   $scope.users;
 
-
- 
-
-
-
-
   $http({
-    url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/accounts' ,
+    url: 'http://localhost:3001/secured/accounts' ,
     method: 'GET'
   }).then(function(response) {  
     songdata = (response["data"]["songs"]);
@@ -110,11 +110,7 @@ angular.module( 'inTunity.home', [
 
     $scope.users = correctUsers;
 
-   
-
-
-
-
+  
     // adding all the songs to arr
     for (var i = 0; i < correctUsers.length; i++) {
       songUrl = correctUsers[i][0]["today_song"]["song_url"];
@@ -125,103 +121,190 @@ angular.module( 'inTunity.home', [
     }
 
 
+    var trackarray = [];
+    for (var i = 0; i < correctUsers.length; i++) {
+      trackarray.push(correctUsers[i][0]["today_song"]["track_id"]);
+    }
+
+    console.log(trackarray);
+
+
+
     SC.initialize({
-      client_id: '87be5093d25e70cbe11e0e4e6ae82ce7',
-      redirect_uri: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3000'
+        client_id: '87be5093d25e70cbe11e0e4e6ae82ce7',
+        redirect_uri: 'http://localhost:3000'
     });
+        
+
+    var trackid = trackarray[0];
+    var url = '/tracks/' + trackid;
+    startStream(url);
+
+    var song_count = 0;
 
 
-    // goes to the correct position in the screen when songs changes
-    function findPos(obj) {
-        var curtop = 0;
-  	    if (obj.offsetParent) {
-  		      do {
-  			       curtop += obj.offsetTop - 50;
-  		      } while (obj = obj.offsetParent);
-            return [curtop];
-        }
-     }
+    $scope.nextPlayer = function() {
+      song_count++;
+      new_song = trackarray[song_count % trackarray.length];
+      console.log("Starting New " + new_song);
+      new_url = '/tracks/' + new_song;
+      startStream(new_url);
+    }
 
-    console.log(song_array);
-    masterPlayer(song_array[0]["url"]);
-    song_count +=1;
+    
+    function startStream(newSoundUrl) {
+      SC.stream(newSoundUrl).then(function (player) {
+        console.log(player);
+        globalPlayer = player;
+
+        globalPlayer.play();
+
+        globalPlayer.on('play-start', function () {
+          globalPlayer.seek(0);
+          globalPlayer.play();
+        }); 
+
+        
+        globalPlayer.on('finish', function () {
+          song_count++;
+          new_song = trackarray[song_count % trackarray.length];
+          console.log("Starting New " + new_song);
+          new_url = '/tracks/' + new_song;
+        
 
 
-
-    $scope.playSpecificSong = function(index) {
-      song_index = index;
-      song_count = song_index + 1;
-      var url = song_array[index]["url"];
-      masterPlayer(url);
+          startStream(new_url);
+        }); 
+      });
     }
 
 
-    function masterPlayer(url){
-      SC.oEmbed(url, {
-        auto_play: true,
-        buying: false,
-        sharing: false,
-        download: false,
-        show_comments: false,
-        show_user: false,
-        enable_api: true,
-        single_active: false,
-        liking:false,
-        element: document.getElementById('putTheWidgetHere')
-      }).then(function(embed){
-          var container = document.getElementById("widgetContainer");
-          container.style.height = "125px";
-          iframe = document.getElementsByTagName("iframe")[0];
-          widget = SC.Widget(iframe); 
-          // widget.bind(SC.Widget.Events.PLAY, playSC);
-          // widget.bind(SC.Widget.Events.FINISH, endSC);
+    // SC.initialize({
+    //   client_id: '87be5093d25e70cbe11e0e4e6ae82ce7',
+    //   redirect_uri: 'http://localhost:3000'
+    // });
+
+
+    // // goes to the correct position in the screen when songs changes
+    // function findPos(obj) {
+    //     var curtop = 0;
+    //     if (obj.offsetParent) {
+    //         do {
+    //            curtop += obj.offsetTop - 50;
+    //         } while (obj = obj.offsetParent);
+    //         return [curtop];
+    //     }
+    //  }
+
+
+   
+
+     
+
+
+      // widget.bind(SC.Stream.Events.READY, function() {
+      //   // load new widget
+      //   widget.bind(SC.Widget.Events.FINISH, function() {
+      //     widget.load(newSoundUrl, function() {
+      //       iframe = document.getElementById('sc-widget');
+      //       widget =  SC.Widget(iframe);
+      //       widget.play();
+      //       show_artwork: false;
+
+      //     });
+
+      //   });
+      // });
 
 
 
-          widget.bind(SC.Widget.Events.READY, function() {
-            iframe = document.getElementsByTagName("iframe")[0];
-            iframe.height = 125;
-            widget = SC.Widget(iframe); 
+    // console.log(song_array);
+    // masterPlayer(song_array[0]["url"]);
+    // song_count +=1;
 
-            //this is for resetting all the background color to its natural settings
-            for (var i = 0; i < song_array.length; i ++) {
-               var row = document.getElementById("song" + i);
-               row.style.backgroundColor = "#f5f5f5";
-            }
+
+
+    // $scope.playSpecificSong = function(index) {
+    //   song_index = index;
+    //   song_count = song_index + 1;
+    //   var url = song_array[index]["url"];
+    //   masterPlayer(url);
+    // }
+
+
+
+
+
+
+
+    // function masterPlayer(url){
+
+      
+
+
+    //   //  SC.oEmbed(url, {
+    //   //   auto_play: true,
+    //   //   buying: false,
+    //   //   sharing: false,
+    //   //   download: false,
+    //   //   show_comments: false,
+    //   //   show_user: false,
+    //   //   enable_api: true,
+    //   //   single_active: false,
+    //   //   liking:false,
+    //   //   element: document.getElementById('sc-widget')
+    //   // }).then(function(embed){
+    //   //     var container = document.getElementById("widgetContainer");
+    //   //     iframe.src = url;
+    //   //     console.log(url);
+    //   //     container.style.height = "125px";
+    //   //     //iframe = document.getElementsByTagName("iframe")[0];
+    //   //     //widget = SC.Widget(iframe); 
+    //   //     // widget.bind(SC.Widget.Events.PLAY, playSC);
+    //   //     // widget.bind(SC.Widget.Events.FINISH, endSC);
+
+
+
+    //   //     widget.bind(SC.Widget.Events.READY, function() {
+    //   //       iframe = document.getElementById("sc-widget");
+    //   //       iframe.height = 125;
+    //   //       widget = SC.Widget(iframe); 
+
+    //   //       //this is for resetting all the background color to its natural settings
+    //   //       for (var i = 0; i < song_array.length; i ++) {
+    //   //          var row = document.getElementById("song" + i);
+    //   //          row.style.backgroundColor = "#f5f5f5";
+    //   //       }
 
             
-            widget.getCurrentSound(function (currentSound) {
-                var rowCurrent = document.getElementById("song"+song_index);
-                rowCurrent.style.backgroundColor = "#ffe4c4";
-                window.scroll(0,findPos(rowCurrent));
-            });
+    //   //       widget.getCurrentSound(function (currentSound) {
+    //   //           var rowCurrent = document.getElementById("song"+song_index);
+    //   //           rowCurrent.style.backgroundColor = "#ffe4c4";
+    //   //           window.scroll(0,findPos(rowCurrent));
+    //   //       });
 
-            widget.bind(SC.Widget.Events.FINISH, function() {
-              new_song = song_array[song_count % song_array.length];
-              song_index = song_count % song_array.length;
+    //   //       widget.bind(SC.Widget.Events.FINISH, function() {
+    //   //         new_song = song_array[song_count % song_array.length];
+    //   //         song_index = song_count % song_array.length;
 
-              song_count +=1;
+    //   //         song_count +=1;
 
-              masterPlayer(new_song["url"]);
-            });
-
+    //   //         masterPlayer(new_song["url"]);
+    //   //       });
 
 
           
-          });
+    //   //     });
 
 
-      });
+    //   // });
 
 
-    } // end of master play function
+    // } // end of master play function
 
   }); // end of http get
 
 
+
 });
-
-
-
-
 
