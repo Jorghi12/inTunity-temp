@@ -146,7 +146,7 @@ angular.module( 'inTunity.home', [
     $scope.prevPlayer = function() {
       song_count--;
       if (song_count < 0) {
-        song_count = 0;
+        song_count = trackarray.length - 1;
       }
       new_song = trackarray[song_count % trackarray.length];
       console.log("Starting New " + new_song);
@@ -157,9 +157,6 @@ angular.module( 'inTunity.home', [
     // this is for skipping to the next song
     $scope.nextPlayer = function() {
       song_count++;
-      if (song_count > trackarray.length - 1) {
-        song_count = trackarray.length - 1;
-      }
       new_song = trackarray[song_count % trackarray.length];
       console.log("Starting New " + new_song);
       new_url = '/tracks/' + new_song;
