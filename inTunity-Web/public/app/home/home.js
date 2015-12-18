@@ -162,6 +162,7 @@ angular.module( 'inTunity.home', [
         song_count = trackarray.length - 1;
       }
       new_song = trackarray[song_count % trackarray.length];
+      song_index = song_count % trackarray.length;
       console.log("Starting New " + new_song);
       new_url = '/tracks/' + new_song;
       startStream(new_url);
@@ -170,6 +171,7 @@ angular.module( 'inTunity.home', [
     // this is for skipping to the next song
     $scope.nextPlayer = function() {
       song_count++;
+      song_index = song_count % trackarray.length;
       new_song = trackarray[song_count % trackarray.length];
       console.log("Starting New " + new_song);
       new_url = '/tracks/' + new_song;
@@ -178,7 +180,6 @@ angular.module( 'inTunity.home', [
 
 
     $scope.pause = function() {
-      console.log("hi");
       var pauseButton = document.getElementById('pauseButton');
       if (paused == false) {
         globalPlayer.pause();
