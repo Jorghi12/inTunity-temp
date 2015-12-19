@@ -208,8 +208,7 @@ angular.module( 'inTunity.addSong', [
   $scope.boss = function(url){
 
     SC.initialize({
-      client_id: '87be5093d25e70cbe11e0e4e6ae82ce7',
-      redirect_uri: 'http://localhost:3000/callback'
+      client_id: 'a17d2904e0284ac32f1b5f9957fd7c3f'
     });
 
    

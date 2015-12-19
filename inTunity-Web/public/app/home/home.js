@@ -137,7 +137,7 @@ angular.module( 'inTunity.home', [
 
 
     SC.initialize({
-        client_id: '87be5093d25e70cbe11e0e4e6ae82ce7'
+        client_id: 'a17d2904e0284ac32f1b5f9957fd7c3f'
     });
 
     var paused = false;
@@ -214,7 +214,7 @@ angular.module( 'inTunity.home', [
     }
 
 
-    console.log(SC.resolve("https://api.soundcloud.com/tracks/" + trackid));
+
 
 
     startStream(url);
@@ -236,7 +236,7 @@ angular.module( 'inTunity.home', [
 
         globalPlayer.play();
 
-        globalPlayer.setVolume(0.01);
+
 
 
 
