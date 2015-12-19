@@ -140,6 +140,8 @@ angular.module( 'inTunity.home', [
         client_id: 'a17d2904e0284ac32f1b5f9957fd7c3f'
     });
 
+
+
     var paused = false;
     var song_count = 0;
     var song_index = 0;
@@ -149,6 +151,14 @@ angular.module( 'inTunity.home', [
     var url = 'tracks/' + trackid;
 
 
+    // var waveform = new Waveform({
+    //   container: document.getElementById("waveform")
+    //   // data: [1, 0.2, 0.5]
+    // });
+
+    // SC.get("/users/1539950/favorites", function(tracks){
+    //   alert(tracks);
+    // });
 
    
 
@@ -213,7 +223,7 @@ angular.module( 'inTunity.home', [
       }
     }
 
-
+   
 
 
 
@@ -221,31 +231,20 @@ angular.module( 'inTunity.home', [
 
     var progressBall = document.getElementById('playHead');
     var time = document.getElementById('time');
-    
     var songDuration = 0;
     
     function startStream(newSoundUrl) {
       songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
-
+      
       SC.stream(newSoundUrl).then(function (player) {
 
-
-
-        // console.log("Starting New " + newSoundUrl);
         globalPlayer = player;
-
         globalPlayer.play();
-
-
-
-
 
         globalPlayer.on('play-start', function () {
           console.log("play");
           globalPlayer.seek(0);
-   
 
-    
           //this is for resetting all the background color to its natural settings
           for (var i = 0; i < trackarray.length; i ++) {
              var row = document.getElementById("song" + i);
@@ -264,36 +263,43 @@ angular.module( 'inTunity.home', [
           title.innerHTML = trackarray[song_count % trackarray.length][2];
         }); 
 
-      
 
-        
-        
 
         globalPlayer.on('time', function() {
           songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
           var percent = Math.floor((100 / songDuration) * globalPlayer.currentTime());
           progressBall.style.marginLeft = percent + "%";
+
+
+          if (globalPlayer.currentTime() <= (songDuration  * 0.05)) {
+            globalPlayer.setVolume(0.4);
+          }
+
+          if ((globalPlayer.currentTime() > (songDuration  * 0.05)) && (globalPlayer.currentTime() < (songDuration  * 0.95)) ) {
+             globalPlayer.setVolume(1);
+          }
+
+          if (globalPlayer.currentTime() >= (songDuration  * 0.95)) {
+            globalPlayer.setVolume(0.4);
+          }
+
         });
 
         var length = (parseInt(trackarray[song_count % trackarray.length][3]));
-        globalPlayer.on('finish', function () {
-          // globalPlayer.pause();
+        console.log(length);
+        console.log(globalPlayer.currentTime());
 
-         
-   
-   
-    
-          // globalPlayer.currentTime() = ;
+
+       
+
+        globalPlayer.on('finish', function () {
+       
+
           if (length == globalPlayer.currentTime()) {
-            // console.log("finish");
-            // console.log(globalPlayer.currentTime());
             song_count++;
             new_song = trackarray[song_count % trackarray.length][0];
             song_index = song_count % trackarray.length;
             new_url = '/tracks/' + new_song;
-            
-            // console.log(SC.resolve("https://api.soundcloud.com/tracks/" + new_song));
-            console.log(new_url);
             globalPlayer.seek(0); //Do this before startStream
             startStream(new_url);
           }
@@ -317,7 +323,7 @@ angular.module( 'inTunity.home', [
 
 
 
-     //Handles the progress bar.
+    //Handles the progress bar.
     var time = document.getElementById("time");
     var playHead = document.getElementById('playHead');
     var timelineWidth = time.offsetWidth - playHead.offsetWidth;
