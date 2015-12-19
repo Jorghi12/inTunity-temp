@@ -285,27 +285,20 @@ angular.module( 'inTunity.home', [
 
         });
 
-        var length = (parseInt(trackarray[song_count % trackarray.length][3]));
-        console.log(length);
-        console.log(globalPlayer.currentTime());
-
-
        
 
         globalPlayer.on('finish', function () {
-       
-
+          var length = parseInt(trackarray[song_count % trackarray.length][3]);
           if (length == globalPlayer.currentTime()) {
             song_count++;
             new_song = trackarray[song_count % trackarray.length][0];
             song_index = song_count % trackarray.length;
             new_url = '/tracks/' + new_song;
+            console.log(new_url);
             globalPlayer.seek(0); //Do this before startStream
             startStream(new_url);
           }
-
-         
-        
+  
         }); // end of finish
 
 
