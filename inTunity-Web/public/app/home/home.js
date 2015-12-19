@@ -112,6 +112,8 @@ angular.module( 'inTunity.home', [
 
     $scope.users = correctUsers;
 
+    console.log(correctUsers);
+
   
     // adding all the songs to arr
     for (var i = 0; i < correctUsers.length; i++) {
@@ -144,10 +146,10 @@ angular.module( 'inTunity.home', [
         
 
     var trackid = (trackarray[0][0]);
-    var url = '/tracks/' + trackid;
-    startStream(url);
+    var url = 'tracks/' + trackid;
 
 
+         startStream(url);
    
 
     // when you press on album pic, it will play that song
@@ -226,10 +228,16 @@ angular.module( 'inTunity.home', [
       songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
 
       SC.stream(newSoundUrl).then(function (player) {
+
+
+
         console.log("Starting New " + newSoundUrl);
         globalPlayer = player;
 
         globalPlayer.play();
+
+        globalPlayer.setVolume(0.01);
+         globalPlayer.seek(0);
 
 
         globalPlayer.on('play-start', function () {
@@ -268,13 +276,17 @@ angular.module( 'inTunity.home', [
 
 
         globalPlayer.on('finish', function () {
-          globalPlayer.pause();
+          // globalPlayer.pause();
+
          
           song_count++;
           new_song = trackarray[song_count % trackarray.length][0];
           song_index = song_count % trackarray.length;
           new_url = '/tracks/' + new_song;
+          
+    
           startStream(new_url);
+          globalPlayer.seek(0);
         }); // end of finish
 
 
@@ -287,7 +299,7 @@ angular.module( 'inTunity.home', [
     }
 
 
-
+   
 
 
 
