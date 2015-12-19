@@ -73,7 +73,7 @@ angular.module( 'inTunity.addSong', [
         }
 
         console.log(streamableSongs);
-        var obj =(tracks);
+        var obj =(streamableSongs);
 
 
         
@@ -128,8 +128,8 @@ angular.module( 'inTunity.addSong', [
               confirmSong.onclick = function() {
                 console.log("hi");
                 console.log(this.id);
-                console.log(tracks[this.id]);
-                var selectedSong = tracks[this.id];
+                console.log(obj[this.id]);
+                var selectedSong = obj[this.id];
                 var id = (selectedSong["id"]);
                 $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
 
