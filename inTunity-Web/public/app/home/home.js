@@ -182,7 +182,7 @@ angular.module( 'inTunity.home', [
       song_index = song_count % trackarray.length;
       new_song = trackarray[song_count % trackarray.length][0];
       console.log("Starting New " + new_song);
-      new_url = '/tracks/24732726';
+      new_url = '/tracks/' + new_song;
       startStream(new_url);
     }
 
@@ -223,17 +223,11 @@ angular.module( 'inTunity.home', [
     var songDuration = 0;
     
     function startStream(newSoundUrl) {
-
-
       songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
-
-
 
       SC.stream(newSoundUrl).then(function (player) {
         console.log("Starting New " + newSoundUrl);
         globalPlayer = player;
-
-  
 
         globalPlayer.play();
 
@@ -280,7 +274,7 @@ angular.module( 'inTunity.home', [
           new_song = trackarray[song_count % trackarray.length][0];
           song_index = song_count % trackarray.length;
           new_url = '/tracks/' + new_song;
-          startStream(newSoundUrl);
+          startStream(new_url);
         }); // end of finish
 
 
