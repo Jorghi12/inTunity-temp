@@ -67,10 +67,9 @@ angular.module( 'inTunity.home', [
   }).then(function(response) {  
     songdata = (response["data"]["songs"]);
 
-    song_count = 0;
-    song_index = 0;
 
-    window.song_array = [];
+
+    var song_array = [];
 
     var users = response["data"]["songs"];
 
@@ -111,8 +110,6 @@ angular.module( 'inTunity.home', [
       }
     }
 
-    console.log(correctUsers);
-
     $scope.users = correctUsers;
 
   
@@ -131,26 +128,32 @@ angular.module( 'inTunity.home', [
       trackarray.push(new Array(correctUsers[i][0]["today_song"]["track_id"], correctUsers[i][0]["today_song"]["song_album_pic"], correctUsers[i][0]["today_song"]["song_title"], correctUsers[i][0]["today_song"]["song_duration"]));
     }
 
+    console.log("track array:");
     console.log(trackarray);
+
 
 
 
     SC.initialize({
         client_id: '87be5093d25e70cbe11e0e4e6ae82ce7'
     });
+
+    var paused = false;
+    var song_count = 0;
+    var song_index = 0;
         
 
-    var trackid = trackarray[0][0];
+    var trackid = (trackarray[0][0]);
     var url = '/tracks/' + trackid;
     startStream(url);
 
-    var paused = false;
-    song_count = 0;
+
+   
 
     // when you press on album pic, it will play that song
     $scope.playSpecificSong = function(index) {
       song_index = index;
-      song_count = song_index + 1;
+      song_count = song_index;
       new_song = trackarray[song_count % trackarray.length][0];
       var new_url = '/tracks/' + new_song;
       startStream(new_url);
@@ -179,7 +182,7 @@ angular.module( 'inTunity.home', [
       song_index = song_count % trackarray.length;
       new_song = trackarray[song_count % trackarray.length][0];
       console.log("Starting New " + new_song);
-      new_url = '/tracks/' + new_song;
+      new_url = '/tracks/24732726';
       startStream(new_url);
     }
 
@@ -210,6 +213,10 @@ angular.module( 'inTunity.home', [
 
 
 
+
+
+
+
     var progressBall = document.getElementById('playHead');
     var time = document.getElementById('time');
     
@@ -219,21 +226,21 @@ angular.module( 'inTunity.home', [
 
 
       songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
-      console.log(songDuration);
+
 
 
       SC.stream(newSoundUrl).then(function (player) {
         console.log("Starting New " + newSoundUrl);
         globalPlayer = player;
 
-        globalPlayer.setVolume(0.05);
+  
 
         globalPlayer.play();
-        console.log("hi");
+
 
         globalPlayer.on('play-start', function () {
           globalPlayer.seek(0);
-          // globalPlayer.play();
+   
 
     
           //this is for resetting all the background color to its natural settings
@@ -269,10 +276,10 @@ angular.module( 'inTunity.home', [
         globalPlayer.on('finish', function () {
           globalPlayer.pause();
          
-          
-          // new_song = trackarray[song_count % trackarray.length][0];
-          // song_index = song_count % trackarray.length;
-          // new_url = '/tracks/' + new_song;
+          song_count++;
+          new_song = trackarray[song_count % trackarray.length][0];
+          song_index = song_count % trackarray.length;
+          new_url = '/tracks/' + new_song;
           startStream(newSoundUrl);
         }); // end of finish
 
