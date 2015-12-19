@@ -149,7 +149,7 @@ angular.module( 'inTunity.home', [
     var url = 'tracks/' + trackid;
 
 
-         startStream(url);
+
    
 
     // when you press on album pic, it will play that song
@@ -214,10 +214,10 @@ angular.module( 'inTunity.home', [
     }
 
 
+    console.log(SC.resolve("https://api.soundcloud.com/tracks/" + trackid));
 
 
-
-
+    startStream(url);
 
     var progressBall = document.getElementById('playHead');
     var time = document.getElementById('time');
@@ -231,16 +231,17 @@ angular.module( 'inTunity.home', [
 
 
 
-        console.log("Starting New " + newSoundUrl);
+        // console.log("Starting New " + newSoundUrl);
         globalPlayer = player;
 
         globalPlayer.play();
 
         globalPlayer.setVolume(0.01);
-         globalPlayer.seek(0);
+
 
 
         globalPlayer.on('play-start', function () {
+          console.log("play");
           globalPlayer.seek(0);
    
 
@@ -274,19 +275,31 @@ angular.module( 'inTunity.home', [
           progressBall.style.marginLeft = percent + "%";
         });
 
-
+        var length = (parseInt(trackarray[song_count % trackarray.length][3]));
         globalPlayer.on('finish', function () {
           // globalPlayer.pause();
 
          
-          song_count++;
-          new_song = trackarray[song_count % trackarray.length][0];
-          song_index = song_count % trackarray.length;
-          new_url = '/tracks/' + new_song;
-          
+   
+   
     
-          startStream(new_url);
-          globalPlayer.seek(0);
+          // globalPlayer.currentTime() = ;
+          if (length == globalPlayer.currentTime()) {
+            // console.log("finish");
+            // console.log(globalPlayer.currentTime());
+            song_count++;
+            new_song = trackarray[song_count % trackarray.length][0];
+            song_index = song_count % trackarray.length;
+            new_url = '/tracks/' + new_song;
+            
+            // console.log(SC.resolve("https://api.soundcloud.com/tracks/" + new_song));
+            console.log(new_url);
+            globalPlayer.seek(0); //Do this before startStream
+            startStream(new_url);
+          }
+
+         
+        
         }); // end of finish
 
 
