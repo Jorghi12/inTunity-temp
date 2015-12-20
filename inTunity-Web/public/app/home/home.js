@@ -295,16 +295,16 @@ angular.module( 'inTunity.home', [
           currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
 
 
-          if (globalPlayer.currentTime() <= (songDuration  * 0.05)) {
-            globalPlayer.setVolume(0.4);
+          if (globalPlayer.currentTime() <= (songDuration  * 0.02)) {
+            globalPlayer.setVolume(0.8);
           }
 
-          if ((globalPlayer.currentTime() > (songDuration  * 0.05)) && (globalPlayer.currentTime() < (songDuration  * 0.95)) ) {
+          if ((globalPlayer.currentTime() > (songDuration  * 0.02)) && (globalPlayer.currentTime() < (songDuration  * 0.98)) ) {
              globalPlayer.setVolume(1);
           }
 
-          if (globalPlayer.currentTime() >= (songDuration  * 0.95)) {
-            globalPlayer.setVolume(0.4);
+          if (globalPlayer.currentTime() >= (songDuration  * 0.98)) {
+            globalPlayer.setVolume(0.8);
           }
 
         });
@@ -336,53 +336,64 @@ angular.module( 'inTunity.home', [
 
 
    
+    var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
 
-
-
+    var current_time = document.getElementById("currentTime");
 
     //Handles the progress bar.
+
+
     var time = document.getElementById("time");
     var playHead = document.getElementById('playHead');
     var timelineWidth = time.offsetWidth - playHead.offsetWidth;
     
-   //  function clickPercentage(click) {
-   //    var perct = (click.pageX - time.offsetLeft) / timelineWidth;
-   //    return (click.pageX - time.offsetLeft) / timelineWidth;
-   //  }
+    // function clickPercentage(click) {
+    //   var perct = (click.pageX - time.offsetLeft) / timelineWidth;
+    //   return (click.pageX - time.offsetLeft) / timelineWidth;
+    // }
     
-   //  time.addEventListener('click', function (event) {
-   //    changePosition(event);
-   //  }, false);
+    time.addEventListener('click', function (event) {
+      changePosition(event);
+    }, false);
     
-   //  playHead.addEventListener('mouseup', mouseUp, false);
-   //  playHead.addEventListener('mousedown', mouseDown, false);
-   //  var beingclicked = false;
+    playHead.addEventListener('mouseup', mouseUp, false);
+    playHead.addEventListener('mousedown', mouseDown, false);
+    var beingclicked = false;
     
-   //  function mouseDown() {
-   //      beingclicked = true;
-   //      window.addEventListener('mousemove', changePosition, true);
-   //  }
+    function mouseDown() {
+        beingclicked = true;
+        window.addEventListener('mousemove', changePosition, true);
+    }
     
-   // function mouseUp(click) {
-   //    if (beingclicked == true) {
-   //      changePosition(click);
-   //      window.removeEventListener('mousemove', changePosition, true);
-   //    }
-   //    beingclicked = false;
-   //  }
+   function mouseUp(click) {
+      if (beingclicked == true) {
+        changePosition(click);
+        window.removeEventListener('mousemove', changePosition, true);
+      }
+      beingclicked = false;
+    }
     
-   //  function changePosition(click) {
-   //    var marginLeft = click.pageX - time.offsetLeft;
-   //    if (marginLeft >= 0 && marginLeft <= timelineWidth) {
-   //        playHead.style.marginLeft = marginLeft + "px";
-   //    }
-   //    if (marginLeft < 0) {
-   //        playHead.style.marginLeft = "0px";
-   //    }
-   //    if (marginLeft > timelineWidth) {
-   //        playHead.style.marginLeft = timelineWidth + "px";
-   //    }
-   //  }
+    function changePosition(click) {
+      console.log("change");
+      var marginLeft = click.pageX - time.offsetLeft - 10;
+
+      console.log(timelength);
+      var percentageClicked = (marginLeft / time.offsetWidth);
+
+      globalPlayer.seek(Math.floor(percentageClicked * timelength));
+
+
+
+      // if (marginLeft >= 0 && marginLeft <= timelineWidth) {
+      //     playHead.style.marginLeft = marginLeft + "px";
+      // }
+      // if (marginLeft < 0) {
+      //     playHead.style.marginLeft = "0px";
+      // }
+      // if (marginLeft > timelineWidth) {
+      //     playHead.style.marginLeft = timelineWidth + "px";
+      // }
+    }
 
   }); // end of http get
 

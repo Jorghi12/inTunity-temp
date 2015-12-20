@@ -264,7 +264,7 @@ hr {
 	background: grey;
 	display: inline-block;
 	float:left;
-	border-radius: 15px;
+
 	margin-left:10px;
 	margin-right:10px;
 	margin-top:7px;
@@ -273,7 +273,7 @@ hr {
 #playHead {
 
 	width: 0px;
-	height: 4px;
+	height: 5px;
 
 	margin-top: 0px;
 	background: orange;
