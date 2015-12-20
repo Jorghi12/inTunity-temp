@@ -242,7 +242,7 @@ angular.module( 'inTunity.home', [
    
     // console.log(SC.resolve("https://soundcloud.com/octobersveryown/remyboyz-my-way-rmx-ft-drake"));
 
-
+    var time = document.getElementById("time");
     startStream(url);
 
     var progressBall = document.getElementById('playHead');
@@ -291,7 +291,7 @@ angular.module( 'inTunity.home', [
 
           songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
 
-          var percent = ((globalPlayer.currentTime() / songDuration)) * 400;
+          var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
           progressBall.style.width = percent + "px";
 
           var currentTime = document.getElementById("currentTime");
@@ -346,7 +346,7 @@ angular.module( 'inTunity.home', [
     //Handles the progress bar.
 
 
-    var time = document.getElementById("time");
+
     var playHead = document.getElementById('playHead');
     var timelineWidth = time.offsetWidth - playHead.offsetWidth;
         
@@ -357,11 +357,30 @@ angular.module( 'inTunity.home', [
    
     function changePosition(click) {
       var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
-      var marginLeft = click.pageX - time.offsetLeft - 10;
+      console.log(timelength);
+
+
+      var col1 = document.getElementById("col1");
+
+      console.log(click.pageX);
+
+      var marginLeft;
+      if (col1.offsetWidth < 500) {
+        console.log("here");
+        marginLeft = click.pageX - 15;
+      } else {
+        marginLeft = click.pageX - col1.offsetWidth - 10
+      }
+      
+
+
       var percentageClicked = (marginLeft / time.offsetWidth);
+
+
+      console.log(percentageClicked);
       globalPlayer.seek(Math.floor(percentageClicked * timelength));
       var currentTime = percentageClicked * timelength;
-      progressBall.style.width = ((currentTime/ timelength) * 400) + "px";
+      progressBall.style.width = ((currentTime/ timelength) * time.offsetWidth) + "px";
 
 
 
