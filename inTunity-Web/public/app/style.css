@@ -260,17 +260,21 @@ hr {
 
 #time{
 	width: 400px;
-	height: 20px;
+	height: 5px;
 	background: grey;
 	display: inline-block;
 	float:left;
 	border-radius: 15px;
+	margin-left:10px;
+	margin-right:10px;
+	margin-top:7px;
 }
 
 #playHead {
-	width: 18px;
-	height: 18px;
-	border-radius: 50%;
-	margin-top: 1px;
-	background: black;
+
+	width: 0px;
+	height: 4px;
+
+	margin-top: 0px;
+	background: orange;
 }

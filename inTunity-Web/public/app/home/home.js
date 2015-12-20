@@ -289,7 +289,7 @@ angular.module( 'inTunity.home', [
         globalPlayer.on('time', function() {
           songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
           var percent = Math.floor((100 / songDuration) * globalPlayer.currentTime());
-          progressBall.style.marginLeft = percent + "%";
+          progressBall.style.width = percent + "%";
 
           var currentTime = document.getElementById("currentTime");
           currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
@@ -345,44 +345,44 @@ angular.module( 'inTunity.home', [
     var playHead = document.getElementById('playHead');
     var timelineWidth = time.offsetWidth - playHead.offsetWidth;
     
-    function clickPercentage(click) {
-      var perct = (click.pageX - time.offsetLeft) / timelineWidth;
-      return (click.pageX - time.offsetLeft) / timelineWidth;
-    }
+   //  function clickPercentage(click) {
+   //    var perct = (click.pageX - time.offsetLeft) / timelineWidth;
+   //    return (click.pageX - time.offsetLeft) / timelineWidth;
+   //  }
     
-    time.addEventListener('click', function (event) {
-      changePosition(event);
-    }, false);
+   //  time.addEventListener('click', function (event) {
+   //    changePosition(event);
+   //  }, false);
     
-    playHead.addEventListener('mouseup', mouseUp, false);
-    playHead.addEventListener('mousedown', mouseDown, false);
-    var beingclicked = false;
+   //  playHead.addEventListener('mouseup', mouseUp, false);
+   //  playHead.addEventListener('mousedown', mouseDown, false);
+   //  var beingclicked = false;
     
-    function mouseDown() {
-        beingclicked = true;
-        window.addEventListener('mousemove', changePosition, true);
-    }
+   //  function mouseDown() {
+   //      beingclicked = true;
+   //      window.addEventListener('mousemove', changePosition, true);
+   //  }
     
-   function mouseUp(click) {
-      if (beingclicked == true) {
-        changePosition(click);
-        window.removeEventListener('mousemove', changePosition, true);
-      }
-      beingclicked = false;
-    }
+   // function mouseUp(click) {
+   //    if (beingclicked == true) {
+   //      changePosition(click);
+   //      window.removeEventListener('mousemove', changePosition, true);
+   //    }
+   //    beingclicked = false;
+   //  }
     
-    function changePosition(click) {
-      var marginLeft = click.pageX - time.offsetLeft;
-      if (marginLeft >= 0 && marginLeft <= timelineWidth) {
-          playHead.style.marginLeft = marginLeft + "px";
-      }
-      if (marginLeft < 0) {
-          playHead.style.marginLeft = "0px";
-      }
-      if (marginLeft > timelineWidth) {
-          playHead.style.marginLeft = timelineWidth + "px";
-      }
-    }
+   //  function changePosition(click) {
+   //    var marginLeft = click.pageX - time.offsetLeft;
+   //    if (marginLeft >= 0 && marginLeft <= timelineWidth) {
+   //        playHead.style.marginLeft = marginLeft + "px";
+   //    }
+   //    if (marginLeft < 0) {
+   //        playHead.style.marginLeft = "0px";
+   //    }
+   //    if (marginLeft > timelineWidth) {
+   //        playHead.style.marginLeft = timelineWidth + "px";
+   //    }
+   //  }
 
   }); // end of http get
 
