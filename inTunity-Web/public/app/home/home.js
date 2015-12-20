@@ -256,6 +256,7 @@ angular.module( 'inTunity.home', [
 
         globalPlayer = player;
         globalPlayer.play();
+        globalPlayer.seek(0);
 
         globalPlayer.on('play-start', function () {
           console.log("play");
@@ -287,9 +288,11 @@ angular.module( 'inTunity.home', [
 
 
         globalPlayer.on('time', function() {
+
           songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
-          var percent = Math.floor((100 / songDuration) * globalPlayer.currentTime());
-          progressBall.style.width = percent + "%";
+
+          var percent = ((globalPlayer.currentTime() / songDuration)) * 400;
+          progressBall.style.width = percent + "px";
 
           var currentTime = document.getElementById("currentTime");
           currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
@@ -336,7 +339,7 @@ angular.module( 'inTunity.home', [
 
 
    
-    var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
+    
 
     var current_time = document.getElementById("currentTime");
 
@@ -356,31 +359,26 @@ angular.module( 'inTunity.home', [
       changePosition(event);
     }, false);
     
-    playHead.addEventListener('mouseup', mouseUp, false);
-    playHead.addEventListener('mousedown', mouseDown, false);
-    var beingclicked = false;
-    
-    function mouseDown() {
-        beingclicked = true;
-        window.addEventListener('mousemove', changePosition, true);
-    }
-    
-   function mouseUp(click) {
-      if (beingclicked == true) {
-        changePosition(click);
-        window.removeEventListener('mousemove', changePosition, true);
-      }
-      beingclicked = false;
-    }
+   
     
     function changePosition(click) {
+      var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
       console.log("change");
       var marginLeft = click.pageX - time.offsetLeft - 10;
 
-      console.log(timelength);
+
+      console.log(marginLeft);
+      console.log(time.offsetWidth);
       var percentageClicked = (marginLeft / time.offsetWidth);
 
+      console.log(percentageClicked);
+
+      console.log(timelength);
       globalPlayer.seek(Math.floor(percentageClicked * timelength));
+
+      var currentTime = percentageClicked * timelength;
+
+      progressBall.style.width = ((currentTime/ timelength) * 400) + "px";
 
 
 
