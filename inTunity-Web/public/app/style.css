@@ -18,6 +18,8 @@ input {
 	margin:5px;
 }
 
+button:focus {outline:0;}
+
 .navbar-fixed-top {
 	background-color: #F5F5F5;
 }
@@ -259,14 +261,12 @@ hr {
 
 
 #time{
-	width: 400px;
+	width: 100%;
 	height: 5px;
 	background: grey;
 	display: inline-block;
 	float:left;
-
-	margin-left:10px;
-	margin-right:10px;
+	margin:10px 0px 0px 0px;
 	margin-top:7px;
 }
 
@@ -277,4 +277,19 @@ hr {
 
 	margin-top: 0px;
 	background: orange;
+}
+
+.playerButton {
+	width: 100px;
+	background-color: #ffe4c4;
+	border-radius: 10px;
+	transition: all 0.2s;
+}
+
+.playerButton:hover {
+	color:black;
+	background-color: salmon;
+	-moz-box-shadow: 1px 1px 5px #999;
+ 	-webkit-box-shadow: 1px 1px 5px #999;
+ 	box-shadow: 1px 1px 5px #999;
 }
