@@ -177,6 +177,11 @@ angular.module( 'inTunity.home', [
       if (song_count < 0) {
         song_count = 0;
       }
+
+      paused = false;
+      var pauseButton = document.getElementById('pauseButton');
+      pauseButton.innerHTML = "Pause";
+
       new_song = trackarray[song_count % trackarray.length][0];
       song_index = song_count % trackarray.length;
       console.log("Starting New " + new_song);
@@ -191,6 +196,11 @@ angular.module( 'inTunity.home', [
       if (song_count == trackarray.length) {
         song_count = 0;
       }
+      
+      paused = false;
+      var pauseButton = document.getElementById('pauseButton');
+      pauseButton.innerHTML = "Pause";
+
       song_index = song_count % trackarray.length;
       new_song = trackarray[song_count % trackarray.length][0];
       console.log("Starting New " + new_song);
