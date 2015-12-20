@@ -66,35 +66,56 @@
 
 
   <div id="footer">
-  <div id = "waveform" style = "height:100px"></div>
+
 
     <div class = "container" id = "widgetContainer" >
-<!--       <iframe id="sc-widget" src="" width="100%" height="150" scrolling="no" frameborder="no"></iframe> -->
-          <!-- <div id="putTheWidgetHere"></div> -->
-          <!--<iframe id="sc-widget" width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F1848538&show_artwork=true&auto_play=true"></iframe>-->
-        <button id="prevButton" ng-click="prevPlayer()">Previous</button>
-        <button type="button" id="pauseButton" ng-click ="pause()">Pause</button>
-        <button id="nextButton" ng-click="nextPlayer()">Next</button>
 
 
-        <div id='audplayer'>
-          <div id='time'>
-            <div id='playHead'></div>
+        <div class = "row">
+
+            <button id="prevButton" ng-click="prevPlayer()">Previous</button>
+            <button type="button" id="pauseButton" ng-click ="pause()">Pause</button>
+            <button id="nextButton" ng-click="nextPlayer()">Next</button>
+         
+            
+  
+        </div>  
+
+
+        <div class = "row">
+          <div class = "col-md-6">
+            <div id='audplayer'>
+              <div id='time'>
+                <div id='playHead'></div>
+              </div>
+            </div>
           </div>
+          <div class = "col-md-6">
+            
+
+            <span><img id = "artwork" style = "width:80px; height:80px;"><span><span>  Current: </span><span id = "songtitle" style = "font-weight: bold"></span>
+          </div>
+            
+
         </div>
+
+
+        
 
        
 
-        <div class = "col-md-12">
-          <div class= = "col-xs-6">
+        
+      <!--     <div class= = "col-xs-6">
             <span>Current:</span>
             <span id = "songtitle"></span>
-          </div>
+          </div> -->
 
-          <div class= = "col-xs-6">
+         <!--  <div class= = "col-xs-6">
             <img id = "artwork" style = "width:80px; height:80px;">
-          </div>
-        </div> 
+          </div> -->
+
+
+
       </div>
   </div>
 </div>

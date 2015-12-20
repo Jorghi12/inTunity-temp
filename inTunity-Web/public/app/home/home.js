@@ -224,7 +224,7 @@ angular.module( 'inTunity.home', [
     }
 
    
-
+    // console.log(SC.resolve("https://soundcloud.com/octobersveryown/remyboyz-my-way-rmx-ft-drake"));
 
 
     startStream(url);
