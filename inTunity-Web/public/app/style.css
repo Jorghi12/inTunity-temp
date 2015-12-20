@@ -259,11 +259,11 @@ hr {
 
 
 #time{
-	width: 500px;
+	width: 400px;
 	height: 20px;
 	background: grey;
-	float: left;
-	margin-top: 20px;
+	display: inline-block;
+	float:left;
 	border-radius: 15px;
 }
 

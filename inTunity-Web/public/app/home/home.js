@@ -48,6 +48,12 @@ angular.module( 'inTunity.home', [
     $location.path('/about');
   }
 
+  function millisToMinutesAndSeconds(millis) {
+    var minutes = Math.floor(millis / 60000);
+    var seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+  }
+
 
 
   var username;
@@ -196,7 +202,7 @@ angular.module( 'inTunity.home', [
       if (song_count == trackarray.length) {
         song_count = 0;
       }
-      
+
       paused = false;
       var pauseButton = document.getElementById('pauseButton');
       pauseButton.innerHTML = "Pause";
@@ -255,6 +261,11 @@ angular.module( 'inTunity.home', [
           console.log("play");
           globalPlayer.seek(0);
 
+
+
+          var endTime = document.getElementById("endTime");
+          endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
+
           //this is for resetting all the background color to its natural settings
           for (var i = 0; i < trackarray.length; i ++) {
              var row = document.getElementById("song" + i);
@@ -279,6 +290,9 @@ angular.module( 'inTunity.home', [
           songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
           var percent = Math.floor((100 / songDuration) * globalPlayer.currentTime());
           progressBall.style.marginLeft = percent + "%";
+
+          var currentTime = document.getElementById("currentTime");
+          currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
 
 
           if (globalPlayer.currentTime() <= (songDuration  * 0.05)) {
