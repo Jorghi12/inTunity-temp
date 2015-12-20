@@ -341,7 +341,7 @@ angular.module( 'inTunity.home', [
    
     
 
-    var current_time = document.getElementById("currentTime");
+    
 
     //Handles the progress bar.
 
@@ -349,48 +349,22 @@ angular.module( 'inTunity.home', [
     var time = document.getElementById("time");
     var playHead = document.getElementById('playHead');
     var timelineWidth = time.offsetWidth - playHead.offsetWidth;
-    
-    // function clickPercentage(click) {
-    //   var perct = (click.pageX - time.offsetLeft) / timelineWidth;
-    //   return (click.pageX - time.offsetLeft) / timelineWidth;
-    // }
-    
+        
     time.addEventListener('click', function (event) {
       changePosition(event);
     }, false);
     
    
-    
     function changePosition(click) {
       var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
-      console.log("change");
       var marginLeft = click.pageX - time.offsetLeft - 10;
-
-
-      console.log(marginLeft);
-      console.log(time.offsetWidth);
       var percentageClicked = (marginLeft / time.offsetWidth);
-
-      console.log(percentageClicked);
-
-      console.log(timelength);
       globalPlayer.seek(Math.floor(percentageClicked * timelength));
-
       var currentTime = percentageClicked * timelength;
-
       progressBall.style.width = ((currentTime/ timelength) * 400) + "px";
 
 
 
-      // if (marginLeft >= 0 && marginLeft <= timelineWidth) {
-      //     playHead.style.marginLeft = marginLeft + "px";
-      // }
-      // if (marginLeft < 0) {
-      //     playHead.style.marginLeft = "0px";
-      // }
-      // if (marginLeft > timelineWidth) {
-      //     playHead.style.marginLeft = timelineWidth + "px";
-      // }
     }
 
   }); // end of http get
