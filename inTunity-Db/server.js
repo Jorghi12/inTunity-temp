@@ -41,7 +41,8 @@ app.set('port', 3005);
 
 var User = require('./model/User.js');
 var SongHistory = require('./model/SongHistory.js');
-// var Event = require('./model/Event.js');
+var location = require('./model/Location.js');
+
 
 //routes
 var router = express.Router();

@@ -188,21 +188,66 @@ angular.module( 'inTunity.addSong', [
         song_duration: duration
     });
 
-     console.log(song);
+    console.log(song);
 
-     // console.log(song);
+
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        console.log("Geolocation is not supported by this browser.");
+    }
+
     
-    $http.post('http://localhost:3001/secured/songs', {data: song}, { 
-        headers: {
-        'Accept' : '*/*',
-        'Content-Type': 'application/json'
-       }
-    }).success(function(data, status, headers, config) {
-          console.log(status);
-          $location.path('/');
-      }).error(function(data, status, headers, config) {
-          console.log(status);
-      });
+    // going to do everything inside this function
+    function showPosition(position) {
+        lat = (position.coords.latitude); 
+        lon = (position.coords.longitude);  
+       
+
+
+        function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 8,
+    center: {lat: 40.731, lng: -73.997}
+  });
+  var geocoder = new google.maps.Geocoder;
+  var infowindow = new google.maps.InfoWindow;
+
+  // document.getElementById('submit').addEventListener('click', function() {
+  //   geocodeLatLng(geocoder, map, infowindow);
+  // });
+}
+
+
+
+
+    }
+    
+
+
+
+
+
+
+
+
+
+    
+    // $http.post('http://localhost:3001/secured/songs', {data: song}, { 
+    //     headers: {
+    //     'Accept' : '*/*',
+    //     'Content-Type': 'application/json'
+    //    }
+    // }).success(function(data, status, headers, config) {
+    //       console.log(status);
+    //       $location.path('/');
+    //   }).error(function(data, status, headers, config) {
+    //       console.log(status);
+    //   });
+
+
+
   } 
 
   $scope.boss = function(url){
