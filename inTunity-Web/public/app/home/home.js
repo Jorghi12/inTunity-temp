@@ -159,6 +159,7 @@ angular.module( 'inTunity.home', [
     var song_index = 0;
         
     if (trackarray.length > 0) {
+      console.log("hit here");
       var trackid = (trackarray[0][0]);
       var url = 'tracks/' + trackid;
       startStream(url);
