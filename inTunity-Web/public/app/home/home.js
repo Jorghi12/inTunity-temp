@@ -177,6 +177,7 @@ angular.module( 'inTunity.home', [
       song_count = song_index;
       new_song = trackarray[song_count % trackarray.length][0];
       var new_url = '/tracks/' + new_song;
+      console.log(new_url);
       startStream(new_url);
     }
 
