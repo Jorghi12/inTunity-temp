@@ -26,7 +26,9 @@ angular.module( 'inTunity.home', [
   var id = prof["identities"][0]["user_id"];
 
   $scope.logout = function() {
-    globalPlayer.pause();
+    if (trackarray.length > 0) {
+      globalPlayer.pause();
+    }  
     auth.signout();
     store.remove('profile');
     store.remove('token');
