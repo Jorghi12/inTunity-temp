@@ -267,6 +267,8 @@ angular.module( 'inTunity.home', [
           console.log("play");
           globalPlayer.seek(0);
 
+    
+
 
 
           var endTime = document.getElementById("endTime");
