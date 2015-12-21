@@ -260,7 +260,11 @@ angular.module( 'inTunity.home', [
       songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
 
       console.log(songDuration);
-      $scope.currentuser = correctUsers[song_count][0]["nickname"];
+
+      currentuser = document.getElementById("currentuser");
+      currentuser.innerHTML = correctUsers[song_count][0]["nickname"];
+
+
       console.log($scope.currentuser);
       
       SC.stream(newSoundUrl).then(function (player) {
@@ -339,7 +343,7 @@ angular.module( 'inTunity.home', [
             new_url = '/tracks/' + new_song;
             console.log(new_url);
             globalPlayer.seek(0); //Do this before startStream
-            $scope.currentuser = correctUsers[song_count][0]["nickname"];
+
             startStream(new_url);
           }
   
