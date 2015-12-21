@@ -328,12 +328,6 @@ angular.module( 'inTunity.home', [
   
         }); // end of finish
 
-
-
-
-
-
-
       });
     }
 
@@ -346,45 +340,41 @@ angular.module( 'inTunity.home', [
     //Handles the progress bar.
 
 
+    if (trackarray.length > 0) { 
+      var playHead = document.getElementById('playHead');
+      var timelineWidth = time.offsetWidth - playHead.offsetWidth;
+          
+      time.addEventListener('click', function (event) {
+        changePosition(event);
+      }, false);
 
-    var playHead = document.getElementById('playHead');
-    var timelineWidth = time.offsetWidth - playHead.offsetWidth;
+      function changePosition(click) {
+        var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
+        var col1 = document.getElementById("col1");
+
+        var marginLeft;
+        if (col1.offsetWidth < 500) {
+          console.log("here");
+          marginLeft = click.pageX - 15;
+        } else {
+          marginLeft = click.pageX - col1.offsetWidth - 10
+        }
         
-    time.addEventListener('click', function (event) {
-      changePosition(event);
-    }, false);
+        var percentageClicked = (marginLeft / time.offsetWidth);
+
+        console.log(percentageClicked);
+        globalPlayer.seek(Math.floor(percentageClicked * timelength));
+        var currentTime = percentageClicked * timelength;
+        progressBall.style.width = ((currentTime/ timelength) * time.offsetWidth) + "px";
+
+     }
+    
+
+
+    }  
     
    
-    function changePosition(click) {
-      var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
-      console.log(timelength);
-
-
-      var col1 = document.getElementById("col1");
-
-      console.log(click.pageX);
-
-      var marginLeft;
-      if (col1.offsetWidth < 500) {
-        console.log("here");
-        marginLeft = click.pageX - 15;
-      } else {
-        marginLeft = click.pageX - col1.offsetWidth - 10
-      }
-      
-
-
-      var percentageClicked = (marginLeft / time.offsetWidth);
-
-
-      console.log(percentageClicked);
-      globalPlayer.seek(Math.floor(percentageClicked * timelength));
-      var currentTime = percentageClicked * timelength;
-      progressBall.style.width = ((currentTime/ timelength) * time.offsetWidth) + "px";
-
-
-
-    }
+   
 
   }); // end of http get
 
