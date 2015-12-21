@@ -14,7 +14,21 @@ angular.module( 'inTunity.addSong', [
     $scope.owner = prof["nickname"];
   }
 
+  $scope.position;
+
   var id = auth.profile["identities"][0]["user_id"];
+
+  
+   
+  
+ 
+
+
+
+
+ 
+
+
   
 
 
@@ -41,11 +55,30 @@ angular.module( 'inTunity.addSong', [
     return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
   }
 
+  if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position){
+        console.log(position.coords.latitude);
+        console.log(position.coords.longitude);
+        localStorage.setItem("latitude", position.coords.latitude);
+        localStorage.setItem("longitude", position.coords.longitude);
 
+      });
+    } else {
+        console.log("Geolocation is not supported by this browser.");
+    }
 
  
 
   $scope.findSong = function() {
+
+    var latitude = parseFloat(localStorage.getItem("latitude"));
+    var longitude = parseFloat(localStorage.getItem("longitude"));
+
+    localStorage.removeItem("latitude");
+    localStorage.removeItem("longitude");
+
+
+
     var name = $scope.search;
 
     var container = document.getElementById("searchResults");
@@ -131,7 +164,7 @@ angular.module( 'inTunity.addSong', [
                 console.log(obj[this.id]);
                 var selectedSong = obj[this.id];
                 var id = (selectedSong["id"]);
-                $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
+                $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"], latitude, longitude);
 
               }
               confirmSong.className = 'intunity-button play-button confirmSong';
@@ -161,7 +194,7 @@ angular.module( 'inTunity.addSong', [
 
 
 
-  $scope.selectSong = function(url, artwork, title, trackid, duration) {
+  $scope.selectSong = function(url, artwork, title, trackid, duration, latitude, longitude) {
     console.log(url);
     console.log(artwork)
     console.log(title);
@@ -177,35 +210,66 @@ angular.module( 'inTunity.addSong', [
     } 
 
 
+
      var today = new Date();
-     var song = JSON.stringify({
-        user_id: id,
-        song_url:url, 
-        song_artwork: updatedSongPic, 
-        song_title: title,
-        unix_time: today.getTime()/1000,
-        track_id: trackid,
-        song_duration: duration
+     
+ 
+
+  
+    var geocoder = new google.maps.Geocoder;
+    var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+    geocoder.geocode({'location': latlng}, function(results, status) {
+      if (status === google.maps.GeocoderStatus.OK) {
+
+        if (results[1]) {
+          console.log("result found");
+          console.log(results);
+
+          var state = results[2]["address_components"][1]["short_name"];
+
+
+          var city = results[1]["address_components"][1]["short_name"];
+
+
+          var song = JSON.stringify({
+            user_id: id,
+            song_url:url, 
+            song_artwork: updatedSongPic, 
+            song_title: title,
+            unix_time: today.getTime()/1000,
+            track_id: trackid,
+            song_duration: duration,
+            state: state,
+            city: city
+          });
+
+          console.log(song);
+
+          console.log("adding a song...");
+          $http.post('http://localhost:3001/secured/songs', {data: song}, { 
+            headers: {
+            'Accept' : '*/*',
+            'Content-Type': 'application/json'
+           }
+          }).success(function(data, status, headers, config) {
+              console.log(status);
+              $location.path('/');
+          }).error(function(data, status, headers, config) {
+              console.log(status);
+          });
+
+
+        
+        } else {
+          window.alert('No results found');
+        }
+      } else {
+        window.alert('Geocoder failed due to: ' + status);
+      }
     });
+  
 
-     console.log(song);
-
-     // console.log(song);
-
-
-    console.log("adding a song");
-    $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
-        headers: {
-        'Accept' : '*/*',
-        'Content-Type': 'application/json'
-       }
-    }).success(function(data, status, headers, config) {
-          console.log(status);
-          $location.path('/');
-      }).error(function(data, status, headers, config) {
-          console.log(status);
-      });
-  } 
+  } // end of selectSong()
 
   $scope.boss = function(url){
 

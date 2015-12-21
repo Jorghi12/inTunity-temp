@@ -4,8 +4,6 @@ var Schema = mongoose.Schema;
 var location = new Schema({
 	state: String,
 	city: String,
-	latitude: String,
-	longitude: String,
 	song_id: String
 });
 

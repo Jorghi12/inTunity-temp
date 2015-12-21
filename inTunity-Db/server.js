@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 
 var dbName = 'inTunity';
 
-mongoose.connect('mongodb://ec2-52-35-92-198.us-west-2.compute.amazonaws.com/' + dbName);
+mongoose.connect('mongodb://localhost:27017/' + dbName);
 
 app.use(session({
 	secret: 'inTunity',
@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 
-var whitelist = ['http://http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:8100'];
+var whitelist = ['http://localhost:8100'];
 var cors_options = {
 	origin: function (origin, callback) {
 		var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
@@ -41,6 +41,8 @@ app.set('port', 3005);
 
 var User = require('./model/User.js');
 var SongHistory = require('./model/SongHistory.js');
+var location = require('./model/location.js');
+
 // var Event = require('./model/Event.js');
 
 //routes
@@ -202,17 +204,42 @@ router.post('/api/accounts/updateSong' , function (req, res, next) {
 			unix_time: req.body.unix_time,
 			track_id: req.body.track_id,
 			song_duration: req.body.song_duration
-		
 	    });
+
 
 	  	userObj.song_history.push(song);
 
-	    userObj.save(function(err) {
+	  	
+
+
+
+	    userObj.save(function(err, obj) {
 	    	if (err) {
 	    		throw err;
-	    	}	
-    		res.sendStatus(200);
+	    	}
+
+	    	var locObj = new location({
+		    	state: req.body.state,
+		    	city: req.body.city,
+		    	song_id: obj["song_history"][0].id
+		    });
+
+
+	    	locObj.save(function(err) {
+		    	if (err) {
+		    		throw err;
+		    	}	
+	    		res.sendStatus(200);
+	  		});	
+
+	  		console.log(locObj);
+
   		});	
+
+
+
+	    
+
 
 
   		console.log("Updated user after posting song" + userObj);

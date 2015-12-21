@@ -75,7 +75,7 @@ angular.module( 'inTunity.home', [
   $scope.users;
 
   $http({
-    url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/accounts' ,
+    url: 'http://localhost:3001/secured/accounts' ,
     method: 'GET'
   }).then(function(response) {  
     songdata = (response["data"]["songs"]);
@@ -264,8 +264,6 @@ angular.module( 'inTunity.home', [
       currentuser = document.getElementById("currentuser");
       currentuser.innerHTML = correctUsers[song_count][0]["nickname"];
 
-
-      console.log($scope.currentuser);
       
       SC.stream(newSoundUrl).then(function (player) {
 
