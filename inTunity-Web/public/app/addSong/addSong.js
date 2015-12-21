@@ -15,6 +15,8 @@ angular.module( 'inTunity.addSong', [
   }
 
   var id = auth.profile["identities"][0]["user_id"];
+
+  
   
 
 
@@ -234,17 +236,17 @@ angular.module( 'inTunity.addSong', [
 
 
     
-    // $http.post('http://localhost:3001/secured/songs', {data: song}, { 
-    //     headers: {
-    //     'Accept' : '*/*',
-    //     'Content-Type': 'application/json'
-    //    }
-    // }).success(function(data, status, headers, config) {
-    //       console.log(status);
-    //       $location.path('/');
-    //   }).error(function(data, status, headers, config) {
-    //       console.log(status);
-    //   });
+    $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
+        headers: {
+        'Accept' : '*/*',
+        'Content-Type': 'application/json'
+       }
+    }).success(function(data, status, headers, config) {
+          console.log(status);
+          $location.path('/');
+      }).error(function(data, status, headers, config) {
+          console.log(status);
+      });
 
 
 
