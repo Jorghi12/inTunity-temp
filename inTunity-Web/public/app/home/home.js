@@ -28,7 +28,7 @@ angular.module( 'inTunity.home', [
   $scope.logout = function() {
     if (trackarray.length > 0) {
       console.log("hit here");
-      // globalPlayer.pause();
+      globalPlayer.pause();
     }  
     auth.signout();
     store.remove('profile');
@@ -42,9 +42,9 @@ angular.module( 'inTunity.home', [
   }
 
   $scope.addSong = function() {
-    // if (trackarray.length > 0) {
-    //   globalPlayer.pause();
-    // }
+    if (trackarray.length > 0) {
+      globalPlayer.pause();
+    }
     $location.path('/add-song');
 
   }
