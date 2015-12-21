@@ -16,7 +16,7 @@ angular.module( 'inTunity.addSong', [
 
   var id = auth.profile["identities"][0]["user_id"];
 
-  
+
   
 
 
@@ -209,20 +209,17 @@ angular.module( 'inTunity.addSong', [
 
 
         function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 8,
-    center: {lat: 40.731, lng: -73.997}
-  });
-  var geocoder = new google.maps.Geocoder;
-  var infowindow = new google.maps.InfoWindow;
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 8,
+            center: {lat: 40.731, lng: -73.997}
+          });
+          var geocoder = new google.maps.Geocoder;
+          var infowindow = new google.maps.InfoWindow;
 
-  // document.getElementById('submit').addEventListener('click', function() {
-  //   geocodeLatLng(geocoder, map, infowindow);
-  // });
-}
-
-
-
+          // document.getElementById('submit').addEventListener('click', function() {
+          //   geocodeLatLng(geocoder, map, infowindow);
+          // });
+        }
 
     }
     
