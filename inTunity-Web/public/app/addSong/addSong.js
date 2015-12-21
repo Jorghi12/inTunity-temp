@@ -194,11 +194,11 @@ angular.module( 'inTunity.addSong', [
 
 
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else { 
-        console.log("Geolocation is not supported by this browser.");
-    }
+    // if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition(showPosition);
+    // } else { 
+    //     console.log("Geolocation is not supported by this browser.");
+    // }
 
     
     // going to do everything inside this function
