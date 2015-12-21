@@ -141,6 +141,7 @@ angular.module( 'inTunity.home', [
       trackarray.push(new Array(correctUsers[i][0]["today_song"]["track_id"], correctUsers[i][0]["today_song"]["song_album_pic"], correctUsers[i][0]["today_song"]["song_title"], correctUsers[i][0]["today_song"]["song_duration"]));
     }
 
+    console.log(correctUsers);
     console.log("track array:");
     console.log(trackarray);
 
