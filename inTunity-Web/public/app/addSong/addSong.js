@@ -55,141 +55,144 @@ angular.module( 'inTunity.addSong', [
     return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
   }
 
-  if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position){
-        console.log(position.coords.latitude);
-        console.log(position.coords.longitude);
-        localStorage.setItem("latitude", position.coords.latitude);
-        localStorage.setItem("longitude", position.coords.longitude);
 
-      });
-    } else {
-        console.log("Geolocation is not supported by this browser.");
-    }
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position){
+      console.log(position.coords.latitude);
+      console.log(position.coords.longitude);
+      localStorage.setItem("latitude", position.coords.latitude);
+      localStorage.setItem("longitude", position.coords.longitude);
+
+    });
+  } else {
+      console.log("Geolocation is not supported by this browser.");
+  }
 
  
 
   $scope.findSong = function() {
 
-    var latitude = parseFloat(localStorage.getItem("latitude"));
-    var longitude = parseFloat(localStorage.getItem("longitude"));
 
-    localStorage.removeItem("latitude");
-    localStorage.removeItem("longitude");
+    var latitude;
+    var longitude;
+    if (localStorage.getItem("latitude") != null) {
+      console.log("hit here");
+      latitude = parseFloat(localStorage.getItem("latitude"));
+      longitude = parseFloat(localStorage.getItem("longitude"));
 
-
-
-    var name = $scope.search;
-
-    var container = document.getElementById("searchResults");
-    container.innerHTML = "";
-
-    if (name == "") {
-      container.innerHTML = "<h3>Please Enter a Search Query</h3>";
-    } else {
-
-      //searching for specific genres / artists
-      var page_size = 100;
-      SC.get('/tracks', {
-        q: name,
-        limit: page_size 
-      }).then(function(tracks) {
-   
-
-        // console.log(tracks);
-
-        var streamableSongs = [];
-        for (var i = 0; i < tracks.length; i++) {
-          if (tracks[i]["streamable"] == true) {
-            streamableSongs.push(tracks[i]);
-          }
-        }
-
-        console.log(streamableSongs);
-        var obj =(streamableSongs);
+      localStorage.removeItem("latitude");
+      localStorage.removeItem("longitude");
 
 
-        
-        for (var i = 0; i < obj.length; i++) {
+      var name = $scope.search;
 
-          var albumArtwork;
-          if(obj[i]['artwork_url'] != null) {
-              var album = obj[i]['artwork_url'];
-              var index = album.indexOf("large");
-              albumArtwork = album.substring(0,index) + "t500x500.jpg";
-          } else {
-             albumArtwork = "/images/no-art.png";
+      var container = document.getElementById("searchResults");
+      container.innerHTML = "";
+
+      if (name == "") {
+        container.innerHTML = "<h3>Please Enter a Search Query</h3>";
+      } else {
+
+        //searching for specific genres / artists
+        var page_size = 100;
+        SC.get('/tracks', {
+          q: name,
+          limit: page_size 
+        }).then(function(tracks) {
+     
+
+          // console.log(tracks);
+
+          var streamableSongs = [];
+          for (var i = 0; i < tracks.length; i++) {
+            if (tracks[i]["streamable"] == true) {
+              streamableSongs.push(tracks[i]);
+            }
           }
 
+          console.log(streamableSongs);
+          var obj =(streamableSongs);
 
 
           
-          var songContainer = document.createElement('div');
-          songContainer.className = "col-md-6 search-result";
+          for (var i = 0; i < obj.length; i++) {
 
-            var col1 = document.createElement('div');
-            col1.className = "col-md-6";
-
-
-              var img = document.createElement('img');
-              img.className = "album-artwork";
-              img.src = albumArtwork;
-
-            col1.appendChild(img);
-
-            var col2 = document.createElement('div');
-            col2.className = "col-md-6 search-info";
-
-
-              var songTitle = document.createElement('h4');
-              songTitle.innerHTML = obj[i]["title"];
-
-              var likes = document.createElement('h5');
-              likes.innerHTML = "Soundcloud likes: " + obj[i]["likes_count"];
-
-              var duration = document.createElement("h5");
-              duration.innerHTML = "Time: " + millisToMinutesAndSeconds(obj[i]["duration"]);
-
-              var playbutton = "<div class='intunity-button play-button'><a href='' ng-click = 'boss(" + '"' + obj[i]['permalink_url'] + '"' + ")'><h4>" + "Sample Song" + "</h4></a></div>";
-             
-              var confirmSong = document.createElement("div");
-              confirmSong.innerHTML = "<h4>Confirm</h4>";
+            var albumArtwork;
+            if(obj[i]['artwork_url'] != null) {
+                var album = obj[i]['artwork_url'];
+                var index = album.indexOf("large");
+                albumArtwork = album.substring(0,index) + "t500x500.jpg";
+            } else {
+               albumArtwork = "/images/no-art.png";
+            }
 
 
 
+            
+            var songContainer = document.createElement('div');
+            songContainer.className = "col-md-6 search-result";
 
-              confirmSong.onclick = function() {
-                console.log("hi");
-                console.log(this.id);
-                console.log(obj[this.id]);
-                var selectedSong = obj[this.id];
-                var id = (selectedSong["id"]);
-                $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"], latitude, longitude);
-
-              }
-              confirmSong.className = 'intunity-button play-button confirmSong';
-              confirmSong.id = i;
-              
+              var col1 = document.createElement('div');
+              col1.className = "col-md-6";
 
 
-              var playElement = $compile(playbutton)($scope)[0];
-    
+                var img = document.createElement('img');
+                img.className = "album-artwork";
+                img.src = albumArtwork;
+
+              col1.appendChild(img);
+
+              var col2 = document.createElement('div');
+              col2.className = "col-md-6 search-info";
 
 
-            col2.appendChild(songTitle);
-            col2.appendChild(likes); 
-            col2.appendChild(duration); 
-            col2.appendChild(playElement);
-            col2.appendChild(confirmSong);
+                var songTitle = document.createElement('h4');
+                songTitle.innerHTML = obj[i]["title"];
 
-            songContainer.appendChild(col1);
-            songContainer.appendChild(col2);
+                var likes = document.createElement('h5');
+                likes.innerHTML = "Soundcloud likes: " + obj[i]["likes_count"];
 
-            container.appendChild(songContainer);
-        }
-      });
+                var duration = document.createElement("h5");
+                duration.innerHTML = "Time: " + millisToMinutesAndSeconds(obj[i]["duration"]);
+
+                var playbutton = "<div class='intunity-button play-button'><a href='' ng-click = 'boss(" + '"' + obj[i]['permalink_url'] + '"' + ")'><h4>" + "Sample Song" + "</h4></a></div>";
+               
+                var confirmSong = document.createElement("div");
+                confirmSong.innerHTML = "<h4>Confirm</h4>";
+
+
+
+
+                confirmSong.onclick = function() {
+                  console.log("hi");
+                  console.log(this.id);
+                  console.log(obj[this.id]);
+                  var selectedSong = obj[this.id];
+                  var id = (selectedSong["id"]);
+                  $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"], latitude, longitude);
+
+                }
+                confirmSong.className = 'intunity-button play-button confirmSong';
+                confirmSong.id = i;
+                
+                var playElement = $compile(playbutton)($scope)[0];
+      
+              col2.appendChild(songTitle);
+              col2.appendChild(likes); 
+              col2.appendChild(duration); 
+              col2.appendChild(playElement);
+              col2.appendChild(confirmSong);
+
+              songContainer.appendChild(col1);
+              songContainer.appendChild(col2);
+
+              container.appendChild(songContainer);
+          }
+        });
+      }
     }
-  }
+    
+  } // end of findSong
 
 
 
@@ -209,6 +212,8 @@ angular.module( 'inTunity.addSong', [
       updatedSongPic = "/images/no-art.png";
     } 
 
+    console.log(latitude);
+    console.log(longitude);
 
 
      var today = new Date();
