@@ -152,20 +152,15 @@ angular.module( 'inTunity.home', [
     var song_count = 0;
     var song_index = 0;
         
+    if (trackarray.length > 0) {
+      var trackid = (trackarray[0][0]);
+      var url = 'tracks/' + trackid;
+      startStream(url);
+    }
 
-    var trackid = (trackarray[0][0]);
-    var url = 'tracks/' + trackid;
 
 
-    // var waveform = new Waveform({
-    //   container: document.getElementById("waveform")
-    //   // data: [1, 0.2, 0.5]
-    // });
-
-    // SC.get("/users/1539950/favorites", function(tracks){
-    //   alert(tracks);
-    // });
-
+   
    
 
     // when you press on album pic, it will play that song
@@ -243,7 +238,7 @@ angular.module( 'inTunity.home', [
     // console.log(SC.resolve("https://soundcloud.com/octobersveryown/remyboyz-my-way-rmx-ft-drake"));
 
     var time = document.getElementById("time");
-    startStream(url);
+
 
     var progressBall = document.getElementById('playHead');
     var time = document.getElementById('time');
