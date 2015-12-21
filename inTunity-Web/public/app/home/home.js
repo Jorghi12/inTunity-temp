@@ -14,6 +14,8 @@ angular.module( 'inTunity.home', [
   var globalPlayer;
   var trackarray = [];
 
+  $scope.currentuser;
+
   
 
 
@@ -258,6 +260,8 @@ angular.module( 'inTunity.home', [
       songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
 
       console.log(songDuration);
+      $scope.currentuser = correctUsers[song_count][0]["nickname"];
+      console.log($scope.currentuser);
       
       SC.stream(newSoundUrl).then(function (player) {
 
@@ -266,7 +270,7 @@ angular.module( 'inTunity.home', [
         globalPlayer.seek(0);
 
 
-        $scope.currentuser = correctUsers[song_count][0]["nickname"];
+       
 
         globalPlayer.on('play-start', function () {
           console.log("play");
