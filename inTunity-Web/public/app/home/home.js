@@ -163,6 +163,7 @@ angular.module( 'inTunity.home', [
       console.log(trackarray.length);
       var trackid = (trackarray[0][0]);
       var url = 'tracks/' + trackid;
+      console.log(new_url);
       startStream(url);
     }
 
