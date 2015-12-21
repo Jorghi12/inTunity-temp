@@ -35,13 +35,17 @@ angular.module( 'inTunity.location', [
     $location.path('/add-song');
   }
 
-
+  $scope.places;
 
   $http({
     url: 'http://localhost:3001/secured/location' ,
     method: 'GET'
   }).then(function(response) {  
-      console.log(response);
+    $scope.places = response["data"]["location"];
+
+    console.log($scope.places);
+
+
 
   }); // end of http get
 

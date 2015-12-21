@@ -49,9 +49,6 @@ var location = require('./model/location.js');
 var router = express.Router();
 
 
-router.post('/api/accounts', function (req, res, next) {
-	console.log("about to post a user!!!");
-
 	// User.find({  }, function(err, user) {
 	//       if (err) {
 	//       	throw err;
@@ -64,9 +61,32 @@ router.post('/api/accounts', function (req, res, next) {
 	//            throw err;
 	//       }
 	//       console.log('User successfully deleted!');
-	//       res.send(200);
+
 	//       });
  //    });
+
+    // location.find({  }, function(err, loc) {
+	   //    if (err) {
+	   //    	throw err;
+	   //    }
+
+	   //    console.log("delete");
+	   //      // delete him
+	   //    location.remove(function(err) {
+	   //    if (err) {
+	   //         throw err;
+	   //    }
+	   //    console.log('Location successfully deleted!');
+	 
+	   //    });
+    // });
+
+
+
+router.post('/api/accounts', function (req, res, next) {
+	console.log("about to post a user!!!");
+
+
 
 
 	var newUser = new User({
@@ -207,7 +227,7 @@ router.post('/api/accounts/updateSong' , function (req, res, next) {
 	    	var locObj = new location({
 		    	state: req.body.state,
 		    	city: req.body.city,
-		    	song_id: obj["song_history"][0].id
+		    	song_id: obj["song_history"][obj["song_history"].length - 1].id
 		    });
 
 
@@ -238,6 +258,7 @@ router.get('/api/location/' , function (req, res, next) {
 	    res.sendStatus(500);
 	  } else if(locationObj) {
 	  	console.log(locationObj);
+	  	res.send(locationObj);
 	  } 
 	});
 });

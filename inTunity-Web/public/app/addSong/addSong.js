@@ -75,13 +75,15 @@ angular.module( 'inTunity.addSong', [
 
     var latitude;
     var longitude;
-    if (localStorage.getItem("latitude") != null) {
+
       console.log("hit here");
       latitude = parseFloat(localStorage.getItem("latitude"));
       longitude = parseFloat(localStorage.getItem("longitude"));
 
       localStorage.removeItem("latitude");
       localStorage.removeItem("longitude");
+
+      console.log(latitude, longitude);
 
 
       var name = $scope.search;
@@ -188,7 +190,7 @@ angular.module( 'inTunity.addSong', [
           }
         });
       }
-    }
+
     
   } // end of findSong
 

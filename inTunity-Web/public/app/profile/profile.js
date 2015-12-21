@@ -69,7 +69,7 @@ angular.module( 'inTunity.profile', [
 
 
 
-    var container = document.getElementById("song-list");
+
 
 
 
