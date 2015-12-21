@@ -259,6 +259,9 @@ angular.module( 'inTunity.home', [
         globalPlayer.play();
         globalPlayer.seek(0);
 
+
+        $scope.currentuser = correctUsers[song_count][0]["nickname"];
+
         globalPlayer.on('play-start', function () {
           console.log("play");
           globalPlayer.seek(0);
