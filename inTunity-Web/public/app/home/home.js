@@ -40,8 +40,11 @@ angular.module( 'inTunity.home', [
   }
 
   $scope.addSong = function() {
-    globalPlayer.pause();
+    if (trackarray.length > 0) {
+      globalPlayer.pause();
+    }
     $location.path('/add-song');
+
   }
 
   $scope.about = function() {
