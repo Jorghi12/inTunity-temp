@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 
-var whitelist = ['http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:8100'];
+var whitelist = ['http://http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:8100'];
 var cors_options = {
 	origin: function (origin, callback) {
 		var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
@@ -41,8 +41,7 @@ app.set('port', 3005);
 
 var User = require('./model/User.js');
 var SongHistory = require('./model/SongHistory.js');
-var location = require('./model/Location.js');
-
+// var Event = require('./model/Event.js');
 
 //routes
 var router = express.Router();
@@ -51,57 +50,57 @@ var router = express.Router();
 router.post('/api/accounts', function (req, res, next) {
 	console.log("about to post a user!!!");
 
-	User.find({  }, function(err, user) {
-	      if (err) {
-	      	throw err;
-	      }
+	// User.find({  }, function(err, user) {
+	//       if (err) {
+	//       	throw err;
+	//       }
 
-	      console.log("delete");
-	        // delete him
-	      User.remove(function(err) {
-	      if (err) {
-	           throw err;
-	      }
-	      console.log('User successfully deleted!');
-	      res.send(200);
-	      });
-    });
-
-
-	// var newUser = new User({
-	//     user_id: req.body.user_id,
-	//     nickname: req.body.nickname,
-	//     picture: req.body.picture,
-	//     email: req.body.email,
-	//     today_song: {
- //            song_name: "",
- //            song_album_pic: "",
- //            song_url: "",
-	// 		unix_time: "",
-	// 		track_id: "",
-	// 		song_duration: ""
-	//     }
+	//       console.log("delete");
+	//         // delete him
+	//       User.remove(function(err) {
+	//       if (err) {
+	//            throw err;
+	//       }
+	//       console.log('User successfully deleted!');
+	//       res.send(200);
+	//       });
  //    });
 
-	//  User.findOne({user_id: req.body.user_id}, function (err, userObj) {
-	//     if (err) {
-	//       console.log(err);
-	//       res.sendStatus(500);
-	//     } else if (userObj) {
-	//       console.log('Found:', userObj);
-	//       res.sendStatus(500);
-	//     } else {
-	//       console.log('User not found!');
-	//         newUser.save(function(err) {
-	//            if (err) {
-	//                  throw err;
-	//            }     else {
-	//                  console.log('User created!');
-	//                  res.sendStatus(200);
-	//            }
-	//          });
-	//     }
-	//   });
+
+	var newUser = new User({
+	    user_id: req.body.user_id,
+	    nickname: req.body.nickname,
+	    picture: req.body.picture,
+	    email: req.body.email,
+	    today_song: {
+            song_name: "",
+            song_album_pic: "",
+            song_url: "",
+			unix_time: "",
+			track_id: "",
+			song_duration: ""
+	    }
+    });
+
+	 User.findOne({user_id: req.body.user_id}, function (err, userObj) {
+	    if (err) {
+	      console.log(err);
+	      res.sendStatus(500);
+	    } else if (userObj) {
+	      console.log('Found:', userObj);
+	      res.sendStatus(500);
+	    } else {
+	      console.log('User not found!');
+	        newUser.save(function(err) {
+	           if (err) {
+	                 throw err;
+	           }     else {
+	                 console.log('User created!');
+	                 res.sendStatus(200);
+	           }
+	         });
+	    }
+	  });
 });
 
 
