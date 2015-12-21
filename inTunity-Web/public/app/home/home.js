@@ -14,7 +14,7 @@ angular.module( 'inTunity.home', [
   var globalPlayer;
   var trackarray = [];
 
-  $scope.currentuser;
+
 
   
 
