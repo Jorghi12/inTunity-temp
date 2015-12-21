@@ -160,6 +160,7 @@ angular.module( 'inTunity.home', [
         
     if (trackarray.length > 0) {
       console.log("hit here");
+      console.log(trackarray.length);
       var trackid = (trackarray[0][0]);
       var url = 'tracks/' + trackid;
       startStream(url);
@@ -267,7 +268,7 @@ angular.module( 'inTunity.home', [
           console.log("play");
           globalPlayer.seek(0);
 
-    
+
 
 
 
