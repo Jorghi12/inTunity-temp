@@ -254,6 +254,8 @@ angular.module( 'inTunity.home', [
     
     function startStream(newSoundUrl) {
       songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
+
+      console.log(songDuration);
       
       SC.stream(newSoundUrl).then(function (player) {
 
