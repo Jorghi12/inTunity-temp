@@ -114,10 +114,6 @@ router.get('/api/accounts/' , function (req, res, next) {
 	    res.sendStatus(500);
 	  } else if(userObj) {
 
-	  	console.log(userObj.length);
-
-	
-
 
 	  	// update the timer in here after expiration
 	  	// if expired, make that entry null in the db
@@ -157,19 +153,13 @@ router.get('/api/accounts/' , function (req, res, next) {
 		  		}
 	  		}
 
-	  		
 	  	} // end of for loop
 
-
-
-
-	  	// console.log(userObj);
 	  	res.send(userObj);
 
 
 	  } 
 	}).sort({'today_song.unix_time': -1});
-
 
 });
 
@@ -209,10 +199,6 @@ router.post('/api/accounts/updateSong' , function (req, res, next) {
 
 	  	userObj.song_history.push(song);
 
-	  	
-
-
-
 	    userObj.save(function(err, obj) {
 	    	if (err) {
 	    		throw err;
@@ -236,16 +222,28 @@ router.post('/api/accounts/updateSong' , function (req, res, next) {
 
   		});	
 
-
-
-	    
-
-
-
   		console.log("Updated user after posting song" + userObj);
 	  } 
 	});
 });	
+
+
+
+
+// retrieving all the locations
+router.get('/api/location/' , function (req, res, next) {
+	location.find({}, function(err, locationObj) {
+	  if (err) {
+	    console.log(err);
+	    res.sendStatus(500);
+	  } else if(locationObj) {
+	  	console.log(locationObj);
+	  } 
+	});
+});
+
+
+
 
 
 app.use(router);

@@ -127,8 +127,6 @@ angular.module( 'inTunity.addSong', [
             }
 
 
-
-            
             var songContainer = document.createElement('div');
             songContainer.className = "col-md-6 search-result";
 

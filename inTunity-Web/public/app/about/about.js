@@ -21,13 +21,6 @@ angular.module( 'inTunity.about', [
     $location.path('/add-song');
   }
 
-  $scope.logout = function() {
-    auth.signout();
-    store.remove('profile');
-    store.remove('token');
-    $location.path('/login');
-  }
-
 
   $scope.about = function() {
     $location.path('/about');
