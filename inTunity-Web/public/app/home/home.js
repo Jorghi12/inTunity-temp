@@ -339,6 +339,7 @@ angular.module( 'inTunity.home', [
             new_url = '/tracks/' + new_song;
             console.log(new_url);
             globalPlayer.seek(0); //Do this before startStream
+            $scope.currentuser = correctUsers[song_count][0]["nickname"];
             startStream(new_url);
           }
   
