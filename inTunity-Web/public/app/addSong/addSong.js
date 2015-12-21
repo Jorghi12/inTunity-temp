@@ -202,26 +202,26 @@ angular.module( 'inTunity.addSong', [
 
     
     // going to do everything inside this function
-    function showPosition(position) {
-        lat = (position.coords.latitude); 
-        lon = (position.coords.longitude);  
+    // function showPosition(position) {
+    //     lat = (position.coords.latitude); 
+    //     lon = (position.coords.longitude);  
        
 
 
-        function initMap() {
-          var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 8,
-            center: {lat: 40.731, lng: -73.997}
-          });
-          var geocoder = new google.maps.Geocoder;
-          var infowindow = new google.maps.InfoWindow;
+    //     function initMap() {
+    //       var map = new google.maps.Map(document.getElementById('map'), {
+    //         zoom: 8,
+    //         center: {lat: 40.731, lng: -73.997}
+    //       });
+    //       var geocoder = new google.maps.Geocoder;
+    //       var infowindow = new google.maps.InfoWindow;
 
-          // document.getElementById('submit').addEventListener('click', function() {
-          //   geocodeLatLng(geocoder, map, infowindow);
-          // });
-        }
+    //       // document.getElementById('submit').addEventListener('click', function() {
+    //       //   geocodeLatLng(geocoder, map, infowindow);
+    //       // });
+    //     }
 
-    }
+    // }
     
 
 
@@ -232,7 +232,7 @@ angular.module( 'inTunity.addSong', [
 
 
 
-    
+    console.log("about add a song...");  
     $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
         headers: {
         'Accept' : '*/*',
