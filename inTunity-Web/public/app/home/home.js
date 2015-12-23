@@ -375,6 +375,8 @@ angular.module( 'inTunity.home', [
         var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
         var col1 = document.getElementById("col1");
 
+        console.log($(window).width());
+
         var marginLeft;
         if (col1.className == "col-sm-12") {
           console.log("here");
