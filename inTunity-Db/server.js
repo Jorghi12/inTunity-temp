@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 
 var dbName = 'inTunity';
 
-mongoose.connect('mongodb://ec2-52-35-92-198.us-west-2.compute.amazonaws.com/' + dbName);
+mongoose.connect('mongodb://localhost:27017/' + dbName);
 
 app.use(session({
 	secret: 'inTunity',
@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 
-var whitelist = ['http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:8100'];
+var whitelist = ['http://localhost:8100'];
 var cors_options = {
 	origin: function (origin, callback) {
 		var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
@@ -39,9 +39,9 @@ var cors_options = {
 app.all('/api/*', cors(cors_options));
 app.set('port', 3005);
 
-var User = require('../model/User.js');
-var SongHistory = require('../model/SongHistory.js');
-var location = require('../model/location.js');
+var User = require('./model/User.js');
+var SongHistory = require('./model/SongHistory.js');
+var location = require('./model/location.js');
 
 // var Event = require('./model/Event.js');
 
@@ -49,21 +49,21 @@ var location = require('../model/location.js');
 var router = express.Router();
 
 
-User.find({  }, function(err, user) {
-      if (err) {
-      	throw err;
-      }
+// User.find({  }, function(err, user) {
+//       if (err) {
+//       	throw err;
+//       }
 
-      console.log("delete");
-        // delete him
-      User.remove(function(err) {
-      if (err) {
-           throw err;
-      }
-      console.log('User successfully deleted!');
+//       console.log("delete");
+//         // delete him
+//       User.remove(function(err) {
+//       if (err) {
+//            throw err;
+//       }
+//       console.log('User successfully deleted!');
 
-      });
-});
+//       });
+// });
 
 // location.find({  }, function(err, loc) {
 //       if (err) {
