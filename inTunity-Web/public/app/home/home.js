@@ -378,8 +378,9 @@ angular.module( 'inTunity.home', [
         var marginLeft;
         if (col1.className == "col-sm-12") {
           console.log("here");
-          marginLeft = click.pageX - 15;
+          marginLeft = click.pageX;
         } else if (col1.className == "col-md-6") {
+          console.log("here!");
           marginLeft = click.pageX - col1.offsetWidth - 10
         }
         
