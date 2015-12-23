@@ -39,6 +39,10 @@ angular.module( 'inTunity.home', [
 
   }
 
+  $scope.profile = function() {
+
+  }
+
   $scope.home = function() {
     $location.path('/');
   }
