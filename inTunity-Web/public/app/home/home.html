@@ -8,7 +8,7 @@
       <a ng-click = "home()" href = ""><img src="images/logo.png" height="50px"></a>
       <div class="navbar-links">
         <a ng-click = "logout()" href = ""><h3 id="logout">Logout, {{owner}}</h3></a>
-        <a ng-click = "profile()" href = ""><h3 id = "profile">My Profile</h3></a>
+        <a ng-click = "profile()" href = ""><h3 id = "navbar-link">My Profile</h3></a>
         <a ng-click = "addSong()" href = ""><h3 id = "navbar-link">Add a Song</h3></a>
 <!--        <a ng-click= "about()"><h3>About</h3></a> -->
       </div>
@@ -46,7 +46,7 @@
             </div>
 
             <div class = "col-md-8 text-center prof-info">
-              <h3>{{item[0].nickname}}</h3>
+              <a href = "#/profile/{{users.indexOf(item)}}"> <h3>{{item[0].nickname}}</h3></a>
               <h4>{{item[1]}} | {{item[2]}}</h4>
             </div>
           </div>
