@@ -39,9 +39,9 @@ var cors_options = {
 app.all('/api/*', cors(cors_options));
 app.set('port', 3005);
 
-var User = require('./model/User.js');
-var SongHistory = require('./model/SongHistory.js');
-var location = require('./model/location.js');
+var User = require('../model/User.js');
+var SongHistory = require('../model/SongHistory.js');
+var location = require('../model/location.js');
 
 // var Event = require('./model/Event.js');
 
