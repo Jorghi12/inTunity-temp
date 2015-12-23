@@ -29,7 +29,7 @@ angular.module( 'inTunity', [
       templateUrl: '/app/addSong/addSong.html',
       pageTitle: 'Add Song'
     })
-    .when('/profile/', {
+    .when('/profile/:itemId', {
       templateUrl: 'app/profile/profile.html',
       controller: 'ProfileCtrl',
       pageTitle: 'Profile'
