@@ -246,7 +246,8 @@ angular.module( 'inTunity.addSong', [
       // });
  
  
-
+    console.log(latitude);
+    console.log(longitude);
   
     var geocoder = new google.maps.Geocoder;
     var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
