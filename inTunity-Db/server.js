@@ -49,37 +49,37 @@ var location = require('./model/location.js');
 var router = express.Router();
 
 
-	User.find({  }, function(err, user) {
-	      if (err) {
-	      	throw err;
-	      }
+User.find({  }, function(err, user) {
+      if (err) {
+      	throw err;
+      }
 
-	      console.log("delete");
-	        // delete him
-	      User.remove(function(err) {
-	      if (err) {
-	           throw err;
-	      }
-	      console.log('User successfully deleted!');
+      console.log("delete");
+        // delete him
+      User.remove(function(err) {
+      if (err) {
+           throw err;
+      }
+      console.log('User successfully deleted!');
 
-	      });
-    });
+      });
+});
 
-    location.find({  }, function(err, loc) {
-	      if (err) {
-	      	throw err;
-	      }
+// location.find({  }, function(err, loc) {
+//       if (err) {
+//       	throw err;
+//       }
 
-	      console.log("delete");
-	        // delete him
-	      location.remove(function(err) {
-	      if (err) {
-	           throw err;
-	      }
-	      console.log('Location successfully deleted!');
-	 
-	      });
-    });
+//       console.log("delete");
+//         // delete him
+//       location.remove(function(err) {
+//       if (err) {
+//            throw err;
+//       }
+//       console.log('Location successfully deleted!');
+ 
+//       });
+// });
 
 
 
