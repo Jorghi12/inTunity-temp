@@ -344,15 +344,15 @@ angular.module( 'inTunity.home', [
 
 
           if (globalPlayer.currentTime() <= (songDuration  * 0.02)) {
-            globalPlayer.setVolume(0.0);
+            globalPlayer.setVolume(0.8);
           }
 
           if ((globalPlayer.currentTime() > (songDuration  * 0.02)) && (globalPlayer.currentTime() < (songDuration  * 0.98)) ) {
-             globalPlayer.setVolume(0);
+             globalPlayer.setVolume(1);
           }
 
           if (globalPlayer.currentTime() >= (songDuration  * 0.98)) {
-            globalPlayer.setVolume(0.0);
+            globalPlayer.setVolume(0.8);
           }
 
         });
