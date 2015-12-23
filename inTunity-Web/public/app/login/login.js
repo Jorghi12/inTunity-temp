@@ -35,16 +35,37 @@ angular.module( 'inTunity.login', [
         picture = auth.profile["picture"];
       }
 
+      console.log(nickname.charAt(0));
+
+
+
+      var url_username = "";
+      for (var i = 0; i < nickname.length; i++) {
+        if (nickname.charAt(i) == " ") {
+           url_username += ".";
+        } else {
+           url_username += (nickname.charAt(i));
+        }
+       
+      }
+
+
+
+
       var user_account = JSON.stringify({
         user_id:id, 
         email: email, 
         nickname: nickname, 
-        picture: picture}); 
+        picture: picture,
+        url_username: url_username
+      });
+
+      console.log(user_account); 
 
       $location.path("/");
 
       console.log("posting..");
-      $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/account', {data: user_account}, { 
+      $http.post('http://localhost:3001/secured/account', {data: user_account}, { 
           headers: {
           'Accept' : '*/*',
           'Content-Type': 'application/json'

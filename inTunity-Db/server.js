@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 
 var dbName = 'inTunity';
 
-mongoose.connect('mongodb://ec2-52-35-92-198.us-west-2.compute.amazonaws.com/' + dbName);
+mongoose.connect('mongodb://localhost:27017/' + dbName);
 
 app.use(session({
 	secret: 'inTunity',
@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 
-var whitelist = ['http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:8100'];
+var whitelist = ['http://localhost:8100'];
 var cors_options = {
 	origin: function (origin, callback) {
 		var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
@@ -65,46 +65,29 @@ var router = express.Router();
 	//       });
  //    });
 
-    // location.find({  }, function(err, loc) {
-	   //    if (err) {
-	   //    	throw err;
-	   //    }
+ //    location.find({  }, function(err, loc) {
+	//       if (err) {
+	//       	throw err;
+	//       }
 
-	   //    console.log("delete");
-	   //      // delete him
-	   //    location.remove(function(err) {
-	   //    if (err) {
-	   //         throw err;
-	   //    }
-	   //    console.log('Location successfully deleted!');
+	//       console.log("delete");
+	//         // delete him
+	//       location.remove(function(err) {
+	//       if (err) {
+	//            throw err;
+	//       }
+	//       console.log('Location successfully deleted!');
 	 
-	   //    });
-    // });
+	//       });
+ //    });
 
 
 
 router.post('/api/accounts', function (req, res, next) {
-	console.log("about to post a user!!!");
 
+	
 
-
-
-	var newUser = new User({
-	    user_id: req.body.user_id,
-	    nickname: req.body.nickname,
-	    picture: req.body.picture,
-	    email: req.body.email,
-	    today_song: {
-            song_name: "",
-            song_album_pic: "",
-            song_url: "",
-			unix_time: "",
-			track_id: "",
-			song_duration: ""
-	    }
-    });
-
-	 User.findOne({user_id: req.body.user_id}, function (err, userObj) {
+	User.findOne({user_id: req.body.user_id}, function (err, userObj) {
 	    if (err) {
 	      console.log(err);
 	      res.sendStatus(500);
@@ -113,16 +96,67 @@ router.post('/api/accounts', function (req, res, next) {
 	      res.sendStatus(500);
 	    } else {
 	      console.log('User not found!');
-	        newUser.save(function(err) {
-	           if (err) {
-	                 throw err;
-	           }     else {
-	                 console.log('User created!');
-	                 res.sendStatus(200);
-	           }
-	         });
+
+
+	      	User.find({nickname: req.body.nickname}, function (err, result) {
+	      		if (result.length == 0) {
+	      			var newUser = new User({
+					    user_id: req.body.user_id,
+					    nickname: req.body.nickname,
+					    picture: req.body.picture,
+					    email: req.body.email,
+					    url_username: req.body.url_username,
+					    today_song: {
+				            song_name: "",
+				            song_album_pic: "",
+				            song_url: "",
+							unix_time: "",
+							track_id: "",
+							song_duration: ""
+					    }
+				    });
+
+	      			newUser.save(function(err) {
+			           if (err) {
+			           	 throw err;
+			           } else {
+		                 console.log('User created!');
+		                 res.sendStatus(200);
+			           }
+			         });
+
+	      		} else {
+	      			var newUser = new User({
+					    user_id: req.body.user_id,
+					    nickname: req.body.nickname,
+					    picture: req.body.picture,
+					    email: req.body.email,
+					    url_username: req.body.url_username + (result.length + 1).toString(),
+					    today_song: {
+				            song_name: "",
+				            song_album_pic: "",
+				            song_url: "",
+							unix_time: "",
+							track_id: "",
+							song_duration: ""
+					    }
+				    });
+
+	      			newUser.save(function(err) {
+			           if (err) {
+			           	 throw err;
+			           } else {
+		                 console.log('User created!');
+		                 res.sendStatus(200);
+
+			           }
+			        });
+
+	      		}
+	      	}); 
+	      		
 	    }
-	  });
+	 });
 });
 
 
@@ -262,6 +296,22 @@ router.get('/api/location/' , function (req, res, next) {
 	  } 
 	});
 });
+
+router.get('/api/account/:accountID' , function (req, res, next) {
+	console.log(res);
+	User.find({user_id: res }, function(err, result) {
+	  if (err) {
+	    console.log(err);
+	    res.sendStatus(500);
+	  } else if(result) {
+	  	console.log(result);
+	  	// res.send(locationObj);
+	  } 
+	});
+});
+
+
+
 
 
 

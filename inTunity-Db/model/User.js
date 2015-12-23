@@ -15,6 +15,7 @@ var User = new Schema({
 	nickname: String,
 	picture: String,
 	email: String,
+	url_username: String,
 	today_song: {
 		song_title: String,
 		song_album_pic: String,

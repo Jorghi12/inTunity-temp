@@ -41,7 +41,7 @@ app.get('/secured/ping', function(req, res) {
 // adding a new account
 app.post('/secured/account', function(req, res) {
   request({
-    url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3005/api/accounts/', //URL to hit
+    url: 'http://localhost:3005/api/accounts/', //URL to hit
     method: 'POST', //Specify the method
     headers: {
       'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ app.post('/secured/account', function(req, res) {
 // getting all the accounts
 app.get('/secured/accounts', function(req, res) {
   request({
-      url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3005/api/accounts/', //URL to hit
+      url: 'http://localhost:3005/api/accounts/', //URL to hit
       headers: {
       'Content-Type': 'application/json'
       },
@@ -83,7 +83,7 @@ app.get('/secured/accounts', function(req, res) {
 // this method is used for posting a song
 app.post('/secured/songs', function(req, res) {
   request({
-    url: "http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3005/api/accounts/updateSong", //URL to hit
+    url: "http://localhost:3005/api/accounts/updateSong", //URL to hit
     method: 'POST', //Specify the method
     headers: {
       'Content-Type': 'application/json'
@@ -103,7 +103,7 @@ app.post('/secured/songs', function(req, res) {
 // getting the different locations
 app.get('/secured/location', function(req, res) {
   request({
-      url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3005/api/location/', //URL to hit
+      url: 'http://localhost:3005/api/location/', //URL to hit
       headers: {
       'Content-Type': 'application/json'
       },
@@ -115,6 +115,29 @@ app.get('/secured/location', function(req, res) {
         if (response.statusCode == 200) {
           var data = JSON.parse(response.body);
           res.send(200, {location: data});
+        }
+      }
+  });
+});
+
+// getting a specific user
+app.get('/secured/specificUser', function(req, res) {
+  request({
+      url: 'http://localhost:3005/api/account' + req.query["id"], //URL to hit
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      method: 'GET' //Specify the method
+  }, function(error, response, body){
+      console.log(req.query["id"]);
+
+      if(error) {
+          console.log(error);
+      } else {
+        if (response.statusCode == 200) {
+          var data = JSON.parse(response.body);
+          console.log(data);
+          res.send(200);
         }
       }
   });

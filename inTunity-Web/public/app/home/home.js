@@ -9,12 +9,22 @@ angular.module( 'inTunity.home', [
   $scope.tgState = false;
   var prof = (store.get('profile'));
   $scope.owner;
+  var id = prof["identities"][0]["user_id"];
+
+
   
 
   var globalPlayer;
   var trackarray = [];
 
+  $http({
+    url: 'http://localhost:3001/secured/specificUser' ,
+    method: 'GET',
+    params: {id: id}
+  }).then(function(response) {  
+    console.log(response);
 
+  }); // end of http get
 
   
 
@@ -25,7 +35,7 @@ angular.module( 'inTunity.home', [
   } else {
     $scope.owner = prof["nickname"];
   }
-  var id = prof["identities"][0]["user_id"];
+
 
   $scope.logout = function() {
     if (trackarray.length > 0) {
@@ -40,7 +50,7 @@ angular.module( 'inTunity.home', [
   }
 
   $scope.profile = function() {
-
+    $location.path('/profile/' + auth.profile["name"]);
   }
 
   $scope.home = function() {
@@ -79,10 +89,12 @@ angular.module( 'inTunity.home', [
   $scope.users;
 
   $http({
-    url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/accounts' ,
+    url: 'http://localhost:3001/secured/accounts' ,
     method: 'GET'
   }).then(function(response) {  
     songdata = (response["data"]["songs"]);
+
+    console.log(songdata);
 
 
 
@@ -133,7 +145,7 @@ angular.module( 'inTunity.home', [
 
     $scope.users = correctUsers;
 
-    console.log(correctUsers);
+
 
   
     // adding all the songs to arr
@@ -151,9 +163,9 @@ angular.module( 'inTunity.home', [
       trackarray.push(new Array(correctUsers[i][0]["today_song"]["track_id"], correctUsers[i][0]["today_song"]["song_album_pic"], correctUsers[i][0]["today_song"]["song_title"], correctUsers[i][0]["today_song"]["song_duration"]));
     }
 
-    console.log(correctUsers);
-    console.log("track array:");
-    console.log(trackarray);
+    // console.log(correctUsers);
+    // console.log("track array:");
+    // console.log(trackarray);
 
 
 
@@ -280,11 +292,14 @@ angular.module( 'inTunity.home', [
         globalPlayer.seek(0);
 
 
+
        
 
         globalPlayer.on('play-start', function () {
           console.log("play");
           globalPlayer.seek(0);
+
+
 
 
 
@@ -325,15 +340,15 @@ angular.module( 'inTunity.home', [
 
 
           if (globalPlayer.currentTime() <= (songDuration  * 0.02)) {
-            globalPlayer.setVolume(0.8);
+            globalPlayer.setVolume(0.0);
           }
 
           if ((globalPlayer.currentTime() > (songDuration  * 0.02)) && (globalPlayer.currentTime() < (songDuration  * 0.98)) ) {
-             globalPlayer.setVolume(1);
+             globalPlayer.setVolume(0);
           }
 
           if (globalPlayer.currentTime() >= (songDuration  * 0.98)) {
-            globalPlayer.setVolume(0.8);
+            globalPlayer.setVolume(0.0);
           }
 
         });

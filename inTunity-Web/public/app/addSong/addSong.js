@@ -18,21 +18,6 @@ angular.module( 'inTunity.addSong', [
 
   var id = auth.profile["identities"][0]["user_id"];
 
-  
-   
-  
- 
-
-
-
-
- 
-
-
-  
-
-
-
 
   $scope.logout = function() {
     auth.signout();
@@ -279,7 +264,7 @@ angular.module( 'inTunity.addSong', [
           console.log(song);
 
           console.log("adding a song...");
-          $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
+          $http.post('http://localhost:3001/secured/songs', {data: song}, { 
             headers: {
             'Accept' : '*/*',
             'Content-Type': 'application/json'

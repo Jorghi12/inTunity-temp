@@ -40,13 +40,13 @@
           <div class = "col-md-6 text-center info">
             <h2>{{item[0].today_song.song_title}}</h2>
             <div class="col-md-4">
-              <a href = "#/profile/{{users.indexOf(item)}}"> 
+              <a href = "#/profile/{{item[0].url_username}}"> 
                 <img class = "img-circle" ng-src = "{{item[0].picture}}">
               </a>
             </div>
 
             <div class = "col-md-8 text-center prof-info">
-              <a href = "#/profile/{{users.indexOf(item)}}"> <h3>{{item[0].nickname}}</h3></a>
+              <a href = "#/profile/{{item[0].url_username}}"> <h3>{{item[0].nickname}}</h3></a>
               <h4>{{item[1]}} | {{item[2]}}</h4>
             </div>
           </div>
