@@ -107,6 +107,10 @@ angular.module( 'inTunity.home', [
         var minutes = "0" + date.getMinutes();
         var am_pm = "AM";
 
+        if (hours == 12) {
+          am_pm = "PM";
+        }
+
         if (hours > 12) {
           hours = hours - 12;
           am_pm = "PM";
