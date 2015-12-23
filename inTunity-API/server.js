@@ -137,9 +137,9 @@ app.get('/secured/specificUser', function(req, res) {
           console.log(error);
       } else {
         if (response.statusCode == 200) {
-          // var data = JSON.parse(response.body);
-          // console.log(data);
-          res.send(200);
+          var data = JSON.parse(response.body);
+          console.log(data);
+          res.send(200, {user:data});
         }
       }
   });

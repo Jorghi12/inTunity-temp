@@ -304,9 +304,23 @@ router.get('/api/specificUser/' , function (req, res, next) {
 
 	console.log(req.query["user_id"]);
 
-	console.log("hi");
+	User.findOne({user_id:req.query["user_id"] }, function(err, userObj) {
+	  if (err) {
+	    console.log(err);
+	    res.sendStatus(500);
+	  } else if(userObj) {
 
-	res.sendStatus(200);
+
+	  
+
+	  	res.send(userObj);
+
+
+	  } 
+	});
+
+
+
 
 });
 
