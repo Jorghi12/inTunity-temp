@@ -17,12 +17,16 @@ angular.module( 'inTunity.home', [
   var globalPlayer;
   var trackarray = [];
 
+  $scope.username_url;
+
   $http({
     url: 'http://localhost:3001/secured/specificUser' ,
     method: 'GET',
     params: {id: id}
   }).then(function(response) {  
-    console.log(response);
+    console.log(response["data"]["user"]);
+
+    $scope.username_url = response["data"]["user"][0]["url_username"];
 
   }); // end of http get
 
@@ -50,7 +54,7 @@ angular.module( 'inTunity.home', [
   }
 
   $scope.profile = function() {
-    $location.path('/profile/' + auth.profile["name"]);
+    $location.path('/profile/' + $scope.username_url);
   }
 
   $scope.home = function() {

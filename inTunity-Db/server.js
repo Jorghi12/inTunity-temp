@@ -297,18 +297,7 @@ router.get('/api/location/' , function (req, res, next) {
 	});
 });
 
-router.get('/api/account/:accountID' , function (req, res, next) {
-	console.log(res);
-	User.find({user_id: res }, function(err, result) {
-	  if (err) {
-	    console.log(err);
-	    res.sendStatus(500);
-	  } else if(result) {
-	  	console.log(result);
-	  	// res.send(locationObj);
-	  } 
-	});
-});
+
 
 
 

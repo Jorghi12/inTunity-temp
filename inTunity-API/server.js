@@ -123,21 +123,20 @@ app.get('/secured/location', function(req, res) {
 // getting a specific user
 app.get('/secured/specificUser', function(req, res) {
   request({
-      url: 'http://localhost:3005/api/account' + req.query["id"], //URL to hit
+      url: 'http://localhost:3005/api/accounts', //URL to hit
       headers: {
       'Content-Type': 'application/json'
       },
-      method: 'GET' //Specify the method
+      method: 'GET', //Specify the method
+      qs: {user_id: req.query["id"]}
   }, function(error, response, body){
-      console.log(req.query["id"]);
 
       if(error) {
           console.log(error);
       } else {
         if (response.statusCode == 200) {
           var data = JSON.parse(response.body);
-          console.log(data);
-          res.send(200);
+          res.send(200, {user:data});
         }
       }
   });
