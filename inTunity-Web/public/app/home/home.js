@@ -75,7 +75,7 @@ angular.module( 'inTunity.home', [
   $scope.users;
 
   $http({
-    url: 'http://localhost:3001/secured/accounts' ,
+    url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/accounts' ,
     method: 'GET'
   }).then(function(response) {  
     songdata = (response["data"]["songs"]);
