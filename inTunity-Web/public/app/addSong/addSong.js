@@ -233,72 +233,72 @@ angular.module( 'inTunity.addSong', [
       console.log(song);
 
       console.log("adding a song...");
-      $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
-        headers: {
-        'Accept' : '*/*',
-        'Content-Type': 'application/json'
-       }
-      }).success(function(data, status, headers, config) {
-          console.log(status);
-          $location.path('/');
-      }).error(function(data, status, headers, config) {
-          console.log(status);
-      });
+      // $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
+      //   headers: {
+      //   'Accept' : '*/*',
+      //   'Content-Type': 'application/json'
+      //  }
+      // }).success(function(data, status, headers, config) {
+      //     console.log(status);
+      //     $location.path('/');
+      // }).error(function(data, status, headers, config) {
+      //     console.log(status);
+      // });
  
  
 
   
-    // var geocoder = new google.maps.Geocoder;
-    // var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
-    // geocoder.geocode({'location': latlng}, function(results, status) {
-    //   if (status === google.maps.GeocoderStatus.OK) {
+    var geocoder = new google.maps.Geocoder;
+    var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+    geocoder.geocode({'location': latlng}, function(results, status) {
+      if (status === google.maps.GeocoderStatus.OK) {
 
-    //     if (results[1]) {
-    //       console.log("result found");
-    //       console.log(results);
+        if (results[1]) {
+          console.log("result found");
+          console.log(results);
 
-    //       var state = results[2]["address_components"][1]["short_name"];
-
-
-    //       var city = results[1]["address_components"][1]["short_name"];
+          var state = results[2]["address_components"][1]["short_name"];
 
 
-    //       var song = JSON.stringify({
-    //         user_id: id,
-    //         song_url:url, 
-    //         song_artwork: updatedSongPic, 
-    //         song_title: title,
-    //         unix_time: today.getTime()/1000,
-    //         track_id: trackid,
-    //         song_duration: duration,
-    //         state: state,
-    //         city: city
-    //       });
+          var city = results[1]["address_components"][1]["short_name"];
 
-    //       console.log(song);
 
-    //       console.log("adding a song...");
-    //       $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
-    //         headers: {
-    //         'Accept' : '*/*',
-    //         'Content-Type': 'application/json'
-    //        }
-    //       }).success(function(data, status, headers, config) {
-    //           console.log(status);
-    //           $location.path('/');
-    //       }).error(function(data, status, headers, config) {
-    //           console.log(status);
-    //       });
+          var song = JSON.stringify({
+            user_id: id,
+            song_url:url, 
+            song_artwork: updatedSongPic, 
+            song_title: title,
+            unix_time: today.getTime()/1000,
+            track_id: trackid,
+            song_duration: duration,
+            state: state,
+            city: city
+          });
+
+          console.log(song);
+
+          console.log("adding a song...");
+          $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
+            headers: {
+            'Accept' : '*/*',
+            'Content-Type': 'application/json'
+           }
+          }).success(function(data, status, headers, config) {
+              console.log(status);
+              $location.path('/');
+          }).error(function(data, status, headers, config) {
+              console.log(status);
+          });
 
 
         
-    //     } else {
-    //       window.alert('No results found');
-    //     }
-    //   } else {
-    //     window.alert('Geocoder failed due to: ' + status);
-    //   }
-    // });
+        } else {
+          window.alert('No results found');
+        }
+      } else {
+        window.alert('Geocoder failed due to: ' + status);
+      }
+    });
   
 
   } // end of selectSong()
