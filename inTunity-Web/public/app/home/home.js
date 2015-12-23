@@ -380,7 +380,7 @@ angular.module( 'inTunity.home', [
         var marginLeft;
         if ($(window).width() < 992) {
           console.log("here");
-          marginLeft = click.pageX;
+          marginLeft = click.pageX - 10;
         } else {
           console.log("here!");
           marginLeft = click.pageX - col1.offsetWidth - 10;
