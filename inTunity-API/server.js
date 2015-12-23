@@ -58,7 +58,7 @@ app.post('/secured/account', function(req, res) {
   });
 });
 
-
+// getting all the accounts
 app.get('/secured/accounts', function(req, res) {
   request({
       url: 'http://localhost:3005/api/accounts/', //URL to hit
@@ -80,7 +80,7 @@ app.get('/secured/accounts', function(req, res) {
 
 
 
-
+// this method is used for posting a song
 app.post('/secured/songs', function(req, res) {
   request({
     url: "http://localhost:3005/api/accounts/updateSong", //URL to hit
@@ -96,6 +96,26 @@ app.post('/secured/songs', function(req, res) {
       } else {
           console.log(response.body);
           res.send(response.statusCode);
+      }
+  });
+});
+
+// getting the different locations
+app.get('/secured/location', function(req, res) {
+  request({
+      url: 'http://localhost:3005/api/location/', //URL to hit
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      method: 'GET' //Specify the method
+  }, function(error, response, body){
+      if(error) {
+          console.log(error);
+      } else {
+        if (response.statusCode == 200) {
+          var data = JSON.parse(response.body);
+          res.send(200, {location: data});
+        }
       }
   });
 });

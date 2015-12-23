@@ -41,14 +41,13 @@ app.set('port', 3005);
 
 var User = require('./model/User.js');
 var SongHistory = require('./model/SongHistory.js');
+var location = require('./model/location.js');
+
 // var Event = require('./model/Event.js');
 
 //routes
 var router = express.Router();
 
-
-router.post('/api/accounts', function (req, res, next) {
-	console.log("about to post a user!!!");
 
 	// User.find({  }, function(err, user) {
 	//       if (err) {
@@ -62,9 +61,32 @@ router.post('/api/accounts', function (req, res, next) {
 	//            throw err;
 	//       }
 	//       console.log('User successfully deleted!');
-	//       res.send(200);
+
 	//       });
  //    });
+
+    // location.find({  }, function(err, loc) {
+	   //    if (err) {
+	   //    	throw err;
+	   //    }
+
+	   //    console.log("delete");
+	   //      // delete him
+	   //    location.remove(function(err) {
+	   //    if (err) {
+	   //         throw err;
+	   //    }
+	   //    console.log('Location successfully deleted!');
+	 
+	   //    });
+    // });
+
+
+
+router.post('/api/accounts', function (req, res, next) {
+	console.log("about to post a user!!!");
+
+
 
 
 	var newUser = new User({
@@ -112,10 +134,6 @@ router.get('/api/accounts/' , function (req, res, next) {
 	    res.sendStatus(500);
 	  } else if(userObj) {
 
-	  	console.log(userObj.length);
-
-	
-
 
 	  	// update the timer in here after expiration
 	  	// if expired, make that entry null in the db
@@ -155,19 +173,13 @@ router.get('/api/accounts/' , function (req, res, next) {
 		  		}
 	  		}
 
-	  		
 	  	} // end of for loop
 
-
-
-
-	  	// console.log(userObj);
 	  	res.send(userObj);
 
 
 	  } 
 	}).sort({'today_song.unix_time': -1});
-
 
 });
 
@@ -202,23 +214,57 @@ router.post('/api/accounts/updateSong' , function (req, res, next) {
 			unix_time: req.body.unix_time,
 			track_id: req.body.track_id,
 			song_duration: req.body.song_duration
-		
 	    });
+
 
 	  	userObj.song_history.push(song);
 
-	    userObj.save(function(err) {
+	    userObj.save(function(err, obj) {
 	    	if (err) {
 	    		throw err;
-	    	}	
-    		res.sendStatus(200);
-  		});	
+	    	}
 
+	    	var locObj = new location({
+		    	state: req.body.state,
+		    	city: req.body.city,
+		    	song_id: obj["song_history"][obj["song_history"].length - 1].id
+		    });
+
+
+	    	locObj.save(function(err) {
+		    	if (err) {
+		    		throw err;
+		    	}	
+	    		res.sendStatus(200);
+	  		});	
+
+	  		console.log(locObj);
+
+  		});	
 
   		console.log("Updated user after posting song" + userObj);
 	  } 
 	});
 });	
+
+
+
+
+// retrieving all the locations
+router.get('/api/location/' , function (req, res, next) {
+	location.find({}, function(err, locationObj) {
+	  if (err) {
+	    console.log(err);
+	    res.sendStatus(500);
+	  } else if(locationObj) {
+	  	console.log(locationObj);
+	  	res.send(locationObj);
+	  } 
+	});
+});
+
+
+
 
 
 app.use(router);

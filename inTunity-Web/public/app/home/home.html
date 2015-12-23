@@ -59,14 +59,16 @@
   <div id="footer">
     <div class = "container" id = "widgetContainer">
 
-          <div class = "col-md-6" >
+          <div class = "col-md-6" id = "col1">
             <div class="row">
             <div style="float:left">
               <img id = "artwork" style = "width:100px; height:100px; margin:5% 0%; float:left">
             </div>
             <div style="margin-left:20px; float:left;">
               <h4>Current:</h4><span id = "songtitle" style = "font-weight: bold"></span>
-              <h5>Selected by: Nikita Dubnov</h5>
+              <br>
+              <br>
+              <span style = "font-family: 'Archivo Narrow', sans-serif">Selected by: </span><span style = "font-family: 'Archivo Narrow', sans-serif" id = "currentuser"></span>
             </div>
             </div>
           </div> 
@@ -79,15 +81,15 @@
               <button class="playerButton" id="nextButton" ng-click="nextPlayer()"><h5>Next</h5></button>
             </div> 
 
-            <span id = "currentTime" style = "float: left"></span>
+<!--             <span id = "currentTime" style = "float: left"></span> -->
             <div id='audplayer'>
               <div id='time'>
                 <div id='playHead'></div>
               </div>
             </div>
-            <span id = "endTime" style = "float: left"></span>
-            <h5 style="float:left;">0:00</h5>
-            <h5 style="float:right;">3:00</h5>
+<!--             <span id = "endTime" style = "float: left"></span> -->
+            <h5 id = "currentTime" style="float:left;">0:00</h5>
+            <h5 id = "endTime" style="float:right;">3:00</h5>
 
           </div>
 

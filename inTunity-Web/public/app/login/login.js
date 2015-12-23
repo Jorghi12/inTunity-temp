@@ -39,37 +39,23 @@ angular.module( 'inTunity.login', [
         user_id:id, 
         email: email, 
         nickname: nickname, 
-        picture: picture}); // Indented with tab
+        picture: picture}); 
 
+      $location.path("/");
 
-      console.log(picture);
-      console.log(user_account);
-
-           $location.path("/");
-
-    console.log("posting..");
-    $http.post('http://localhost:3001/secured/account', {data: user_account}, { 
-        headers: {
-        'Accept' : '*/*',
-        'Content-Type': 'application/json'
-       }
-    }).success(function(data, status, headers, config) {
-          // this callback will be called asynchronously
-          // when the response is available
-          console.log("come onnn");
-          console.log(status);
-          console.log("success");
-     
+      console.log("posting..");
+      $http.post('http://localhost:3001/secured/account', {data: user_account}, { 
+          headers: {
+          'Accept' : '*/*',
+          'Content-Type': 'application/json'
+         }
+      }).success(function(data, status, headers, config) {
+        console.log(status);
+        console.log("success");
       }).error(function(data, status, headers, config) {
-          // called asynchronously if an error occurs
-          // or server returns response with an error status.
-           console.log("failed");
-          console.log(status);
-	 
+        console.log("failed");
+        console.log(status); 
       });
-
-
-
 
     }, function(error) {
       console.log("There was an error logging in", error);

@@ -7,7 +7,8 @@ angular.module( 'inTunity', [
   'inTunity.home',
   'inTunity.addSong',
   'inTunity.about',
-  'inTunity.profile'
+  'inTunity.profile',
+  'inTunity.location'
 ])
 .config( function myAppConfig ( $routeProvider, authProvider, $httpProvider, $locationProvider,
   jwtInterceptorProvider) {
@@ -37,6 +38,11 @@ angular.module( 'inTunity', [
       controller: 'AboutCtrl',
       templateUrl: '/app/about/about.html',
       pageTitle: 'About'
+    })
+    .when( '/location', {
+      controller: 'LocationCtrl',
+      templateUrl: '/app/location/location.html',
+      pageTitle: 'Location'
     });
 
 

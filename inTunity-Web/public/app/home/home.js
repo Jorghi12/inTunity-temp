@@ -10,11 +10,12 @@ angular.module( 'inTunity.home', [
   var prof = (store.get('profile'));
   $scope.owner;
   
-  //Global Variables for the iframe and widget
-  // var iframe = document.getElementById("sc-widget");
-  //var widget = SC.Widget(iframe);
+
   var globalPlayer;
-  /*global SC*/
+  var trackarray = [];
+
+
+
   
 
 
@@ -27,7 +28,10 @@ angular.module( 'inTunity.home', [
   var id = prof["identities"][0]["user_id"];
 
   $scope.logout = function() {
-    globalPlayer.pause();
+    if (trackarray.length > 0) {
+      console.log("hit here");
+      globalPlayer.pause();
+    }  
     auth.signout();
     store.remove('profile');
     store.remove('token');
@@ -40,8 +44,11 @@ angular.module( 'inTunity.home', [
   }
 
   $scope.addSong = function() {
-    globalPlayer.pause();
+    if (trackarray.length > 0) {
+      globalPlayer.pause();
+    }
     $location.path('/add-song');
+
   }
 
   $scope.about = function() {
@@ -131,11 +138,12 @@ angular.module( 'inTunity.home', [
     }
 
 
-    var trackarray = [];
+
     for (var i = 0; i < correctUsers.length; i++) {
       trackarray.push(new Array(correctUsers[i][0]["today_song"]["track_id"], correctUsers[i][0]["today_song"]["song_album_pic"], correctUsers[i][0]["today_song"]["song_title"], correctUsers[i][0]["today_song"]["song_duration"]));
     }
 
+    console.log(correctUsers);
     console.log("track array:");
     console.log(trackarray);
 
@@ -152,20 +160,18 @@ angular.module( 'inTunity.home', [
     var song_count = 0;
     var song_index = 0;
         
+    if (trackarray.length > 0) {
+      console.log("hit here");
+      console.log(trackarray.length);
+      var trackid = (trackarray[0][0]);
+      var url = 'tracks/' + trackid;
+      console.log(url);
+      startStream(url);
+    }
 
-    var trackid = (trackarray[0][0]);
-    var url = 'tracks/' + trackid;
 
 
-    // var waveform = new Waveform({
-    //   container: document.getElementById("waveform")
-    //   // data: [1, 0.2, 0.5]
-    // });
-
-    // SC.get("/users/1539950/favorites", function(tracks){
-    //   alert(tracks);
-    // });
-
+   
    
 
     // when you press on album pic, it will play that song
@@ -174,6 +180,7 @@ angular.module( 'inTunity.home', [
       song_count = song_index;
       new_song = trackarray[song_count % trackarray.length][0];
       var new_url = '/tracks/' + new_song;
+      console.log(new_url);
       startStream(new_url);
     }
 
@@ -242,8 +249,8 @@ angular.module( 'inTunity.home', [
    
     // console.log(SC.resolve("https://soundcloud.com/octobersveryown/remyboyz-my-way-rmx-ft-drake"));
 
+    var time = document.getElementById("time");
 
-    startStream(url);
 
     var progressBall = document.getElementById('playHead');
     var time = document.getElementById('time');
@@ -251,6 +258,12 @@ angular.module( 'inTunity.home', [
     
     function startStream(newSoundUrl) {
       songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
+
+      console.log(songDuration);
+
+      currentuser = document.getElementById("currentuser");
+      currentuser.innerHTML = correctUsers[song_count][0]["nickname"];
+
       
       SC.stream(newSoundUrl).then(function (player) {
 
@@ -258,9 +271,14 @@ angular.module( 'inTunity.home', [
         globalPlayer.play();
         globalPlayer.seek(0);
 
+
+       
+
         globalPlayer.on('play-start', function () {
           console.log("play");
           globalPlayer.seek(0);
+
+
 
 
 
@@ -291,7 +309,7 @@ angular.module( 'inTunity.home', [
 
           songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
 
-          var percent = ((globalPlayer.currentTime() / songDuration)) * 400;
+          var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
           progressBall.style.width = percent + "px";
 
           var currentTime = document.getElementById("currentTime");
@@ -323,16 +341,11 @@ angular.module( 'inTunity.home', [
             new_url = '/tracks/' + new_song;
             console.log(new_url);
             globalPlayer.seek(0); //Do this before startStream
+
             startStream(new_url);
           }
   
         }); // end of finish
-
-
-
-
-
-
 
       });
     }
@@ -346,26 +359,41 @@ angular.module( 'inTunity.home', [
     //Handles the progress bar.
 
 
-    var time = document.getElementById("time");
-    var playHead = document.getElementById('playHead');
-    var timelineWidth = time.offsetWidth - playHead.offsetWidth;
+    if (trackarray.length > 0) { 
+      var playHead = document.getElementById('playHead');
+      var timelineWidth = time.offsetWidth - playHead.offsetWidth;
+          
+      time.addEventListener('click', function (event) {
+        changePosition(event);
+      }, false);
+
+      function changePosition(click) {
+        var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
+        var col1 = document.getElementById("col1");
+
+        var marginLeft;
+        if (col1.offsetWidth < 500) {
+          console.log("here");
+          marginLeft = click.pageX - 15;
+        } else {
+          marginLeft = click.pageX - col1.offsetWidth - 10
+        }
         
-    time.addEventListener('click', function (event) {
-      changePosition(event);
-    }, false);
+        var percentageClicked = (marginLeft / time.offsetWidth);
+
+        console.log(percentageClicked);
+        globalPlayer.seek(Math.floor(percentageClicked * timelength));
+        var currentTime = percentageClicked * timelength;
+        progressBall.style.width = ((currentTime/ timelength) * time.offsetWidth) + "px";
+
+     }
+    
+
+
+    }  
     
    
-    function changePosition(click) {
-      var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
-      var marginLeft = click.pageX - time.offsetLeft - 10;
-      var percentageClicked = (marginLeft / time.offsetWidth);
-      globalPlayer.seek(Math.floor(percentageClicked * timelength));
-      var currentTime = percentageClicked * timelength;
-      progressBall.style.width = ((currentTime/ timelength) * 400) + "px";
-
-
-
-    }
+   
 
   }); // end of http get
 
