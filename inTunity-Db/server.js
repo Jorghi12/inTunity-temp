@@ -162,6 +162,9 @@ router.post('/api/accounts', function (req, res, next) {
 
 
 router.get('/api/accounts/' , function (req, res, next) {
+
+
+
 	User.find({}, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
@@ -182,8 +185,8 @@ router.get('/api/accounts/' , function (req, res, next) {
 
 	  		if(userObj[i].today_song.song_url != '') {
 	  			
-		  		console.log("time difference");
-		  		console.log(todayTime - userObj[i].today_song.unix_time);
+		  		// console.log("time difference");
+		  		// console.log(todayTime - userObj[i].today_song.unix_time);
 
 		  		// a diff of 600 is about 10 min
 		  		if (todayTime - userObj[i].today_song.unix_time >= 86400) {
@@ -297,7 +300,15 @@ router.get('/api/location/' , function (req, res, next) {
 	});
 });
 
+router.get('/api/specificUser/' , function (req, res, next) {
 
+	console.log(req.query["user_id"]);
+
+	console.log("hi");
+
+	res.sendStatus(200);
+
+});
 
 
 

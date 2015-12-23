@@ -65,7 +65,7 @@ app.get('/secured/accounts', function(req, res) {
       headers: {
       'Content-Type': 'application/json'
       },
-      method: 'GET' //Specify the method
+      method: 'GET' //Specify the method,
   }, function(error, response, body){
       if(error) {
           console.log(error);
@@ -122,8 +122,9 @@ app.get('/secured/location', function(req, res) {
 
 // getting a specific user
 app.get('/secured/specificUser', function(req, res) {
+  console.log(req.query["id"]);
   request({
-      url: 'http://localhost:3005/api/accounts', //URL to hit
+      url: 'http://localhost:3005/api/specificUser', //URL to hit
       headers: {
       'Content-Type': 'application/json'
       },
@@ -136,8 +137,9 @@ app.get('/secured/specificUser', function(req, res) {
           console.log(error);
       } else {
         if (response.statusCode == 200) {
-          var data = JSON.parse(response.body);
-          res.send(200, {user:data});
+          // var data = JSON.parse(response.body);
+          // console.log(data);
+          res.send(200);
         }
       }
   });

@@ -62,6 +62,7 @@ angular.module( 'inTunity.login', [
 
       console.log(user_account); 
 
+
       $location.path("/");
 
       console.log("posting..");
@@ -73,6 +74,7 @@ angular.module( 'inTunity.login', [
       }).success(function(data, status, headers, config) {
         console.log(status);
         console.log("success");
+       
       }).error(function(data, status, headers, config) {
         console.log("failed");
         console.log(status); 
