@@ -214,8 +214,7 @@ angular.module( 'inTunity.addSong', [
     latitude = parseFloat(localStorage.getItem("latitude"));
     longitude = parseFloat(localStorage.getItem("longitude"));
 
-    localStorage.removeItem("latitude");
-    localStorage.removeItem("longitude");
+
 
 
     var geocoder = new google.maps.Geocoder;
