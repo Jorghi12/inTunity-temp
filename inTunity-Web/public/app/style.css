@@ -13,6 +13,7 @@ body {
 
 h1,h2,h3,h4,h5,h6 {
 	font-family: 'Archivo Narrow', sans-serif;
+	color: black;
 }
 
 input {
@@ -137,6 +138,7 @@ hr {
 	padding-top:0px;
 	transition: all 0.2s;
 	border-radius: 10px;
+	margin-left: 4px;
 }
 
 .intunity-button a {
@@ -296,7 +298,7 @@ hr {
 }
 
 .playButton:hover {
-	-moz-box-shadow: 1px 1px 5px #999;
- 	-webkit-box-shadow: 1px 1px 5px #999;
- 	box-shadow: 1px 1px 5px #999;
+	-moz-box-shadow: 1px 1px 10px #999;
+ 	-webkit-box-shadow: 1px 10px 5px #999;
+ 	box-shadow: 1px 1px 10px #999;
 }
