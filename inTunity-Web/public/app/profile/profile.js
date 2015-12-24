@@ -56,7 +56,57 @@ angular.module( 'inTunity.profile', [
       }  
     }
 
+
+
     $scope.numPosts = $scope.correctPerson[0].song_history.length;
+
+    for (var i = 0; i < $scope.correctPerson[0].song_history.length; i++) {
+      var date = new Date($scope.correctPerson[0].song_history[i]["unix_time"] * 1000);
+      var year = date.getFullYear();
+      var month = date.getMonth();
+      var day = date.getDate();
+      var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+      var formmatedDay = monthNames[month] + " " + day + ", " + year;
+
+      $scope.correctPerson[0].song_history[i].formmatedDay = formmatedDay;
+    }
+
+
+
+
+    console.log($scope.correctPerson);
+
+
+
+
+    // var date = new Date(users[i]["today_song"]["unix_time"] * 1000);
+
+    //     var year = date.getFullYear();
+    //     var month = date.getMonth();
+    //     var day = date.getDate();
+    //     var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+
+   
+
+    //     var hours = date.getHours();
+
+    //     var minutes = "0" + date.getMinutes();
+    //     var am_pm = "AM";
+
+    //     if (hours == 12) {
+    //       am_pm = "PM";
+    //     }
+
+    //     if (hours > 12) {
+    //       hours = hours - 12;
+    //       am_pm = "PM";
+    //     }
+    //     if (hours == 0) {
+    //       hours = 12;
+    //     }
+
+
+
 
 
 
