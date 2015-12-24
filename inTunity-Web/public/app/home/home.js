@@ -299,7 +299,7 @@ angular.module( 'inTunity.home', [
 
       currentuser = document.getElementById("currentuser");
 
-      console.log(correctUsers);
+      console.log(correctUsers[song_count]);
 
 
       currentuser.innerHTML = correctUsers[song_count][0]["nickname"];
