@@ -299,7 +299,9 @@ angular.module( 'inTunity.home', [
 
       currentuser = document.getElementById("currentuser");
 
-      console.log(correctUsers[song_count]);
+      console.log(correctUsers);
+
+
       currentuser.innerHTML = correctUsers[song_count][0]["nickname"];
 
       
@@ -308,10 +310,6 @@ angular.module( 'inTunity.home', [
         globalPlayer = player;
         globalPlayer.play();
         globalPlayer.seek(0);
-
-
-
-       
 
         globalPlayer.on('play-start', function () {
           console.log("play");
