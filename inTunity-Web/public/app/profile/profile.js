@@ -74,54 +74,6 @@ angular.module( 'inTunity.profile', [
 
 
 
-    console.log($scope.correctPerson);
-
-
-
-
-    // var date = new Date(users[i]["today_song"]["unix_time"] * 1000);
-
-    //     var year = date.getFullYear();
-    //     var month = date.getMonth();
-    //     var day = date.getDate();
-    //     var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
-
-   
-
-    //     var hours = date.getHours();
-
-    //     var minutes = "0" + date.getMinutes();
-    //     var am_pm = "AM";
-
-    //     if (hours == 12) {
-    //       am_pm = "PM";
-    //     }
-
-    //     if (hours > 12) {
-    //       hours = hours - 12;
-    //       am_pm = "PM";
-    //     }
-    //     if (hours == 0) {
-    //       hours = 12;
-    //     }
-
-
-
-
-
-
-    console.log($scope.correctPerson);
-
-  
-
-
-
-
-
-
-
-
-
 
   }); // end of http get
 

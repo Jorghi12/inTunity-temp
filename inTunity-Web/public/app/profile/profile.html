@@ -8,7 +8,7 @@
         <a ng-click = "logout()" href = ""><h3 id="logout">Logout, {{owner}}</h3></a>
         <a ng-click = "profile()" href = ""><h3 id = "navbar-link">My Profile</h3></a>
         <a ng-click = "addSong()" href = ""><h3 id = "navbar-link">Add a Song</h3></a>
-    <!--     <a ng-click = "about()"><h3>About</h3></a> -->
+
       </div>
     </div>
   </div>
@@ -18,11 +18,10 @@
   <div class="profile-info" align="center">
     <img id="profile-img" ng-src="{{correctPerson[0].picture}}">
     <h1>{{correctPerson[0].nickname}}</h1>
-    <!--<h1>{{users[whichItem].nickname}}</h1>-->
     <h4>{{numPosts}} posts</h4>
   </div>
   
-  <div id = "song-grid" align="center" ng-repeat = "item in correctPerson[0].song_history " >
+  <div id = "song-grid" align="center" ng-repeat = "item in correctPerson[0].song_history | orderBy:'-unix_time' " >
 
 
     <a href="" ng-click = 'playSpecificSong()'>
@@ -33,57 +32,8 @@
         <h5>100 Views | 15 Likes</h5>
       </div>
     </a>
- <!--    <a href="" ng-click = 'playSpecificSong()'>
-      <div class="col-md-4 song-tile">
-        <img class="song-image" src="album-cover.jpg">
-        <h4>Mako - Smoke Filled Room [Out Now]</h4>
-        <h5>Posted: Dec. 23, 2015</h5>
-        <h5>100 Views | 15 Likes</h5>
-      </div>
-    </a>
-    <a href="" ng-click = 'playSpecificSong()'>
-      <div class="col-md-4 song-tile">
-        <img class="song-image" src="album-cover.jpg">
-        <h4>Mako - Smoke Filled Room [Out Now]</h4>
-        <h5>Posted: Dec. 23, 2015</h5>
-        <h5>100 Views | 15 Likes</h5>
-      </div>
-    </a>
-    <a href="" ng-click = 'playSpecificSong()'>
-      <div class="col-md-4 song-tile">
-        <img class="song-image" src="album-cover.jpg">
-        <h4>Mako - Smoke Filled Room [Out Now]</h4>
-        <h5>Posted: Dec. 23, 2015</h5>
-        <h5>100 Views | 15 Likes</h5>
-      </div>
-    </a>
-    <a href="" ng-click = 'playSpecificSong()'>
-      <div class="col-md-4 song-tile">
-        <img class="song-image" src="album-cover.jpg">
-        <h4>Mako - Smoke Filled Room [Out Now]</h4>
-        <h5>Posted: Dec. 23, 2015</h5>
-        <h5>100 Views | 15 Likes</h5>
-      </div>
-    </a>
-    <a href="" ng-click = 'playSpecificSong()'>
-      <div class="col-md-4 song-tile">
-        <img class="song-image" src="album-cover.jpg">
-        <h4>Mako - Smoke Filled Room [Out Now]</h4>
-        <h5>Posted: Dec. 23, 2015</h5>
-        <h5>100 Views | 15 Likes</h5>
-      </div>
-    </a> -->
+ 
   </div>
   
-
-  <!-- WITH NG-REPEAT
-  <div id = "song-grid" ng-repeat = "item in users[whichItem].song_history">
-    <div class="song-tile" align="center">
-      <img class="song-image" src="album-cover.jpg">
-      <h4>{{item}}</h4>
-      <h5>Posted: Dec. 23, 2015</h5>
-    </div>
-  </div>
-  -->
 
 </div>

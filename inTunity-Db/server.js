@@ -160,10 +160,9 @@ router.post('/api/accounts', function (req, res, next) {
 });
 
 
-
+// get the whole entire accounts
+// mainly used for main feed
 router.get('/api/accounts/' , function (req, res, next) {
-
-
 
 	User.find({}, function(err, userObj) {
 	  if (err) {
@@ -171,23 +170,17 @@ router.get('/api/accounts/' , function (req, res, next) {
 	    res.sendStatus(500);
 	  } else if(userObj) {
 
-
 	  	// update the timer in here after expiration
 	  	// if expired, make that entry null in the db
 	  	var today = new Date();
 
 	  	// unix time 
 	  	var todayTime = today.getTime()/1000;
-	  	console.log(todayTime);
-
 
 	  	for (var i = 0; i < userObj.length; i++) {
 
 	  		if(userObj[i].today_song.song_url != '') {
 	  			
-		  		// console.log("time difference");
-		  		// console.log(todayTime - userObj[i].today_song.unix_time);
-
 		  		// a diff of 600 is about 10 min
 		  		if (todayTime - userObj[i].today_song.unix_time >= 86400) {
 		  			console.log("past expiration time");
@@ -213,8 +206,6 @@ router.get('/api/accounts/' , function (req, res, next) {
 	  	} // end of for loop
 
 	  	res.send(userObj);
-
-
 	  } 
 	}).sort({'today_song.unix_time': -1});
 
@@ -309,13 +300,7 @@ router.get('/api/specificUser/' , function (req, res, next) {
 	    console.log(err);
 	    res.sendStatus(500);
 	  } else if(userObj) {
-
-
-	  
-
 	  	res.send(userObj);
-
-
 	  } 
 	});
 

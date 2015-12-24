@@ -240,18 +240,7 @@ angular.module( 'inTunity.addSong', [
 
       console.log(song);
 
-      console.log("adding a song...");
-      // $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
-      //   headers: {
-      //   'Accept' : '*/*',
-      //   'Content-Type': 'application/json'
-      //  }
-      // }).success(function(data, status, headers, config) {
-      //     console.log(status);
-      //     $location.path('/');
-      // }).error(function(data, status, headers, config) {
-      //     console.log(status);
-      // });
+     
  
  
     console.log(latitude);
