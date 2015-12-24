@@ -284,14 +284,14 @@ hr {
 
 .playerButton {
 	width: 100px;
-	background-color: #ffe4c4;
+	background-color: white;
 	border-radius: 10px;
 	transition: all 0.2s;
 }
 
 .playerButton:hover {
 	color:black;
-	background-color: salmon;
+	background-color: #ffe4c4;
 	-moz-box-shadow: 1px 1px 5px #999;
  	-webkit-box-shadow: 1px 1px 5px #999;
  	box-shadow: 1px 1px 5px #999;
