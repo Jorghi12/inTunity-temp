@@ -79,22 +79,8 @@ angular.module( 'inTunity.addSong', [
  
 
   $scope.findSong = function() {
-
-
-    var latitude;
-    var longitude;
-
-      console.log("hit here");
-      latitude = parseFloat(localStorage.getItem("latitude"));
-      longitude = parseFloat(localStorage.getItem("longitude"));
-
-      localStorage.removeItem("latitude");
-      localStorage.removeItem("longitude");
-
-      console.log(latitude, longitude);
-
-
-      var name = $scope.search;
+ 
+     var name = $scope.search;
 
       var container = document.getElementById("searchResults");
       container.innerHTML = "";
@@ -177,7 +163,7 @@ angular.module( 'inTunity.addSong', [
                   console.log(obj[this.id]);
                   var selectedSong = obj[this.id];
                   var id = (selectedSong["id"]);
-                  $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"], latitude, longitude);
+                  $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
 
                 }
                 confirmSong.className = 'intunity-button play-button confirmSong';
@@ -205,11 +191,8 @@ angular.module( 'inTunity.addSong', [
 
 
 
-  $scope.selectSong = function(url, artwork, title, trackid, duration, latitude, longitude) {
-    console.log(url);
-    console.log(artwork)
-    console.log(title);
-    console.log(trackid);
+  $scope.selectSong = function(url, artwork, title, trackid, duration) {
+   
   
 
     console.log(artwork);
@@ -220,32 +203,21 @@ angular.module( 'inTunity.addSong', [
       updatedSongPic = "/images/no-art.png";
     } 
 
-    console.log(latitude);
-    console.log(longitude);
-
-
-     var today = new Date();
-
-     var song = JSON.stringify({
-        user_id: id,
-        song_url:url, 
-        song_artwork: updatedSongPic, 
-        song_title: title,
-        unix_time: today.getTime()/1000,
-        track_id: trackid,
-        song_duration: duration,
-        state: "",
-        city: ""
-      });
-
-      console.log(song);
-
-     
- 
- 
-    console.log(latitude);
-    console.log(longitude);
   
+    var today = new Date();
+
+
+    var latitude;
+    var longitude;
+
+
+    latitude = parseFloat(localStorage.getItem("latitude"));
+    longitude = parseFloat(localStorage.getItem("longitude"));
+
+    localStorage.removeItem("latitude");
+    localStorage.removeItem("longitude");
+
+
     var geocoder = new google.maps.Geocoder;
     var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
     geocoder.geocode({'location': latlng}, function(results, status) {
