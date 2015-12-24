@@ -56,27 +56,13 @@ angular.module( 'inTunity.profile', [
       }  
     }
 
+    $scope.numPosts = $scope.correctPerson[0].song_history.length;
+
+
+
     console.log($scope.correctPerson);
 
-    // $scope.whichItem = $routeParams.itemId;
-
-
-    // // this array has users who only have songs with it
-    // var correctUsers= [];
   
-    // // makes sure we only show users who have songs
-    // for (var i = 0; i < users.length; i++) {
-    //   if (users[i]["today_song"]["song_url"] != "") {
-    //     console.log("user has a song for today");
-    //     correctUsers.push(users[i]);
-    //   } else {
-    //     console.log("user does not have a song for today");
-    //   }
-    // }
-
-    // $scope.users = correctUsers;
-
-    // console.log($scope.users);
 
 
 

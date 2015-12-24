@@ -16,10 +16,10 @@
 
 <div class="content">
   <div class="profile-info" align="center">
-    <img id="profile-img" src="profile-img.jpg">
-    <h1>Nikita Dubnov</h1>
+    <img id="profile-img" ng-src="{{correctPerson[0].picture}}">
+    <h1>{{correctPerson[0].nickname}}</h1>
     <!--<h1>{{users[whichItem].nickname}}</h1>-->
-    <h4>10 posts</h4>
+    <h4>{{numPosts}} posts</h4>
   </div>
   
   <div id = "song-grid" align="center">
