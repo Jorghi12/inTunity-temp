@@ -56,32 +56,20 @@ angular.module( 'inTunity.profile', [
       }  
     }
 
-    console.log($scope.correctPerson);
-
-    // $scope.whichItem = $routeParams.itemId;
 
 
-    // // this array has users who only have songs with it
-    // var correctUsers= [];
-  
-    // // makes sure we only show users who have songs
-    // for (var i = 0; i < users.length; i++) {
-    //   if (users[i]["today_song"]["song_url"] != "") {
-    //     console.log("user has a song for today");
-    //     correctUsers.push(users[i]);
-    //   } else {
-    //     console.log("user does not have a song for today");
-    //   }
-    // }
+    $scope.numPosts = $scope.correctPerson[0].song_history.length;
 
-    // $scope.users = correctUsers;
+    for (var i = 0; i < $scope.correctPerson[0].song_history.length; i++) {
+      var date = new Date($scope.correctPerson[0].song_history[i]["unix_time"] * 1000);
+      var year = date.getFullYear();
+      var month = date.getMonth();
+      var day = date.getDate();
+      var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+      var formmatedDay = monthNames[month] + " " + day + ", " + year;
 
-    // console.log($scope.users);
-
-
-
-
-
+      $scope.correctPerson[0].song_history[i].formmatedDay = formmatedDay;
+    }
 
 
 
