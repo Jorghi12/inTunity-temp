@@ -15,11 +15,20 @@
 </nav>
 
 <div class="content">
-
-  <h1>{{users[whichItem].nickname}}</h1>
-    
-  <div id = "song-list" ng-repeat = "item in users[whichItem].song_history">
-    <p>{{item}}</p>
+  <div class="profile-info">
+    <img id="profile-img" src="profile-img.jpg">
+    <h1>{{users[whichItem].nickname}}</h1>
+    <h4>10 posts</h4>
   </div>
+  
+  <div id = "song-grid" ng-repeat = "item in users[whichItem].song_history">
+    <div class="song-tile" align="center">
+      <img id="song-image" src="album-cover.jpg">
+      <h4>Song name</h4>
+      <h5>Posted: Dec. 23, 2015</h5>
+    </div>
+  </div>
+
+  <p>{{item}}</p>
 
 </div>

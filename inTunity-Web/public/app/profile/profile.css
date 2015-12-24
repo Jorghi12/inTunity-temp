@@ -1,0 +1,25 @@
+/*Custom CSS for Profile Page*/
+.profile-info {
+	height: auto;
+}
+
+#profile-img {
+	height: 250px;
+	width: 250px;
+	border-radius: 100px;
+	float: left;
+	border: solid 1px #CCC;
+	margin: 20px;
+}
+
+#song-grid {
+	display: flex;
+	flex-direction: row;
+}
+
+.song-tile {
+	border: solid 1px #CCC;
+	padding: 10px;
+	height: auto;
+	margin: 5px;
+}

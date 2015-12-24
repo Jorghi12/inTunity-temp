@@ -74,6 +74,7 @@ hr {
   margin-top:18px;
   height:100px;
   width:100px;
+  border: solid 1px #CCC;
 }
 
 .img-circle:hover {
@@ -289,6 +290,12 @@ hr {
 .playerButton:hover {
 	color:black;
 	background-color: salmon;
+	-moz-box-shadow: 1px 1px 5px #999;
+ 	-webkit-box-shadow: 1px 1px 5px #999;
+ 	box-shadow: 1px 1px 5px #999;
+}
+
+.playButton:hover {
 	-moz-box-shadow: 1px 1px 5px #999;
  	-webkit-box-shadow: 1px 1px 5px #999;
  	box-shadow: 1px 1px 5px #999;
