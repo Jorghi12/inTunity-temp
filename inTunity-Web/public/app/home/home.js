@@ -295,13 +295,7 @@ angular.module( 'inTunity.home', [
     function startStream(newSoundUrl) {
       songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
 
-      console.log(songDuration);
-
       currentuser = document.getElementById("currentuser");
-
-      console.log(correctUsers[song_index]);
-
-
       currentuser.innerHTML = correctUsers[song_index][0]["nickname"];
 
       
@@ -312,14 +306,7 @@ angular.module( 'inTunity.home', [
         globalPlayer.seek(0);
 
         globalPlayer.on('play-start', function () {
-          console.log("play");
           globalPlayer.seek(0);
-
-
-
-
-
-
 
           var endTime = document.getElementById("endTime");
           endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
