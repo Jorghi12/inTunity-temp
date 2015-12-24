@@ -43,7 +43,8 @@ angular.module( 'inTunity', [
       controller: 'LocationCtrl',
       templateUrl: '/app/location/location.html',
       pageTitle: 'Location'
-    });
+    })
+
 
 
     $httpProvider.defaults.useXDomain = true;

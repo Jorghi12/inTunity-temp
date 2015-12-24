@@ -9,10 +9,16 @@ angular.module( 'inTunity.home', [
   $scope.tgState = false;
   var prof = (store.get('profile'));
   $scope.owner;
+  var id = prof["identities"][0]["user_id"];
+
+  console.log(prof);
   
 
   var globalPlayer;
   var trackarray = [];
+
+  var username_url;
+
 
 
 
@@ -25,7 +31,7 @@ angular.module( 'inTunity.home', [
   } else {
     $scope.owner = prof["nickname"];
   }
-  var id = prof["identities"][0]["user_id"];
+
 
   $scope.logout = function() {
     if (trackarray.length > 0) {
@@ -36,6 +42,30 @@ angular.module( 'inTunity.home', [
     store.remove('profile');
     store.remove('token');
     $location.path('/login');
+
+
+  }
+
+  $scope.profile = function() {
+    var ppl = store.get('profile');
+    var ppl_id = ppl["identities"][0]["user_id"];
+
+
+    $http({
+      url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/specificUser' ,
+      method: 'GET',
+      params: {id: ppl_id}
+    }).then(function(response) {  
+      console.log(response["data"]["user"]);
+
+      username_url = response["data"]["user"]["url_username"];
+      // console.log(username_url);
+      $location.path('/profile/' + username_url);
+    
+
+    }); // end of http get
+
+
 
   }
 
@@ -80,6 +110,8 @@ angular.module( 'inTunity.home', [
   }).then(function(response) {  
     songdata = (response["data"]["songs"]);
 
+    console.log(songdata);
+
 
 
     var song_array = [];
@@ -107,6 +139,10 @@ angular.module( 'inTunity.home', [
         var minutes = "0" + date.getMinutes();
         var am_pm = "AM";
 
+        if (hours == 12) {
+          am_pm = "PM";
+        }
+
         if (hours > 12) {
           hours = hours - 12;
           am_pm = "PM";
@@ -125,7 +161,7 @@ angular.module( 'inTunity.home', [
 
     $scope.users = correctUsers;
 
-    console.log(correctUsers);
+
 
   
     // adding all the songs to arr
@@ -143,9 +179,9 @@ angular.module( 'inTunity.home', [
       trackarray.push(new Array(correctUsers[i][0]["today_song"]["track_id"], correctUsers[i][0]["today_song"]["song_album_pic"], correctUsers[i][0]["today_song"]["song_title"], correctUsers[i][0]["today_song"]["song_duration"]));
     }
 
-    console.log(correctUsers);
-    console.log("track array:");
-    console.log(trackarray);
+    // console.log(correctUsers);
+    // console.log("track array:");
+    // console.log(trackarray);
 
 
 
@@ -259,10 +295,8 @@ angular.module( 'inTunity.home', [
     function startStream(newSoundUrl) {
       songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
 
-      console.log(songDuration);
-
       currentuser = document.getElementById("currentuser");
-      currentuser.innerHTML = correctUsers[song_count][0]["nickname"];
+      currentuser.innerHTML = correctUsers[song_index][0]["nickname"];
 
       
       SC.stream(newSoundUrl).then(function (player) {
@@ -271,16 +305,8 @@ angular.module( 'inTunity.home', [
         globalPlayer.play();
         globalPlayer.seek(0);
 
-
-       
-
         globalPlayer.on('play-start', function () {
-          console.log("play");
           globalPlayer.seek(0);
-
-
-
-
 
           var endTime = document.getElementById("endTime");
           endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
@@ -371,12 +397,15 @@ angular.module( 'inTunity.home', [
         var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
         var col1 = document.getElementById("col1");
 
+        console.log($(window).width());
+
         var marginLeft;
-        if (col1.offsetWidth < 500) {
+        if ($(window).width() < 992) {
           console.log("here");
-          marginLeft = click.pageX - 15;
+          marginLeft = click.pageX - 10;
         } else {
-          marginLeft = click.pageX - col1.offsetWidth - 10
+          console.log("here!");
+          marginLeft = click.pageX - col1.offsetWidth - 10;
         }
         
         var percentageClicked = (marginLeft / time.offsetWidth);

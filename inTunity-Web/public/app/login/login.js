@@ -35,11 +35,33 @@ angular.module( 'inTunity.login', [
         picture = auth.profile["picture"];
       }
 
+      console.log(nickname.charAt(0));
+
+
+
+      var url_username = "";
+      for (var i = 0; i < nickname.length; i++) {
+        if (nickname.charAt(i) == " ") {
+           url_username += ".";
+        } else {
+           url_username += (nickname.charAt(i));
+        }
+       
+      }
+
+
+
+
       var user_account = JSON.stringify({
         user_id:id, 
         email: email, 
         nickname: nickname, 
-        picture: picture}); 
+        picture: picture,
+        url_username: url_username
+      });
+
+      console.log(user_account); 
+
 
       $location.path("/");
 
@@ -52,6 +74,7 @@ angular.module( 'inTunity.login', [
       }).success(function(data, status, headers, config) {
         console.log(status);
         console.log("success");
+       
       }).error(function(data, status, headers, config) {
         console.log("failed");
         console.log(status); 

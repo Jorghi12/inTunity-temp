@@ -49,62 +49,45 @@ var location = require('./model/location.js');
 var router = express.Router();
 
 
-	// User.find({  }, function(err, user) {
-	//       if (err) {
-	//       	throw err;
-	//       }
+// User.find({  }, function(err, user) {
+//       if (err) {
+//       	throw err;
+//       }
 
-	//       console.log("delete");
-	//         // delete him
-	//       User.remove(function(err) {
-	//       if (err) {
-	//            throw err;
-	//       }
-	//       console.log('User successfully deleted!');
+//       console.log("delete");
+//         // delete him
+//       User.remove(function(err) {
+//       if (err) {
+//            throw err;
+//       }
+//       console.log('User successfully deleted!');
 
-	//       });
- //    });
+//       });
+// });
 
-    // location.find({  }, function(err, loc) {
-	   //    if (err) {
-	   //    	throw err;
-	   //    }
+// location.find({  }, function(err, loc) {
+//       if (err) {
+//       	throw err;
+//       }
 
-	   //    console.log("delete");
-	   //      // delete him
-	   //    location.remove(function(err) {
-	   //    if (err) {
-	   //         throw err;
-	   //    }
-	   //    console.log('Location successfully deleted!');
-	 
-	   //    });
-    // });
+//       console.log("delete");
+//         // delete him
+//       location.remove(function(err) {
+//       if (err) {
+//            throw err;
+//       }
+//       console.log('Location successfully deleted!');
+ 
+//       });
+// });
 
 
 
 router.post('/api/accounts', function (req, res, next) {
-	console.log("about to post a user!!!");
 
+	
 
-
-
-	var newUser = new User({
-	    user_id: req.body.user_id,
-	    nickname: req.body.nickname,
-	    picture: req.body.picture,
-	    email: req.body.email,
-	    today_song: {
-            song_name: "",
-            song_album_pic: "",
-            song_url: "",
-			unix_time: "",
-			track_id: "",
-			song_duration: ""
-	    }
-    });
-
-	 User.findOne({user_id: req.body.user_id}, function (err, userObj) {
+	User.findOne({user_id: req.body.user_id}, function (err, userObj) {
 	    if (err) {
 	      console.log(err);
 	      res.sendStatus(500);
@@ -113,21 +96,75 @@ router.post('/api/accounts', function (req, res, next) {
 	      res.sendStatus(500);
 	    } else {
 	      console.log('User not found!');
-	        newUser.save(function(err) {
-	           if (err) {
-	                 throw err;
-	           }     else {
-	                 console.log('User created!');
-	                 res.sendStatus(200);
-	           }
-	         });
+
+
+	      	User.find({nickname: req.body.nickname}, function (err, result) {
+	      		if (result.length == 0) {
+	      			var newUser = new User({
+					    user_id: req.body.user_id,
+					    nickname: req.body.nickname,
+					    picture: req.body.picture,
+					    email: req.body.email,
+					    url_username: req.body.url_username,
+					    today_song: {
+				            song_name: "",
+				            song_album_pic: "",
+				            song_url: "",
+							unix_time: "",
+							track_id: "",
+							song_duration: ""
+					    }
+				    });
+
+	      			newUser.save(function(err) {
+			           if (err) {
+			           	 throw err;
+			           } else {
+		                 console.log('User created!');
+		                 res.sendStatus(200);
+			           }
+			         });
+
+	      		} else {
+	      			var newUser = new User({
+					    user_id: req.body.user_id,
+					    nickname: req.body.nickname,
+					    picture: req.body.picture,
+					    email: req.body.email,
+					    url_username: req.body.url_username + (result.length + 1).toString(),
+					    today_song: {
+				            song_name: "",
+				            song_album_pic: "",
+				            song_url: "",
+							unix_time: "",
+							track_id: "",
+							song_duration: ""
+					    }
+				    });
+
+	      			newUser.save(function(err) {
+			           if (err) {
+			           	 throw err;
+			           } else {
+		                 console.log('User created!');
+		                 res.sendStatus(200);
+
+			           }
+			        });
+
+	      		}
+	      	}); 
+	      		
 	    }
-	  });
+	 });
 });
 
 
 
 router.get('/api/accounts/' , function (req, res, next) {
+
+
+
 	User.find({}, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
@@ -148,8 +185,8 @@ router.get('/api/accounts/' , function (req, res, next) {
 
 	  		if(userObj[i].today_song.song_url != '') {
 	  			
-		  		console.log("time difference");
-		  		console.log(todayTime - userObj[i].today_song.unix_time);
+		  		// console.log("time difference");
+		  		// console.log(todayTime - userObj[i].today_song.unix_time);
 
 		  		// a diff of 600 is about 10 min
 		  		if (todayTime - userObj[i].today_song.unix_time >= 86400) {
@@ -262,6 +299,33 @@ router.get('/api/location/' , function (req, res, next) {
 	  } 
 	});
 });
+
+router.get('/api/specificUser/' , function (req, res, next) {
+
+	console.log(req.query["user_id"]);
+
+	User.findOne({user_id:req.query["user_id"] }, function(err, userObj) {
+	  if (err) {
+	    console.log(err);
+	    res.sendStatus(500);
+	  } else if(userObj) {
+
+
+	  
+
+	  	res.send(userObj);
+
+
+	  } 
+	});
+
+
+
+
+});
+
+
+
 
 
 
