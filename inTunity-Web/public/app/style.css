@@ -114,7 +114,7 @@ hr {
 	border-radius: 10px;
 }
 
-.add-button a {
+.top-add-song a {
 	color:black;
 	text-decoration: none;
 }
@@ -175,6 +175,11 @@ hr {
 
 .search-info {
 	margin: 0;
+}
+
+.search-info h4 {
+	max-height: 58px;
+    overflow-y: hidden;
 }
 
 /*NEW STYLING ADDED SINCE LAST COMMIT TO ZAPATA*/
@@ -302,3 +307,4 @@ hr {
  	-webkit-box-shadow: 1px 10px 5px #999;
  	box-shadow: 1px 1px 10px #999;
 }
+

@@ -19,13 +19,13 @@
 <!--PAGE CONTENTS-->
 <div class = "bkg" style = "width:100%; height:100%; position:absolute">
   <div class="content">
-    <div class="col-sm-12 text-center">
+    <div class="col-sm-12 text-center top-add-song">
       <h2>What is your motivation today? Tell a story with music:</h2>
-      <div class="add-button">
-        <a ng-click = "addSong()" href = "">
+      <a ng-click = "addSong()" href = "">
+        <div class="add-button">
           <h2>Add a Song</h2>
-        </a>
-      </div>
+        </div>
+      </a>
     </div>
 
     <div class="col-sm-12">
@@ -39,13 +39,13 @@
           </div>
           <div class = "col-md-6 text-center info">
             <h2>{{item[0].today_song.song_title}}</h2>
-            <div class="col-md-4">
+            <div class="col-md-4 col-md-offset-1">
               <a href = "#/profile/{{item[0].url_username}}"> 
                 <img class = "img-circle" ng-src = "{{item[0].picture}}">
               </a>
             </div>
 
-            <div class = "col-md-8 text-center prof-info">
+            <div class = "col-md-6 text-center prof-info">
               <a href = "#/profile/{{item[0].url_username}}"> <h3>{{item[0].nickname}}</h3></a>
               <h4>{{item[1]}} | {{item[2]}}</h4>
             </div>

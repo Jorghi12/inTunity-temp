@@ -163,7 +163,7 @@ angular.module( 'inTunity.addSong', [
                 var duration = document.createElement("h5");
                 duration.innerHTML = "Time: " + millisToMinutesAndSeconds(obj[i]["duration"]);
 
-                var playbutton = "<div class='intunity-button play-button'><a href='' ng-click = 'boss(" + '"' + obj[i]['permalink_url'] + '"' + ")'><h4>" + "Sample Song" + "</h4></a></div>";
+                var playbutton = "<a href='' ng-click = 'boss(" + '"' + obj[i]['permalink_url'] + '"' + ")'><div class='intunity-button play-button'><h4>" + "Sample Song" + "</h4></div></a>";
                
                 var confirmSong = document.createElement("div");
                 confirmSong.innerHTML = "<h4>Confirm</h4>";

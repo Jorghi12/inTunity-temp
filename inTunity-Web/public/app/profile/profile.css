@@ -22,6 +22,12 @@
 	height: auto;
 }
 
+.song-tile h4 {
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .song-tile:hover {
 	-moz-box-shadow: 1px 1px 10px #999;
   	-webkit-box-shadow: 1px 1px 10px #999;
@@ -29,7 +35,7 @@
 }
 
 .song-image {
-	height: 200px;
-	width: 200px;
+	height: 250px;
+	width: 250px;
 	margin-top: 10px;
 }
