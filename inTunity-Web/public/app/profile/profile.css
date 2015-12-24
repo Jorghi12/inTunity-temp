@@ -21,5 +21,11 @@
 	border: solid 1px #CCC;
 	padding: 10px;
 	height: auto;
+	width: 200px;
 	margin: 5px;
+}
+
+.song-image {
+	height: 150px;
+	width: 150px;
 }
