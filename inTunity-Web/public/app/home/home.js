@@ -299,10 +299,10 @@ angular.module( 'inTunity.home', [
 
       currentuser = document.getElementById("currentuser");
 
-      console.log(correctUsers[song_count]);
+      console.log(correctUsers[song_index]);
 
 
-      currentuser.innerHTML = correctUsers[song_count][0]["nickname"];
+      currentuser.innerHTML = correctUsers[song_index][0]["nickname"];
 
       
       SC.stream(newSoundUrl).then(function (player) {
