@@ -15,17 +15,15 @@
   </div>
 </nav>
 
-<div class="content">
+<div class="content" ng-controller="ProfileCtrl">
   <div class="profile-info" align="center">
-    <img id="profile-img" ng-src="{{correctPerson[0].picture}}">
+    <img id="profile-img" ng-src="{{correctPerson[0].picture}}"> 
     <h1>{{correctPerson[0].nickname}}</h1>
     <h4>{{numPosts}} posts</h4>
   </div>
   
   <div id = "song-grid" align="center" ng-repeat = "item in correctPerson[0].song_history | orderBy:'-unix_time' " >
-
-
-    <a href="" ng-click = 'playSpecificSong()'>
+    <a href="" ng-click = 'startStreamingProfileSong(item.song_url,item.song_album_pic,item.song_title,item.track_id,item.song_duration)'>
       <div class="col-md-4 song-tile">
         <img class="song-image" ng-src="{{item.song_album_pic}}">
         <h4>{{item.song_title}}</h4>

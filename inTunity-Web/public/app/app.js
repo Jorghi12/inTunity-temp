@@ -10,7 +10,7 @@ angular.module( 'inTunity', [
   'inTunity.profile',
   'inTunity.location'
 ])
-.config( function myAppConfig ( $routeProvider, authProvider, $httpProvider, $locationProvider,
+.config( function myAppConfig ($routeProvider, authProvider, $httpProvider, $locationProvider,
   jwtInterceptorProvider) {
   $routeProvider
     .when( '/', {
@@ -90,7 +90,7 @@ angular.module( 'inTunity', [
       $scope.pageTitle = nextRoute.$$route.pageTitle + ' | inTunity' ;
     }
   });
-}).service('musicStatus', function () {  var songNumber = 0; var songPos = -1;
+}).service('musicStatus', function () {  var songNumber = 0; var songPos = -1; 
 return {
 getStatus: function () {
 return [songNumber,songPos];
@@ -101,7 +101,3 @@ songPos = pos;
 }
 };
 });
-
-
-
-
