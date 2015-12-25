@@ -48,6 +48,8 @@ angular.module( 'inTunity.addSong', [
 
   function startStreaming(newSoundUrl) {
 
+
+
       console.log(trackarray[song_count]);
 
       var song_title = document.getElementById("songtitle");
