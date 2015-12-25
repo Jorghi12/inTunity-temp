@@ -232,7 +232,8 @@ angular.module( 'inTunity.home', [
 
     // this is for skipping to the previous song
     $scope.prevPlayer = function() {
-      song_count--;
+      song_count = musicStatus.getStatus()[0];
+	  song_count -=1;
       if (song_count < 0) {
         song_count = 0;
       }
@@ -250,8 +251,8 @@ angular.module( 'inTunity.home', [
 
     // this is for skipping to the next song
     $scope.nextPlayer = function() {
-
-      song_count++;
+	  song_count = musicStatus.getStatus()[0];
+	  song_count +=1;
       if (song_count == trackarray.length) {
         song_count = 0;
       }
@@ -349,7 +350,7 @@ angular.module( 'inTunity.home', [
 
         globalPlayer.on('time', function() {
 		  //Updates information about our currently playing song (shared cross page)
-		  if (globalPlayer.currentTime() < songDuration){
+		  if (globalPlayer.currentTime() < parseInt(trackarray[song_count % trackarray.length][3])){
 			musicStatus.setStatus(song_count % trackarray.length,globalPlayer.currentTime());
 		  }
 
@@ -381,7 +382,8 @@ angular.module( 'inTunity.home', [
         globalPlayer.on('finish', function () {
           var length = parseInt(trackarray[song_count % trackarray.length][3]);
           if (length == globalPlayer.currentTime()) {
-            song_count++;
+            song_count+=1;
+		    musicStatus.setStatus(song_count % trackarray.length,globalPlayer.currentTime());
 			musicStatus.setStatus(song_count % trackarray.length,0);
             new_song = trackarray[song_count % trackarray.length][0];
             song_count = song_count % trackarray.length;
