@@ -111,7 +111,7 @@ angular.module( 'inTunity.addSong', [
         console.log(trackarray[song_count]);
 
         var song_title = document.getElementById("songtitle");
-        song_title.innerHTML = trackarray[song_count][2];
+        song_title.innerHTML = trackarray[song_count % trackarray.length][2];
 
         var poster = document.getElementById("currentuser");
         poster.innerHTML = trackarray[song_count][4];
@@ -172,7 +172,7 @@ angular.module( 'inTunity.addSong', [
             if (length == globalPlayer.currentTime()) {
               song_count++;
               new_song = trackarray[song_count % trackarray.length][0];
-              song_index = song_count % trackarray.length;
+              
               new_url = '/tracks/' + new_song;
               console.log(new_url);
               globalPlayer.seek(0); //Do this before startStream
