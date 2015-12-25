@@ -27,29 +27,33 @@ angular.module( 'inTunity.addSong', [
   var song_count; 
   var prevTime;
 
+  var progressBall = document.getElementById('playHead');
+  var time = document.getElementById('time');
 
-  $http({
-    url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/specificUser' ,
-    method: 'GET',
-    params: {id: id}
-  }).then(function(response) {  
-   
-          ;
-
-  }); // end of http get
-
-    var progressBall = document.getElementById('playHead');
-    var time = document.getElementById('time');
   $scope.startStreamingAddSong = function(songUrl, artworkUrl,myTitle, trackid, duration) {
 	  
+	   
+    var prevButton = document.getElementById("prevButton");
+    prevButton.style.visibility = "hidden";
+
+
+    var nextButton = document.getElementById("nextButton");
+    nextButton.style.visibility = "hidden";
+
+    var poster = document.getElementById("currentuser");
+    poster.style.visibility = "hidden";
+
+    var selectedBy = document.getElementById("selectedBy");
+    selectedBy.style.visibility = "hidden";
+
+
+
+    songDuration = duration;
+    
 	
-      songDuration = duration;
-      currentuser = "Add Song";
-      currentuser.innerHTML = "Add Song";
-	
-      SC.stream("/tracks/" + trackid).then(function (player) {
-		globalPlayer = player;
-		globalPlayer.play();
+    SC.stream("/tracks/" + trackid).then(function (player) {
+    		globalPlayer = player;
+    		globalPlayer.play();
         globalPlayer.on('play-start', function () {
 		
 
@@ -245,14 +249,14 @@ angular.module( 'inTunity.addSong', [
                 var duration = document.createElement("h5");
                 duration.innerHTML = "Time: " + millisToMinutesAndSeconds(obj[i]["duration"]);
 
-				var playbutton = document.createElement("a");
-				playbutton.href = "";
-				playbutton.innerHTML = "<div class='intunity-button play-button'><h4>" + "Sample Song" + "</h4></div>"
-				playbutton.onclick = function(){
+        				var playbutton = document.createElement("a");
+        				playbutton.href = "";
+        				playbutton.innerHTML = "<div class='intunity-button play-button'><h4>" + "Sample Song" + "</h4></div>"
+        				playbutton.onclick = function(){
                   var selectedSong = obj[this.id];
                   var id = (selectedSong["id"]);
                   $scope.startStreamingAddSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
-				}
+        				}
 				
                 var confirmSong = document.createElement("div");
                 confirmSong.innerHTML = "<h4>Confirm</h4>";
@@ -294,9 +298,6 @@ angular.module( 'inTunity.addSong', [
 
   $scope.selectSong = function(url, artwork, title, trackid, duration) {
    
-  
-
-    console.log(artwork);
     if (artwork != null) {
       var index = artwork.indexOf("large");
       updatedSongPic = artwork.substring(0,index) + "t500x500.jpg";
@@ -314,9 +315,6 @@ angular.module( 'inTunity.addSong', [
 
     latitude = parseFloat(localStorage.getItem("latitude"));
     longitude = parseFloat(localStorage.getItem("longitude"));
-
-
-
 
     var geocoder = new google.maps.Geocoder;
     var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
