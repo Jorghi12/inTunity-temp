@@ -37,105 +37,152 @@ angular.module( 'inTunity.addSong', [
     console.log(current);
     if (current["track_array"].length > 0) {
       trackarray = current["track_array"];
+
       song_count = current["song_index"];
       prevTime = current["current_time"];
       startStreaming(current["track_id"]);
+
+
+      var progressBall = document.getElementById('playHead');
+      var time = document.getElementById('time');
+
+      function startStreaming(newSoundUrl) {
+
+        songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
+        var endTime = document.getElementById("endTime");
+        endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
+
+
+        console.log(trackarray[song_count]);
+
+        var song_title = document.getElementById("songtitle");
+        song_title.innerHTML = trackarray[song_count][2];
+
+        var poster = document.getElementById("currentuser");
+        poster.innerHTML = trackarray[song_count][4];
+
+        var image = document.getElementById("artwork");
+        image.src = trackarray[song_count][1];
+
+       
+        
+        SC.stream(newSoundUrl).then(function (player) {
+
+          
+
+          globalPlayer = player;
+          globalPlayer.play();
+
+
+    
+
+          globalPlayer.on('seek', function () {
+            console.log("seek");  
+          }); 
+
+          globalPlayer.on('play-start', function () {
+            console.log(prevTime);
+            globalPlayer.seek(parseInt(prevTime));
+            globalPlayer.play();      
+          }); 
+
+
+
+         
+
+
+
+         
+
+          globalPlayer.on('time', function() {
+
+            songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
+
+            var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
+            progressBall.style.width = percent + "px";
+
+            var currentTime = document.getElementById("currentTime");
+            currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
+
+
+
+          });
+
+       
+
+         
+
+          globalPlayer.on('finish', function () {
+            var length = parseInt(trackarray[song_count % trackarray.length][3]);
+            if (length == globalPlayer.currentTime()) {
+              song_count++;
+              new_song = trackarray[song_count % trackarray.length][0];
+              song_index = song_count % trackarray.length;
+              new_url = '/tracks/' + new_song;
+              console.log(new_url);
+              globalPlayer.seek(0); //Do this before startStream
+
+              startStreaming(new_url);
+            }
+    
+          }); // end of finish
+
+        });
+    }
+
+
+
+
+
+
+
+      if (trackarray.length > 0) { 
+        var playHead = document.getElementById('playHead');
+        var timelineWidth = time.offsetWidth - playHead.offsetWidth;
+            
+        time.addEventListener('click', function (event) {
+          changePosition(event);
+        }, false);
+
+        function changePosition(click) {
+          var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
+          var col1 = document.getElementById("col1");
+
+          console.log($(window).width());
+
+          var marginLeft;
+          if ($(window).width() < 992) {
+            console.log("here");
+            marginLeft = click.pageX - 10;
+          } else {
+            console.log("here!");
+            marginLeft = click.pageX - col1.offsetWidth - 10;
+          }
+          
+          var percentageClicked = (marginLeft / time.offsetWidth);
+
+          console.log(percentageClicked);
+          globalPlayer.seek(Math.floor(percentageClicked * timelength));
+          var currentTime = percentageClicked * timelength;
+          progressBall.style.width = ((currentTime/ timelength) * time.offsetWidth) + "px";
+
+        }
+      } 
+
+
+
     }
   
 
   }); // end of http get
 
 
-  function startStreaming(newSoundUrl) {
-
-
-
-      console.log(trackarray[song_count]);
-
-      var song_title = document.getElementById("songtitle");
-      song_title.innerHTML = trackarray[song_count][2];
-
-      var poster = document.getElementById("currentuser");
-      poster.innerHTML = trackarray[song_count][4];
-
-      var image = document.getElementById("artwork");
-      image.src = trackarray[song_count][1];
-
-      // songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
-
-
-
-      // currentuser = document.getElementById("currentuser");
-      // currentuser.innerHTML = correctUsers[song_index][0]["nickname"];
-
-      
-      SC.stream(newSoundUrl).then(function (player) {
-
-        
-
-        
-        player.play();
-        // globalPlayer.seek(172676.30299999999 * 0.50);
-
-  
-
-        player.on('seek', function () {
-          console.log("seek");
-          // player.seek(172676.30299999999 * 0.50);
-          // player.play();
-
-         
-        }); 
-
-        player.on('play-start', function () {
-          player.seek(172676.30299999999 * 0.50);
-          player.play();
-
-         
-        }); 
-
-
-
-       
-
-
-
-        // globalPlayer.on('play-resume', function () {
-        //    globalPlayer.seek(172676.30299999999 * 0.50);
-        //    globalPlayer.play();
  
 
-         
-        // }); 
-
-        player.on('time', function() {
-
-          // console.log(player.currentTime());
 
 
-        });
 
-     
 
-       
-
-        // globalPlayer.on('finish', function () {
-        //   var length = parseInt(trackarray[song_count % trackarray.length][3]);
-        //   if (length == globalPlayer.currentTime()) {
-        //     song_count++;
-        //     new_song = trackarray[song_count % trackarray.length][0];
-        //     song_index = song_count % trackarray.length;
-        //     new_url = '/tracks/' + new_song;
-        //     console.log(new_url);
-        //     globalPlayer.seek(0); //Do this before startStream
-
-        //     startStreaming(new_url);
-        //   }
-  
-        // }); // end of finish
-
-      });
-    }
 
 
 
@@ -369,6 +416,8 @@ angular.module( 'inTunity.addSong', [
           }).success(function(data, status, headers, config) {
               console.log(status);
               $location.path('/');
+
+
           }).error(function(data, status, headers, config) {
               console.log(status);
           });
