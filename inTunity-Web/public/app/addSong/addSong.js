@@ -40,7 +40,6 @@ angular.module( 'inTunity.addSong', [
 
     var progressBall = document.getElementById('playHead');
     var time = document.getElementById('time');
-	
   $scope.startStreamingAddSong = function(songUrl, artworkUrl,myTitle, trackid, duration) {
 	  
 	
@@ -114,12 +113,15 @@ angular.module( 'inTunity.addSong', [
 
 
   $scope.logout = function() {
-    auth.signout();
+	auth.signout();
     store.remove('profile');
     store.remove('token');
     $location.path('/login');
+	
+	//STOP SOUND PLAYER
+	//globalPlayer.pause();
   }
-
+	
   $scope.home = function() {
     $location.path('/');
   }
