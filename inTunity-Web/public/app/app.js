@@ -10,7 +10,7 @@ angular.module( 'inTunity', [
   'inTunity.profile',
   'inTunity.location'
 ])
-.config( function myAppConfig ( $routeProvider, authProvider, $httpProvider, $locationProvider,
+.config( function myAppConfig ($routeProvider, authProvider, $httpProvider, $locationProvider,
   jwtInterceptorProvider) {
   $routeProvider
     .when( '/', {
@@ -101,7 +101,3 @@ songPos = pos;
 }
 };
 });
-
-
-
-

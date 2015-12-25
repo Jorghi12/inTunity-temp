@@ -1,10 +1,33 @@
-angular.module( 'inTunity.home', [
-'auth0'
-])
+app = angular.module( 'inTunity.home', [
+'auth0', 'ngCookies'
+]);
 
-.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $location, store, $compile, musicStatus) {
+app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $location, store, $compile, musicStatus, $cookieStore, $cookies, $rootScope) {
+  // Put cookie
+  //$cookieStore.put('myFavorite','oatmeal');
+  
+  // Get cookie
+  var songNum = $cookieStore.get('songNum');
+  var songPos = $cookieStore.get('songPos');
+  var startSpecific = $cookieStore.get('routeChange');
+  $cookieStore.put('routeChange',false);
+  musicStatus.setStatus(songNum,songPos);
+  
+  // Removing a cookie
+  //$cookieStore.remove('myFavorite');
+  
+  app.run();
+
+  $rootScope.$on('$routeChangeStart', function (event, next, current) {
+    // handle session start event
+   curStats = musicStatus.getStatus();
+   $cookieStore.put('songNum',curStats[0]);
+   $cookieStore.put('songPos',curStats[1]);
+   $cookieStore.put('routeChange',true);
+  });
+
   //musicStatus.setStatus(0,21);
-  console.log(musicStatus.getStatus());
+  //console.log(musicStatus.getStatus());
   $scope.auth = auth;
   $scope.tgState = false;
   var prof = (store.get('profile'));
@@ -209,12 +232,17 @@ angular.module( 'inTunity.home', [
 	  songPos = statusObj[1];
 	  
 	  //We haven't started playing music yet
-	  if (songPos == -1){
+      if (songPos == -1 || songPos == null){
 		startStream(songUrl,0);
 	  }
-	  else{
+	  else {
 		  song_count = statusObj[0];
-		  startStream(songUrl,-1);
+		  if (startSpecific == true || startSpecific == null){
+			startStream(songUrl,-1);
+		  }
+		  else{
+			startStream(songUrl,songPos);
+		  }
 	  }
     }
 
@@ -354,6 +382,8 @@ angular.module( 'inTunity.home', [
 		  //Updates information about our currently playing song (shared cross page)
 		  if (globalPlayer.currentTime() < parseInt(trackarray[song_count % trackarray.length][3])){
 			musicStatus.setStatus(song_count % trackarray.length,globalPlayer.currentTime());
+			$cookieStore.put('songNum',song_count % trackarray.length);
+			$cookieStore.put('songPos',globalPlayer.currentTime());
 		  }
 
           songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
