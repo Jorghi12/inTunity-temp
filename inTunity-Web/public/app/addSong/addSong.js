@@ -14,6 +14,10 @@ angular.module( 'inTunity.addSong', [
     $scope.owner = prof["nickname"];
   }
 
+  SC.initialize({
+    client_id: 'a17d2904e0284ac32f1b5f9957fd7c3f'
+  });
+
   $scope.position;
 
   var id = auth.profile["identities"][0]["user_id"];
@@ -30,104 +34,103 @@ angular.module( 'inTunity.addSong', [
     params: {id: id}
   }).then(function(response) {  
     var current = response["data"]["user"]["current_song"];
+    console.log(current);
     if (current["track_array"].length > 0) {
       trackarray = current["track_array"];
       song_count = current["song_index"];
       prevTime = current["current_time"];
-      startStream(current["track_id"]);
-
-
+      startStreaming(current["track_id"]);
     }
   
 
   }); // end of http get
 
 
-  function startStream(newSoundUrl) {
-      songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
+  function startStreaming(newSoundUrl) {
 
-      currentuser = document.getElementById("currentuser");
+      console.log(trackarray[song_count]);
+
+      var song_title = document.getElementById("songtitle");
+      song_title.innerHTML = trackarray[song_count][2];
+
+      var poster = document.getElementById("currentuser");
+      poster.innerHTML = trackarray[song_count][4];
+
+      var image = document.getElementById("artwork");
+      image.src = trackarray[song_count][1];
+
+      // songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
+
+
+
+      // currentuser = document.getElementById("currentuser");
       // currentuser.innerHTML = correctUsers[song_index][0]["nickname"];
 
       
       SC.stream(newSoundUrl).then(function (player) {
 
-        globalPlayer = player;
-        globalPlayer.play();
+        
 
+        
+        player.play();
+        // globalPlayer.seek(172676.30299999999 * 0.50);
 
+  
 
-       
+        player.on('seek', function () {
+          console.log("seek");
+          // player.seek(172676.30299999999 * 0.50);
+          // player.play();
 
+         
+        }); 
 
+        player.on('play-start', function () {
+          player.seek(172676.30299999999 * 0.50);
+          player.play();
 
-        globalPlayer.on('play-start', function () {
-          globalPlayer.seek(prevTime);
-
-          // var endTime = document.getElementById("endTime");
-          // endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
-
-          // //this is for resetting all the background color to its natural settings
-          // for (var i = 0; i < trackarray.length; i ++) {
-          //    var row = document.getElementById("song" + i);
-          //    row.style.backgroundColor = "#f5f5f5";
-          // }
-
-          // // this targets which row to highlight
-          // var rowCurrent = document.getElementById("song"+song_index);
-          // rowCurrent.style.backgroundColor = "#ffe4c4";
-          // window.scroll(0,findPos(rowCurrent));
-
-          // var album = document.getElementById("artwork");
-          // album.src = trackarray[song_count % trackarray.length][1];
-
-          // var title = document.getElementById("songtitle");
-          // title.innerHTML = trackarray[song_count % trackarray.length][2];
+         
         }); 
 
 
 
-        globalPlayer.on('time', function() {
-
-          // songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
-
-          // var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
-          // progressBall.style.width = percent + "px";
-
-          // var currentTime = document.getElementById("currentTime");
-          // currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
+       
 
 
-          // if (globalPlayer.currentTime() <= (songDuration  * 0.02)) {
-          //   globalPlayer.setVolume(0.8);
-          // }
 
-          // if ((globalPlayer.currentTime() > (songDuration  * 0.02)) && (globalPlayer.currentTime() < (songDuration  * 0.98)) ) {
-          //    globalPlayer.setVolume(1);
-          // }
+        // globalPlayer.on('play-resume', function () {
+        //    globalPlayer.seek(172676.30299999999 * 0.50);
+        //    globalPlayer.play();
+ 
 
-          // if (globalPlayer.currentTime() >= (songDuration  * 0.98)) {
-          //   globalPlayer.setVolume(0.8);
-          // }
+         
+        // }); 
+
+        player.on('time', function() {
+
+          // console.log(player.currentTime());
+
 
         });
 
+     
+
        
 
-        globalPlayer.on('finish', function () {
-          var length = parseInt(trackarray[song_count % trackarray.length][3]);
-          if (length == globalPlayer.currentTime()) {
-            song_count++;
-            new_song = trackarray[song_count % trackarray.length][0];
-            song_index = song_count % trackarray.length;
-            new_url = '/tracks/' + new_song;
-            console.log(new_url);
-            globalPlayer.seek(0); //Do this before startStream
+        // globalPlayer.on('finish', function () {
+        //   var length = parseInt(trackarray[song_count % trackarray.length][3]);
+        //   if (length == globalPlayer.currentTime()) {
+        //     song_count++;
+        //     new_song = trackarray[song_count % trackarray.length][0];
+        //     song_index = song_count % trackarray.length;
+        //     new_url = '/tracks/' + new_song;
+        //     console.log(new_url);
+        //     globalPlayer.seek(0); //Do this before startStream
 
-            startStream(new_url);
-          }
+        //     startStreaming(new_url);
+        //   }
   
-        }); // end of finish
+        // }); // end of finish
 
       });
     }
@@ -383,9 +386,7 @@ angular.module( 'inTunity.addSong', [
 
   $scope.boss = function(url){
 
-    SC.initialize({
-      client_id: 'a17d2904e0284ac32f1b5f9957fd7c3f'
-    });
+
 
    
 
