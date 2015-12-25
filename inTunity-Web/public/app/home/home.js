@@ -3,42 +3,35 @@ app = angular.module( 'inTunity.home', [
 ]);
 
 app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $location, store, $compile, musicStatus, $cookieStore, $cookies, $rootScope) {
-  // Put cookie
-  //$cookieStore.put('myFavorite','oatmeal');
+
   
   // Get cookie
   var songNum;
   var songPos;
-  if ($cookieStore.get('songNum') != null){
-	songNum = $cookieStore.get('songNum');
-  }
-  else{
+  if ($cookieStore.get('songNum') != null) {
+	 songNum = $cookieStore.get('songNum');
+  } else {
 	  songNum = 0;
   }
   
   
   if ($cookieStore.get('songPos') != null){
-	songPos = $cookieStore.get('songPos');
-  }
-  else{
+	 songPos = $cookieStore.get('songPos');
+  } else{
 	  songPos = -1;
   }
   
   var startSpecific;
   if ($cookieStore.get('routeChange') != null){
 	  startSpecific = $cookieStore.get('routeChange');
-  }
-  else{
+  } else{
 	  startSpecific = true;
   }
   
   $cookieStore.put('routeChange',false);
   musicStatus.setStatus(songNum,songPos);
   
-  // Removing a cookie
-  //$cookieStore.remove('myFavorite');
-  
-  app.run();
+
   
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
     // handle session start event
@@ -285,7 +278,7 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
     // this is for skipping to the previous song
     $scope.prevPlayer = function() {
       song_count = musicStatus.getStatus()[0];
-	  song_count -=1;
+	     song_count -=1;
       if (song_count < 0) {
         song_count = 0;
       }
@@ -339,15 +332,14 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
       var curtop = 0;
       if (obj.offsetParent) {
           do {
-             curtop += obj.offsetTop - 50;
+            curtop += obj.offsetTop - 50;
           } while (obj = obj.offsetParent);
           return [curtop];
       }
     }
 
    
-    // console.log(SC.resolve("https://soundcloud.com/octobersveryown/remyboyz-my-way-rmx-ft-drake"));
-
+  
     var time = document.getElementById("time");
 
 
@@ -459,8 +451,6 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
     
 
     //Handles the progress bar.
-
-
     if (trackarray.length > 0) { 
       var playHead = document.getElementById('playHead');
       var timelineWidth = time.offsetWidth - playHead.offsetWidth;
@@ -470,24 +460,16 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
       }, false);
 
       function changePosition(click) {
-		console.log($location.path());
         var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
-        var col1 = document.getElementById("col1");
-
-        console.log($(window).width());
 
         var marginLeft;
         if ($(window).width() < 992) {
-          console.log("here");
           marginLeft = click.pageX - 10;
         } else {
-          console.log("here!");
           marginLeft = click.pageX - col1.offsetWidth - 10;
         }
         
         var percentageClicked = (marginLeft / time.offsetWidth);
-
-        console.log(percentageClicked);
         globalPlayer.seek(Math.floor(percentageClicked * timelength));
         var currentTime = percentageClicked * timelength;
         progressBall.style.width = ((currentTime/ timelength) * time.offsetWidth) + "px";

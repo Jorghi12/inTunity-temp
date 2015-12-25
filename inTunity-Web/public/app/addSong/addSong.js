@@ -30,6 +30,23 @@ angular.module( 'inTunity.addSong', [
   var progressBall = document.getElementById('playHead');
   var time = document.getElementById('time');
 
+  // var paused = true;
+
+  // $scope.pause = function() {
+
+  //     var pauseButton = document.getElementById('pauseButton');
+  //     if (paused == false) {
+  //       globalPlayer.pause();
+  //       paused = true;
+  //       pauseButton.innerHTML = "<h4>Play</h4>";
+  //     } else {
+  //       globalPlayer.play();
+  //       paused = false;
+  //       pauseButton.innerHTML = "<h4>Pause</h4>";
+  //     }
+  // }
+
+
   $scope.startStreamingAddSong = function(songUrl, artworkUrl,myTitle, trackid, duration) {
 	  
 	   
@@ -46,8 +63,6 @@ angular.module( 'inTunity.addSong', [
     var selectedBy = document.getElementById("selectedBy");
     selectedBy.style.visibility = "hidden";
 
-
-
     songDuration = duration;
     
 	
@@ -56,27 +71,25 @@ angular.module( 'inTunity.addSong', [
     		globalPlayer.play();
         globalPlayer.on('play-start', function () {
 		
+    		  var endTime = document.getElementById("endTime");
+    		  endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
+    		  
+    		  var album = document.getElementById("artwork");
+    		  album.src = artworkUrl;
 
-		  var endTime = document.getElementById("endTime");
-		  endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
-		  
-		  var album = document.getElementById("artwork");
-		  album.src = artworkUrl;
-
-		  var title = document.getElementById("songtitle");
-		  title.innerHTML = myTitle;
+    		  var title = document.getElementById("songtitle");
+    		  title.innerHTML = myTitle;
         }); 
 
 
 
         globalPlayer.on('time', function() {
-		  //Updates information about our currently playing song (shared cross page)
-		  if (globalPlayer.currentTime() < songDuration){
-			;//musicStatus.setStatus(song_count % trackarray.length,globalPlayer.currentTime());
-		  }
+    		  //Updates information about our currently playing song (shared cross page)
+    		  if (globalPlayer.currentTime() < songDuration){
+    			;//musicStatus.setStatus(song_count % trackarray.length,globalPlayer.currentTime());
+    		  }
 
           var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
-		  //alert(percent);
           progressBall.style.width = percent + "px";
 
           var currentTime = document.getElementById("currentTime");
@@ -100,11 +113,15 @@ angular.module( 'inTunity.addSong', [
        
 
         globalPlayer.on('finish', function () {
-			globalPlayer.seek(0);
+
+			     globalPlayer.seek(0);
         }); // end of finish
 
       });
     }
+
+
+
 
 
 
@@ -196,9 +213,6 @@ angular.module( 'inTunity.addSong', [
           limit: page_size 
         }).then(function(tracks) {
      
-
-          // console.log(tracks);
-
           var streamableSongs = [];
           for (var i = 0; i < tracks.length; i++) {
             if (tracks[i]["streamable"] == true) {
@@ -206,8 +220,7 @@ angular.module( 'inTunity.addSong', [
             }
           }
 
-          console.log(streamableSongs);
-          var obj =(streamableSongs);
+          var obj = streamableSongs;
 
 
           
@@ -352,7 +365,7 @@ angular.module( 'inTunity.addSong', [
             'Content-Type': 'application/json'
            }
           }).success(function(data, status, headers, config) {
-              console.log(status);
+              
               $location.path('/');
 
 
