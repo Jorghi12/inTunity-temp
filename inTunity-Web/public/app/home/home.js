@@ -42,7 +42,9 @@ angular.module( 'inTunity.home', [
     store.remove('profile');
     store.remove('token');
     $location.path('/login');
-
+	
+	//STOP SOUND PLAYER
+	$scope.pause();
 
   }
 
