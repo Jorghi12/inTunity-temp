@@ -232,7 +232,6 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
       console.log(url);
 	  
 	  statusObj = musicStatus.getStatus();
-	  alert(statusObj[0]);
 	  songUrl = 'tracks/' + trackarray[statusObj[0] % trackarray.length][0];
 	  songPos = statusObj[1];
 	 
