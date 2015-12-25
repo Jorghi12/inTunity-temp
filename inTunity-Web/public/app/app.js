@@ -25,7 +25,7 @@ angular.module( 'inTunity', [
       pageTitle: 'Login'
     })
     .when( '/add-song', {
-      controller: 'AddSongCtrl',
+      controller: 'AddSongCtrl', 
       templateUrl: '/app/addSong/addSong.html',
       pageTitle: 'Add Song'
     })
@@ -90,10 +90,17 @@ angular.module( 'inTunity', [
       $scope.pageTitle = nextRoute.$$route.pageTitle + ' | inTunity' ;
     }
   });
-})
-
-;
-
+}).service('musicStatus', function () {  var songNumber = 0; var songPos = -1;
+return {
+getStatus: function () {
+return [songNumber,songPos];
+},
+setStatus: function (num,pos) {
+songNumber = num;
+songPos = pos;
+}
+};
+});
 
 
 

@@ -2,9 +2,9 @@ angular.module( 'inTunity.home', [
 'auth0'
 ])
 
-
-.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $location, store, $compile) {
-
+.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $location, store, $compile, musicStatus) {
+  //musicStatus.setStatus(0,21);
+  console.log(musicStatus.getStatus());
   $scope.auth = auth;
   $scope.tgState = false;
   var prof = (store.get('profile'));
@@ -194,7 +194,6 @@ angular.module( 'inTunity.home', [
 
     var paused = false;
     var song_count = 0;
-    var song_index = 0;
         
     if (trackarray.length > 0) {
       console.log("hit here");
@@ -202,7 +201,19 @@ angular.module( 'inTunity.home', [
       var trackid = (trackarray[0][0]);
       var url = 'tracks/' + trackid;
       console.log(url);
-      startStream(url);
+	  
+	  statusObj = musicStatus.getStatus();
+	  songUrl = 'tracks/' + trackarray[statusObj[0] % trackarray.length][0];
+	  songPos = statusObj[1];
+	  
+	  //We haven't started playing music yet
+	  if (songPos == -1){
+		startStream(songUrl,0);
+	  }
+	  else{
+		  song_count = statusObj[0];
+		  startStream(songUrl,-1);
+	  }
     }
 
 
@@ -212,17 +223,17 @@ angular.module( 'inTunity.home', [
 
     // when you press on album pic, it will play that song
     $scope.playSpecificSong = function(index) {
-      song_index = index;
-      song_count = song_index;
+      song_count = index;
       new_song = trackarray[song_count % trackarray.length][0];
       var new_url = '/tracks/' + new_song;
       console.log(new_url);
-      startStream(new_url);
+      startStream(new_url,0);
     }
 
     // this is for skipping to the previous song
     $scope.prevPlayer = function() {
-      song_count--;
+      song_count = musicStatus.getStatus()[0];
+	  song_count -=1;
       if (song_count < 0) {
         song_count = 0;
       }
@@ -232,16 +243,16 @@ angular.module( 'inTunity.home', [
       pauseButton.innerHTML = "<h4>Pause</h4>";
 
       new_song = trackarray[song_count % trackarray.length][0];
-      song_index = song_count % trackarray.length;
+      song_count = song_count % trackarray.length;
       console.log("Starting New " + new_song);
       new_url = '/tracks/' + new_song;
-      startStream(new_url);
+      startStream(new_url,0);
     }
 
     // this is for skipping to the next song
     $scope.nextPlayer = function() {
-
-      song_count++;
+	  song_count = musicStatus.getStatus()[0]; 
+	  song_count +=1;
       if (song_count == trackarray.length) {
         song_count = 0;
       }
@@ -250,11 +261,11 @@ angular.module( 'inTunity.home', [
       var pauseButton = document.getElementById('pauseButton');
       pauseButton.innerHTML = "<h4>Pause</h4>";
 
-      song_index = song_count % trackarray.length;
+      song_count = song_count % trackarray.length;
       new_song = trackarray[song_count % trackarray.length][0];
       console.log("Starting New " + new_song);
       new_url = '/tracks/' + new_song;
-      startStream(new_url);
+      startStream(new_url,0);
     }
 
 
@@ -292,46 +303,56 @@ angular.module( 'inTunity.home', [
     var time = document.getElementById('time');
     var songDuration = 0;
     
-    function startStream(newSoundUrl) {
+	
+    function startStream(newSoundUrl,startingPosition) {
       songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
-
       currentuser = document.getElementById("currentuser");
-      currentuser.innerHTML = correctUsers[song_index][0]["nickname"];
+      currentuser.innerHTML = correctUsers[song_count][0]["nickname"];
 
-      
       SC.stream(newSoundUrl).then(function (player) {
-
-        globalPlayer = player;
-        globalPlayer.play();
-        globalPlayer.seek(0);
-
+		globalPlayer = player;
+		globalPlayer.play();
+		
         globalPlayer.on('play-start', function () {
-          globalPlayer.seek(0);
+		  if (startingPosition != -1){
+			globalPlayer.seek(startingPosition);
+		  }
+		  else{
+			var endTime = document.getElementById("endTime");
+			songDuration =parseInt(trackarray[song_count % trackarray.length][3]);
+			endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
+		  }
 
           var endTime = document.getElementById("endTime");
           endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
 
-          //this is for resetting all the background color to its natural settings
-          for (var i = 0; i < trackarray.length; i ++) {
-             var row = document.getElementById("song" + i);
-             row.style.backgroundColor = "#f5f5f5";
-          }
+		  if ($location.path() == "/"){
+			  //this is for resetting all the background color to its natural settings
+			  for (var i = 0; i < trackarray.length; i ++) {
+				 var row = document.getElementById("song" + i);
+				 row.style.backgroundColor = "#f5f5f5";
+			  }
+			  
+			  // this targets which row to highlight
+			  var rowCurrent = document.getElementById("song"+song_count);
+			  rowCurrent.style.backgroundColor = "#ffe4c4";
+			  window.scroll(0,findPos(rowCurrent));
 
-          // this targets which row to highlight
-          var rowCurrent = document.getElementById("song"+song_index);
-          rowCurrent.style.backgroundColor = "#ffe4c4";
-          window.scroll(0,findPos(rowCurrent));
+		  }
+			  var album = document.getElementById("artwork");
+			  album.src = trackarray[song_count % trackarray.length][1];
 
-          var album = document.getElementById("artwork");
-          album.src = trackarray[song_count % trackarray.length][1];
-
-          var title = document.getElementById("songtitle");
-          title.innerHTML = trackarray[song_count % trackarray.length][2];
+			  var title = document.getElementById("songtitle");
+			  title.innerHTML = trackarray[song_count % trackarray.length][2];
         }); 
 
 
 
         globalPlayer.on('time', function() {
+		  //Updates information about our currently playing song (shared cross page)
+		  if (globalPlayer.currentTime() < parseInt(trackarray[song_count % trackarray.length][3])){
+			musicStatus.setStatus(song_count % trackarray.length,globalPlayer.currentTime());
+		  }
 
           songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
 
@@ -361,14 +382,15 @@ angular.module( 'inTunity.home', [
         globalPlayer.on('finish', function () {
           var length = parseInt(trackarray[song_count % trackarray.length][3]);
           if (length == globalPlayer.currentTime()) {
-            song_count++;
+            song_count+=1;
+		    musicStatus.setStatus(song_count % trackarray.length,globalPlayer.currentTime());
+			musicStatus.setStatus(song_count % trackarray.length,0);
             new_song = trackarray[song_count % trackarray.length][0];
-            song_index = song_count % trackarray.length;
+            song_count = song_count % trackarray.length;
             new_url = '/tracks/' + new_song;
             console.log(new_url);
             globalPlayer.seek(0); //Do this before startStream
-
-            startStream(new_url);
+            startStream(new_url,0);
           }
   
         }); // end of finish
@@ -394,6 +416,7 @@ angular.module( 'inTunity.home', [
       }, false);
 
       function changePosition(click) {
+		console.log($location.path());
         var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
         var col1 = document.getElementById("col1");
 
