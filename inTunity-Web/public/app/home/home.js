@@ -2,6 +2,7 @@ app = angular.module('inTunity.home', [
     'auth0', 'ngCookies'
 ]);
 
+<<<<<<< HEAD
 app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus, $cookieStore, $cookies, $rootScope) {
     // Put cookie
     //$cookieStore.put('myFavorite','oatmeal');
@@ -14,6 +15,81 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     } else {
         songNum = 0;
     }
+=======
+app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $location, store, $compile, musicStatus, $cookieStore, $cookies, $rootScope) {
+
+  
+  // Get cookie
+  var songNum;
+  var songPos;
+  if ($cookieStore.get('songNum') != null) {
+	 songNum = $cookieStore.get('songNum');
+  } else {
+	  songNum = 0;
+  }
+  
+  
+  if ($cookieStore.get('songPos') != null){
+	 songPos = $cookieStore.get('songPos');
+  } else{
+	  songPos = -1;
+  }
+  
+  var startSpecific;
+  if ($cookieStore.get('routeChange') != null){
+	  startSpecific = $cookieStore.get('routeChange');
+  } else{
+	  startSpecific = true;
+  }
+  
+  $cookieStore.put('routeChange',false);
+  musicStatus.setStatus(songNum,songPos);
+  
+
+  
+  $rootScope.$on('$routeChangeStart', function (event, next, current) {
+   curStats = musicStatus.getStatus();
+   $cookieStore.put('songNum',curStats[0]);
+   $cookieStore.put('songPos',curStats[1]);
+   $cookieStore.put('routeChange',true);
+  });
+  
+
+  $scope.auth = auth;
+  var prof = (store.get('profile'));
+  $scope.owner;
+  var id = prof["identities"][0]["user_id"];
+
+  var globalPlayer;
+  var trackarray = [];
+  var username_url;
+
+  if (prof["given_name"] != null) {
+    $scope.owner = prof["given_name"];
+  } else {
+    $scope.owner = prof["nickname"];
+  }
+
+
+  $scope.logout = function() {
+    if (trackarray.length > 0) {
+      console.log("hit here");
+      globalPlayer.pause();
+    }  
+    auth.signout();
+    store.remove('profile');
+    store.remove('token');
+    $location.path('/login');
+	
+	//STOP SOUND PLAYER
+	$scope.pause();
+
+  }
+
+  $scope.profile = function() {
+    var ppl = store.get('profile');
+    var ppl_id = ppl["identities"][0]["user_id"];
+>>>>>>> a74acf8ffc1b3d03384bebd7d93c63154f7e0fae
 
 
     if ($cookieStore.get('songPos') != null) {
@@ -51,6 +127,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     $scope.owner;
     var id = prof["identities"][0]["user_id"];
 
+<<<<<<< HEAD
     console.log(prof);
 
 
@@ -58,6 +135,18 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     var trackarray = [];
 
     var username_url;
+=======
+  // going to home page
+  $scope.home = function() {
+    $location.path('/');
+  }
+
+  // going to add song page
+  $scope.addSong = function() {
+    $location.path('/add-song');
+  }
+
+>>>>>>> a74acf8ffc1b3d03384bebd7d93c63154f7e0fae
 
 
 
@@ -82,6 +171,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         //STOP SOUND PLAYER
         $scope.pause();
 
+<<<<<<< HEAD
     }
 
     $scope.profile = function() {
@@ -131,6 +221,41 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
     }
 
+=======
+    var song_array = [];
+    var users = response["data"]["songs"];
+
+    // this array has users who only have songs with it
+    var correctUsers= [];
+  
+    // makes sure we only show users who have songs
+    for (var i = 0; i < users.length; i++) {
+      if (users[i]["today_song"]["song_url"] != "") {
+        var date = new Date(users[i]["today_song"]["unix_time"] * 1000);
+        var year = date.getFullYear();
+        var month = date.getMonth();
+        var day = date.getDate();
+        var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+        var formmatedDay = monthNames[month] + " " + day + ", " + year;
+        var hours = date.getHours();
+        var minutes = "0" + date.getMinutes();
+        var am_pm = "AM";
+        if (hours == 12) {
+          am_pm = "PM";
+        }
+        if (hours > 12) {
+          hours = hours - 12;
+          am_pm = "PM";
+        }
+        if (hours == 0) {
+          hours = 12;
+        }
+        var formattedTime = hours + ':' + minutes.substr(-2) +  " " + am_pm;
+        correctUsers.push(new Array(users[i], formattedTime, formmatedDay));
+      }
+    }
+    $scope.users = correctUsers;
+>>>>>>> a74acf8ffc1b3d03384bebd7d93c63154f7e0fae
 
 
     var username;
@@ -139,8 +264,20 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     var songtitle;
     var songUrl;
 
+<<<<<<< HEAD
     var timeStamp;
     var dayStamp;
+=======
+  
+    // adding all the songs to song array
+    for (var i = 0; i < correctUsers.length; i++) {
+      songUrl = correctUsers[i][0]["today_song"]["song_url"];
+      var entry = {
+        url: songUrl
+      }
+      song_array.push(entry);
+    }
+>>>>>>> a74acf8ffc1b3d03384bebd7d93c63154f7e0fae
 
     $scope.users;
 
@@ -152,7 +289,11 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
         console.log(songdata);
 
+<<<<<<< HEAD
 
+=======
+   
+>>>>>>> a74acf8ffc1b3d03384bebd7d93c63154f7e0fae
 
         var song_array = [];
 
@@ -167,10 +308,36 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
                 var date = new Date(users[i]["today_song"]["unix_time"] * 1000);
 
+<<<<<<< HEAD
                 var year = date.getFullYear();
                 var month = date.getMonth();
                 var day = date.getDate();
                 var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+=======
+    var paused = false; 
+    var song_count = 0;
+        
+    if (trackarray.length > 0) {
+      var trackid = (trackarray[0][0]);
+      var url = 'tracks/' + trackid;
+	  
+  	  statusObj = musicStatus.getStatus();
+  	  songUrl = 'tracks/' + trackarray[statusObj[0] % trackarray.length][0];
+  	  songPos = statusObj[1];
+	  
+	     //We haven't started playing music yet
+      if (songPos == -1 || songPos == null) {
+		    startStream(songUrl,0);
+	    } else {
+		    song_count = statusObj[0];
+		    if (startSpecific == true || startSpecific == null) {
+			   startStream(songUrl,-1);
+		    } else {
+			   startStream(songUrl,songPos);
+		    }
+	    }
+    }
+>>>>>>> a74acf8ffc1b3d03384bebd7d93c63154f7e0fae
 
                 var formmatedDay = monthNames[month] + " " + day + ", " + year;
 
@@ -183,6 +350,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                     am_pm = "PM";
                 }
 
+<<<<<<< HEAD
                 if (hours > 12) {
                     hours = hours - 12;
                     am_pm = "PM";
@@ -190,8 +358,29 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 if (hours == 0) {
                     hours = 12;
                 }
+=======
+    // this is for skipping to the previous song
+    $scope.prevPlayer = function() {
+      song_count = musicStatus.getStatus()[0];
+	     song_count -=1;
+      if (song_count < 0) {
+        song_count = 0;
+      }
+
+      paused = false;
+      var pauseButton = document.getElementById('pauseButton');
+      pauseButton.innerHTML = "<h4>Pause</h4>";
+
+      new_song = trackarray[song_count % trackarray.length][0];
+      song_count = song_count % trackarray.length;
+      console.log("Starting New " + new_song);
+      new_url = '/tracks/' + new_song;
+      startStream(new_url,0);
+    }
+>>>>>>> a74acf8ffc1b3d03384bebd7d93c63154f7e0fae
 
 
+<<<<<<< HEAD
                 var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
                 correctUsers.push(new Array(users[i], formattedTime, formmatedDay));
             } else {
@@ -203,6 +392,115 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
 
+=======
+    // pausing/resume a song
+    $scope.pause = function() {
+      var pauseButton = document.getElementById('pauseButton');
+      if (paused == false) {
+        globalPlayer.pause();
+        paused = true;
+        pauseButton.innerHTML = "<h4>Play</h4>";
+      } else {
+        globalPlayer.play();
+        paused = false;
+        pauseButton.innerHTML = "<h4>Pause</h4>";
+      }
+    }
+
+    // goes to the correct position in the screen when songs changes
+    function findPos(obj) {
+      var curtop = 0;
+      if (obj.offsetParent) {
+          do {
+            curtop += obj.offsetTop - 50;
+          } while (obj = obj.offsetParent);
+          return [curtop];
+      }
+    }
+
+   
+  
+    var time = document.getElementById("time");
+
+
+    var progressBall = document.getElementById('playHead');
+    var time = document.getElementById('time');
+    var songDuration = 0;
+    
+	
+    function startStream(newSoundUrl,startingPosition) {
+      songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
+      currentuser = document.getElementById("currentuser");
+      currentuser.innerHTML = correctUsers[song_count][0]["nickname"];
+
+      SC.stream(newSoundUrl).then(function (player) {
+		globalPlayer = player;
+		globalPlayer.play();
+		
+        globalPlayer.on('play-start', function () {
+		  if (startingPosition != -1){
+			globalPlayer.seek(startingPosition);
+		  }
+		  else{
+			var endTime = document.getElementById("endTime");
+			songDuration =parseInt(trackarray[song_count % trackarray.length][3]);
+			endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
+		  }
+
+          var endTime = document.getElementById("endTime");
+          endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
+
+		  if ($location.path() == "/"){
+			  //this is for resetting all the background color to its natural settings
+			  for (var i = 0; i < trackarray.length; i ++) {
+				 var row = document.getElementById("song" + i);
+				 row.style.backgroundColor = "#f5f5f5";
+			  }
+			  
+			  // this targets which row to highlight
+			  var rowCurrent = document.getElementById("song"+song_count);
+			  rowCurrent.style.backgroundColor = "#ffe4c4";
+			  window.scroll(0,findPos(rowCurrent));
+
+		  }
+			  var album = document.getElementById("artwork");
+			  album.src = trackarray[song_count % trackarray.length][1];
+
+			  var title = document.getElementById("songtitle");
+			  title.innerHTML = trackarray[song_count % trackarray.length][2];
+        }); 
+
+
+
+        globalPlayer.on('time', function() {
+		  //Updates information about our currently playing song (shared cross page)
+		  if (globalPlayer.currentTime() < parseInt(trackarray[song_count % trackarray.length][3])){
+			musicStatus.setStatus(song_count % trackarray.length,globalPlayer.currentTime());
+			$cookieStore.put('songNum',song_count % trackarray.length);
+			$cookieStore.put('songPos',globalPlayer.currentTime());
+		  }
+
+          songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
+
+          var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
+          progressBall.style.width = percent + "px";
+
+          var currentTime = document.getElementById("currentTime");
+          currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
+
+
+          if (globalPlayer.currentTime() <= (songDuration  * 0.02)) {
+            globalPlayer.setVolume(0.8);
+          }
+
+          if ((globalPlayer.currentTime() > (songDuration  * 0.02)) && (globalPlayer.currentTime() < (songDuration  * 0.98)) ) {
+             globalPlayer.setVolume(1);
+          }
+
+          if (globalPlayer.currentTime() >= (songDuration  * 0.98)) {
+            globalPlayer.setVolume(0.8);
+          }
+>>>>>>> a74acf8ffc1b3d03384bebd7d93c63154f7e0fae
 
         // adding all the songs to arr
         for (var i = 0; i < correctUsers.length; i++) {
@@ -390,6 +688,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 });
 
 
+<<<<<<< HEAD
 
                 globalPlayer.on('time', function() {
                     //Updates information about our currently playing song (shared cross page)
@@ -443,6 +742,31 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             });
         }
 
+=======
+    //Handles the progress bar.
+    if (trackarray.length > 0) { 
+      var playHead = document.getElementById('playHead');
+      var timelineWidth = time.offsetWidth - playHead.offsetWidth;
+          
+      time.addEventListener('click', function (event) {
+        changePosition(event);
+      }, false);
+
+      function changePosition(click) {
+        var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
+
+        var marginLeft;
+        if ($(window).width() < 992) {
+          marginLeft = click.pageX - 10;
+        } else {
+          marginLeft = click.pageX - col1.offsetWidth - 10;
+        }
+        
+        var percentageClicked = (marginLeft / time.offsetWidth);
+        globalPlayer.seek(Math.floor(percentageClicked * timelength));
+        var currentTime = percentageClicked * timelength;
+        progressBall.style.width = ((currentTime/ timelength) * time.offsetWidth) + "px";
+>>>>>>> a74acf8ffc1b3d03384bebd7d93c63154f7e0fae
 
 
 

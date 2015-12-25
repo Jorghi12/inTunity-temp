@@ -303,10 +303,6 @@ router.get('/api/specificUser/' , function (req, res, next) {
 	  	res.send(userObj);
 	  } 
 	});
-
-
-
-
 });
 
 
