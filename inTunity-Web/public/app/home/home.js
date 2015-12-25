@@ -34,35 +34,21 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
 
   
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
-    // handle session start event
    curStats = musicStatus.getStatus();
    $cookieStore.put('songNum',curStats[0]);
    $cookieStore.put('songPos',curStats[1]);
    $cookieStore.put('routeChange',true);
   });
   
-  //musicStatus.setStatus(0,21);
-  //console.log(musicStatus.getStatus());
+
   $scope.auth = auth;
-  $scope.tgState = false;
   var prof = (store.get('profile'));
   $scope.owner;
   var id = prof["identities"][0]["user_id"];
 
-  console.log(prof);
-  
-
   var globalPlayer;
   var trackarray = [];
-
   var username_url;
-
-
-
-
-  
-
-
 
   if (prof["given_name"] != null) {
     $scope.owner = prof["given_name"];
@@ -109,21 +95,16 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
 
   }
 
+  // going to home page
   $scope.home = function() {
     $location.path('/');
   }
 
+  // going to add song page
   $scope.addSong = function() {
-    // if (trackarray.length > 0) {
-    //   globalPlayer.pause();
-    // }
     $location.path('/add-song');
-
   }
 
-  $scope.about = function() {
-    $location.path('/about');
-  }
 
   function millisToMinutesAndSeconds(millis) {
     var minutes = Math.floor(millis / 60000);
@@ -150,12 +131,7 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
   }).then(function(response) {  
     songdata = (response["data"]["songs"]);
 
-    console.log(songdata);
-
-
-
     var song_array = [];
-
     var users = response["data"]["songs"];
 
     // this array has users who only have songs with it
@@ -164,25 +140,18 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
     // makes sure we only show users who have songs
     for (var i = 0; i < users.length; i++) {
       if (users[i]["today_song"]["song_url"] != "") {
-
         var date = new Date(users[i]["today_song"]["unix_time"] * 1000);
-
         var year = date.getFullYear();
         var month = date.getMonth();
         var day = date.getDate();
         var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
-
         var formmatedDay = monthNames[month] + " " + day + ", " + year;
-
         var hours = date.getHours();
-
         var minutes = "0" + date.getMinutes();
         var am_pm = "AM";
-
         if (hours == 12) {
           am_pm = "PM";
         }
-
         if (hours > 12) {
           hours = hours - 12;
           am_pm = "PM";
@@ -190,21 +159,16 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
         if (hours == 0) {
           hours = 12;
         }
-
-
         var formattedTime = hours + ':' + minutes.substr(-2) +  " " + am_pm;
         correctUsers.push(new Array(users[i], formattedTime, formmatedDay));
-      } else {
-        console.log("user does not have a song for today");
       }
     }
-
     $scope.users = correctUsers;
 
 
 
   
-    // adding all the songs to arr
+    // adding all the songs to song array
     for (var i = 0; i < correctUsers.length; i++) {
       songUrl = correctUsers[i][0]["today_song"]["song_url"];
       var entry = {
@@ -219,10 +183,7 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
       trackarray.push(new Array(correctUsers[i][0]["today_song"]["track_id"], correctUsers[i][0]["today_song"]["song_album_pic"], correctUsers[i][0]["today_song"]["song_title"], correctUsers[i][0]["today_song"]["song_duration"]));
     }
 
-    // console.log(correctUsers);
-    // console.log("track array:");
-    // console.log(trackarray);
-
+   
 
 
 
@@ -236,29 +197,24 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
     var song_count = 0;
         
     if (trackarray.length > 0) {
-      console.log("hit here");
-      console.log(trackarray.length);
       var trackid = (trackarray[0][0]);
       var url = 'tracks/' + trackid;
-      console.log(url);
 	  
-	  statusObj = musicStatus.getStatus();
-	  songUrl = 'tracks/' + trackarray[statusObj[0] % trackarray.length][0];
-	  songPos = statusObj[1];
+  	  statusObj = musicStatus.getStatus();
+  	  songUrl = 'tracks/' + trackarray[statusObj[0] % trackarray.length][0];
+  	  songPos = statusObj[1];
 	  
-	  //We haven't started playing music yet
-      if (songPos == -1 || songPos == null){
-		startStream(songUrl,0);
-	  }
-	  else {
-		  song_count = statusObj[0];
-		  if (startSpecific == true || startSpecific == null){
-			startStream(songUrl,-1);
-		  }
-		  else{
-			startStream(songUrl,songPos);
-		  }
-	  }
+	     //We haven't started playing music yet
+      if (songPos == -1 || songPos == null) {
+		    startStream(songUrl,0);
+	    } else {
+		    song_count = statusObj[0];
+		    if (startSpecific == true || startSpecific == null) {
+			   startStream(songUrl,-1);
+		    } else {
+			   startStream(songUrl,songPos);
+		    }
+	    }
     }
 
 
@@ -313,7 +269,7 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
       startStream(new_url,0);
     }
 
-
+    // pausing/resume a song
     $scope.pause = function() {
       var pauseButton = document.getElementById('pauseButton');
       if (paused == false) {
