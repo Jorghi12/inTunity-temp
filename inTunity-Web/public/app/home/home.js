@@ -239,7 +239,7 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
 
 
 
-    var paused = false;
+    var paused = false; 
     var song_count = 0;
         
     if (trackarray.length > 0) {

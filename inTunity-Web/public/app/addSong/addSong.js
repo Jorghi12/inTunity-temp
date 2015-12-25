@@ -24,7 +24,7 @@ angular.module( 'inTunity.addSong', [
 
   var globalPlayer;
   var trackarray;
-  var song_count;
+  var song_count; 
   var prevTime;
 
 
