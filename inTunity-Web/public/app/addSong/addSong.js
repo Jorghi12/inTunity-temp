@@ -33,206 +33,75 @@ angular.module( 'inTunity.addSong', [
     method: 'GET',
     params: {id: id}
   }).then(function(response) {  
-    var current = response["data"]["user"]["current_song"];
-    console.log(current);
-    if (current["track_array"].length > 0) {
-      trackarray = current["track_array"];
- 
-      song_count = current["song_index"];
-      prevTime = current["current_time"];
-      startStreaming(current["track_id"]);
-
-      var paused = false;
-
-
-      var progressBall = document.getElementById('playHead');
-      var time = document.getElementById('time');
-
-      $scope.pause = function() {
-        var pauseButton = document.getElementById('pauseButton');
-        if (paused == false) {
-          globalPlayer.pause();
-          paused = true;
-          pauseButton.innerHTML = "<h4>Play</h4>";
-        } else { 
-          globalPlayer.play();
-          paused = false;
-          pauseButton.innerHTML = "<h4>Pause</h4>";
-        }
-      }
-
-      // this is for skipping to the previous song
-      /*$scope.prevPlayer = function() {
-        song_count--;
-        if (song_count < 0) {
-          song_count = 0;
-        }
-
-        paused = false;
-        var pauseButton = document.getElementById('pauseButton');
-        pauseButton.innerHTML = "<h4>Pause</h4>";
-
-        new_song = trackarray[song_count % trackarray.length][0];
-        song_index = song_count % trackarray.length;
-        console.log("Starting New " + new_song);
-        new_url = '/tracks/' + new_song;
-        startStreaming(new_url);
-      }
-
-      // this is for skipping to the next song
-      $scope.nextPlayer = function() {
-
-        song_count++;
-        if (song_count == trackarray.length) {
-          song_count = 0;
-        }
-
-        paused = false;
-        var pauseButton = document.getElementById('pauseButton');
-        pauseButton.innerHTML = "<h4>Pause</h4>";
-
-        song_index = song_count % trackarray.length;
-        new_song = trackarray[song_count % trackarray.length][0];
-        console.log("Starting New " + new_song);
-        new_url = '/tracks/' + new_song;
-        startStreaming(new_url);
-      }*/
-
-
-
-
-      function startStreaming(newSoundUrl) {
-
-        songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
-        var endTime = document.getElementById("endTime");
-        endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
-
-
-        console.log(trackarray[song_count]);
-
-        var song_title = document.getElementById("songtitle");
-        song_title.innerHTML = trackarray[song_count % trackarray.length][2];
-
-        var poster = document.getElementById("currentuser");
-        poster.innerHTML = trackarray[song_count][4];
-
-        var image = document.getElementById("artwork");
-        image.src = trackarray[song_count][1];
-
-       
-        
-        SC.stream(newSoundUrl).then(function (player) {
-
-          
-
-          globalPlayer = player;
-          globalPlayer.play();
-
-
-    
-
-          globalPlayer.on('seek', function () {
-            console.log("seek");  
-          }); 
-
-          globalPlayer.on('play-start', function () {
-            console.log(prevTime);
-            globalPlayer.seek(parseFloat(prevTime));
-            globalPlayer.play();      
-          }); 
-
-
-
-         
-
-
-
-         
-
-          globalPlayer.on('time', function() {
-
-            songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
-
-            var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
-            progressBall.style.width = percent + "px";
-
-            var currentTime = document.getElementById("currentTime");
-            currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
-
-
-
-          });
-
-       
-
-         
-
-          globalPlayer.on('finish', function () {
-            var length = parseInt(trackarray[song_count % trackarray.length][3]);
-            if (length == globalPlayer.currentTime()) {
-              song_count++;
-              new_song = trackarray[song_count % trackarray.length][0];
-              
-              new_url = '/tracks/' + new_song;
-              console.log(new_url);
-              globalPlayer.seek(0); //Do this before startStream
-
-              startStreaming(new_url);
-            }
-    
-          }); // end of finish
-
-        });
-    }
-
-
-
-
-
-
-
-      if (trackarray.length > 0) { 
-        var playHead = document.getElementById('playHead');
-        var timelineWidth = time.offsetWidth - playHead.offsetWidth;
-            
-        time.addEventListener('click', function (event) {
-          changePosition(event);
-        }, false);
-
-        function changePosition(click) {
-          var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
-          var col1 = document.getElementById("col1");
-
-          console.log($(window).width());
-
-          var marginLeft;
-          if ($(window).width() < 992) {
-            console.log("here");
-            marginLeft = click.pageX - 10;
-          } else {
-            console.log("here!");
-            marginLeft = click.pageX - col1.offsetWidth - 10;
-          }
-          
-          var percentageClicked = (marginLeft / time.offsetWidth);
-
-          console.log(percentageClicked);
-          globalPlayer.seek(Math.floor(percentageClicked * timelength));
-          var currentTime = percentageClicked * timelength;
-          progressBall.style.width = ((currentTime/ timelength) * time.offsetWidth) + "px";
-
-        }
-      } 
-
-
-
-    }
-  
+   
+          ;
 
   }); // end of http get
 
+    var progressBall = document.getElementById('playHead');
+    var time = document.getElementById('time');
+	
+  $scope.startStreamingAddSong = function(songUrl, artworkUrl,myTitle, trackid, duration) {
+	  
+	
+      songDuration = duration;
+      currentuser = "Add Song";
+      currentuser.innerHTML = "Add Song";
+	
+      SC.stream("/tracks/" + trackid).then(function (player) {
+		globalPlayer = player;
+		globalPlayer.play();
+        globalPlayer.on('play-start', function () {
+		
 
- 
+		  var endTime = document.getElementById("endTime");
+		  endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
+		  
+		  var album = document.getElementById("artwork");
+		  album.src = artworkUrl;
+
+		  var title = document.getElementById("songtitle");
+		  title.innerHTML = myTitle;
+        }); 
+
+
+
+        globalPlayer.on('time', function() {
+		  //Updates information about our currently playing song (shared cross page)
+		  if (globalPlayer.currentTime() < songDuration){
+			;//musicStatus.setStatus(song_count % trackarray.length,globalPlayer.currentTime());
+		  }
+
+          var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
+		  //alert(percent);
+          progressBall.style.width = percent + "px";
+
+          var currentTime = document.getElementById("currentTime");
+          currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
+		
+
+          if (globalPlayer.currentTime() <= (songDuration  * 0.02)) {
+            globalPlayer.setVolume(0.8);
+          }
+
+          if ((globalPlayer.currentTime() > (songDuration  * 0.02)) && (globalPlayer.currentTime() < (songDuration  * 0.98)) ) {
+             globalPlayer.setVolume(1);
+          }
+
+          if (globalPlayer.currentTime() >= (songDuration  * 0.98)) {
+            globalPlayer.setVolume(0.8);
+          }
+
+        });
+
+       
+
+        globalPlayer.on('finish', function () {
+			globalPlayer.seek(0);
+        }); // end of finish
+
+      });
+    }
 
 
 
@@ -374,13 +243,17 @@ angular.module( 'inTunity.addSong', [
                 var duration = document.createElement("h5");
                 duration.innerHTML = "Time: " + millisToMinutesAndSeconds(obj[i]["duration"]);
 
-                var playbutton = "<a href='' ng-click = 'boss(" + '"' + obj[i]['permalink_url'] + '"' + ")'><div class='intunity-button play-button'><h4>" + "Sample Song" + "</h4></div></a>";
-               
+				var playbutton = document.createElement("a");
+				playbutton.href = "";
+				playbutton.innerHTML = "<div class='intunity-button play-button'><h4>" + "Sample Song" + "</h4></div>"
+				playbutton.onclick = function(){
+                  var selectedSong = obj[this.id];
+                  var id = (selectedSong["id"]);
+                  $scope.startStreamingAddSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
+				}
+				
                 var confirmSong = document.createElement("div");
                 confirmSong.innerHTML = "<h4>Confirm</h4>";
-
-
-
 
                 confirmSong.onclick = function() {
                   console.log("hi");
@@ -392,6 +265,7 @@ angular.module( 'inTunity.addSong', [
 
                 }
                 confirmSong.className = 'intunity-button play-button confirmSong';
+                playbutton.id = i;
                 confirmSong.id = i;
                 
                 var playElement = $compile(playbutton)($scope)[0];
@@ -498,60 +372,6 @@ angular.module( 'inTunity.addSong', [
   
 
   } // end of selectSong()
-
-  $scope.boss = function(url){
-
-
-
-   
-
-
-  
-
-    SC.oEmbed(url, {
-      auto_play: true,
-      buying: false,
-      sharing: false,
-      download: false,
-      show_comments: false,
-      show_user: false,
-      enable_api: true,
-      single_active: false,
-      liking:false,
-      element: document.getElementById('putTheWidgetHere')
-    }).then(function(embed){
-
-  
-
-        iframe = document.getElementsByTagName("iframe")[0];
-        widget = SC.Widget(iframe); 
-        widget.bind(SC.Widget.Events.FINISH, endSC);
-        widget.bind(SC.Widget.Events.PLAY, playSC);
-        iframe.height = 125;
-
-    });
-
-    function playSC(){
-        var container = document.getElementById("widgetContainer");
-        container.style.height = "125px";
-
-        iframe = document.getElementsByTagName("iframe")[0];
-        iframe.height = 125;
-        widget = SC.Widget(iframe); 
-    }
-
-    function endSC(){
-        iframe = document.getElementsByTagName("iframe")[0];
-        iframe.height = 0;
-
-        var container = document.getElementById("widgetContainer");
-        container.style.height = "0px";
-
-
-    }
-
-  } // end of boss function
-
   
 
 
