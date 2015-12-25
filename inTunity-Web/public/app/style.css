@@ -105,7 +105,7 @@ hr {
 }
 
 .add-button {
-	border: 2px solid black;
+	border: 2px solid #707070;
 	width: 200px;
 	text-align: center;
 	margin: 10px auto 0 auto;
@@ -121,6 +121,7 @@ hr {
 
 .add-button:hover {
 	background-color: #ffe4c4;
+	border: 2px solid #333;
 	-moz-box-shadow: 1px 1px 5px #999;
  	-webkit-box-shadow: 1px 1px 5px #999;
  	box-shadow: 1px 1px 5px #999;
@@ -191,7 +192,11 @@ hr {
     -webkit-box-shadow: 0px -4px 3px rgba(50, 50, 50, 0.75);
     -moz-box-shadow:    0px -4px 3px rgba(50, 50, 50, 0.75);
     box-shadow:         0px -4px 3px rgba(50, 50, 50, 0.75);
-    background-color: #f5f5f5;
+    background: #f5f5f5; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#f5f5f5, #ffe4c4); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#f5f5f5, #ffe4c4); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#f5f5f5, #ffe4c4); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#f5f5f5, #ffe4c4); /* Standard syntax */
 }
 
 #footer .container {
@@ -271,7 +276,7 @@ hr {
 #time{
 	width: 100%;
 	height: 5px;
-	background: grey;
+	background: #707070;
 	display: inline-block;
 	float:left;
 	margin:10px 0px 0px 0px;
@@ -279,10 +284,8 @@ hr {
 }
 
 #playHead {
-
 	width: 0px;
 	height: 5px;
-
 	margin-top: 0px;
 	background: orange;
 }
@@ -290,16 +293,22 @@ hr {
 .playerButton {
 	width: 100px;
 	background-color: white;
+	border: 1px solid #707070;
 	border-radius: 10px;
 	transition: all 0.2s;
 }
 
 .playerButton:hover {
-	color:black;
+	color: #333;
+	border: 1px solid #333;
 	background-color: #ffe4c4;
 	-moz-box-shadow: 1px 1px 5px #999;
  	-webkit-box-shadow: 1px 1px 5px #999;
  	box-shadow: 1px 1px 5px #999;
+}
+
+.playerButton:active {
+	box-shadow: none;
 }
 
 .playButton:hover {
@@ -308,3 +317,39 @@ hr {
  	box-shadow: 1px 1px 10px #999;
 }
 
+/* Header link styles test */
+.navbar-links a {
+	height:50px;
+	border-bottom: none;
+	transition: all 0.2s;
+	margin-left: 0;
+	width: 130px;
+	text-align: center;
+	color: gray;
+}
+
+.navbar-links a:hover {
+	border-bottom: 5px solid #333;
+	background-color: #ffe4c4;
+}
+
+.navbar-links h4 {
+	margin-top: 15px;
+	color: #707070;
+}
+
+.navbar-links a:hover h4 {
+	color: #333;
+}
+
+#selected-link {
+	border-bottom: 5px solid #333;
+}
+
+#selected-link h4 {
+	color: #333;
+}
+
+#phrase h1 {
+	color: #f5f5f5;
+}
