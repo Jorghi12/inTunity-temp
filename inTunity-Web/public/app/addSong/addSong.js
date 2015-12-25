@@ -14,7 +14,7 @@ angular.module( 'inTunity.addSong', [
     $scope.owner = prof["nickname"];
   }
 
-  SC.initialize({
+  SC.initialize({ 
     client_id: 'a17d2904e0284ac32f1b5f9957fd7c3f'
   });
 
@@ -27,69 +27,52 @@ angular.module( 'inTunity.addSong', [
   var song_count; 
   var prevTime;
 
-  var progressBall = document.getElementById('playHead');
-  var time = document.getElementById('time');
 
-  // var paused = true;
+  $http({
+    url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/specificUser' ,
+    method: 'GET',
+    params: {id: id}
+  }).then(function(response) {  
+   
+          ;
 
-  // $scope.pause = function() {
+  }); // end of http get
 
-  //     var pauseButton = document.getElementById('pauseButton');
-  //     if (paused == false) {
-  //       globalPlayer.pause();
-  //       paused = true;
-  //       pauseButton.innerHTML = "<h4>Play</h4>";
-  //     } else {
-  //       globalPlayer.play();
-  //       paused = false;
-  //       pauseButton.innerHTML = "<h4>Pause</h4>";
-  //     }
-  // }
-
-
+    var progressBall = document.getElementById('playHead');
+    var time = document.getElementById('time');
   $scope.startStreamingAddSong = function(songUrl, artworkUrl,myTitle, trackid, duration) {
 	  
-	   
-    var prevButton = document.getElementById("prevButton");
-    prevButton.style.visibility = "hidden";
-
-
-    var nextButton = document.getElementById("nextButton");
-    nextButton.style.visibility = "hidden";
-
-    var poster = document.getElementById("currentuser");
-    poster.style.visibility = "hidden";
-
-    var selectedBy = document.getElementById("selectedBy");
-    selectedBy.style.visibility = "hidden";
-
-    songDuration = duration;
-    
 	
-    SC.stream("/tracks/" + trackid).then(function (player) {
-    		globalPlayer = player;
-    		globalPlayer.play();
+      songDuration = duration;
+      currentuser = "Add Song";
+      currentuser.innerHTML = "Add Song";
+	
+      SC.stream("/tracks/" + trackid).then(function (player) {
+		globalPlayer = player;
+		globalPlayer.play();
         globalPlayer.on('play-start', function () {
 		
-    		  var endTime = document.getElementById("endTime");
-    		  endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
-    		  
-    		  var album = document.getElementById("artwork");
-    		  album.src = artworkUrl;
 
-    		  var title = document.getElementById("songtitle");
-    		  title.innerHTML = myTitle;
+		  var endTime = document.getElementById("endTime");
+		  endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
+		  
+		  var album = document.getElementById("artwork");
+		  album.src = artworkUrl;
+
+		  var title = document.getElementById("songtitle");
+		  title.innerHTML = myTitle;
         }); 
 
 
 
         globalPlayer.on('time', function() {
-    		  //Updates information about our currently playing song (shared cross page)
-    		  if (globalPlayer.currentTime() < songDuration){
-    			;//musicStatus.setStatus(song_count % trackarray.length,globalPlayer.currentTime());
-    		  }
+		  //Updates information about our currently playing song (shared cross page)
+		  if (globalPlayer.currentTime() < songDuration){
+			;//musicStatus.setStatus(song_count % trackarray.length,globalPlayer.currentTime());
+		  }
 
           var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
+		  //alert(percent);
           progressBall.style.width = percent + "px";
 
           var currentTime = document.getElementById("currentTime");
@@ -113,15 +96,11 @@ angular.module( 'inTunity.addSong', [
        
 
         globalPlayer.on('finish', function () {
-
-			     globalPlayer.seek(0);
+			globalPlayer.seek(0);
         }); // end of finish
 
       });
     }
-
-
-
 
 
 
@@ -213,6 +192,9 @@ angular.module( 'inTunity.addSong', [
           limit: page_size 
         }).then(function(tracks) {
      
+
+          // console.log(tracks);
+
           var streamableSongs = [];
           for (var i = 0; i < tracks.length; i++) {
             if (tracks[i]["streamable"] == true) {
@@ -220,7 +202,8 @@ angular.module( 'inTunity.addSong', [
             }
           }
 
-          var obj = streamableSongs;
+          console.log(streamableSongs);
+          var obj =(streamableSongs);
 
 
           
@@ -262,14 +245,14 @@ angular.module( 'inTunity.addSong', [
                 var duration = document.createElement("h5");
                 duration.innerHTML = "Time: " + millisToMinutesAndSeconds(obj[i]["duration"]);
 
-        				var playbutton = document.createElement("a");
-        				playbutton.href = "";
-        				playbutton.innerHTML = "<div class='intunity-button play-button'><h4>" + "Sample Song" + "</h4></div>"
-        				playbutton.onclick = function(){
+				var playbutton = document.createElement("a");
+				playbutton.href = "";
+				playbutton.innerHTML = "<div class='intunity-button play-button'><h4>" + "Sample Song" + "</h4></div>"
+				playbutton.onclick = function(){
                   var selectedSong = obj[this.id];
                   var id = (selectedSong["id"]);
                   $scope.startStreamingAddSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
-        				}
+				}
 				
                 var confirmSong = document.createElement("div");
                 confirmSong.innerHTML = "<h4>Confirm</h4>";
@@ -312,6 +295,9 @@ angular.module( 'inTunity.addSong', [
 
   $scope.selectSong = function(url, artwork, title, trackid, duration) {
    
+  
+
+    console.log(artwork);
     if (artwork != null) {
       var index = artwork.indexOf("large");
       updatedSongPic = artwork.substring(0,index) + "t500x500.jpg";
@@ -329,6 +315,9 @@ angular.module( 'inTunity.addSong', [
 
     latitude = parseFloat(localStorage.getItem("latitude"));
     longitude = parseFloat(localStorage.getItem("longitude"));
+
+
+
 
     var geocoder = new google.maps.Geocoder;
     var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
@@ -366,16 +355,11 @@ angular.module( 'inTunity.addSong', [
             'Content-Type': 'application/json'
            }
           }).success(function(data, status, headers, config) {
-<<<<<<< HEAD
               console.log(status);
 			  musicStatus.confirmSong();
 			  curStats = musicStatus.getStatus();
               $cookieStore.put('songNum',curStats[0]);
               $cookieStore.put('songPos',curStats[1]);
-=======
-
-             
->>>>>>> a74acf8ffc1b3d03384bebd7d93c63154f7e0fae
               $location.path('/');
 
 
@@ -395,53 +379,13 @@ angular.module( 'inTunity.addSong', [
   
 
   } // end of selectSong()
-
-  $scope.boss = function(url){
-
-    SC.oEmbed(url, {
-      auto_play: true,
-      buying: false,
-      sharing: false,
-      download: false,
-      show_comments: false,
-      show_user: false,
-      enable_api: true,
-      single_active: false,
-      liking:false,
-      element: document.getElementById('putTheWidgetHere')
-    }).then(function(embed){
-
-  
-
-        iframe = document.getElementsByTagName("iframe")[0];
-        widget = SC.Widget(iframe); 
-        widget.bind(SC.Widget.Events.FINISH, endSC);
-        widget.bind(SC.Widget.Events.PLAY, playSC);
-        iframe.height = 125;
-
-    });
-
-    function playSC(){
-        var container = document.getElementById("widgetContainer");
-        container.style.height = "125px";
-
-        iframe = document.getElementsByTagName("iframe")[0];
-        iframe.height = 125;
-        widget = SC.Widget(iframe); 
-    }
-
-    function endSC(){
-        iframe = document.getElementsByTagName("iframe")[0];
-        iframe.height = 0;
-
-        var container = document.getElementById("widgetContainer");
-        container.style.height = "0px";
-
-
-    }
-
-  } // end of boss function
   
 
 
 });
+
+
+
+
+
+
