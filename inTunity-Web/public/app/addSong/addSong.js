@@ -41,10 +41,28 @@ angular.module( 'inTunity.addSong', [
       song_count = current["song_index"];
       prevTime = current["current_time"];
       startStreaming(current["track_id"]);
+      
+      var paused = false;
 
 
       var progressBall = document.getElementById('playHead');
       var time = document.getElementById('time');
+
+      $scope.pause = function() {
+        var pauseButton = document.getElementById('pauseButton');
+        if (paused == false) {
+          globalPlayer.pause();
+          paused = true;
+          pauseButton.innerHTML = "<h4>Play</h4>";
+        } else {
+          globalPlayer.play();
+          paused = false;
+          pauseButton.innerHTML = "<h4>Pause</h4>";
+        }
+      }
+
+
+
 
       function startStreaming(newSoundUrl) {
 
@@ -82,7 +100,7 @@ angular.module( 'inTunity.addSong', [
 
           globalPlayer.on('play-start', function () {
             console.log(prevTime);
-            globalPlayer.seek(parseInt(prevTime));
+            globalPlayer.seek(parseFloat(prevTime));
             globalPlayer.play();      
           }); 
 
