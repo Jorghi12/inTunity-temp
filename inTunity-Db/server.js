@@ -11,7 +11,7 @@ var dbName = 'inTunity';
 
 mongoose.connect('mongodb://ec2-52-35-92-198.us-west-2.compute.amazonaws.com/' + dbName);
 
-app.use(session({
+app.use(session({ 
 	secret: 'inTunity',
 	resave: false,
 	saveUninitialized: false,
