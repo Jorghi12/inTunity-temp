@@ -501,13 +501,6 @@ angular.module( 'inTunity.addSong', [
 
   $scope.boss = function(url){
 
-
-
-   
-
-
-  
-
     SC.oEmbed(url, {
       auto_play: true,
       buying: false,
