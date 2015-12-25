@@ -1,7 +1,7 @@
 angular.module( 'inTunity.addSong', [
   'auth0'
 ])
-.controller( 'AddSongCtrl', function AddSongController( $scope, auth, $location, store, $http, $compile) {
+.controller( 'AddSongCtrl', function AddSongController( $scope, auth, $location, store, $http, $compile, musicStatus) {
   $scope.auth = auth;
   $scope.tgState = false;
   $scope.search = "";
