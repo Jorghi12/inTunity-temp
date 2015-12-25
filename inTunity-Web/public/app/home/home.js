@@ -416,6 +416,7 @@ angular.module( 'inTunity.home', [
       }, false);
 
       function changePosition(click) {
+		console.log($location.path());
         var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
         var col1 = document.getElementById("col1");
 
