@@ -7,21 +7,39 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
   //$cookieStore.put('myFavorite','oatmeal');
   
   // Get cookie
-  var songNum = $cookieStore.get('songNum');
-  var songPos = $cookieStore.get('songPos');
-  var startSpecific = $cookieStore.get('routeChange');
-  $cookieStore.put('routeChange',false);
-  if (songNum == null || songPos == null){
-	  songNum = 0;
-	  songPos = 0;
+  var songNum;
+  var songPos;
+  if ($cookieStore.get('songNum') != null){
+	songNum = $cookieStore.get('songNum');
   }
+  else{
+	  songNum = 0;
+  }
+  
+  
+  if ($cookieStore.get('songPos') != null){
+	songPos = $cookieStore.get('songPos');
+  }
+  else{
+	  songPos = -1;
+  }
+  
+  var startSpecific;
+  if ($cookieStore.get('routeChange') != null){
+	  startSpecific = $cookieStore.get('routeChange');
+  }
+  else{
+	  startSpecific = true;
+  }
+  
+  $cookieStore.put('routeChange',false);
   musicStatus.setStatus(songNum,songPos);
   
   // Removing a cookie
   //$cookieStore.remove('myFavorite');
   
   app.run();
-
+  
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
     // handle session start event
    curStats = musicStatus.getStatus();
@@ -29,7 +47,7 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
    $cookieStore.put('songPos',curStats[1]);
    $cookieStore.put('routeChange',true);
   });
-
+  
   //musicStatus.setStatus(0,21);
   //console.log(musicStatus.getStatus());
   $scope.auth = auth;
@@ -234,13 +252,13 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
 	  statusObj = musicStatus.getStatus();
 	  songUrl = 'tracks/' + trackarray[statusObj[0] % trackarray.length][0];
 	  songPos = statusObj[1];
-	 
 	  
 	  //We haven't started playing music yet
       if (songPos == -1 || songPos == null){
 		startStream(songUrl,0);
 	  }
 	  else {
+		  song_count = statusObj[0];
 		  if (startSpecific == true || startSpecific == null){
 			startStream(songUrl,-1);
 		  }
