@@ -296,7 +296,7 @@ angular.module( 'inTunity.addSong', [
 
   $scope.findSong = function() {
  
-     var name = $scope.search;
+     var name = document.getElementById("searchResult");
 
       var container = document.getElementById("searchResults");
       container.innerHTML = "";
