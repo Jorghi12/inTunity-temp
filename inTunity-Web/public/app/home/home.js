@@ -11,6 +11,10 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
   var songPos = $cookieStore.get('songPos');
   var startSpecific = $cookieStore.get('routeChange');
   $cookieStore.put('routeChange',false);
+  if (songNum == null || songPos == null){
+	  songNum = 0;
+	  songPos = 0;
+  }
   musicStatus.setStatus(songNum,songPos);
   
   // Removing a cookie
@@ -228,15 +232,16 @@ app.controller( 'HomeCtrl',  function HomeController( $scope, auth, $http, $loca
       console.log(url);
 	  
 	  statusObj = musicStatus.getStatus();
+	  alert(statusObj[0]);
 	  songUrl = 'tracks/' + trackarray[statusObj[0] % trackarray.length][0];
 	  songPos = statusObj[1];
+	 
 	  
 	  //We haven't started playing music yet
       if (songPos == -1 || songPos == null){
 		startStream(songUrl,0);
 	  }
 	  else {
-		  song_count = statusObj[0];
 		  if (startSpecific == true || startSpecific == null){
 			startStream(songUrl,-1);
 		  }
