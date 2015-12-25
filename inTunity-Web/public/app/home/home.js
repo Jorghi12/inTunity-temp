@@ -251,7 +251,7 @@ angular.module( 'inTunity.home', [
 
     // this is for skipping to the next song
     $scope.nextPlayer = function() {
-	  song_count = musicStatus.getStatus()[0];
+	  song_count = musicStatus.getStatus()[0]; 
 	  song_count +=1;
       if (song_count == trackarray.length) {
         song_count = 0;

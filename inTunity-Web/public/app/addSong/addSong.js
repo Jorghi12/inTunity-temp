@@ -37,7 +37,7 @@ angular.module( 'inTunity.addSong', [
     console.log(current);
     if (current["track_array"].length > 0) {
       trackarray = current["track_array"];
-
+ 
       song_count = current["song_index"];
       prevTime = current["current_time"];
       startStreaming(current["track_id"]);
@@ -54,7 +54,7 @@ angular.module( 'inTunity.addSong', [
           globalPlayer.pause();
           paused = true;
           pauseButton.innerHTML = "<h4>Play</h4>";
-        } else {
+        } else { 
           globalPlayer.play();
           paused = false;
           pauseButton.innerHTML = "<h4>Pause</h4>";

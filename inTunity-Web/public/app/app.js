@@ -25,7 +25,7 @@ angular.module( 'inTunity', [
       pageTitle: 'Login'
     })
     .when( '/add-song', {
-      controller: 'AddSongCtrl',
+      controller: 'AddSongCtrl', 
       templateUrl: '/app/addSong/addSong.html',
       pageTitle: 'Add Song'
     })
