@@ -1,7 +1,7 @@
 angular.module( 'inTunity.addSong', [
   'auth0'
 ])
-.controller( 'AddSongCtrl', function AddSongController( $scope, auth, $location, store, $http, $compile, musicStatus) {
+.controller( 'AddSongCtrl', function AddSongController( $scope, auth, $location, store, $http, $compile, musicStatus, $cookieStore) {
   $scope.auth = auth;
   $scope.tgState = false;
   $scope.search = "";
@@ -263,6 +263,7 @@ angular.module( 'inTunity.addSong', [
                   console.log(obj[this.id]);
                   var selectedSong = obj[this.id];
                   var id = (selectedSong["id"]);
+				  
                   $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
 
                 }
@@ -355,6 +356,10 @@ angular.module( 'inTunity.addSong', [
            }
           }).success(function(data, status, headers, config) {
               console.log(status);
+			  musicStatus.confirmSong();
+			  curStats = musicStatus.getStatus();
+              $cookieStore.put('songNum',curStats[0]);
+              $cookieStore.put('songPos',curStats[1]);
               $location.path('/');
 
 
