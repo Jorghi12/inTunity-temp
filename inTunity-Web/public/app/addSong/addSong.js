@@ -62,7 +62,7 @@ angular.module( 'inTunity.addSong', [
       }
 
       // this is for skipping to the previous song
-      $scope.prevPlayer = function() {
+      /*$scope.prevPlayer = function() {
         song_count--;
         if (song_count < 0) {
           song_count = 0;
@@ -96,7 +96,7 @@ angular.module( 'inTunity.addSong', [
         console.log("Starting New " + new_song);
         new_url = '/tracks/' + new_song;
         startStreaming(new_url);
-      }
+      }*/
 
 
 
