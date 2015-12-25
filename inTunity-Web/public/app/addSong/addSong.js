@@ -18,6 +18,124 @@ angular.module( 'inTunity.addSong', [
 
   var id = auth.profile["identities"][0]["user_id"];
 
+  var globalPlayer;
+  var trackarray;
+  var song_count;
+  var prevTime;
+
+
+  $http({
+    url: 'http://localhost:3001/secured/specificUser' ,
+    method: 'GET',
+    params: {id: id}
+  }).then(function(response) {  
+    var current = response["data"]["user"]["current_song"];
+    if (current["track_array"].length > 0) {
+      trackarray = current["track_array"];
+      song_count = current["song_index"];
+      prevTime = current["current_time"];
+      startStream(current["track_id"]);
+
+
+    }
+  
+
+  }); // end of http get
+
+
+  function startStream(newSoundUrl) {
+      songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
+
+      currentuser = document.getElementById("currentuser");
+      // currentuser.innerHTML = correctUsers[song_index][0]["nickname"];
+
+      
+      SC.stream(newSoundUrl).then(function (player) {
+
+        globalPlayer = player;
+        globalPlayer.play();
+
+
+
+       
+
+
+
+        globalPlayer.on('play-start', function () {
+          globalPlayer.seek(prevTime);
+
+          // var endTime = document.getElementById("endTime");
+          // endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
+
+          // //this is for resetting all the background color to its natural settings
+          // for (var i = 0; i < trackarray.length; i ++) {
+          //    var row = document.getElementById("song" + i);
+          //    row.style.backgroundColor = "#f5f5f5";
+          // }
+
+          // // this targets which row to highlight
+          // var rowCurrent = document.getElementById("song"+song_index);
+          // rowCurrent.style.backgroundColor = "#ffe4c4";
+          // window.scroll(0,findPos(rowCurrent));
+
+          // var album = document.getElementById("artwork");
+          // album.src = trackarray[song_count % trackarray.length][1];
+
+          // var title = document.getElementById("songtitle");
+          // title.innerHTML = trackarray[song_count % trackarray.length][2];
+        }); 
+
+
+
+        globalPlayer.on('time', function() {
+
+          // songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
+
+          // var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
+          // progressBall.style.width = percent + "px";
+
+          // var currentTime = document.getElementById("currentTime");
+          // currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
+
+
+          // if (globalPlayer.currentTime() <= (songDuration  * 0.02)) {
+          //   globalPlayer.setVolume(0.8);
+          // }
+
+          // if ((globalPlayer.currentTime() > (songDuration  * 0.02)) && (globalPlayer.currentTime() < (songDuration  * 0.98)) ) {
+          //    globalPlayer.setVolume(1);
+          // }
+
+          // if (globalPlayer.currentTime() >= (songDuration  * 0.98)) {
+          //   globalPlayer.setVolume(0.8);
+          // }
+
+        });
+
+       
+
+        globalPlayer.on('finish', function () {
+          var length = parseInt(trackarray[song_count % trackarray.length][3]);
+          if (length == globalPlayer.currentTime()) {
+            song_count++;
+            new_song = trackarray[song_count % trackarray.length][0];
+            song_index = song_count % trackarray.length;
+            new_url = '/tracks/' + new_song;
+            console.log(new_url);
+            globalPlayer.seek(0); //Do this before startStream
+
+            startStream(new_url);
+          }
+  
+        }); // end of finish
+
+      });
+    }
+
+
+
+
+
 
   $scope.logout = function() {
     auth.signout();
@@ -34,23 +152,14 @@ angular.module( 'inTunity.addSong', [
     var ppl = store.get('profile');
     var ppl_id = ppl["identities"][0]["user_id"];
 
-
     $http({
-      url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/specificUser' ,
+      url: 'http://localhost:3001/secured/specificUser' ,
       method: 'GET',
       params: {id: ppl_id}
     }).then(function(response) {  
-      console.log(response["data"]["user"]);
-
       username_url = response["data"]["user"]["url_username"];
-      // console.log(username_url);
       $location.path('/profile/' + username_url);
-    
-
     }); // end of http get
-
-
-
   }
 
   $scope.about = function() {
@@ -247,7 +356,7 @@ angular.module( 'inTunity.addSong', [
           console.log(song);
 
           console.log("adding a song...");
-          $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
+          $http.post('http://localhost:3001/secured/songs', {data: song}, { 
             headers: {
             'Accept' : '*/*',
             'Content-Type': 'application/json'
