@@ -351,6 +351,9 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         function startStream(newSoundUrl, startingPosition) {
             songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
             currentuser = document.getElementById("currentuser");
+
+
+
             currentuser.innerHTML = correctUsers[song_count][0]["nickname"];
 
             SC.stream(newSoundUrl).then(function(player) {
