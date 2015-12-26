@@ -44,6 +44,18 @@ angular.module( 'inTunity.addSong', [
 
     var selectedBy = document.getElementById("selectedBy");
     selectedBy.style.visibility = "hidden";
+
+
+
+    // var playerButtons = document.getElementById("playerButtons");
+
+
+    // var confirmButton = document.createElement("button");
+    // confirmButton.innerHTML = "Confirm";
+    // confirmButton.className = "playerButton";
+    // playerButtons.appendChild(confirmButton);
+
+
 	  
 	
     songDuration = duration;
@@ -240,10 +252,39 @@ angular.module( 'inTunity.addSong', [
                   document.getElementsByClassName("footer")[0].className = "footer footer-sample";
                   var selectedSong = obj[this.id];
                   var id = (selectedSong["id"]);
+
+           
+
                   $scope.startStreamingAddSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
 				          
-                  // Yen
-                  //document.getElementById("playerButtons").innerHTML = "<button class=\"playerButton\" id=\"pauseButton\" ng-click =\"pause()\" style=\"margin:10px 0px; min-height:50px; margin-right: 5px;\"><h4>Pause</h4></button><button class=\"playerButton\" ng-click =\"confirm()\" style=\"margin:10px 0px; min-height:50px; margin-left: 5px;\"><h4>Confirm</h4></button>";
+                   var playerButtons = document.getElementById("playerButtons");
+                   playerButtons.innerHTML = "";
+
+                    var pause = document.createElement("button");
+                    pause.id = "pauseButton";
+                    pause.className = "playerButton";
+                    pause.innerHTML = "Pause";
+                    pause.style = "margin:10px 0px; min-height:50px; margin-right: 5px";
+                    pause.onclick = function() {
+                      $scope.pause();
+                    }
+
+                    var confirm = document.createElement("button");
+                    confirm.innerHTML = "Confirm";
+                    confirm.className = "playerButton";
+                    confirm.style = "margin:10px 0px; min-height:50px; margin-right: 5px";
+                    confirm.onclick = function() {
+                   
+                      $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
+                    }
+
+
+                    playerButtons.appendChild(pause);
+                    playerButtons.appendChild(confirm);
+
+
+
+
                 }
 				
                 var confirmSong = document.createElement("div");
@@ -259,6 +300,8 @@ angular.module( 'inTunity.addSong', [
                   $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
 
                 }
+
+
                 confirmSong.className = 'intunity-button play-button confirmSong';
                 playbutton.id = i;
                 confirmSong.id = i;
