@@ -61,8 +61,9 @@ angular.module( 'inTunity.addSong', [
         var confirmTitle = document.createElement("h4");
         confirmTitle.innerHTML = "Confirm";
       confirmButton.appendChild(confirmTitle);
-      confirmButton.style = "margin:10px 0px; min-height:50px";
+      confirmButton.setAttribute("id", "playerConfirm");
       confirmButton.className = "playerButton";
+      confirmButton.style = "margin:10px 0px; min-height:50px;";
       playerButtons.appendChild(confirmButton);
 
     } 

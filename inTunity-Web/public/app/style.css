@@ -356,3 +356,8 @@ hr {
 #selected-link h4 {
 	color: #333;
 }
+
+#playerConfirm {
+	margin-left: -100px;
+	margin-right: 50px;
+}
