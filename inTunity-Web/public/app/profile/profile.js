@@ -78,14 +78,16 @@ angular.module( 'inTunity.profile', [
             id: ppl_id
         }
     }).then(function(response) {
-        var personalusername = response["data"]["user"]["username"];
+        var personalusername = response["data"]["user"]["url_username"];
 
         var username_clicked = store.get('username_clicked');
 
         console.log(username_clicked);
+        console.log(personalusername);
 
         if (username_clicked != personalusername) {
           //NIKITA DO YOUR THING
+          console.log("hit");
         }
 
 
