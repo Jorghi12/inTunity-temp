@@ -40,6 +40,17 @@ angular.module( 'inTunity.addSong', [
 
     console.log($scope.confirmCounter);
 
+     // this is used to change the background for player using color-thief
+    var image = document.createElement("img");
+    image.crossOrigin = "Anonymous";
+    image.src = artworkUrl;
+    image.onload = function(){
+        var colorThief = new ColorThief();
+        var cp = colorThief.getPalette(image, 2, 5);
+        // var color = colorThief.getColor(image); 
+        document.getElementById("footer1").style.background = 'linear-gradient(#f5f5f5, rgb('+cp[2][0]+','+cp[2][1]+','+cp[2][2]+'))';
+    };
+
     if ($scope.confirmCounter == 1) {
       var prevButton = document.getElementById("prevButton");
       prevButton.style.visibility = "hidden";

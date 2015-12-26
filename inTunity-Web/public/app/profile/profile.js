@@ -147,10 +147,22 @@ angular.module( 'inTunity.profile', [
     var poster = document.getElementById("currentuser");
     currentuser.innerHTML = $scope.correctPerson[0].nickname;
 
-      songDuration = duration;
-      currentuser = "Add Song";
-      currentuser.innerHTML = "Add Song";
-      SC.stream("/tracks/" + trackid).then(function (player) {
+     // this is used to change the background for player using color-thief
+    var image = document.createElement("img");
+    image.crossOrigin = "Anonymous";
+    image.src = artworkUrl;
+    image.onload = function(){
+        var colorThief = new ColorThief();
+        var cp = colorThief.getPalette(image, 2, 5);
+        // var color = colorThief.getColor(image); 
+        document.getElementById("footer1").style.background = 'linear-gradient(#f5f5f5, rgb('+cp[2][0]+','+cp[2][1]+','+cp[2][2]+'))';
+    };
+
+
+
+    songDuration = duration;
+    
+    SC.stream("/tracks/" + trackid).then(function (player) {
 		  globalPlayer = player;
 		  window.globalPlayer = player;
 	    globalPlayer.seek(0);
