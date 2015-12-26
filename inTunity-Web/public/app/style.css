@@ -180,6 +180,12 @@ hr {
 	min-height: 200px;
 }
 
+@media screen and (max-width: 1305px) {
+	.search-result {
+		min-width: 100%;
+	}
+}
+
 .album-artwork {
 	height:150px;
 	margin-top: 15px
