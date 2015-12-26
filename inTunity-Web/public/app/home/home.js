@@ -376,7 +376,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                     title.innerHTML = trackarray[song_count % trackarray.length][2];
 					
                 globalPlayer.on('play-start', function() {
-					if (startingPosition != -1) {
+					if (startSpecific == false){//startingPosition != -1) {
+						alert("HI");
                         globalPlayer.seek(startingPosition);
                     } else {
                         var endTime = document.getElementById("endTime");
