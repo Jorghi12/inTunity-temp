@@ -16,7 +16,7 @@ angular.module( 'inTunity.profile', [
     $scope.owner = prof["given_name"];
   } else {
     $scope.owner = prof["nickname"];
-  }
+  } 
   var id = prof["identities"][0]["user_id"];
 
 
@@ -24,6 +24,10 @@ angular.module( 'inTunity.profile', [
     auth.signout();
     store.remove('profile');
     store.remove('token');
+	
+	//STOP SOUND PLAYER
+	window.globalPlayer.pause();
+	
     $location.path('/login');
   }
 
@@ -62,6 +66,8 @@ angular.module( 'inTunity.profile', [
 
 
 
+
+
     $scope.numPosts = $scope.correctPerson[0].song_history.length;
 
     for (var i = 0; i < $scope.correctPerson[0].song_history.length; i++) {
@@ -92,31 +98,33 @@ angular.module( 'inTunity.profile', [
     var time = document.getElementById('time');
 	
   $scope.startStreamingProfileSong = function(songUrl, artworkUrl,myTitle, trackid, duration) {
+    var poster = document.getElementById("currentuser");
+    currentuser.innerHTML = $scope.correctPerson[0].nickname;
+
       songDuration = duration;
       currentuser = "Add Song";
       currentuser.innerHTML = "Add Song";
       SC.stream("/tracks/" + trackid).then(function (player) {
-		globalPlayer = player;
+		  globalPlayer = player;
+		  window.globalPlayer = player;
 	    globalPlayer.seek(0);
-		globalPlayer.play();
-        globalPlayer.on('play-start', function () {
-		  var endTime = document.getElementById("endTime");
-		  endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
-		  
-		  var album = document.getElementById("artwork");
-		  album.src = artworkUrl;
+		  globalPlayer.play();
+      globalPlayer.on('play-start', function () {
+  		  var endTime = document.getElementById("endTime");
+  		  endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
+  		  
+  		  var album = document.getElementById("artwork");
+  		  album.src = artworkUrl;
 
-		  var title = document.getElementById("songtitle");
-		  title.innerHTML = myTitle;
-        }); 
+  		  var title = document.getElementById("songtitle");
+  		  title.innerHTML = myTitle;
+      }); 
 
 
 
-        globalPlayer.on('time', function() {
-		  //Updates information about our currently playing song (shared cross page)
+      globalPlayer.on('time', function() {
 		  
           var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
-		  //alert(percent);
           progressBall.style.width = percent + "px";
 
           var currentTime = document.getElementById("currentTime");
@@ -140,8 +148,9 @@ angular.module( 'inTunity.profile', [
        
 
         globalPlayer.on('finish', function () {
-			globalPlayer.seek(0);
-        }); // end of finish
+			     globalPlayer.seek(0);
+			window.playSpecificSong(musicStatus.getStatus()[0], -2000);
+        });
 
       });
     }

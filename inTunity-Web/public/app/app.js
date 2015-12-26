@@ -90,8 +90,22 @@ angular.module( 'inTunity', [
       $scope.pageTitle = nextRoute.$$route.pageTitle + ' | inTunity' ;
     }
   });
-}).service('musicStatus', function () {  var songNumber = 0; var songPos = -1; 
+}).service('musicStatus', function () {  var songNumber = 0; var songPos = -1; var confirmSong = false;
 return {
+checkConfirm: function(){ 
+	if (confirmSong == false){
+		return false
+	}
+	else{
+		confirmSong = false;
+		return true;
+	}
+},
+confirmSong: function(){
+	songNumber = 0;
+	songPos = -1;
+	confirmSong = true;
+},
 getStatus: function () {
 return [songNumber,songPos];
 },

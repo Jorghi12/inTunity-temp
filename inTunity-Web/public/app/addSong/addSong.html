@@ -11,13 +11,13 @@
         <a ng-click = "profile()" href = ""><h4>My Profile</h4></a>
         <a ng-click = "addSong()" href = "" id="selected-link"><h4>Add a Song</h4></a>
         <a ng-click="home()" href = ""><h4>Home</h4></a>
-      </div>
+      </div> 
     </div>
   </div>
 </nav>
 
     <!--PAGE CONTENTS-->
-<div class = "bkg" style = "height:100%; width:100%; position:absolute" ng-controller="AddSongCtrl">
+<div class = "bkg" style = "height:100%; width:100%; position:absolute">
   <div class="content">
     <div class="col-sm-12 text-center">
       <h2>What is your motivation today? Tell a story with music!</h2>
@@ -50,7 +50,7 @@
           <h4>Current:</h4><span id = "songtitle" style = "font-weight: bold"></span>
           <br>
           <br>
-          <span style = "font-family: 'Archivo Narrow', sans-serif">Selected by: </span><span style = "font-family: 'Archivo Narrow', sans-serif" id = "currentuser"></span>
+          <span style = "font-family: 'Archivo Narrow', sans-serif" id = "selectedBy">Selected by: </span><span style = "font-family: 'Archivo Narrow', sans-serif" id = "currentuser"></span>
         </div>
         </div>
       </div> 
