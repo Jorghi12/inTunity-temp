@@ -347,8 +347,8 @@ angular.module( 'inTunity.addSong', [
               console.log(status);
       			  musicStatus.confirmSong();
       			  curStats = musicStatus.getStatus();
-              $cookie.put('songNum',curStats[0], {expires: expirationDate});
-              $cookie.put('songPos',curStats[1], {expires: expirationDate});
+              $cookies.put('songNum',curStats[0], {expires: expirationDate});
+              $cookies.put('songPos',curStats[1], {expires: expirationDate});
               $location.path('/');
 
 
