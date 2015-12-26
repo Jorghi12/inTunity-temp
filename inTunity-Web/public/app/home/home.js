@@ -381,11 +381,11 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 title.innerHTML = trackarray[song_count % trackarray.length][2];
 
                 var colorThief = new ColorThief();
-                var $myImage = $("#artwork");
+                var myImage = document.getElementById("artwork");
 
 
 
-                var cp = colorThief.getPalette($myImage[0], 8, 5);
+                var cp = colorThief.getColor(myImage);
 
                 console.log(cp);
 
