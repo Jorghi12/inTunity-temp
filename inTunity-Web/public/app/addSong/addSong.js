@@ -5,7 +5,9 @@ angular.module( 'inTunity.addSong', [
   $scope.auth = auth;
   $scope.tgState = false;
   $scope.search = "";
-    var globalPlayer;
+  var globalPlayer;
+  var ppl = store.get('profile');
+  var ppl_id = ppl["identities"][0]["user_id"];
 
   var prof = (store.get('profile'));
   $scope.owner;
