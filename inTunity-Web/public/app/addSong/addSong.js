@@ -60,6 +60,8 @@ angular.module( 'inTunity.addSong', [
     playerButtons.appendChild(confirmButton);
 
 
+
+
 	  
 	
     songDuration = duration;
@@ -101,7 +103,9 @@ angular.module( 'inTunity.addSong', [
       globalPlayer.on('finish', function () {
   			globalPlayer.seek(0);
 
-      
+
+
+
         prevButton.style.visibility = "visible";
         nextButton.style.visibility = "visible";
         poster.style.visibility = "visible";
