@@ -394,7 +394,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 image.src = trackarray[song_count % trackarray.length][1];
                 image.onload = function(){
                     var colorThief = new ColorThief();
-                    var cp = colorThief.getPalette(image, 8, 5);
+                    var cp = colorThief.getPalette(image, 2, 5);
                     // var color = colorThief.getColor(image); 
                     document.getElementById("footer1").style.background = 'linear-gradient(#f5f5f5, rgb('+cp[2][0]+','+cp[2][1]+','+cp[2][2]+'))';
                 };
