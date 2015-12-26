@@ -231,12 +231,17 @@ angular.module( 'inTunity.addSong', [
 
         				var playbutton = document.createElement("a");
         				playbutton.href = "";
-        				playbutton.innerHTML = "<div class='intunity-button play-button'><h4>" + "Sample Song" + "</h4></div>"
+        				playbutton.innerHTML = "<div class='intunity-button play-button'><h4>" + "Sample Song" + "</h4></div>";
+
         				playbutton.onclick = function(){
+                  document.getElementsByClassName("footer")[0].className = "footer footer-sample";
                   var selectedSong = obj[this.id];
                   var id = (selectedSong["id"]);
                   $scope.startStreamingAddSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
-				        }
+				          
+                  // Yen
+                  //document.getElementById("playerButtons").innerHTML = "<button class=\"playerButton\" id=\"pauseButton\" ng-click =\"pause()\" style=\"margin:10px 0px; min-height:50px; margin-right: 5px;\"><h4>Pause</h4></button><button class=\"playerButton\" ng-click =\"confirm()\" style=\"margin:10px 0px; min-height:50px; margin-left: 5px;\"><h4>Confirm</h4></button>";
+                }
 				
                 var confirmSong = document.createElement("div");
                 confirmSong.innerHTML = "<h4>Confirm</h4>";
