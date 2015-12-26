@@ -3,10 +3,7 @@ app = angular.module('inTunity.home', [
 ]);
 
 app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus, $cookieStore, $cookies, $rootScope) {
-    // Put cookie
-    //$cookieStore.put('myFavorite','oatmeal');
-
-    // Get cookie
+    
     var songNum;
     var songPos;
     if ($cookieStore.get('songNum') != null) {
@@ -32,19 +29,16 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     $cookieStore.put('routeChange', false);
     musicStatus.setStatus(songNum, songPos);
 
-    // Removing a cookie
-    //$cookieStore.remove('myFavorite');
+  
 
     $rootScope.$on('$routeChangeStart', function(event, next, current) {
-        // handle session start event
         curStats = musicStatus.getStatus();
         $cookieStore.put('songNum', curStats[0]);
         $cookieStore.put('songPos', curStats[1]);
         $cookieStore.put('routeChange', true);
     });
 
-    //musicStatus.setStatus(0,21);
-    //console.log(musicStatus.getStatus());
+  
     $scope.auth = auth;
     $scope.tgState = false;
     var prof = (store.get('profile'));
