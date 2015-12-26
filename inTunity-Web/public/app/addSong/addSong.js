@@ -47,13 +47,17 @@ angular.module( 'inTunity.addSong', [
 
 
 
-    // var playerButtons = document.getElementById("playerButtons");
+    var playerButtons = document.getElementById("playerButtons");
 
 
-    // var confirmButton = document.createElement("button");
-    // confirmButton.innerHTML = "Confirm";
-    // confirmButton.className = "playerButton";
-    // playerButtons.appendChild(confirmButton);
+    var confirmButton = document.createElement("button");
+
+      var confirmTitle = document.createElement("h4");
+      confirmTitle.innerHTML = "Confirm";
+    confirmButton.appendChild(confirmTitle);
+    confirmButton.style = "margin:10px 0px; min-height:50px";
+    confirmButton.className = "playerButton";
+    playerButtons.appendChild(confirmButton);
 
 
 	  
@@ -97,13 +101,16 @@ angular.module( 'inTunity.addSong', [
       globalPlayer.on('finish', function () {
   			globalPlayer.seek(0);
 
-        document.getElementsByClassName("footer footer-sample")[0].className = "footer";
-        document.getElementById("playerButtons").innerHTML = "<button class=\"playerButton\" id=\"prevButton\" ng-click=\"prevPlayer()\"><h5><b>Previous</b></h5></button><button class=\"playerButton\" id=\"pauseButton\" ng-click =\"pause()\" style=\"margin:10px 0px; min-height:50px;\"><h4>Pause</h4></button><button class=\"playerButton\" id=\"nextButton\" ng-click=\"nextPlayer()\"><h5><b>Next</b></h5></button>";
-
+      
         prevButton.style.visibility = "visible";
         nextButton.style.visibility = "visible";
         poster.style.visibility = "visible";
         selectedBy.style.visibility = "visible";
+
+        confirmButton.style.visibility = "hidden";
+        $(confirmButton).remove();
+
+
 
   			//Need to invoke startStream on home.js somehow....
   			//-2000 is code for go back to feed songs
@@ -253,38 +260,8 @@ angular.module( 'inTunity.addSong', [
                   var selectedSong = obj[this.id];
                   var id = (selectedSong["id"]);
 
-           
-
                   $scope.startStreamingAddSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
-				          
-                   var playerButtons = document.getElementById("playerButtons");
-                   playerButtons.innerHTML = "";
-
-                    var pause = document.createElement("button");
-                    pause.id = "pauseButton";
-                    pause.className = "playerButton";
-                    pause.innerHTML = "Pause";
-                    pause.style = "margin:10px 0px; min-height:50px; margin-right: 5px";
-                    pause.onclick = function() {
-                      $scope.pause();
-                    }
-
-                    var confirm = document.createElement("button");
-                    confirm.innerHTML = "Confirm";
-                    confirm.className = "playerButton";
-                    confirm.style = "margin:10px 0px; min-height:50px; margin-right: 5px";
-                    confirm.onclick = function() {
-                   
-                      $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
-                    }
-
-
-                    playerButtons.appendChild(pause);
-                    playerButtons.appendChild(confirm);
-
-
-
-
+				        
                 }
 				
                 var confirmSong = document.createElement("div");
