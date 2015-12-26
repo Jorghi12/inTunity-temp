@@ -299,6 +299,7 @@ hr {
 	float:left;
 	margin:10px 0px 0px 0px;
 	margin-top: 5px;
+	border-radius: 15px;
 }
 
 #playHead {
@@ -306,6 +307,7 @@ hr {
 	height: 10px;
 	margin-top: 0px;
 	background: orange;
+	border-radius: 15px;
 }
 
 #playerButtons {
