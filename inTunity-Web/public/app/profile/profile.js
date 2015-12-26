@@ -10,6 +10,8 @@ angular.module( 'inTunity.profile', [
   $scope.tgState = false;
 
   var prof = (store.get('profile'));
+  var ppl = store.get('profile');
+  var ppl_id = ppl["identities"][0]["user_id"];
 
   $scope.owner;
   if (prof["given_name"] != null) {
@@ -24,10 +26,7 @@ angular.module( 'inTunity.profile', [
     auth.signout();
     store.remove('profile');
     store.remove('token');
-	
-	//STOP SOUND PLAYER
-	window.globalPlayer.pause();
-	
+	   window.globalPlayer.pause();
     $location.path('/login');
   }
 
@@ -43,13 +42,8 @@ angular.module( 'inTunity.profile', [
     $location.path('/about');
   }
 
-  var ppl = store.get('profile');
-  var ppl_id = ppl["identities"][0]["user_id"];
 
   $scope.profile = function() {
-   
-
-
     $http({
         url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
         method: 'GET',
@@ -57,16 +51,10 @@ angular.module( 'inTunity.profile', [
             id: ppl_id
         }
     }).then(function(response) {
-        console.log(response["data"]["user"]);
-
         username_url = response["data"]["user"]["url_username"];
-        // console.log(username_url);
         store.set('username_clicked', username_url);
         $location.path('/profile/' + username_url);
-
-
     }); // end of http get
-
   }
 
 

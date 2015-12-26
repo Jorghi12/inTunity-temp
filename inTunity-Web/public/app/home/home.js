@@ -161,7 +161,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
         var users = response["data"]["songs"];
 
-        // this array has users who only have songs with it
+        // this array has users who only have songs for today with it
         var correctUsers = [];
 
         // makes sure we only show users who have songs
@@ -222,9 +222,11 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             trackarray.push(new Array(correctUsers[i][0]["today_song"]["track_id"], correctUsers[i][0]["today_song"]["song_album_pic"], correctUsers[i][0]["today_song"]["song_title"], correctUsers[i][0]["today_song"]["song_duration"]));
         }
 
-        // console.log(correctUsers);
-        // console.log("track array:");
-        // console.log(trackarray);
+
+
+
+
+
 
 
 
@@ -366,21 +368,35 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             SC.stream(newSoundUrl).then(function(player) {
                 globalPlayer = player;
 				window.globalPlayer = player;
-				if (startingPosition != -2000){
+				if (startingPosition != -2000) {
 					window.globalPlayer.play();
-				}
-				else{
+				} else {
 					$scope.pause();
 				}
 				
-                    var album = document.getElementById("artwork");
-                    album.src = trackarray[song_count % trackarray.length][1];
+                var album = document.getElementById("artwork");
+                album.src = trackarray[song_count % trackarray.length][1];
 
-                    var title = document.getElementById("songtitle");
-                    title.innerHTML = trackarray[song_count % trackarray.length][2];
+                var title = document.getElementById("songtitle");
+                title.innerHTML = trackarray[song_count % trackarray.length][2];
+
+                var colorThief = new ColorThief();
+                var $myImage = $("#artwork");
+
+
+
+                var cp = colorThief.getPalette($myImage[0], 8, 5);
+
+                console.log(cp);
+
+                $('html').css('background-color', 'rgb('+cp[2][0]+','+cp[2][1]+','+cp[2][2]+')');
+
+
+
 					
-                        globalPlayer.seek(startingPosition);
-			 globalPlayer.on('play-start', function() {
+                globalPlayer.seek(startingPosition);
+
+			    globalPlayer.on('play-start', function() {
 					if (startSpecific == false){
                         globalPlayer.seek(startingPosition);
                     } else {
