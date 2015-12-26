@@ -24,6 +24,10 @@ angular.module( 'inTunity.profile', [
     auth.signout();
     store.remove('profile');
     store.remove('token');
+	
+	//STOP SOUND PLAYER
+	window.globalPlayer.pause();
+	
     $location.path('/login');
   }
 

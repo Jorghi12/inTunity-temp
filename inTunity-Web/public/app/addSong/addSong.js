@@ -5,6 +5,7 @@ angular.module( 'inTunity.addSong', [
   $scope.auth = auth;
   $scope.tgState = false;
   $scope.search = "";
+    var globalPlayer;
 
   var prof = (store.get('profile'));
   $scope.owner;
@@ -22,7 +23,6 @@ angular.module( 'inTunity.addSong', [
 
   var id = auth.profile["identities"][0]["user_id"];
 
-  var globalPlayer;
   var trackarray;
   var song_count; 
   var prevTime;
@@ -49,6 +49,7 @@ angular.module( 'inTunity.addSong', [
 	
       SC.stream("/tracks/" + trackid).then(function (player) {
 		globalPlayer = player;
+		window.globalPlayer = player;
 		globalPlayer.play();
         globalPlayer.on('play-start', function () {
 		
@@ -97,6 +98,9 @@ angular.module( 'inTunity.addSong', [
 
         globalPlayer.on('finish', function () {
 			globalPlayer.seek(0);
+			//Need to invoke startStream on home.js somehow....
+			//-2000 is code for go back to feed songs
+			window.playSpecificSong(musicStatus.getStatus()[0], -2000);
         }); // end of finish
 
       });
@@ -119,9 +123,24 @@ angular.module( 'inTunity.addSong', [
     $location.path('/login');
 	
 	//STOP SOUND PLAYER
-	//globalPlayer.pause();
+	window.globalPlayer.pause();
   }
-	
+
+  var paused = false;
+
+$scope.pause = function() { 
+	var pauseButton = document.getElementById('pauseButton');
+	if (paused == false) {
+		window.globalPlayer.pause();
+		paused = true;
+		pauseButton.innerHTML = "<h4>Play</h4>";
+	} else {
+		window.globalPlayer.play();
+		paused = false;
+		pauseButton.innerHTML = "<h4>Pause</h4>";
+	}
+}
+		
   $scope.home = function() {
     $location.path('/');
   }

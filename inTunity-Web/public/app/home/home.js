@@ -72,15 +72,16 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     $scope.logout = function() {
         if (trackarray.length > 0) {
             console.log("hit here");
-            globalPlayer.pause();
+            window.globalPlayer.pause();
         }
         auth.signout();
         store.remove('profile');
         store.remove('token');
         $location.path('/login');
 
-        //STOP SOUND PLAYER
-        $scope.pause();
+			
+		//STOP SOUND PLAYER
+		window.globalPlayer.pause();
 
     }
 
@@ -273,7 +274,13 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             console.log(new_url);
             startStream(new_url, 0);
         }
-
+		window.playSpecificSong  = function(index) {
+            song_count = index;
+            new_song = trackarray[song_count % trackarray.length][0];
+            var new_url = '/tracks/' + new_song;
+            console.log(new_url);
+            startStream(new_url,  -2000);
+        }
         // this is for skipping to the previous song
         $scope.prevPlayer = function() {
             song_count = musicStatus.getStatus()[0];
@@ -316,11 +323,11 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         $scope.pause = function() { 
             var pauseButton = document.getElementById('pauseButton');
             if (paused == false) {
-                globalPlayer.pause();
+                window.globalPlayer.pause();
                 paused = true;
                 pauseButton.innerHTML = "<h4>Play</h4>";
             } else {
-                globalPlayer.play();
+                window.globalPlayer.play();
                 paused = false;
                 pauseButton.innerHTML = "<h4>Pause</h4>";
             }
@@ -358,17 +365,28 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
             SC.stream(newSoundUrl).then(function(player) {
                 globalPlayer = player;
-                globalPlayer.play();
+				window.globalPlayer = player;
+				
+				if (startingPosition != -2000){
+					globalPlayer.play();
+				}
+				else{
+					$scope.pause();
+				}
+                    var album = document.getElementById("artwork");
+                    album.src = trackarray[song_count % trackarray.length][1];
 
+                    var title = document.getElementById("songtitle");
+                    title.innerHTML = trackarray[song_count % trackarray.length][2];
+					
                 globalPlayer.on('play-start', function() {
-                    if (startingPosition != -1) {
+					if (startingPosition != -1) {
                         globalPlayer.seek(startingPosition);
                     } else {
                         var endTime = document.getElementById("endTime");
                         songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
                         endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
                     }
-
                     var endTime = document.getElementById("endTime");
                     endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
 
@@ -385,11 +403,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                         window.scroll(0, findPos(rowCurrent));
 
                     }
-                    var album = document.getElementById("artwork");
-                    album.src = trackarray[song_count % trackarray.length][1];
-
-                    var title = document.getElementById("songtitle");
-                    title.innerHTML = trackarray[song_count % trackarray.length][2];
                 });
 
 
@@ -462,7 +475,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
             function changePosition(click) {
                 console.log($location.path());
-                var timelength = parseInt(trackarray[song_count % trackarray.length][3]);
+                var timelength = window.globalPlayer.streamInfo["duration"];//parseInt(trackarray[song_count % trackarray.length][3]);
                 var col1 = document.getElementById("col1");
 
                 console.log($(window).width());
@@ -479,7 +492,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 var percentageClicked = (marginLeft / time.offsetWidth);
 
                 console.log(percentageClicked);
-                globalPlayer.seek(Math.floor(percentageClicked * timelength));
+                window.globalPlayer.seek(Math.floor(percentageClicked * timelength));
                 var currentTime = percentageClicked * timelength;
                 progressBall.style.width = ((currentTime / timelength) * time.offsetWidth) + "px";
 
