@@ -149,6 +149,7 @@ angular.module( 'inTunity.profile', [
 
         globalPlayer.on('finish', function () {
 			     globalPlayer.seek(0);
+			window.playSpecificSong(musicStatus.getStatus()[0], -2000);
         });
 
       });
