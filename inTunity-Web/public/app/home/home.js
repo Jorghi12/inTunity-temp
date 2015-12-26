@@ -355,8 +355,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
             currentuser = document.getElementById("currentuser");
 
-
-
             currentuser.innerHTML = correctUsers[song_count][0]["nickname"];
 
             SC.stream(newSoundUrl).then(function(player) {
@@ -377,8 +375,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                     title.innerHTML = trackarray[song_count % trackarray.length][2];
 					
                 globalPlayer.on('play-start', function() {
-					if (startSpecific == false){//startingPosition != -1) {
-						alert("HI");
+					if (startSpecific == false){
                         globalPlayer.seek(startingPosition);
                     } else {
                         var endTime = document.getElementById("endTime");
@@ -411,9 +408,12 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                         musicStatus.setStatus(song_count % trackarray.length, globalPlayer.currentTime());
                         $cookies.put('songNum', song_count % trackarray.length, {expires: expirationDate});
                         $cookies.put('songPos', globalPlayer.currentTime(), {expires: expirationDate});
-						$cookies.put('routeChange', true, {expires: expirationDate});
                     }
 
+					if (globalPlayer.currentTime() < startingPosition){
+                        globalPlayer.seek(startingPosition);
+                    }
+					
                     songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
 
                     var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
