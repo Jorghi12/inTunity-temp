@@ -396,15 +396,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                     var colorThief = new ColorThief();
                     var cp = colorThief.getPalette(image, 8, 5);
                     // var color = colorThief.getColor(image); 
-                    document.getElementById("widgetContainer").style.backgroundColor = 'rgb('+cp[2][0]+','+cp[2][1]+','+cp[2][2]+')';
+                    document.getElementById("footer1").style.background = 'linear-gradient(#f5f5f5, rgb('+cp[2][0]+','+cp[2][1]+','+cp[2][2]+'))';
                 };
-
-
-
-
-
-                
-
                
 
                 var title = document.getElementById("songtitle");
