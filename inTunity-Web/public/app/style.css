@@ -312,6 +312,7 @@ hr {
 
 #time:hover {
 	height: 15px;
+	cursor: pointer;
 }
 
 #time:hover #playHead {
