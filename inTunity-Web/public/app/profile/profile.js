@@ -61,9 +61,8 @@ angular.module( 'inTunity.profile', [
 
         username_url = response["data"]["user"]["url_username"];
         // console.log(username_url);
+        store.set('username_clicked', username_url;
         $location.path('/profile/' + username_url);
-
-
 
 
     }); // end of http get
