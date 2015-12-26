@@ -106,8 +106,6 @@ angular.module( 'inTunity.addSong', [
       globalPlayer.on('finish', function () {
   			globalPlayer.seek(0);
 
-
-
         $scope.confirmCounter--;
 
         document.getElementsByClassName("footer footer-sample")[0].className = "footer";
@@ -162,17 +160,20 @@ angular.module( 'inTunity.addSong', [
   }
 
   $scope.profile = function() {
-    var ppl = store.get('profile');
-    var ppl_id = ppl["identities"][0]["user_id"];
-
     $http({
-      url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/specificUser' ,
-      method: 'GET',
-      params: {id: ppl_id}
-    }).then(function(response) {  
-      username_url = response["data"]["user"]["url_username"];
-      $location.path('/profile/' + username_url);
+        url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
+        method: 'GET',
+        params: {
+            id: ppl_id
+        }
+    }).then(function(response) {
+        console.log(response["data"]["user"]);
+        username_url = response["data"]["user"]["url_username"];
+        store.set('username_clicked', username_url;
+        $location.path('/profile/' + username_url);
+
     }); // end of http get
+
   }
 
   $scope.about = function() {

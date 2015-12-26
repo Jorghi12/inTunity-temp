@@ -43,9 +43,11 @@ angular.module( 'inTunity.profile', [
     $location.path('/about');
   }
 
-   $scope.profile = function() {
-    var ppl = store.get('profile');
-    var ppl_id = ppl["identities"][0]["user_id"];
+  var ppl = store.get('profile');
+  var ppl_id = ppl["identities"][0]["user_id"];
+
+  $scope.profile = function() {
+   
 
 
     $http({
@@ -59,12 +61,45 @@ angular.module( 'inTunity.profile', [
 
         username_url = response["data"]["user"]["url_username"];
         // console.log(username_url);
+        store.set('username_clicked', username_url;
         $location.path('/profile/' + username_url);
 
 
     }); // end of http get
 
   }
+
+
+  $http({
+        url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
+        method: 'GET',
+        params: {
+            id: ppl_id
+        }
+    }).then(function(response) {
+        var personalusername = response["data"]["user"]["url_username"];
+
+        var username_clicked = store.get('username_clicked');
+
+        console.log(username_clicked);
+        console.log(personalusername);
+
+        if (username_clicked != personalusername) {
+          //NIKITA DO YOUR THING
+          console.log("hit");
+        }
+
+
+
+
+       
+
+        
+
+
+    }); // end of http get
+
+
 
   
   SC.initialize({
