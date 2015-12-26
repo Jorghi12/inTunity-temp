@@ -106,6 +106,7 @@ angular.module( 'inTunity.profile', [
       currentuser.innerHTML = "Add Song";
       SC.stream("/tracks/" + trackid).then(function (player) {
 		  globalPlayer = player;
+		  window.globalPlayer = player;
 	    globalPlayer.seek(0);
 		  globalPlayer.play();
       globalPlayer.on('play-start', function () {
