@@ -365,7 +365,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 					window.globalPlayer.play();
 				}
 				else{
-					alert("BOSS");
+					// alert("BOSS");
 					$scope.pause();
 				}
                     var album = document.getElementById("artwork");
