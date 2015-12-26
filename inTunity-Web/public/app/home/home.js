@@ -53,15 +53,20 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
     var username_url;
 
-	var expirationDate = new Date();
-	var numberOfDaysToAdd = 10;
-	expirationDate.setDate(expirationDate.getDate() + numberOfDaysToAdd); 
-	
+  	var expirationDate = new Date();
+  	var numberOfDaysToAdd = 10;
+  	expirationDate.setDate(expirationDate.getDate() + numberOfDaysToAdd); 
+  	
 
     if (prof["given_name"] != null) {
         $scope.owner = prof["given_name"];
     } else {
         $scope.owner = prof["nickname"];
+    }
+
+    $scope.otherprofiles = function(username) {
+      store.set('username_clicked', username);
+      $location.path("/profile/" + username);
     }
 
 

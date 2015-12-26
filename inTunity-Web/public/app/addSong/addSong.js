@@ -105,8 +105,6 @@ angular.module( 'inTunity.addSong', [
       globalPlayer.on('finish', function () {
   			globalPlayer.seek(0);
 
-
-
         $scope.confirmCounter--;
 
         document.getElementsByClassName("footer footer-sample")[0].className = "footer";
