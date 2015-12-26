@@ -6,8 +6,8 @@ var router = express.Router();
 //   res.render('callback');
 // });
 
-// router.get('/test', function(req, res, next) {
-//   res.render('index');
-// });
+router.get('/test', function(req, res, next) {
+  res.render('color-thief-example');
+});
 
 module.exports = router;

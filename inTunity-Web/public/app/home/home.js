@@ -380,20 +380,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 var title = document.getElementById("songtitle");
                 title.innerHTML = trackarray[song_count % trackarray.length][2];
 
-                var colorThief = new ColorThief();
-                var myImage = document.getElementById("artwork");
-
-
-
-                var cp = colorThief.getColor(myImage);
-
-                console.log(cp);
-
-                $('html').css('background-color', 'rgb('+cp[2][0]+','+cp[2][1]+','+cp[2][2]+')');
-
-
-
-					
                 globalPlayer.seek(startingPosition);
 
 			    globalPlayer.on('play-start', function() {
