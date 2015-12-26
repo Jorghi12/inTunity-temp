@@ -106,7 +106,11 @@ angular.module( 'inTunity.addSong', [
   			globalPlayer.seek(0);
 
 
+
         $scope.confirmCounter--;
+
+        document.getElementsByClassName("footer footer-sample")[0].className = "footer";
+
 
         prevButton.style.visibility = "visible";
         nextButton.style.visibility = "visible";
