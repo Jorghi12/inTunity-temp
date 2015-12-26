@@ -360,21 +360,21 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             SC.stream(newSoundUrl).then(function(player) {
                 globalPlayer = player;
 				window.globalPlayer = player;
-				
 				if (startingPosition != -2000){
 					window.globalPlayer.play();
 				}
 				else{
-					alert("BOSS");
 					$scope.pause();
 				}
+				
                     var album = document.getElementById("artwork");
                     album.src = trackarray[song_count % trackarray.length][1];
 
                     var title = document.getElementById("songtitle");
                     title.innerHTML = trackarray[song_count % trackarray.length][2];
 					
-                globalPlayer.on('play-start', function() {
+                        globalPlayer.seek(startingPosition);
+			 globalPlayer.on('play-start', function() {
 					if (startSpecific == false){
                         globalPlayer.seek(startingPosition);
                     } else {
@@ -409,9 +409,9 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                         $cookies.put('songNum', song_count % trackarray.length, {expires: expirationDate});
                         $cookies.put('songPos', globalPlayer.currentTime(), {expires: expirationDate});
                     }
-
+					
 					if (globalPlayer.currentTime() < startingPosition){
-                        globalPlayer.seek(startingPosition);
+                        ;//globalPlayer.seek(startingPosition);
                     }
 					
                     songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
