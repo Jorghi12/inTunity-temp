@@ -43,6 +43,29 @@ angular.module( 'inTunity.profile', [
     $location.path('/about');
   }
 
+   $scope.profile = function() {
+    var ppl = store.get('profile');
+    var ppl_id = ppl["identities"][0]["user_id"];
+
+
+    $http({
+        url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
+        method: 'GET',
+        params: {
+            id: ppl_id
+        }
+    }).then(function(response) {
+        console.log(response["data"]["user"]);
+
+        username_url = response["data"]["user"]["url_username"];
+        // console.log(username_url);
+        $location.path('/profile/' + username_url);
+
+
+    }); // end of http get
+
+  }
+
   
   SC.initialize({
     client_id: 'a17d2904e0284ac32f1b5f9957fd7c3f'

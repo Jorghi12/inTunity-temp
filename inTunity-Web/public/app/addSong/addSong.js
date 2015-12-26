@@ -59,11 +59,6 @@ angular.module( 'inTunity.addSong', [
     confirmButton.className = "playerButton";
     playerButtons.appendChild(confirmButton);
 
-
-
-
-	  
-	
     songDuration = duration;
     currentuser = "Add Song";
     currentuser.innerHTML = "Add Song";
