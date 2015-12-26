@@ -85,6 +85,9 @@ angular.module( 'inTunity.addSong', [
       globalPlayer.on('finish', function () {
   			globalPlayer.seek(0);
 
+        document.getElementsByClassName("footer footer-sample")[0].className = "footer";
+        document.getElementById("playerButtons").innerHTML = "<button class=\"playerButton\" id=\"prevButton\" ng-click=\"prevPlayer()\"><h5><b>Previous</b></h5></button><button class=\"playerButton\" id=\"pauseButton\" ng-click =\"pause()\" style=\"margin:10px 0px; min-height:50px;\"><h4>Pause</h4></button><button class=\"playerButton\" id=\"nextButton\" ng-click=\"nextPlayer()\"><h5><b>Next</b></h5></button>";
+
         prevButton.style.visibility = "visible";
         nextButton.style.visibility = "visible";
         poster.style.visibility = "visible";
