@@ -61,7 +61,7 @@ angular.module( 'inTunity.profile', [
 
         username_url = response["data"]["user"]["url_username"];
         // console.log(username_url);
-        store.set('username_clicked', username_url;
+        store.set('username_clicked', username_url);
         $location.path('/profile/' + username_url);
 
 
@@ -85,7 +85,7 @@ angular.module( 'inTunity.profile', [
         console.log(personalusername);
 
         if (username_clicked != personalusername) {
-          //NIKITA DO YOUR THING
+          document.getElementById("selected-link").id = "";
           console.log("hit");
         }
 
