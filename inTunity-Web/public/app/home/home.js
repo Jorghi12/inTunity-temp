@@ -408,7 +408,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
                 var title = document.getElementById("songtitle");
                 title.innerHTML = trackarray[song_count % trackarray.length][2];
-		
+
                 globalPlayer.seek(startingPosition);
 
 			    globalPlayer.on('play-start', function() {
