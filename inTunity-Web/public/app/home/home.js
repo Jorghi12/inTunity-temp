@@ -275,7 +275,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             new_song = trackarray[song_count % trackarray.length][0];
             var new_url = '/tracks/' + new_song;
             console.log(new_url);
-            startStream(new_url,  -2000);
+            startStream(new_url, -2000);
         }
         // this is for skipping to the previous song
         $scope.prevPlayer = function() {
@@ -367,6 +367,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 					window.globalPlayer.play();
 				}
 				else{
+					alert("BOSS");
 					$scope.pause();
 				}
                     var album = document.getElementById("artwork");
