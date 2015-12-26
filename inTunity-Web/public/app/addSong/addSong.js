@@ -28,118 +28,101 @@ angular.module( 'inTunity.addSong', [
   var prevTime;
 
 
-  $http({
-    url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/specificUser' ,
-    method: 'GET',
-    params: {id: id}
-  }).then(function(response) {  
-   
-          ;
+  var progressBall = document.getElementById('playHead');
+  var time = document.getElementById('time');
 
-  }); // end of http get
-
-    var progressBall = document.getElementById('playHead');
-    var time = document.getElementById('time');
   $scope.startStreamingAddSong = function(songUrl, artworkUrl,myTitle, trackid, duration) {
+
+    var prevButton = document.getElementById("prevButton");
+    prevButton.style.visibility = "hidden";
+
+    var nextButton = document.getElementById("nextButton");
+    nextButton.style.visibility = "hidden";
+
+    var poster = document.getElementById("currentuser");
+    poster.style.visibility = "hidden";
+
+    var selectedBy = document.getElementById("selectedBy");
+    selectedBy.style.visibility = "hidden";
 	  
 	
-      songDuration = duration;
-      currentuser = "Add Song";
-      currentuser.innerHTML = "Add Song";
-	
-      SC.stream("/tracks/" + trackid).then(function (player) {
-		globalPlayer = player;
-		window.globalPlayer = player;
-		globalPlayer.play();
-        globalPlayer.on('play-start', function () {
-		
+    songDuration = duration;
+    currentuser = "Add Song";
+    currentuser.innerHTML = "Add Song";
 
-		  var endTime = document.getElementById("endTime");
-		  endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
-		  
-		  var album = document.getElementById("artwork");
-		  album.src = artworkUrl;
+    SC.stream("/tracks/" + trackid).then(function (player) {
+  		globalPlayer = player;
+  		window.globalPlayer = player;
+  		globalPlayer.play();
 
-		  var title = document.getElementById("songtitle");
-		  title.innerHTML = myTitle;
-        }); 
+      globalPlayer.on('play-start', function () {
+  		  var endTime = document.getElementById("endTime");
+  		  endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
+  		  
+  		  var album = document.getElementById("artwork");
+  		  album.src = artworkUrl;
 
+  		  var title = document.getElementById("songtitle");
+  		  title.innerHTML = myTitle;
+      }); 
 
-
-        globalPlayer.on('time', function() {
-		  //Updates information about our currently playing song (shared cross page)
-		  if (globalPlayer.currentTime() < songDuration){
-			;//musicStatus.setStatus(song_count % trackarray.length,globalPlayer.currentTime());
-		  }
-
-          var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
-		  //alert(percent);
-          progressBall.style.width = percent + "px";
-
-          var currentTime = document.getElementById("currentTime");
-          currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
-		
-
-          if (globalPlayer.currentTime() <= (songDuration  * 0.02)) {
-            globalPlayer.setVolume(0.8);
-          }
-
-          if ((globalPlayer.currentTime() > (songDuration  * 0.02)) && (globalPlayer.currentTime() < (songDuration  * 0.98)) ) {
-             globalPlayer.setVolume(1);
-          }
-
-          if (globalPlayer.currentTime() >= (songDuration  * 0.98)) {
-            globalPlayer.setVolume(0.8);
-          }
-
-        });
-
-       
-
-        globalPlayer.on('finish', function () {
-			globalPlayer.seek(0);
-			//Need to invoke startStream on home.js somehow....
-			//-2000 is code for go back to feed songs
-			window.playSpecificSong(musicStatus.getStatus()[0], -2000);
-        }); // end of finish
-
+      globalPlayer.on('time', function() {
+        var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
+        progressBall.style.width = percent + "px";
+        var currentTime = document.getElementById("currentTime");
+        currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
+        if (globalPlayer.currentTime() <= (songDuration  * 0.02)) {
+          globalPlayer.setVolume(0.8);
+        }
+        if ((globalPlayer.currentTime() > (songDuration  * 0.02)) && (globalPlayer.currentTime() < (songDuration  * 0.98)) ) {
+           globalPlayer.setVolume(1);
+        }
+        if (globalPlayer.currentTime() >= (songDuration  * 0.98)) {
+          globalPlayer.setVolume(0.8);
+        }
       });
-    }
 
+      globalPlayer.on('finish', function () {
+  			globalPlayer.seek(0);
 
+        prevButton.style.visibility = "visible";
+        nextButton.style.visibility = "visible";
+        poster.style.visibility = "visible";
+        selectedBy.style.visibility = "visible";
 
+  			//Need to invoke startStream on home.js somehow....
+  			//-2000 is code for go back to feed songs
+  			window.playSpecificSong(musicStatus.getStatus()[0], -2000);
+      }); // end of finish
 
-
-
-
-
-
+    });
+  }
 
 
   $scope.logout = function() {
-	auth.signout();
-    store.remove('profile');
-    store.remove('token');
-    $location.path('/login');
-	
-	//STOP SOUND PLAYER
-	window.globalPlayer.pause();
+  	auth.signout();
+      store.remove('profile');
+      store.remove('token');
+      $location.path('/login');
+  	
+  	//STOP SOUND PLAYER
+  	window.globalPlayer.pause();
   }
 
   var paused = false;
 
-$scope.pause = function() { 
-	var pauseButton = document.getElementById('pauseButton');
-	if (paused == false) {
-		window.globalPlayer.pause();
-		paused = true;
-		pauseButton.innerHTML = "<h4>Play</h4>";
-	} else {
-		window.globalPlayer.play();
-		paused = false;
-		pauseButton.innerHTML = "<h4>Pause</h4>";
-	}
-}
+  $scope.pause = function() { 
+  	var pauseButton = document.getElementById('pauseButton');
+  	if (paused == false) {
+  		window.globalPlayer.pause();
+  		paused = true;
+  		pauseButton.innerHTML = "<h4>Play</h4>";
+  	} else {
+  		window.globalPlayer.play();
+  		paused = false;
+  		pauseButton.innerHTML = "<h4>Pause</h4>";
+  	}
+  }
 		
   $scope.home = function() {
     $location.path('/');
@@ -149,23 +132,14 @@ $scope.pause = function() {
     var ppl = store.get('profile');
     var ppl_id = ppl["identities"][0]["user_id"];
 
-
     $http({
       url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/specificUser' ,
       method: 'GET',
       params: {id: ppl_id}
     }).then(function(response) {  
-      console.log(response["data"]["user"]);
-
       username_url = response["data"]["user"]["url_username"];
-      // console.log(username_url);
       $location.path('/profile/' + username_url);
-    
-
     }); // end of http get
-
-
-
   }
 
   $scope.about = function() {
@@ -196,7 +170,6 @@ $scope.pause = function() {
   $scope.findSong = function() {
  
      var name = $scope.search;
-
       var container = document.getElementById("searchResults");
       container.innerHTML = "";
 
@@ -211,9 +184,6 @@ $scope.pause = function() {
           limit: page_size 
         }).then(function(tracks) {
      
-
-          // console.log(tracks);
-
           var streamableSongs = [];
           for (var i = 0; i < tracks.length; i++) {
             if (tracks[i]["streamable"] == true) {
@@ -221,11 +191,7 @@ $scope.pause = function() {
             }
           }
 
-          console.log(streamableSongs);
           var obj =(streamableSongs);
-
-
-          
           for (var i = 0; i < obj.length; i++) {
 
             var albumArtwork;
@@ -236,7 +202,6 @@ $scope.pause = function() {
             } else {
                albumArtwork = "/images/no-art.png";
             }
-
 
             var songContainer = document.createElement('div');
             songContainer.className = "col-md-6 search-result";
@@ -264,14 +229,14 @@ $scope.pause = function() {
                 var duration = document.createElement("h5");
                 duration.innerHTML = "Time: " + millisToMinutesAndSeconds(obj[i]["duration"]);
 
-				var playbutton = document.createElement("a");
-				playbutton.href = "";
-				playbutton.innerHTML = "<div class='intunity-button play-button'><h4>" + "Sample Song" + "</h4></div>"
-				playbutton.onclick = function(){
+        				var playbutton = document.createElement("a");
+        				playbutton.href = "";
+        				playbutton.innerHTML = "<div class='intunity-button play-button'><h4>" + "Sample Song" + "</h4></div>"
+        				playbutton.onclick = function(){
                   var selectedSong = obj[this.id];
                   var id = (selectedSong["id"]);
                   $scope.startStreamingAddSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
-				}
+				        }
 				
                 var confirmSong = document.createElement("div");
                 confirmSong.innerHTML = "<h4>Confirm</h4>";
@@ -380,8 +345,8 @@ $scope.pause = function() {
            }
           }).success(function(data, status, headers, config) {
               console.log(status);
-			  musicStatus.confirmSong();
-			  curStats = musicStatus.getStatus();
+      			  musicStatus.confirmSong();
+      			  curStats = musicStatus.getStatus();
               $cookie.put('songNum',curStats[0], {expires: expirationDate});
               $cookie.put('songPos',curStats[1], {expires: expirationDate});
               $location.path('/');
