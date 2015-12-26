@@ -27,41 +27,48 @@ angular.module( 'inTunity.addSong', [
   var song_count; 
   var prevTime;
 
+  $scope.confirmCounter = 0;
+
+
 
   var progressBall = document.getElementById('playHead');
   var time = document.getElementById('time');
 
   $scope.startStreamingAddSong = function(songUrl, artworkUrl,myTitle, trackid, duration) {
 
-    var prevButton = document.getElementById("prevButton");
-    prevButton.style.visibility = "hidden";
+    console.log($scope.confirmCounter);
 
-    var nextButton = document.getElementById("nextButton");
-    nextButton.style.visibility = "hidden";
+    if ($scope.confirmCounter == 1) {
+      var prevButton = document.getElementById("prevButton");
+      prevButton.style.visibility = "hidden";
 
-    var poster = document.getElementById("currentuser");
-    poster.style.visibility = "hidden";
+      var nextButton = document.getElementById("nextButton");
+      nextButton.style.visibility = "hidden";
 
-    var selectedBy = document.getElementById("selectedBy");
-    selectedBy.style.visibility = "hidden";
+      var poster = document.getElementById("currentuser");
+      poster.style.visibility = "hidden";
+
+      var selectedBy = document.getElementById("selectedBy");
+      selectedBy.style.visibility = "hidden";
 
 
 
-    var playerButtons = document.getElementById("playerButtons");
+      var playerButtons = document.getElementById("playerButtons");
 
 
-    var confirmButton = document.createElement("button");
+      var confirmButton = document.createElement("button");
 
-      var confirmTitle = document.createElement("h4");
-      confirmTitle.innerHTML = "Confirm";
-    confirmButton.appendChild(confirmTitle);
-    confirmButton.style = "margin:10px 0px; min-height:50px";
-    confirmButton.className = "playerButton";
-    playerButtons.appendChild(confirmButton);
+        var confirmTitle = document.createElement("h4");
+        confirmTitle.innerHTML = "Confirm";
+      confirmButton.appendChild(confirmTitle);
+      confirmButton.style = "margin:10px 0px; min-height:50px";
+      confirmButton.className = "playerButton";
+      playerButtons.appendChild(confirmButton);
 
+    } 
+
+   
     songDuration = duration;
-    currentuser = "Add Song";
-    currentuser.innerHTML = "Add Song";
 
     SC.stream("/tracks/" + trackid).then(function (player) {
   		globalPlayer = player;
@@ -99,7 +106,7 @@ angular.module( 'inTunity.addSong', [
   			globalPlayer.seek(0);
 
 
-
+        $scope.confirmCounter--;
 
         prevButton.style.visibility = "visible";
         nextButton.style.visibility = "visible";
@@ -259,7 +266,11 @@ angular.module( 'inTunity.addSong', [
                   var selectedSong = obj[this.id];
                   var id = (selectedSong["id"]);
 
+                  $scope.confirmCounter++;
+
                   $scope.startStreamingAddSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
+
+                
 				        
                 }
 				
