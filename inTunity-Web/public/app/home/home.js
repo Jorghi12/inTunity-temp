@@ -107,9 +107,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
         }); // end of http get
-
-
-
     }
 
     $scope.home = function() {
@@ -237,8 +234,16 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
 
+
         var paused = false;
         var song_count = 0;
+
+       
+
+      
+
+
+  
 
         if (trackarray.length > 0) {
             console.log("hit here");
@@ -353,6 +358,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
         var time = document.getElementById("time");
 
+       
 
         var progressBall = document.getElementById('playHead');
         var time = document.getElementById('time');
@@ -365,6 +371,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
             currentuser.innerHTML = correctUsers[song_count][0]["nickname"];
 
+
+
             SC.stream(newSoundUrl).then(function(player) {
                 globalPlayer = player;
 				window.globalPlayer = player;
@@ -373,9 +381,30 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				} else {
 					$scope.pause();
 				}
+
+               
 				
                 var album = document.getElementById("artwork");
                 album.src = trackarray[song_count % trackarray.length][1];
+
+
+                // this is used to change the background for player using color-thief
+                var image = document.createElement("img");
+                image.crossOrigin = "Anonymous";
+                image.src = trackarray[song_count % trackarray.length][1];
+                image.onload = function(){
+                    var colorThief = new ColorThief();
+                    var color = colorThief.getColor(image); 
+                    document.getElementById("widgetContainer").style.backgroundColor = "rgb(" + color + ")";
+                };
+
+
+
+
+
+                
+
+               
 
                 var title = document.getElementById("songtitle");
                 title.innerHTML = trackarray[song_count % trackarray.length][2];
@@ -392,6 +421,10 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                     }
                     var endTime = document.getElementById("endTime");
                     endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
+
+                   
+
+
 
                     if ($location.path() == "/") {
                         //this is for resetting all the background color to its natural settings
@@ -411,6 +444,9 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
                 globalPlayer.on('time', function() {
+
+
+
                     //Updates information about our currently playing song (shared cross page)
                     if (globalPlayer.currentTime() < parseInt(trackarray[song_count % trackarray.length][3])) {
                         musicStatus.setStatus(song_count % trackarray.length, globalPlayer.currentTime());
