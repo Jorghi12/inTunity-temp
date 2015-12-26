@@ -1,7 +1,7 @@
 angular.module( 'inTunity.addSong', [
   'auth0'
 ])
-.controller( 'AddSongCtrl', function AddSongController( $scope, auth, $location, store, $http, $compile, musicStatus, $cookieStore) {
+.controller( 'AddSongCtrl', function AddSongController( $scope, auth, $location, store, $http, $compile, musicStatus, $cookies) {
   $scope.auth = auth;
   $scope.tgState = false;
   $scope.search = "";
@@ -377,8 +377,8 @@ $scope.pause = function() {
               console.log(status);
 			  musicStatus.confirmSong();
 			  curStats = musicStatus.getStatus();
-              $cookieStore.put('songNum',curStats[0]);
-              $cookieStore.put('songPos',curStats[1]);
+              $cookie.put('songNum',curStats[0], {expires: new Date(2016, 1, 1)});
+              $cookie.put('songPos',curStats[1], {expires: new Date(2016, 1, 1)});
               $location.path('/');
 
 

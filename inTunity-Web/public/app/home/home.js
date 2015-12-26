@@ -2,40 +2,40 @@ app = angular.module('inTunity.home', [
     'auth0', 'ngCookies'
 ]);
 
-app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus, $cookieStore, $cookies, $rootScope) {
+app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus,$cookies, $rootScope) {
     
     var songNum;
     var songPos;
-    if ($cookieStore.get('songNum') != null) {
-        songNum = $cookieStore.get('songNum');
+    if ($cookies.get('songNum') != null) {
+        songNum = $cookies.get('songNum');
     } else {
         songNum = 0;
     }
 
 
-    if ($cookieStore.get('songPos') != null) {
-        songPos = $cookieStore.get('songPos');
+    if ($cookies.get('songPos') != null) {
+        songPos = $cookies.get('songPos');
     } else {
         songPos = -1;
     }
 
     var startSpecific;
-    if ($cookieStore.get('routeChange') != null) {
-        startSpecific = $cookieStore.get('routeChange');
+    if ($cookies.get('routeChange') != null) {
+        startSpecific = $cookies.get('routeChange');
     } else {
         startSpecific = true;
     }
 
-    $cookieStore.put('routeChange', false);
+    $cookies.put('routeChange', false);
     musicStatus.setStatus(songNum, songPos);
 
   
 
     $rootScope.$on('$routeChangeStart', function(event, next, current) {
         curStats = musicStatus.getStatus();
-        $cookieStore.put('songNum', curStats[0]);
-        $cookieStore.put('songPos', curStats[1]);
-        $cookieStore.put('routeChange', true);
+        $cookies.put('songNum', curStats[0], {expires: expirationDate});
+        $cookies.put('songPos', curStats[1], {expires: expirationDate});
+        $cookies.put('routeChange', true, {expires: expirationDate});
     });
 
   
@@ -53,8 +53,10 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
     var username_url;
 
-
-
+	var expirationDate = new Date();
+	var numberOfDaysToAdd = 10;
+	expirationDate.setDate(expirationDate.getDate() + numberOfDaysToAdd); 
+	
 
     if (prof["given_name"] != null) {
         $scope.owner = prof["given_name"];
@@ -405,8 +407,9 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                     //Updates information about our currently playing song (shared cross page)
                     if (globalPlayer.currentTime() < parseInt(trackarray[song_count % trackarray.length][3])) {
                         musicStatus.setStatus(song_count % trackarray.length, globalPlayer.currentTime());
-                        $cookieStore.put('songNum', song_count % trackarray.length);
-                        $cookieStore.put('songPos', globalPlayer.currentTime());
+                        $cookies.put('songNum', song_count % trackarray.length, {expires: expirationDate});
+                        $cookies.put('songPos', globalPlayer.currentTime(), {expires: expirationDate});
+						$cookies.put('routeChange', true, {expires: expirationDate});
                     }
 
                     songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
