@@ -59,6 +59,9 @@ angular.module( 'inTunity.addSong', [
 
 
       var confirmButton = document.createElement("button");
+      confirmButton.onclick = function() {
+        $scope.selectSong(songUrl, artworkUrl, myTitle, trackid, duration);
+      }
 
         var confirmTitle = document.createElement("h4");
         confirmTitle.innerHTML = "Confirm";
