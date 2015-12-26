@@ -309,6 +309,11 @@ $scope.pause = function() {
     
   } // end of findSong
 
+  
+
+	var expirationDate = new Date();
+	var numberOfDaysToAdd = 10;
+	expirationDate.setDate(expirationDate.getDate() + numberOfDaysToAdd); 
 
 
 
@@ -377,8 +382,8 @@ $scope.pause = function() {
               console.log(status);
 			  musicStatus.confirmSong();
 			  curStats = musicStatus.getStatus();
-              $cookie.put('songNum',curStats[0], {expires: new Date(2016, 1, 1)});
-              $cookie.put('songPos',curStats[1], {expires: new Date(2016, 1, 1)});
+              $cookie.put('songNum',curStats[0], {expires: expirationDate});
+              $cookie.put('songPos',curStats[1], {expires: expirationDate});
               $location.path('/');
 
 
