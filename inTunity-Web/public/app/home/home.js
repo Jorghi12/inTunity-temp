@@ -368,7 +368,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				window.globalPlayer = player;
 				
 				if (startingPosition != -2000){
-					globalPlayer.play();
+					window.globalPlayer.play();
 				}
 				else{
 					$scope.pause();
