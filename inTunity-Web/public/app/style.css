@@ -293,19 +293,23 @@ hr {
 
 #time{
 	width: 100%;
-	height: 5px;
+	height: 10px;
 	background: #707070;
 	display: inline-block;
 	float:left;
 	margin:10px 0px 0px 0px;
-	margin-top:7px;
+	margin-top: 5px;
 }
 
 #playHead {
 	width: 0px;
-	height: 5px;
+	height: 10px;
 	margin-top: 0px;
 	background: orange;
+}
+
+#playerButtons {
+	padding-bottom: 0px;
 }
 
 .playerButton {

@@ -87,7 +87,7 @@ angular.module( 'inTunity', [
 .controller( 'AppCtrl', function AppCtrl ( $scope, $location ) {
   $scope.$on('$routeChangeSuccess', function(e, nextRoute){
     if ( nextRoute.$$route && angular.isDefined( nextRoute.$$route.pageTitle ) ) {
-      $scope.pageTitle = nextRoute.$$route.pageTitle + ' | inTunity' ;
+      $scope.pageTitle = nextRoute.$$route.pageTitle + ' | INTUNITY' ;
     }
   });
 }).service('musicStatus', function () {  var songNumber = 0; var songPos = -1; var confirmSong = false;
