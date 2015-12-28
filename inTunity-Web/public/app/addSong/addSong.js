@@ -38,12 +38,18 @@ angular.module( 'inTunity.addSong', [
 
   $scope.startStreamingAddSong = function(songUrl, artworkUrl,myTitle, trackid, duration) {
 
-    console.log($scope.confirmCounter);
+    var albumPic;
+    if (artworkUrl != null) {
+      var index = artworkUrl.indexOf("large");
+      albumPic = artworkUrl.substring(0,index) + "t500x500.jpg";
+    } else {
+      albumPic = "/images/no-art.png";
+    } 
 
      // this is used to change the background for player using color-thief
     var image = document.createElement("img");
     image.crossOrigin = "Anonymous";
-    image.src = artworkUrl;
+    image.src = albumPic;
     image.onload = function(){
         var colorThief = new ColorThief();
         var cp = colorThief.getPalette(image, 2, 5);
@@ -97,7 +103,7 @@ angular.module( 'inTunity.addSong', [
   		  endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
   		  
   		  var album = document.getElementById("artwork");
-  		  album.src = artworkUrl;
+  		  album.src = albumPic;
 
   		  var title = document.getElementById("songtitle");
   		  title.innerHTML = myTitle;
