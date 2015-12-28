@@ -103,7 +103,7 @@ app.post('/secured/songs', function(req, res) {
 // getting the different locations
 app.get('/secured/location', function(req, res) {
   request({
-      url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3005/api/location/', //URL to hit
+      url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3005/api/location/', //URL to hit
       headers: {
       'Content-Type': 'application/json'
       },

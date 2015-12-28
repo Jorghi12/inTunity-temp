@@ -59,7 +59,7 @@ angular.module( 'inTunity.profile', [
 
 
   $http({
-        url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
+        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
         method: 'GET',
         params: {
             id: ppl_id
@@ -96,7 +96,7 @@ angular.module( 'inTunity.profile', [
 
 
   $http({
-    url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/accounts' ,
+    url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/accounts' ,
     method: 'GET'
   }).then(function(response) {  
     var users = response["data"]["songs"];
