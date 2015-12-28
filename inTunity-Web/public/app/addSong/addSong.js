@@ -183,7 +183,7 @@ angular.module( 'inTunity.addSong', [
 
   $scope.profile = function() {
     $http({
-        url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
+        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
         method: 'GET',
         params: {
             id: ppl_id
@@ -404,7 +404,7 @@ angular.module( 'inTunity.addSong', [
           console.log(song);
 
           console.log("adding a song...");
-          $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
+          $http.post('http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
             headers: {
             'Accept' : '*/*',
             'Content-Type': 'application/json'

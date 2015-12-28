@@ -45,7 +45,7 @@ angular.module( 'inTunity.profile', [
 
   $scope.profile = function() {
     $http({
-        url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
+        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
         method: 'GET',
         params: {
             id: ppl_id

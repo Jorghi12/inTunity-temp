@@ -38,7 +38,7 @@ angular.module( 'inTunity.location', [
   $scope.places;
 
   $http({
-    url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/location' ,
+    url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/location' ,
     method: 'GET'
   }).then(function(response) {  
     $scope.places = response["data"]["location"];
