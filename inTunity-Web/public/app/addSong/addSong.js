@@ -377,7 +377,7 @@ angular.module( 'inTunity.addSong', [
     var geocoder = new google.maps.Geocoder;
     var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
     geocoder.geocode({'location': latlng}, function(results, status) {
-      if (status === google.maps.GeocoderStatus.OK) {
+      if (1 == 1) { //status === google.maps.GeocoderStatus.OK) {            [Not everyone will want to give us their location due to privacy issues]
 
         if (results[1]) {
           console.log("result found");
