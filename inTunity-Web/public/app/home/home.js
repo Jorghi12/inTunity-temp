@@ -7,7 +7,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     var songNum;
     var songPos;
     if ($cookies.get('songNum') != null) {
-        songNum = $cookies.get('songNum');
+        songNum = $cookies.get('songNum'); //Swag
     } else {
         songNum = 0;
     }
