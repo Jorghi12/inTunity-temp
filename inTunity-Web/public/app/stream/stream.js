@@ -192,6 +192,17 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		};
 	}
 	
+	//Updates the graphics of the player GUI
+	$scope.updateCurrentPlayerGraphics = function(){
+		globalPlayer = window.globalPlayer;
+		
+		songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
+		var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
+		progressBall.style.width = percent + "px";
+		var currentTime = document.getElementById("currentTime");
+		currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
+	}
+	
 	//Start the SoundCloud Stream!
 	function startStream(newSoundUrl, startingPosition) {
 		$scope.setGraphics();
@@ -247,15 +258,10 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					$scope.updateCookieData();
 				}
 				
-				songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
+				//Updates the current state of the player footer GUI
+				$scope.updateCurrentPlayerGraphics();
 
-				var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
-				progressBall.style.width = percent + "px";
-
-				var currentTime = document.getElementById("currentTime");
-				currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
-
-
+				//Cool Sound Effects
 				if (globalPlayer.currentTime() <= (songDuration * 0.02)) {
 					globalPlayer.setVolume(0.8);
 				}
@@ -275,12 +281,10 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 			globalPlayer.on('finish', function() {
 				var length = parseInt(trackarray[song_count % trackarray.length][3]);
 				if (length == globalPlayer.currentTime()) {
-					song_count += 1;
-					musicStatus.setStatus(song_count % trackarray.length, globalPlayer.currentTime());
-					musicStatus.setStatus(song_count % trackarray.length, 0);
-					new_song = trackarray[song_count % trackarray.length][0];
-					song_count = song_count % trackarray.length;
-					new_url = '/tracks/' + new_song;
+					song_count = (song_count + 1) % trackarray.length;
+					musicStatus.setStatus(song_count, 0, false);
+					new_url = '/tracks/' + trackarray[song_count][0];
+					
 					console.log(new_url);
 					globalPlayer.seek(0); //Do this before startStream
 					startStream(new_url, 0);
