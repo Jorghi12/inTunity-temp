@@ -8,7 +8,8 @@ angular.module( 'inTunity', [
   'inTunity.addSong',
   'inTunity.about',
   'inTunity.profile',
-  'inTunity.location'
+  'inTunity.location',
+  'inTunity.stream'
 ])
 .config( function myAppConfig ($routeProvider, authProvider, $httpProvider, $locationProvider,
   jwtInterceptorProvider) {
@@ -43,6 +44,11 @@ angular.module( 'inTunity', [
       controller: 'LocationCtrl',
       templateUrl: '/app/location/location.html',
       pageTitle: 'Location'
+    })
+    .when( '/stream', {
+      controller: 'StreamCtrl',
+      templateUrl: '/app/stream/',
+      pageTitle: 'Stream'
     })
 
 
@@ -90,28 +96,33 @@ angular.module( 'inTunity', [
       $scope.pageTitle = nextRoute.$$route.pageTitle + ' | INTUNITY' ;
     }
   });
-}).service('musicStatus', function () {  var songNumber = 0; var songPos = -1; var confirmSong = false;
-return {
-checkConfirm: function(){ 
-	if (confirmSong == false){
-		return false
-	}
-	else{
-		confirmSong = false;
-		return true;
-	}
-},
-confirmSong: function(){
-	songNumber = 0;
-	songPos = -1;
-	confirmSong = true;
-},
-getStatus: function () {
-return [songNumber,songPos];
-},
-setStatus: function (num,pos) {
-songNumber = num;
-songPos = pos;
-}
-};
+}).service('musicStatus', function () {
+	//Song State Variables
+	var songPaused = false; var songNumber = 0; var songPos = -1; var confirmSong = false;
+	
+	//Functions part of the musicStatus Object
+	return {
+		checkConfirm: function(){ 
+			if (confirmSong == false){
+				return false
+			}
+			else{
+				confirmSong = false;
+				return true;
+			}
+		},
+		confirmSong: function(){
+			songNumber = 0;
+			songPos = -1;
+			confirmSong = true;
+		},
+		getStatus: function () {
+			return [songNumber,songPos,songPaused];
+		},
+		setStatus: function (num,pos,paused) {
+			songNumber = num;
+			songPos = pos;
+			songPaused = paused;
+		}
+	};
 });
