@@ -345,4 +345,3 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 
 
-});
