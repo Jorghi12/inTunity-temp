@@ -98,7 +98,10 @@ angular.module( 'inTunity', [
   });
 }).service('musicStatus', function () {
 	//Song State Variables
-	var songPaused = false; var songNumber = 0; var songPos = -1; var confirmSong = false;
+	var songPaused = false; 
+	var songNumber = 0; 
+	var songPos = -1; 
+	var confirmSong = false;
 	
 	//Functions part of the musicStatus Object
 	return {
