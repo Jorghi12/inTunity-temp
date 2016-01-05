@@ -23,6 +23,9 @@
   </div>
   
   <div id = "song-grid" align="center" ng-repeat = "item in correctPerson[0].song_history | orderBy:'-unix_time' " >
+    <a href="" ng-click = "deleteSongFromDB()">
+      <div class="delete-button">X</div>
+    </a>
     <a href="" ng-click = 'startStreamingProfileSong(item.song_url,item.song_album_pic,item.song_title,item.track_id,item.song_duration)'>
       <div class="col-md-4 song-tile">
         <img class="song-image" ng-src="{{item.song_album_pic}}">
