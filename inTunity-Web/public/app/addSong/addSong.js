@@ -38,12 +38,18 @@ angular.module( 'inTunity.addSong', [
 
   $scope.startStreamingAddSong = function(songUrl, artworkUrl,myTitle, trackid, duration) {
 
-    console.log($scope.confirmCounter);
+    var albumPic;
+    if (artworkUrl != null) {
+      var index = artworkUrl.indexOf("large");
+      albumPic = artworkUrl.substring(0,index) + "t500x500.jpg";
+    } else {
+      albumPic = "/images/no-art.png";
+    } 
 
      // this is used to change the background for player using color-thief
     var image = document.createElement("img");
     image.crossOrigin = "Anonymous";
-    image.src = artworkUrl;
+    image.src = albumPic;
     image.onload = function(){
         var colorThief = new ColorThief();
         var cp = colorThief.getPalette(image, 2, 5);
@@ -97,7 +103,7 @@ angular.module( 'inTunity.addSong', [
   		  endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
   		  
   		  var album = document.getElementById("artwork");
-  		  album.src = artworkUrl;
+  		  album.src = albumPic;
 
   		  var title = document.getElementById("songtitle");
   		  title.innerHTML = myTitle;
@@ -177,7 +183,7 @@ angular.module( 'inTunity.addSong', [
 
   $scope.profile = function() {
     $http({
-        url: 'http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
+        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
         method: 'GET',
         params: {
             id: ppl_id
@@ -371,7 +377,7 @@ angular.module( 'inTunity.addSong', [
     var geocoder = new google.maps.Geocoder;
     var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
     geocoder.geocode({'location': latlng}, function(results, status) {
-      if (status === google.maps.GeocoderStatus.OK) {
+      if (1 == 1) { //status === google.maps.GeocoderStatus.OK) {            [Not everyone will want to give us their location due to privacy issues]
 
         if (results[1]) {
           console.log("result found");
@@ -398,7 +404,7 @@ angular.module( 'inTunity.addSong', [
           console.log(song);
 
           console.log("adding a song...");
-          $http.post('http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
+          $http.post('http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/songs', {data: song}, { 
             headers: {
             'Accept' : '*/*',
             'Content-Type': 'application/json'

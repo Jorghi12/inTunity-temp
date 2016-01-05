@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 
 var dbName = 'inTunity';
 
-mongoose.connect('mongodb://ec2-52-35-92-198.us-west-2.compute.amazonaws.com/' + dbName);
+mongoose.connect('mongodb://ec2-52-33-76-106.us-west-2.compute.amazonaws.com/' + dbName);
 
 app.use(session({ 
 	secret: 'inTunity',
@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 
-var whitelist = ['http://ec2-52-35-92-198.us-west-2.compute.amazonaws.com:8100'];
+var whitelist = ['http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:8100'];
 var cors_options = {
 	origin: function (origin, callback) {
 		var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
@@ -182,7 +182,8 @@ router.get('/api/accounts/' , function (req, res, next) {
 	  		if(userObj[i].today_song.song_url != '') {
 	  			
 		  		// a diff of 600 is about 10 min
-		  		if (todayTime - userObj[i].today_song.unix_time >= 86400) {
+		  		//86400 is one day
+		  		if (todayTime - userObj[i].today_song.unix_time >= 32140800) {
 		  			console.log("past expiration time");
 
 		  			userObj[i].today_song.song_title = '';
