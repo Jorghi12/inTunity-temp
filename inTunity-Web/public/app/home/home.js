@@ -1,9 +1,14 @@
 app = angular.module('inTunity.home', [
-    'auth0', 'ngCookies'
+    'auth0', 
+    'ngCookies'
+
 ]);
 
 app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus,$cookies, $rootScope) {
     
+    // var environment = envService.get(); 
+    // console.log(environment);
+
     var songNum;
     var songPos;
     if ($cookies.get('songNum') != null) {

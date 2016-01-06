@@ -46,10 +46,8 @@ app.post('/secured/account', function(req, res) {
     body: req.body["data"]
   }, function(error, response, body) {
       if(error) {
-          console.log("error in logging in");
           console.log(error);
       } else {
-          console.log("successfully added a user " + response.statusCode);
           res.send(response.statusCode);
       }
   });
@@ -87,11 +85,9 @@ app.post('/secured/account/id/today_song', function(req, res) {
     },
     body: req.body["data"]
   }, function(error, response, body) {
-      console.log("updating song...");
       if(error) {
           console.log(error);
       } else {
-          console.log(response.body);
           res.send(response.statusCode);
       }
   });
@@ -133,13 +129,13 @@ app.get('/secured/account/id', function(req, res) {
       } else {
         if (response.statusCode == 200) {
           var data = JSON.parse(response.body);
-          console.log(data);
           res.send(200, {user:data});
         }
       }
   });
 });
 
+// deleting a song on your own account
 app.delete('/secured/account/id/song', function(req, res) {
   console.log(req.query["id"]);
   request({

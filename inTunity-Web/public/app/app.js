@@ -44,13 +44,16 @@ angular.module( 'inTunity', [
       controller: 'LocationCtrl',
       templateUrl: '/app/location/location.html',
       pageTitle: 'Location'
-    })
-   
+    });
+
+
+  
+   $locationProvider.html5Mode(true);
 
 
 
-    $httpProvider.defaults.useXDomain = true;
-      delete $httpProvider.defaults.headers.common['X-Requested-With'];
+  $httpProvider.defaults.useXDomain = true;
+  delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
 
   authProvider.init({
@@ -72,13 +75,10 @@ angular.module( 'inTunity', [
   $rootScope.$on('$locationChangeStart', function() {
     if (!auth.isAuthenticated) {
       var token = store.get('token');
-
       if (token) {
         if (!jwtHelper.isTokenExpired(token)) {
-
           auth.authenticate(store.get('profile'), token);
         } else {
-
           $location.path('/login');
         }
       }
@@ -86,13 +86,18 @@ angular.module( 'inTunity', [
 
   });
 })
+
+
+
 .controller( 'AppCtrl', function AppCtrl ( $scope, $location ) {
   $scope.$on('$routeChangeSuccess', function(e, nextRoute){
     if ( nextRoute.$$route && angular.isDefined( nextRoute.$$route.pageTitle ) ) {
       $scope.pageTitle = nextRoute.$$route.pageTitle + ' | INTUNITY' ;
     }
   });
-}).service('musicStatus', function () {
+})
+
+.service('musicStatus', function () {
 	//Song State Variables
 	var songPaused = false; 
 	var songNumber = 0; 
