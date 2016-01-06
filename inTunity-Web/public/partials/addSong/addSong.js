@@ -306,9 +306,6 @@ angular.module( 'inTunity.addSong', [
                 confirmSong.innerHTML = "<h4>Confirm</h4>";
 
                 confirmSong.onclick = function() {
-                  console.log("hi");
-                  console.log(this.id);
-                  console.log(obj[this.id]);
                   var selectedSong = obj[this.id];
                   var id = (selectedSong["id"]);
 				  
@@ -401,10 +398,8 @@ angular.module( 'inTunity.addSong', [
             city: city
           });
 
-          console.log(song);
 
-          console.log("adding a song...");
-          $http.post('http://localhost:3001/secured/account/id/today_song', {data: song}, { 
+          $http.post('http://localhost:3001/secured/account/id/song', {data: song}, { 
             headers: {
             'Accept' : '*/*',
             'Content-Type': 'application/json'

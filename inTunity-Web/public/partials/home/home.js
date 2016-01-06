@@ -156,11 +156,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     }).then(function(response) {
         songdata = (response["data"]["songs"]);
 
-        console.log(songdata);
-
-
-
-        var song_array = [];
+   
 
         var users = response["data"]["songs"];
 
@@ -169,9 +165,9 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
         // makes sure we only show users who have songs
         for (var i = 0; i < users.length; i++) {
-            if (users[i]["today_song"]["song_url"] != "") {
+            if (users[i]["today_song"].length > 0) {
 
-                var date = new Date(users[i]["today_song"]["unix_time"] * 1000);
+                var date = new Date(users[i]["today_song"][0]["unix_time"] * 1000);
 
                 var year = date.getFullYear();
                 var month = date.getMonth();
@@ -199,7 +195,15 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
                 var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
-                correctUsers.push(new Array(users[i], formattedTime, formmatedDay));
+                correctUsers.push({
+                    user:  new Array(users[i]), 
+                    formattedTime: formattedTime,
+                    formmatedDay: formmatedDay,
+                    unix_time:  users[i]["today_song"][0]["unix_time"] * 1000   
+                })
+
+
+                   
             } else {
                 console.log("user does not have a song for today");
             }
@@ -208,22 +212,18 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         $scope.users = correctUsers;
 
 
+        console.log(correctUsers);
 
 
-        // adding all the songs to arr
-        for (var i = 0; i < correctUsers.length; i++) {
-            songUrl = correctUsers[i][0]["today_song"]["song_url"];
-            var entry = {
-                url: songUrl
-            }
-            song_array.push(entry);
-        }
+     
 
 
 
         for (var i = 0; i < correctUsers.length; i++) {
-            trackarray.push(new Array(correctUsers[i][0]["today_song"]["track_id"], correctUsers[i][0]["today_song"]["song_album_pic"], correctUsers[i][0]["today_song"]["song_title"], correctUsers[i][0]["today_song"]["song_duration"]));
+            trackarray.push(new Array(correctUsers[i]["user"][0]["today_song"][0]["track_id"], correctUsers[i]["user"][0]["today_song"][0]["song_album_pic"], correctUsers[i]["user"][0]["today_song"][0]["song_title"], correctUsers[i]["user"][0]["today_song"][0]["song_duration"]));
         }
+
+
 
 
 
@@ -378,7 +378,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             console.log(correctUsers);
             console.log(song_count);
 
-            currentuser.innerHTML = correctUsers[song_count][0]["nickname"];
+            currentuser.innerHTML = correctUsers[song_count]["user"][0]["nickname"];
 
 
 

@@ -43,10 +43,9 @@ app.all('/api/*', cors(cors_options));
 app.set('port', 3005);
 
 var User = require('./model/User.js');
-var SongHistory = require('./model/SongHistory.js');
+var Song = require('./model/Song.js');
 var location = require('./model/location.js');
 
-// var Event = require('./model/Event.js');
 
 //routes
 var router = express.Router();
@@ -88,8 +87,6 @@ var router = express.Router();
 
 router.post('/api/account', function (req, res, next) {
 
-	
-
 	User.findOne({user_id: req.body.user_id}, function (err, userObj) {
 	    if (err) {
 	      console.log(err);
@@ -101,64 +98,47 @@ router.post('/api/account', function (req, res, next) {
 	      console.log('User not found!');
 
 
-	      	// making sure that each url_username is unique
-	      	User.find({nickname: req.body.nickname}, function (err, result) {
-	      		if (result.length == 0) {
-	      			var newUser = new User({
-					    user_id: req.body.user_id,
-					    nickname: req.body.nickname,
-					    picture: req.body.picture,
-					    email: req.body.email,
-					    url_username: req.body.url_username,
-					    today_song: {
-				            song_name: "",
-				            song_album_pic: "",
-				            song_url: "",
-							unix_time: "",
-							track_id: "",
-							song_duration: ""
-					    }
-				    });
+      	  // making sure that each url_username is unique
+      	  User.find({nickname: req.body.nickname}, function (err, result) {
+      		if (result.length == 0) {
+      			var newUser = new User({
+				    user_id: req.body.user_id,
+				    nickname: req.body.nickname,
+				    picture: req.body.picture,
+				    email: req.body.email,
+				    url_username: req.body.url_username
+			    });
 
-	      			newUser.save(function(err) {
-			           if (err) {
-			           	 throw err;
-			           } else {
-		                 console.log('User created!');
-		                 res.sendStatus(200);
-			           }
-			         });
+      			newUser.save(function(err) {
+		           if (err) {
+		           	 throw err;
+		           } else {
+	                 console.log('User created!');
+	                 res.sendStatus(200);
+		           }
+		         });
 
-	      		} else {
-	      			var newUser = new User({
-					    user_id: req.body.user_id,
-					    nickname: req.body.nickname,
-					    picture: req.body.picture,
-					    email: req.body.email,
-					    url_username: req.body.url_username + (result.length + 1).toString(),
-					    today_song: {
-				            song_name: "",
-				            song_album_pic: "",
-				            song_url: "",
-							unix_time: "",
-							track_id: "",
-							song_duration: ""
-					    }
-				    });
+      		} else {
+      			// username already exists so add +1 to end
+      			var newUser = new User({
+				    user_id: req.body.user_id,
+				    nickname: req.body.nickname,
+				    picture: req.body.picture,
+				    email: req.body.email,
+				    url_username: req.body.url_username + (result.length + 1).toString()
+			    });
 
-	      			newUser.save(function(err) {
-			           if (err) {
-			           	 throw err;
-			           } else {
-		                 console.log('User created!');
-		                 res.sendStatus(200);
+      			newUser.save(function(err) {
+		           if (err) {
+		           	 throw err;
+		           } else {
+	                 console.log('User created!');
+	                 res.sendStatus(200);
 
-			           }
-			        });
-
-	      		}
-	      	}); 
-	      		
+		           }
+		        });
+      		}
+      	  });     		
 	    }
 	 });
 });
@@ -182,22 +162,13 @@ router.get('/api/account/' , function (req, res, next) {
 	  	var todayTime = today.getTime()/1000;
 
 	  	for (var i = 0; i < userObj.length; i++) {
+	  		if(userObj[i].today_song.length > 0) {
 
-	  		if(userObj[i].today_song.song_url != '') {
-	  			
+	
 		  		// a diff of 600 is about 10 min
 		  		//86400 is one day
-		  		if (todayTime - userObj[i].today_song.unix_time >= 32140800) {
-		  			console.log("past expiration time");
-
-		  			userObj[i].today_song.song_title = '';
-		  			userObj[i].today_song.song_url = '';
-		  			userObj[i].today_song.song_album_pic = '';
-		  			userObj[i].today_song.unix_time = '';
-		  			userObj[i].today_song.track_id= '';
-		  			userObj[i].today_song.song_duration= '';
-
-
+		  		if (todayTime - userObj[i].today_song[0].unix_time >= 32140800) {		  		
+		  			userObj[i].today_song.shift();
 		  			userObj[i].save(function(err) {
 		           		if (err) {
 		             		throw err;
@@ -207,12 +178,11 @@ router.get('/api/account/' , function (req, res, next) {
 		         	});
 		  		}
 	  		}
-
 	  	} // end of for loop
 
 	  	res.send(userObj);
 	  } 
-	}).sort({'today_song.unix_time': -1});
+	});
 
 });
 
@@ -222,7 +192,7 @@ router.get('/api/account/' , function (req, res, next) {
 
 
 
-router.post('/api/account/id/today_song' , function (req, res, next) {
+router.post('/api/account/id/song' , function (req, res, next) {
 
 	User.findOne({user_id: req.body.user_id}, function(err, userObj) {
 	  if (err) {
@@ -230,15 +200,7 @@ router.post('/api/account/id/today_song' , function (req, res, next) {
 	    res.sendStatus(500);
 	  } else if(userObj) {
 
-	  	userObj.today_song.song_title = req.body.song_title;
-	  	userObj.today_song.song_url = req.body.song_url;
-	  	userObj.today_song.song_album_pic = req.body.song_artwork;
-	  	userObj.today_song.unix_time = req.body.unix_time;
-	  	userObj.today_song.track_id = req.body.track_id;
-	  	userObj.today_song.song_duration = req.body.song_duration;
-
-
-	  	var song = new SongHistory({
+	  	var song = new Song({
 		   	song_title: req.body.song_title,
 			song_album_pic: req.body.song_artwork,
 			song_url: req.body.song_url,
@@ -248,7 +210,15 @@ router.post('/api/account/id/today_song' , function (req, res, next) {
 	    });
 
 
-	  	userObj.song_history.push(song);
+	  	userObj.song_history.unshift(song);
+
+	  	if (userObj.today_song.length == 0) {
+	  		userObj.today_song.push(song);
+	  	} else {
+	  		userObj.today_song.shift();
+	  		userObj.today_song.push(song);
+	  	}
+	  
 
 	    userObj.save(function(err, obj) {
 	    	if (err) {
@@ -271,7 +241,6 @@ router.post('/api/account/id/today_song' , function (req, res, next) {
 
 
   		});	
-
 	  } 
 	});
 });	
@@ -307,7 +276,7 @@ router.get('/api/account/id/' , function (req, res, next) {
 
 // deleting a specific song 
 router.delete('/api/account/id/song' , function (req, res, next) {
-	SongHistory.findOne({_id:req.query["song_id"] }, function(err, songObj) {
+	Song.findOne({_id:req.query["song_id"] }, function(err, songObj) {
 	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);
