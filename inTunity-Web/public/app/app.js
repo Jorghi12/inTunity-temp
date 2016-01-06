@@ -30,26 +30,30 @@ angular.module( 'inTunity', [
     .when( '/add-song', {
       controller: 'AddSongCtrl', 
       templateUrl: '/app/addSong/addSong.html',
-      pageTitle: 'Add Song'
+      pageTitle: 'Add Song',
+      requiresLogin: true
     })
     .when('/profile/:itemId', {
       templateUrl: 'app/profile/profile.html',
       controller: 'ProfileCtrl',
-      pageTitle: 'Profile'
+      pageTitle: 'Profile',
+      requiresLogin: true
     })
     .when( '/about', {
       controller: 'AboutCtrl',
       templateUrl: '/app/about/about.html',
-      pageTitle: 'About'
+      pageTitle: 'About',
+      requiresLogin: true
     })
     .when( '/location', {
       controller: 'LocationCtrl',
       templateUrl: '/app/location/location.html',
-      pageTitle: 'Location'
+      pageTitle: 'Location',
+      requiresLogin: true
     })
     .otherwise({redirectTo: '/'});
 
-    $locationProvider.html5Mode(true);
+  $locationProvider.html5Mode(true);
 
 
 
