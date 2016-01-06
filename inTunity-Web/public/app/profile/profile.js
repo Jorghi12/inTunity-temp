@@ -76,15 +76,6 @@ angular.module( 'inTunity.profile', [
           document.getElementById("selected-link").id = "";
           console.log("hit");
         }
-
-
-
-
-       
-
-        
-
-
     }); // end of http get
 
 
@@ -96,7 +87,7 @@ angular.module( 'inTunity.profile', [
 
 
   $http({
-    url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/accounts' ,
+    url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account' ,
     method: 'GET'
   }).then(function(response) {  
     var users = response["data"]["songs"];

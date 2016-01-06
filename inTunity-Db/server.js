@@ -83,7 +83,7 @@ var router = express.Router();
 
 
 
-router.post('/api/accounts', function (req, res, next) {
+router.post('/api/account', function (req, res, next) {
 
 	
 
@@ -162,7 +162,7 @@ router.post('/api/accounts', function (req, res, next) {
 
 // get the whole entire accounts
 // mainly used for main feed
-router.get('/api/accounts/' , function (req, res, next) {
+router.get('/api/account/' , function (req, res, next) {
 
 	User.find({}, function(err, userObj) {
 	  if (err) {
@@ -292,10 +292,9 @@ router.get('/api/location/' , function (req, res, next) {
 	});
 });
 
+
+//getting a specific user
 router.get('/api/account/id/' , function (req, res, next) {
-
-	console.log(req.query["user_id"]);
-
 	User.findOne({user_id:req.query["user_id"] }, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
@@ -304,6 +303,19 @@ router.get('/api/account/id/' , function (req, res, next) {
 	  	res.send(userObj);
 	  } 
 	});
+});
+
+// deleting a specific song 
+router.delete('/api/account/id/song' , function (req, res, next) {
+	User.findOne({user_id:req.query["id"] }, function(err, userObj) {
+	  if (err) {
+	    console.log(err);
+	    res.sendStatus(500);
+	  } else if(userObj) {
+	  	
+	  } 
+	});
+	
 });
 
 

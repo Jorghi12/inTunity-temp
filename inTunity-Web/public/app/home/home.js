@@ -146,7 +146,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     $scope.users;
 
     $http({
-        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/accounts',
+        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account',
         method: 'GET'
     }).then(function(response) {
         songdata = (response["data"]["songs"]);

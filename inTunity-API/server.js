@@ -41,7 +41,7 @@ app.get('/secured/ping', function(req, res) {
 // adding a new account
 app.post('/secured/account', function(req, res) {
   request({
-    url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3005/api/accounts/', //URL to hit
+    url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3005/api/account/', //URL to hit
     method: 'POST', //Specify the method
     headers: {
       'Content-Type': 'application/json'
@@ -59,9 +59,9 @@ app.post('/secured/account', function(req, res) {
 });
 
 // getting all the accounts
-app.get('/secured/accounts', function(req, res) {
+app.get('/secured/account', function(req, res) {
   request({
-      url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3005/api/accounts/', //URL to hit
+      url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3005/api/account/', //URL to hit
       headers: {
       'Content-Type': 'application/json'
       },
@@ -131,8 +131,6 @@ app.get('/secured/account/id', function(req, res) {
       method: 'GET', //Specify the method
       qs: {user_id: req.query["id"]}
   }, function(error, response, body){
-    console.log(req.query["id"]);
-
       if(error) {
           console.log(error);
       } else {
@@ -145,25 +143,22 @@ app.get('/secured/account/id', function(req, res) {
   });
 });
 
-app.delete('/secured/account/id/today_song', function(req, res) {
+app.delete('/secured/account/id/song', function(req, res) {
   console.log(req.query["id"]);
   request({
-      url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3005/api/account/id', //URL to hit
+      url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3005/api/account/id/song', //URL to hit
       headers: {
       'Content-Type': 'application/json'
       },
       method: 'DELETE', //Specify the method
       qs: {user_id: req.query["id"]}
   }, function(error, response, body){
-    console.log(req.query["id"]);
-
       if(error) {
           console.log(error);
       } else {
         if (response.statusCode == 200) {
-          var data = JSON.parse(response.body);
           console.log(data);
-          res.send(200, {user:data});
+          res.send(200);
         }
       }
   });
