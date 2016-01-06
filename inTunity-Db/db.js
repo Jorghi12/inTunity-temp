@@ -88,6 +88,8 @@ var router = express.Router();
 
 router.post('/api/account', function (req, res, next) {
 
+	
+
 	User.findOne({user_id: req.body.user_id}, function (err, userObj) {
 	    if (err) {
 	      console.log(err);

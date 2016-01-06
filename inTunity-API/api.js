@@ -45,6 +45,7 @@ app.post('/secured/account', function(req, res) {
     },
     body: req.body["data"]
   }, function(error, response, body) {
+
       if(error) {
           console.log(error);
       } else {
@@ -115,7 +116,6 @@ app.get('/secured/location', function(req, res) {
 
 // getting a specific user
 app.get('/secured/account/id', function(req, res) {
-  console.log(req.query["id"]);
   request({
       url: process.env.DATABASE + '/api/account/id', //URL to hit
       headers: {
@@ -137,7 +137,6 @@ app.get('/secured/account/id', function(req, res) {
 
 // deleting a song on your own account
 app.delete('/secured/account/id/song', function(req, res) {
-  console.log(req.query["id"]);
   request({
       url: process.env.DATABASE + '/api/account/id/song',
       headers: {
@@ -156,10 +155,6 @@ app.delete('/secured/account/id/song', function(req, res) {
       }
   });
 });
-
-
-
-
 
 
 

@@ -13,6 +13,8 @@ angular.module( 'inTunity', [
 ])
 .config( function myAppConfig ($routeProvider, authProvider, $httpProvider, $locationProvider,
   jwtInterceptorProvider) {
+
+
   $routeProvider
     .when( '/', {
       controller: 'HomeCtrl',
@@ -44,11 +46,10 @@ angular.module( 'inTunity', [
       controller: 'LocationCtrl',
       templateUrl: '/app/location/location.html',
       pageTitle: 'Location'
-    });
+    })
+    .otherwise({redirectTo: '/'});
 
-
-  
-
+    $locationProvider.html5Mode(true);
 
 
 

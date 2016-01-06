@@ -4,7 +4,6 @@ angular.module( 'inTunity.login', [
 .controller( 'LoginCtrl', function LoginController( $scope, auth, $location, store, $http ) {
 
   $scope.about = function() {
-    console.log("about");
     $location.path('/about');
   }
 
@@ -26,7 +25,6 @@ angular.module( 'inTunity.login', [
       var email = auth.profile["email"];
       var provider = auth.profile["identities"][0]["provider"];
       var nickname = auth.profile["name"];
-
       var picture;
 
       if(auth.profile["identities"][0]["connection"] == "facebook") {
@@ -59,6 +57,8 @@ angular.module( 'inTunity.login', [
         picture: picture,
         url_username: url_username
       });
+      
+      $location.path("/");
 
       $http.post('http://localhost:3001/secured/account', {data: user_account}, { 
           headers: {
@@ -66,9 +66,9 @@ angular.module( 'inTunity.login', [
           'Content-Type': 'application/json'
          }
       }).success(function(data, status, headers, config) {
-          $location.path("/");
+       
       }).error(function(data, status, headers, config) {
-      
+
       });
 
     }, function(error) {
