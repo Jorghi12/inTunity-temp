@@ -16,15 +16,12 @@ var authenticate = jwt({
 
 
 app.configure(function () {
-
  // Request body parsing middleware should be above methodOverride
   app.use(express.bodyParser());
   app.use(express.urlencoded());
   app.use(express.json());
-
   app.use('/secured', authenticate);
   app.use(cors());
-
   app.use(app.router);
 });
 
@@ -41,7 +38,7 @@ app.get('/secured/ping', function(req, res) {
 // adding a new account
 app.post('/secured/account', function(req, res) {
   request({
-    url: 'http://localhost:3005/api/account/', //URL to hit
+    url: process.env.DATABASE + '/api/account/', //URL to hit
     method: 'POST', //Specify the method
     headers: {
       'Content-Type': 'application/json'
@@ -61,7 +58,7 @@ app.post('/secured/account', function(req, res) {
 // getting all the accounts
 app.get('/secured/account', function(req, res) {
   request({
-      url: 'http://localhost:3005/api/account/', //URL to hit
+      url: process.env.DATABASE + '/api/account/', //URL to hit
       headers: {
       'Content-Type': 'application/json'
       },
@@ -83,7 +80,7 @@ app.get('/secured/account', function(req, res) {
 // this method is used for posting a song
 app.post('/secured/account/id/today_song', function(req, res) {
   request({
-    url: "http://localhost:3005/api/account/id/today_song", //URL to hit
+    url: process.env.DATABASE + "/api/account/id/today_song", //URL to hit
     method: 'POST', //Specify the method
     headers: {
       'Content-Type': 'application/json'
@@ -103,7 +100,7 @@ app.post('/secured/account/id/today_song', function(req, res) {
 // getting the different locations
 app.get('/secured/location', function(req, res) {
   request({
-      url: 'http://localhost:3005/api/location/', //URL to hit
+      url: process.env.DATABASE + '/api/location/', //URL to hit
       headers: {
       'Content-Type': 'application/json'
       },
@@ -124,7 +121,7 @@ app.get('/secured/location', function(req, res) {
 app.get('/secured/account/id', function(req, res) {
   console.log(req.query["id"]);
   request({
-      url: 'http://localhost:3005/api/account/id', //URL to hit
+      url: process.env.DATABASE + '/api/account/id', //URL to hit
       headers: {
       'Content-Type': 'application/json'
       },
@@ -146,7 +143,7 @@ app.get('/secured/account/id', function(req, res) {
 app.delete('/secured/account/id/song', function(req, res) {
   console.log(req.query["id"]);
   request({
-      url: 'http://localhost:3005/api/account/id/song', //URL to hit
+      url: process.env.DATABASE + '/api/account/id/song',
       headers: {
       'Content-Type': 'application/json'
       },

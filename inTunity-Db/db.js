@@ -7,9 +7,12 @@ var MongoStore = require('connect-mongo')(session);
 var app = express();
 var mongoose = require('mongoose');
 
+var dotenv = require('dotenv');
+dotenv.load();
+
 var dbName = 'inTunity';
 
-mongoose.connect('mongodb://localhost:27017/' + dbName);
+mongoose.connect(process.env.MONGO + dbName);
 
 app.use(session({ 
 	secret: 'inTunity',
@@ -27,7 +30,7 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 
-var whitelist = ['http://localhost:8100'];
+var whitelist = [process.env.WHITELIST];
 var cors_options = {
 	origin: function (origin, callback) {
 		var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
