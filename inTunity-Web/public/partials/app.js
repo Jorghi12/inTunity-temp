@@ -18,36 +18,35 @@ angular.module( 'inTunity', [
   $routeProvider
     .when( '/', {
       controller: 'HomeCtrl',
-      templateUrl: '/app/home/home.html',
+      templateUrl: '/partials/home/home.html',
       pageTitle: 'Homepage',
       requiresLogin: true
     })
     .when( '/login', {
       controller: 'LoginCtrl',
-      templateUrl: '/app/login/login.html',
+      templateUrl: '/partials/login/login.html',
       pageTitle: 'Login'
     })
     .when( '/add-song', {
       controller: 'AddSongCtrl', 
-      templateUrl: '/app/addSong/addSong.html',
+      templateUrl: '/partials/addSong/addSong.html',
       pageTitle: 'Add Song',
       requiresLogin: true
     })
     .when('/profile/:itemId', {
-      templateUrl: 'app/profile/profile.html',
+      templateUrl: 'partials/profile/profile.html',
       controller: 'ProfileCtrl',
       pageTitle: 'Profile',
       requiresLogin: true
     })
     .when( '/about', {
       controller: 'AboutCtrl',
-      templateUrl: '/app/about/about.html',
-      pageTitle: 'About',
-      requiresLogin: true
+      templateUrl: '/partials/about/about.html',
+      pageTitle: 'About'
     })
     .when( '/location', {
       controller: 'LocationCtrl',
-      templateUrl: '/app/location/location.html',
+      templateUrl: '/partials/location/location.html',
       pageTitle: 'Location',
       requiresLogin: true
     })

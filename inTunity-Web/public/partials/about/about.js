@@ -5,23 +5,6 @@ angular.module( 'inTunity.about', [
 
 .controller( 'AboutCtrl',  function AboutController( $scope, auth, $http, $location, store ) {
 
-
-  $scope.logout = function() {
-    auth.signout();
-    store.remove('profile');
-    store.remove('token');
-    $location.path('/login');
-  }
-
-  $scope.home = function() {
-    $location.path('/login');
-  }
-
-  $scope.addSong = function() {
-    $location.path('/add-song');
-  }
-
-
   $scope.about = function() {
     $location.path('/about');
   }
@@ -31,7 +14,7 @@ angular.module( 'inTunity.about', [
   }
 
   $scope.signIn = function() {
-    auth.signin({
+     auth.signin({
       gravatar:true, 
       loginAfterSignup: true, 
       callbackOnLocationHash: false, 
@@ -47,42 +30,55 @@ angular.module( 'inTunity.about', [
       var email = auth.profile["email"];
       var provider = auth.profile["identities"][0]["provider"];
       var nickname = auth.profile["name"];
-      var picture = auth.profile["picture"];
+      var picture;
 
+      if(auth.profile["identities"][0]["connection"] == "facebook") {
+        picture = "https://graph.facebook.com/" + id  + "/picture?height=9999";
+      } else {
+        picture = auth.profile["picture"];
+      }
 
- 
+      var atSign = nickname.indexOf("@");
+      var url_username = "";
+
+      if (atSign != -1) {
+        // is email
+        url_username = nickname.substring(0,atSign);
+      } else {
+        // not email
+        for (var i = 0; i < nickname.length; i++) {
+          if (nickname.charAt(i) == " ") {
+             url_username += ".";
+          } else {
+             url_username += (nickname.charAt(i));
+          } 
+        }
+      }
+
       var user_account = JSON.stringify({
         user_id:id, 
         email: email, 
         nickname: nickname, 
-        picture: picture}); // Indented with tab
+        picture: picture,
+        url_username: url_username
+      });
+      
+      $location.path("/");
 
-
-    $location.path("/");
-
-
-    $http.post('http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account', {data: user_account}, { 
-        headers: {
-        'Accept' : '*/*',
-        'Content-Type': 'application/json'
-       }
-    }).success(function(data, status, headers, config) {
-          // this callback will be called asynchronously
-          // when the response is available
-          console.log(status);
+      $http.post('http://localhost:3001/secured/account', {data: user_account}, { 
+          headers: {
+          'Accept' : '*/*',
+          'Content-Type': 'application/json'
+         }
+      }).success(function(data, status, headers, config) {
+       
       }).error(function(data, status, headers, config) {
-          // called asynchronously if an error occurs
-          // or server returns response with an error status.
-          console.log(status);
+
       });
 
-
-
-
     }, function(error) {
-      console.log("There was an error logging in", error);
+      
     });
-
   }
 
 
