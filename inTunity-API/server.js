@@ -151,7 +151,7 @@ app.delete('/secured/account/id/song', function(req, res) {
       'Content-Type': 'application/json'
       },
       method: 'DELETE', //Specify the method
-      qs: {user_id: req.query["id"]}
+      qs: {user_id: req.query["user_id"]}
   }, function(error, response, body){
       if(error) {
           console.log(error);

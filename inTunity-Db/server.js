@@ -307,15 +307,14 @@ router.get('/api/account/id/' , function (req, res, next) {
 
 // deleting a specific song 
 router.delete('/api/account/id/song' , function (req, res, next) {
-	User.findOne({user_id:req.query["id"] }, function(err, userObj) {
+	SongHistory.findOne({_id:req.query["song_id"] }, function(err, songObj) {
 	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);
-	  } else if(userObj) {
-	  	
 	  } 
-	});
-	
+	}).remove().exec();
+
+	res.sendStatus(200);	
 });
 
 
