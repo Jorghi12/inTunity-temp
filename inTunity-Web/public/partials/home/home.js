@@ -6,8 +6,7 @@ app = angular.module('inTunity.home', [
 
 app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus,$cookies, $rootScope) {
     
-    // var environment = envService.get(); 
-    // console.log(environment);
+
 
     var songNum;
     var songPos;
@@ -50,7 +49,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     $scope.owner;
     var id = prof["identities"][0]["user_id"];
 
-    console.log(prof);
+
 
 
     var globalPlayer;
@@ -155,6 +154,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         method: 'GET'
     }).then(function(response) {
         var users = response["data"]["songs"];
+        console.log(users);
 
         // this array has users who only have songs for today with it
         var correctUsers = [];
@@ -204,6 +204,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         }
 
         $scope.users = correctUsers;
+
 
 
         for (var i = 0; i < correctUsers.length; i++) {
