@@ -35,22 +35,22 @@ angular.module( 'inTunity.login', [
         picture = auth.profile["picture"];
       }
 
-      console.log(nickname.charAt(0));
-
-
-
+      var atSign = nickname.indexOf("@");
       var url_username = "";
-      for (var i = 0; i < nickname.length; i++) {
-        if (nickname.charAt(i) == " ") {
-           url_username += ".";
-        } else {
-           url_username += (nickname.charAt(i));
+
+      if (atSign != -1) {
+        // is email
+        url_username = nickname.substring(0,atSign);
+      } else {
+        // not email
+        for (var i = 0; i < nickname.length; i++) {
+          if (nickname.charAt(i) == " ") {
+             url_username += ".";
+          } else {
+             url_username += (nickname.charAt(i));
+          } 
         }
-       
       }
-
-
-
 
       var user_account = JSON.stringify({
         user_id:id, 
@@ -60,28 +60,19 @@ angular.module( 'inTunity.login', [
         url_username: url_username
       });
 
-      console.log(user_account); 
-
-
-      $location.path("/");
-
-      console.log("posting..");
       $http.post('http://localhost:3001/secured/account', {data: user_account}, { 
           headers: {
           'Accept' : '*/*',
           'Content-Type': 'application/json'
          }
       }).success(function(data, status, headers, config) {
-        console.log(status);
-        console.log("success");
-       
+          $location.path("/");
       }).error(function(data, status, headers, config) {
-        console.log("failed");
-        console.log(status); 
+      
       });
 
     }, function(error) {
-      console.log("There was an error logging in", error);
+      
     });
 
 

@@ -48,7 +48,7 @@ angular.module( 'inTunity', [
 
 
   
-   $locationProvider.html5Mode(true);
+
 
 
 
