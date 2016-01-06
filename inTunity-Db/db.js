@@ -182,7 +182,7 @@ router.get('/api/account/' , function (req, res, next) {
 
 	  	res.send(userObj);
 	  } 
-	});
+	})
 
 });
 

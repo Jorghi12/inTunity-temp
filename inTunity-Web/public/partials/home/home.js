@@ -154,10 +154,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         url: 'http://localhost:3001/secured/account',
         method: 'GET'
     }).then(function(response) {
-        songdata = (response["data"]["songs"]);
-
-   
-
         var users = response["data"]["songs"];
 
         // this array has users who only have songs for today with it
@@ -201,36 +197,18 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                     formmatedDay: formmatedDay,
                     unix_time:  users[i]["today_song"][0]["unix_time"] * 1000   
                 })
-
-
-                   
+    
             } else {
-                console.log("user does not have a song for today");
+               
             }
         }
 
         $scope.users = correctUsers;
 
 
-        console.log(correctUsers);
-
-
-     
-
-
-
         for (var i = 0; i < correctUsers.length; i++) {
             trackarray.push(new Array(correctUsers[i]["user"][0]["today_song"][0]["track_id"], correctUsers[i]["user"][0]["today_song"][0]["song_album_pic"], correctUsers[i]["user"][0]["today_song"][0]["song_title"], correctUsers[i]["user"][0]["today_song"][0]["song_duration"]));
         }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -247,16 +225,10 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
        
 
       
-
-
-  
-
         if (trackarray.length > 0) {
-            console.log("hit here");
-            console.log(trackarray.length);
             var trackid = (trackarray[0][0]);
             var url = 'tracks/' + trackid;
-            console.log(url);
+
 
             statusObj = musicStatus.getStatus();
             if (musicStatus.checkConfirm()) {
@@ -359,8 +331,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             }
         }
 
-
-        // console.log(SC.resolve("https://soundcloud.com/octobersveryown/remyboyz-my-way-rmx-ft-drake"));
 
         var time = document.getElementById("time");
 
