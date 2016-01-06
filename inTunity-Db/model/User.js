@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var SongHistory = new Schema({
+var Song = new Schema({
 	song_title: String,
 	song_album_pic: String,
 	song_url: String,
@@ -16,15 +16,8 @@ var User = new Schema({
 	picture: String,
 	email: String,
 	url_username: String,
-	today_song: {
-		song_title: String,
-		song_album_pic: String,
-		song_url: String,
-		unix_time: String,
-		track_id: String,
-		song_duration: String
-	},
-	song_history: [SongHistory]
+	song_history: [Song],
+	today_song: [Song]
 
 	
 });

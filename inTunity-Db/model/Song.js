@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var SongHistory = new Schema({
+var Song = new Schema({
 	song_title: String,
 	song_album_pic: String,
 	song_url: String,
@@ -10,4 +10,4 @@ var SongHistory = new Schema({
 	song_duration: String
 });
 
-module.exports = mongoose.model('SongHistory', SongHistory);
+module.exports = mongoose.model('Song', Song);
