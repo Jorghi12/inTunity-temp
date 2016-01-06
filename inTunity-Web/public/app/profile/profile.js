@@ -45,7 +45,7 @@ angular.module( 'inTunity.profile', [
 
   $scope.profile = function() {
     $http({
-        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
+        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account/id',
         method: 'GET',
         params: {
             id: ppl_id
@@ -59,7 +59,7 @@ angular.module( 'inTunity.profile', [
 
 
   $http({
-        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
+        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account/id',
         method: 'GET',
         params: {
             id: ppl_id
@@ -111,7 +111,7 @@ angular.module( 'inTunity.profile', [
     }
 
 
-
+    console.log($scope.correctPerson);
 
 
     $scope.numPosts = $scope.correctPerson[0].song_history.length;

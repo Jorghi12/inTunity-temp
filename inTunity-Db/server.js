@@ -218,7 +218,7 @@ router.get('/api/accounts/' , function (req, res, next) {
 
 
 
-router.post('/api/accounts/updateSong' , function (req, res, next) {
+router.post('/api/account/id/today_song' , function (req, res, next) {
 
 
 	User.findOne({user_id: req.body.user_id}, function(err, userObj) {
@@ -292,7 +292,7 @@ router.get('/api/location/' , function (req, res, next) {
 	});
 });
 
-router.get('/api/specificUser/' , function (req, res, next) {
+router.get('/api/account/id/' , function (req, res, next) {
 
 	console.log(req.query["user_id"]);
 

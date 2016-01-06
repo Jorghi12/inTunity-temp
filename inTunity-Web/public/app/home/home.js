@@ -92,7 +92,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
         $http({
-            url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
+            url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account/id',
             method: 'GET',
             params: {
                 id: ppl_id
