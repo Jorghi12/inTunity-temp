@@ -92,7 +92,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
         $http({
-            url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+            url: 'http://localhost:3001/secured/account/id',
             method: 'GET',
             params: {
                 id: ppl_id
@@ -146,7 +146,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     $scope.users;
 
     $http({
-        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account',
+        url: 'http://localhost:3001/secured/account',
         method: 'GET'
     }).then(function(response) {
         songdata = (response["data"]["songs"]);
@@ -369,6 +369,9 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         function startStream(newSoundUrl, startingPosition) {
             songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
             currentuser = document.getElementById("currentuser");
+
+            console.log(correctUsers);
+            console.log(song_count);
 
             currentuser.innerHTML = correctUsers[song_count][0]["nickname"];
 

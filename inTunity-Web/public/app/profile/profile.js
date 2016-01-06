@@ -45,7 +45,7 @@ angular.module( 'inTunity.profile', [
 
   $scope.profile = function() {
     $http({
-        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+        url: 'http://localhost:3001/secured/account/id',
         method: 'GET',
         params: {
             id: ppl_id
@@ -59,7 +59,7 @@ angular.module( 'inTunity.profile', [
 
 
   $http({
-        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+        url: 'http://localhost:3001/secured/account/id',
         method: 'GET',
         params: {
             id: ppl_id
@@ -87,7 +87,7 @@ angular.module( 'inTunity.profile', [
 
 
   $http({
-    url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account' ,
+    url: 'http://localhost:3001/secured/account' ,
     method: 'GET'
   }).then(function(response) {  
     var users = response["data"]["songs"];

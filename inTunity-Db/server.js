@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 
 var dbName = 'inTunity';
 
-mongoose.connect('mongodb://ec2-52-33-76-106.us-west-2.compute.amazonaws.com/' + dbName);
+mongoose.connect('mongodb://localhost:27017/' + dbName);
 
 app.use(session({ 
 	secret: 'inTunity',
@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 
-var whitelist = ['http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:8100'];
+var whitelist = ['http://localhost:8100'];
 var cors_options = {
 	origin: function (origin, callback) {
 		var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
@@ -85,8 +85,6 @@ var router = express.Router();
 
 router.post('/api/account', function (req, res, next) {
 
-	
-
 	User.findOne({user_id: req.body.user_id}, function (err, userObj) {
 	    if (err) {
 	      console.log(err);
@@ -98,6 +96,7 @@ router.post('/api/account', function (req, res, next) {
 	      console.log('User not found!');
 
 
+	      	// making sure that each url_username is unique
 	      	User.find({nickname: req.body.nickname}, function (err, result) {
 	      		if (result.length == 0) {
 	      			var newUser = new User({
@@ -220,14 +219,12 @@ router.get('/api/account/' , function (req, res, next) {
 
 router.post('/api/account/id/today_song' , function (req, res, next) {
 
-
 	User.findOne({user_id: req.body.user_id}, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);
 	  } else if(userObj) {
 
-	  	console.log("updating...");
 	  	userObj.today_song.song_title = req.body.song_title;
 	  	userObj.today_song.song_url = req.body.song_url;
 	  	userObj.today_song.song_album_pic = req.body.song_artwork;
@@ -267,11 +264,9 @@ router.post('/api/account/id/today_song' , function (req, res, next) {
 	    		res.sendStatus(200);
 	  		});	
 
-	  		console.log(locObj);
 
   		});	
 
-  		console.log("Updated user after posting song" + userObj);
 	  } 
 	});
 });	
