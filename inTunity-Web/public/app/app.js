@@ -45,11 +45,7 @@ angular.module( 'inTunity', [
       templateUrl: '/app/location/location.html',
       pageTitle: 'Location'
     })
-    .when( '/stream', {
-      controller: 'StreamCtrl',
-      templateUrl: '/app/stream/',
-      pageTitle: 'Stream'
-    })
+   
 
 
 
