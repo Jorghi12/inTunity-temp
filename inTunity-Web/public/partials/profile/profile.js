@@ -7,11 +7,10 @@ angular.module( 'inTunity.profile', [
 
 
   $scope.auth = auth;
-  $scope.tgState = false;
 
   var prof = (store.get('profile'));
-  var ppl = store.get('profile');
-  var ppl_id = ppl["identities"][0]["user_id"];
+  var count_todaysongs = 0;
+
 
   $scope.owner;
   if (prof["given_name"] != null) {
@@ -23,10 +22,13 @@ angular.module( 'inTunity.profile', [
 
 
   $scope.logout = function() {
+    if (count_todaysongs > 0) {
+       window.globalPlayer.pause();
+    } 
     auth.signout();
     store.remove('profile');
     store.remove('token');
-	   window.globalPlayer.pause();
+	  
     $location.path('/login');
   }
 
@@ -48,7 +50,7 @@ angular.module( 'inTunity.profile', [
         url: 'http://localhost:3001/secured/account/id',
         method: 'GET',
         params: {
-            id: ppl_id
+            id: id
         }
     }).then(function(response) {
         username_url = response["data"]["user"]["url_username"];
@@ -62,19 +64,14 @@ angular.module( 'inTunity.profile', [
         url: 'http://localhost:3001/secured/account/id',
         method: 'GET',
         params: {
-            id: ppl_id
+            id: id
         }
     }).then(function(response) {
         var personalusername = response["data"]["user"]["url_username"];
-
         var username_clicked = store.get('username_clicked');
-
-        console.log(username_clicked);
-        console.log(personalusername);
-
         if (username_clicked != personalusername) {
           document.getElementById("selected-link").id = "";
-          console.log("hit");
+
         }
     }); // end of http get
 
@@ -94,15 +91,17 @@ angular.module( 'inTunity.profile', [
 
 
 
+
     $scope.correctPerson = [];
     for (var i = 0; i < users.length; i++) {
       if (users[i]["url_username"] == $routeParams.itemId) {
         $scope.correctPerson.push(users[i]);
       }  
+      if (users[i]["today_song"].length > 0) {
+        count_todaysongs++;
+      }
     }
 
-
-    console.log($scope.correctPerson);
 
 
     $scope.numPosts = $scope.correctPerson[0].song_history.length;
@@ -145,7 +144,6 @@ angular.module( 'inTunity.profile', [
     image.onload = function(){
         var colorThief = new ColorThief();
         var cp = colorThief.getPalette(image, 2, 5);
-        // var color = colorThief.getColor(image); 
         document.getElementById("footer1").style.background = 'linear-gradient(#f5f5f5, rgb('+cp[2][0]+','+cp[2][1]+','+cp[2][2]+'))';
     };
 
@@ -158,6 +156,7 @@ angular.module( 'inTunity.profile', [
 		  window.globalPlayer = player;
 	    globalPlayer.seek(0);
 		  globalPlayer.play();
+
       globalPlayer.on('play-start', function () {
   		  var endTime = document.getElementById("endTime");
   		  endTime.innerHTML = millisToMinutesAndSeconds(songDuration);
@@ -178,31 +177,18 @@ angular.module( 'inTunity.profile', [
 
           var currentTime = document.getElementById("currentTime");
           currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
-		
-
-          if (globalPlayer.currentTime() <= (songDuration  * 0.02)) {
-            globalPlayer.setVolume(0.8);
-          }
-
-          if ((globalPlayer.currentTime() > (songDuration  * 0.02)) && (globalPlayer.currentTime() < (songDuration  * 0.98)) ) {
-             globalPlayer.setVolume(1);
-          }
-
-          if (globalPlayer.currentTime() >= (songDuration  * 0.98)) {
-            globalPlayer.setVolume(0.8);
-          }
-
-        });
+		  
+      });
 
        
 
-        globalPlayer.on('finish', function () {
-			     globalPlayer.seek(0);
-			window.playSpecificSong(musicStatus.getStatus()[0], -2000);
-        });
-
+      globalPlayer.on('finish', function () {
+			   globalPlayer.seek(0);
+			   window.playSpecificSong(musicStatus.getStatus()[0], -2000);
       });
-    }
+
+    });
+  }
 
 
 
