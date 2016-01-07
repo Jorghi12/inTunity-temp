@@ -6,8 +6,7 @@ angular.module( 'inTunity.addSong', [
   $scope.tgState = false;
   $scope.search = "";
   var globalPlayer;
-  var ppl = store.get('profile');
-  var ppl_id = ppl["identities"][0]["user_id"];
+
 
   var prof = (store.get('profile'));
   $scope.owner;
@@ -53,7 +52,6 @@ angular.module( 'inTunity.addSong', [
     image.onload = function(){
         var colorThief = new ColorThief();
         var cp = colorThief.getPalette(image, 2, 5);
-        // var color = colorThief.getColor(image); 
         document.getElementById("footer1").style.background = 'linear-gradient(#f5f5f5, rgb('+cp[2][0]+','+cp[2][1]+','+cp[2][2]+'))';
     };
 
@@ -80,8 +78,8 @@ angular.module( 'inTunity.addSong', [
         $scope.selectSong(songUrl, artworkUrl, myTitle, trackid, duration);
       }
 
-        var confirmTitle = document.createElement("h4");
-        confirmTitle.innerHTML = "Confirm";
+      var confirmTitle = document.createElement("h4");
+      confirmTitle.innerHTML = "Confirm";
       confirmButton.appendChild(confirmTitle);
       confirmButton.setAttribute("id", "playerConfirm");
       confirmButton.className = "playerButton";
@@ -114,15 +112,6 @@ angular.module( 'inTunity.addSong', [
         progressBall.style.width = percent + "px";
         var currentTime = document.getElementById("currentTime");
         currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
-        if (globalPlayer.currentTime() <= (songDuration  * 0.02)) {
-          globalPlayer.setVolume(0.8);
-        }
-        if ((globalPlayer.currentTime() > (songDuration  * 0.02)) && (globalPlayer.currentTime() < (songDuration  * 0.98)) ) {
-           globalPlayer.setVolume(1);
-        }
-        if (globalPlayer.currentTime() >= (songDuration  * 0.98)) {
-          globalPlayer.setVolume(0.8);
-        }
       });
 
       globalPlayer.on('finish', function () {
@@ -154,9 +143,9 @@ angular.module( 'inTunity.addSong', [
 
   $scope.logout = function() {
   	auth.signout();
-      store.remove('profile');
-      store.remove('token');
-      $location.path('/login');
+    store.remove('profile');
+    store.remove('token');
+    $location.path('/login');
   	
   	//STOP SOUND PLAYER
   	window.globalPlayer.pause();
@@ -186,7 +175,7 @@ angular.module( 'inTunity.addSong', [
         url: 'http://localhost:3001/secured/account/id',
         method: 'GET',
         params: {
-            id: ppl_id
+            id: id
         }
     }).then(function(response) {
         console.log(response["data"]["user"]);
@@ -347,9 +336,6 @@ angular.module( 'inTunity.addSong', [
 
   $scope.selectSong = function(url, artwork, title, trackid, duration) {
    
-  
-
-    console.log(artwork);
     if (artwork != null) {
       var index = artwork.indexOf("large");
       updatedSongPic = artwork.substring(0,index) + "t500x500.jpg";

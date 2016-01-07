@@ -228,7 +228,7 @@ router.post('/api/account/id/song' , function (req, res, next) {
 	    	var locObj = new location({
 		    	state: req.body.state,
 		    	city: req.body.city,
-		    	song_id: obj["song_history"][obj["song_history"].length - 1].id
+		    	song_id: obj["song_history"][0].id
 		    });
 
 
