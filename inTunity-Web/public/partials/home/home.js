@@ -63,6 +63,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         $scope.owner = prof["nickname"];
     }
 
+    //use this function when you click on individual profile pics
     $scope.otherprofiles = function(username) {
       store.set('username_clicked', username);
       $location.path("/profile/" + username);
@@ -111,9 +112,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
 
- 
-
-
 
     $scope.users;
 
@@ -122,8 +120,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         method: 'GET'
     }).then(function(response) {
         var users = response["data"]["songs"];
-        console.log(users);
-
+     
         // this array has users who only have songs for today with it
         var correctUsers = [];
 
@@ -132,23 +129,17 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             if (users[i]["today_song"].length > 0) {
 
                 var date = new Date(users[i]["today_song"][0]["unix_time"] * 1000);
-
                 var year = date.getFullYear();
                 var month = date.getMonth();
                 var day = date.getDate();
                 var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
-
                 var formmatedDay = monthNames[month] + " " + day + ", " + year;
-
                 var hours = date.getHours();
-
                 var minutes = "0" + date.getMinutes();
                 var am_pm = "AM";
-
                 if (hours == 12) {
                     am_pm = "PM";
                 }
-
                 if (hours > 12) {
                     hours = hours - 12;
                     am_pm = "PM";
@@ -156,7 +147,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 if (hours == 0) {
                     hours = 12;
                 }
-
 
                 var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
                 correctUsers.push({
@@ -169,7 +159,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             } else {
                
             }
-        }
+        } // end of for loop
 
         $scope.users = correctUsers;
 
@@ -227,14 +217,12 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             song_count = index;
             new_song = trackarray[song_count % trackarray.length][0];
             var new_url = '/tracks/' + new_song;
-            console.log(new_url);
             startStream(new_url, 0);
         }
 		window.playSpecificSong  = function(index) {
             song_count = index;
             new_song = trackarray[song_count % trackarray.length][0];
             var new_url = '/tracks/' + new_song;
-            console.log(new_url);
             startStream(new_url, -2000);
         }
         // this is for skipping to the previous song
@@ -251,7 +239,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
             new_song = trackarray[song_count % trackarray.length][0];
             song_count = song_count % trackarray.length;
-            console.log("Starting New " + new_song);
             new_url = '/tracks/' + new_song;
             startStream(new_url, 0);
         }
@@ -270,7 +257,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
             song_count = song_count % trackarray.length;
             new_song = trackarray[song_count % trackarray.length][0];
-            console.log("Starting New " + new_song);
             new_url = '/tracks/' + new_song;
             startStream(new_url, 0);
         }
@@ -302,9 +288,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
         var time = document.getElementById("time");
-
-       
-
         var progressBall = document.getElementById('playHead');
         var time = document.getElementById('time');
         var songDuration = 0;
@@ -313,9 +296,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         function startStream(newSoundUrl, startingPosition) {
             songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
             currentuser = document.getElementById("currentuser");
-
-            console.log(correctUsers);
-            console.log(song_count);
 
             currentuser.innerHTML = correctUsers[song_count]["user"][0]["nickname"];
 
@@ -343,7 +323,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 image.onload = function(){
                     var colorThief = new ColorThief();
                     var cp = colorThief.getPalette(image, 2, 5);
-                    // var color = colorThief.getColor(image); 
                     document.getElementById("footer1").style.background = 'linear-gradient(#f5f5f5, rgb('+cp[2][0]+','+cp[2][1]+','+cp[2][2]+'))';
                 };
                
@@ -397,7 +376,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                     }
 					
 					if (globalPlayer.currentTime() < startingPosition){
-                        ;//globalPlayer.seek(startingPosition);
+              
                     }
 					
                     songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
@@ -407,20 +386,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
                     var currentTime = document.getElementById("currentTime");
                     currentTime.innerHTML = millisToMinutesAndSeconds(globalPlayer.currentTime());
-
-
-                    if (globalPlayer.currentTime() <= (songDuration * 0.02)) {
-                        globalPlayer.setVolume(0.8);
-                    }
-
-                    if ((globalPlayer.currentTime() > (songDuration * 0.02)) && (globalPlayer.currentTime() < (songDuration * 0.98))) {
-                        globalPlayer.setVolume(1);
-                    }
-
-                    if (globalPlayer.currentTime() >= (songDuration * 0.98)) {
-                        globalPlayer.setVolume(0.8);
-                    }
-
                 });
 
 
@@ -434,8 +399,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                         new_song = trackarray[song_count % trackarray.length][0];
                         song_count = song_count % trackarray.length;
                         new_url = '/tracks/' + new_song;
-                        console.log(new_url);
-                        globalPlayer.seek(0); //Do this before startStream
+                        globalPlayer.seek(0)
                         startStream(new_url, 0);
                     }
 
@@ -448,8 +412,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
         //Handles the progress bar.
-
-
         if (trackarray.length > 0) {
             var playHead = document.getElementById('playHead');
             var timelineWidth = time.offsetWidth - playHead.offsetWidth;
@@ -463,8 +425,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 var timelength = window.globalPlayer.streamInfo["duration"];//parseInt(trackarray[song_count % trackarray.length][3]);
                 var col1 = document.getElementById("col1");
 
-                console.log($(window).width());
-
                 var marginLeft;
                 if ($(window).width() < 992) {
                     console.log("here");
@@ -475,15 +435,11 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 }
 
                 var percentageClicked = (marginLeft / time.offsetWidth);
-
-                console.log(percentageClicked);
                 window.globalPlayer.seek(Math.floor(percentageClicked * timelength));
                 var currentTime = percentageClicked * timelength;
                 progressBall.style.width = ((currentTime / timelength) * time.offsetWidth) + "px";
 
             }
-
-
 
         }
 
