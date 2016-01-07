@@ -44,18 +44,13 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
   
     $scope.auth = auth;
-    $scope.tgState = false;
     var prof = (store.get('profile'));
     $scope.owner;
     var id = prof["identities"][0]["user_id"];
-
-
-
-
     var globalPlayer;
     var trackarray = [];
-
     var username_url;
+    var songUrl;
 
   	var expirationDate = new Date();
   	var numberOfDaysToAdd = 10;
@@ -76,41 +71,25 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
     $scope.logout = function() {
         if (trackarray.length > 0) {
-            console.log("hit here");
             window.globalPlayer.pause();
         }
         auth.signout();
         store.remove('profile');
         store.remove('token');
         $location.path('/login');
-
-			
-		//STOP SOUND PLAYER
-		window.globalPlayer.pause();
-
     }
 
     $scope.profile = function() {
-        var ppl = store.get('profile');
-        var ppl_id = ppl["identities"][0]["user_id"];
-
-
         $http({
             url: 'http://localhost:3001/secured/account/id',
             method: 'GET',
             params: {
-                id: ppl_id
+                id: id
             }
         }).then(function(response) {
-            console.log(response["data"]["user"]);
-
-            console.log(username_url);
             username_url = response["data"]["user"]["url_username"];
-            // console.log(username_url);
             store.set('username_clicked', username_url);
             $location.path('/profile/' + username_url);
-
-
         }); // end of http get
     }
 
@@ -119,16 +98,10 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     }
 
     $scope.addSong = function() {
-        // if (trackarray.length > 0) {
-        //   globalPlayer.pause();
-        // }
         $location.path('/add-song');
-
     }
 
-    $scope.about = function() {
-        $location.path('/about');
-    }
+
 
     function millisToMinutesAndSeconds(millis) {
         var minutes = Math.floor(millis / 60000);
@@ -138,14 +111,9 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
 
-    var username;
-    var profilepic;
-    var songPic;
-    var songtitle;
-    var songUrl;
+ 
 
-    var timeStamp;
-    var dayStamp;
+
 
     $scope.users;
 

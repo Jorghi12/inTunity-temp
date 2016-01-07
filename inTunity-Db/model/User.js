@@ -26,8 +26,7 @@ var User = new Schema({
 	url_username: String,
 	song_history: [Song],
 	today_song: [Song],
-	saved_song: [Song]
-	
+	saved_song: [Song]	
 });
 
 
