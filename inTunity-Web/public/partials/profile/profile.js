@@ -66,15 +66,33 @@ angular.module( 'inTunity.profile', [
         params: {
             id: id
         }
-    }).then(function(response) {
+  }).then(function(response) {
         var personalusername = response["data"]["user"]["url_username"];
         var username_clicked = store.get('username_clicked');
         if (username_clicked != personalusername) {
           document.getElementById("selected-link").id = "";
 
         }
-    }); // end of http get
+  }); // end of http get
 
+
+  // for deleting a particular song on your own account
+  $scope.deleteSong = function(userid, songid) {
+
+    $http.delete('http://localhost:3001/secured/account/id/song', {
+        headers: {
+          'Accept': '*/*',
+          'Content-Type': 'application/json'
+        },
+        params: {user_id: userid, song_id, songid}
+    }).success(function(data, status, headers, config) {                
+      console.log(status);
+    }).error(function(data, status, headers, config) {
+        
+    });
+
+
+  }
 
 
   
