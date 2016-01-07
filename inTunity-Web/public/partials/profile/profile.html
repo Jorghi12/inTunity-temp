@@ -50,7 +50,7 @@
   
 </div>
 
- <div class="footer" id = "footer1" ng-controller="HomeCtrl">
+ <div class="footer" id = "footer1">
     <div class = "container" id = "widgetContainer">
 
       <div class = "col-md-6" id = "col1">
@@ -69,7 +69,7 @@
 
       <div class = "col-sm-12 col-md-6">
 
-        <div class = "row" align="center" id="playerButtons">
+        <div class = "row" align="center" id="playerButtons" ng-controller="StreamCtrl">
           <button class="playerButton" id="prevButton" ng-click="prevPlayer()"><h5><b>Previous</b></h5></button>
           <button class="playerButton" id="pauseButton" ng-click ="pause()" style="margin:10px 0px; min-height:50px;"><h4>Pause</h4></button>
           <button class="playerButton" id="nextButton" ng-click="nextPlayer()"><h5><b>Next</b></h5></button>

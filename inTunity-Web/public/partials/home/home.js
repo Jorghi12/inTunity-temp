@@ -5,9 +5,6 @@ app = angular.module('inTunity.home', [
 ]);
 
 app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus,$cookies, $rootScope) {
-    
-
-
     var songNum;
     var songPos;
     if ($cookies.get('songNum') != null) {
@@ -212,71 +209,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         }
 
 
-
-
-        // when you press on album pic, it will play that song
-        $scope.playSpecificSong = function(index) {
-            song_count = index;
-            new_song = trackarray[song_count % trackarray.length][0];
-            var new_url = '/tracks/' + new_song;
-            startStream(new_url, 0);
-        }
-		window.playSpecificSong  = function(index) {
-            song_count = index;
-            new_song = trackarray[song_count % trackarray.length][0];
-            var new_url = '/tracks/' + new_song;
-            startStream(new_url, -2000);
-        }
-        // this is for skipping to the previous song
-        $scope.prevPlayer = function() {
-            song_count = musicStatus.getStatus()[0];
-            song_count -= 1;
-            if (song_count < 0) {
-                song_count = 0;
-            }
-
-            paused = false;
-            var pauseButton = document.getElementById('pauseButton');
-            pauseButton.innerHTML = "<h4>Pause</h4>";
-
-            new_song = trackarray[song_count % trackarray.length][0];
-            song_count = song_count % trackarray.length;
-            new_url = '/tracks/' + new_song;
-            startStream(new_url, 0);
-        }
-
-        // this is for skipping to the next song
-        $scope.nextPlayer = function() {
-            song_count = musicStatus.getStatus()[0];
-            song_count += 1;
-            if (song_count == trackarray.length) {
-                song_count = 0;
-            }
-
-            paused = false;
-            var pauseButton = document.getElementById('pauseButton');
-            pauseButton.innerHTML = "<h4>Pause</h4>";
-
-            song_count = song_count % trackarray.length;
-            new_song = trackarray[song_count % trackarray.length][0];
-            new_url = '/tracks/' + new_song;
-            startStream(new_url, 0);
-        }
-
-
-        $scope.pause = function() { 
-            var pauseButton = document.getElementById('pauseButton');
-            if (paused == false) {
-                window.globalPlayer.pause();
-                paused = true;
-                pauseButton.innerHTML = "<h4>Play</h4>";
-            } else {
-                window.globalPlayer.play();
-                paused = false;
-                pauseButton.innerHTML = "<h4>Pause</h4>";
-            }
-        }
-
         // goes to the correct position in the screen when songs changes
         function findPos(obj) {
             var curtop = 0;
@@ -296,6 +228,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
         function startStream(newSoundUrl, startingPosition) {
+			return;
             songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
             currentuser = document.getElementById("currentuser");
 
@@ -414,37 +347,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
 
-        //Handles the progress bar.
-        if (trackarray.length > 0) {
-            var playHead = document.getElementById('playHead');
-            var timelineWidth = time.offsetWidth - playHead.offsetWidth;
-
-            time.addEventListener('click', function(event) {
-                changePosition(event);
-            }, false);
-
-            function changePosition(click) {
-                console.log($location.path());
-                var timelength = window.globalPlayer.streamInfo["duration"];//parseInt(trackarray[song_count % trackarray.length][3]);
-                var col1 = document.getElementById("col1");
-
-                var marginLeft;
-                if ($(window).width() < 992) {
-                    console.log("here");
-                    marginLeft = click.pageX - 10;
-                } else {
-                    console.log("here!");
-                    marginLeft = click.pageX - col1.offsetWidth - 10;
-                }
-
-                var percentageClicked = (marginLeft / time.offsetWidth);
-                window.globalPlayer.seek(Math.floor(percentageClicked * timelength));
-                var currentTime = percentageClicked * timelength;
-                progressBall.style.width = ((currentTime / timelength) * time.offsetWidth) + "px";
-
-            }
-
-        }
 
 
 

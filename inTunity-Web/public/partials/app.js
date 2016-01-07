@@ -108,6 +108,13 @@ angular.module( 'inTunity', [
 	var songPos = -1; 
 	var confirmSong = false;
 	
+	//Page State Variables
+	var HOME = 0;
+	var ADDSONG = 1;
+	var PROFILE = 2;
+	
+	var page = 0; //0 = Home, 1 = AddSong, 2 = Profile
+	
 	//Functions part of the musicStatus Object
 	return {
 		checkConfirm: function(){ 
@@ -131,6 +138,11 @@ angular.module( 'inTunity', [
 			songNumber = num;
 			songPos = pos;
 			songPaused = paused;
+		},
+		setPage: function (url){
+			if (url == "/add-song/") {page = ADDSONG} //Play song only once (used for addsong)
+			else if (url == "/profile/") {page = PROFILE} //Play profile track
+			else {page = HOME} //Play home track by default if none of the above
 		}
 	};
 });
