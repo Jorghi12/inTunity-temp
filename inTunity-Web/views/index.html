@@ -62,20 +62,6 @@
     <link href="/stylesheets/animate.css" rel="stylesheet">
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">-->
 
-  
-    
-    <script>
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position){
-              console.log(position.coords.latitude);
-              console.log(position.coords.longitude);
-              localStorage.setItem("latitude", position.coords.latitude);
-              localStorage.setItem("longitude", position.coords.longitude);
-
-            });
-        }
-    </script>
-
 
   </head>
 
@@ -83,7 +69,10 @@
   <body style = "margin:0">
     <div ng-view></div>
 
+
+
     
   </body>
+   
     
 </html>

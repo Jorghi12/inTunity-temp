@@ -297,6 +297,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             songDuration = parseInt(trackarray[song_count % trackarray.length][3]);
             currentuser = document.getElementById("currentuser");
 
+
             currentuser.innerHTML = correctUsers[song_count]["user"][0]["nickname"];
 
 
