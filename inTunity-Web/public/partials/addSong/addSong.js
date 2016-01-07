@@ -8,6 +8,8 @@ angular.module( 'inTunity.addSong', [
   var globalPlayer;
 
 
+
+
   var prof = (store.get('profile'));
   $scope.owner;
   if (prof["given_name"] != null) {
@@ -401,7 +403,7 @@ angular.module( 'inTunity.addSong', [
               locationFlag: true
             });
 
-            console.log(song);
+   
 
 
             $http.post('http://localhost:3001/secured/account/id/song', {data: song}, { 
