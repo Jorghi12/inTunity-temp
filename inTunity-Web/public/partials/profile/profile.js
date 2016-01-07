@@ -24,14 +24,7 @@ angular.module( 'inTunity.profile', [
 
 
   $scope.logout = function() {
-    if (count_todaysongs > 0) {
-       window.globalPlayer.pause();
-    } 
-    auth.signout();
-    store.remove('profile');
-    store.remove('token');
-	  
-    $location.path('/login');
+    window.logout();
   }
 
   $scope.home = function() {

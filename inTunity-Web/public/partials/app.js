@@ -102,47 +102,50 @@ angular.module( 'inTunity', [
 })
 
 .service('musicStatus', function () {
+	//Create Window Object
+	window.musicStatus = new Object();
+	
 	//Song State Variables
-	var songPaused = false; 
-	var songNumber = 0; 
-	var songPos = -1; 
-	var confirmSong = false;
+	window.musicStatus.songPaused = false; 
+	window.musicStatus.songNumber = 0; 
+	window.musicStatus.songPos = -1; 
+	window.musicStatus.confirmSong = false;
 	
 	//Page State Variables
 	var HOME = 0;
 	var ADDSONG = 1;
 	var PROFILE = 2;
 	
-	var page = 0; //0 = Home, 1 = AddSong, 2 = Profile
+	window.musicStatus.page = 0; //0 = Home, 1 = AddSong, 2 = Profile
 	
 	//Functions part of the musicStatus Object
 	return {
 		checkConfirm: function(){ 
-			if (confirmSong == false){
+			if (window.musicStatus.confirmSong == false){
 				return false
 			}
 			else{
-				confirmSong = false;
+				window.musicStatus.confirmSong = false;
 				return true;
 			}
 		},
 		confirmSong: function(){
-			songNumber = 0;
-			songPos = -1;
-			confirmSong = true;
+			window.musicStatus.songNumber = 0;
+			window.musicStatus.songPos = -1;
+			window.musicStatus.confirmSong = true;
 		},
 		getStatus: function () {
-			return [songNumber,songPos,songPaused];
+			return [window.musicStatus.songNumber,window.musicStatus.songPos,window.musicStatus.songPaused];
 		},
 		setStatus: function (num,pos,paused) {
-			songNumber = num;
-			songPos = pos;
-			songPaused = paused;
+			window.musicStatus.songNumber = num;
+			window.musicStatus.songPos = pos;
+			window.musicStatus.songPaused = paused;
 		},
 		setPage: function (url){
-			if (url == "/add-song/") {page = ADDSONG} //Play song only once (used for addsong)
-			else if (url == "/profile/") {page = PROFILE} //Play profile track
-			else {page = HOME} //Play home track by default if none of the above
+			if (url == "/add-song/") {window.musicStatus.page = ADDSONG} //Play song only once (used for addsong)
+			else if (url == "/profile/") {window.musicStatus.page = PROFILE} //Play profile track
+			else {window.musicStatus.page = HOME} //Play home track by default if none of the above
 		}
 	};
 });

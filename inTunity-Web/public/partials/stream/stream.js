@@ -16,7 +16,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         var songNum = ($cookies.get('songNum') != null) ? $cookies.get('songNum') : 0;
         var songPos = ($cookies.get('songPos') != null) ? $cookies.get('songPos') : -1;
         var songPaused = ($cookies.get('songPaused') != null) ? $cookies.get('songPaused') : false;
-
+		
         //Update the music status via cookie data
         musicStatus.setStatus(songNum, songPos, songPaused);
 		
@@ -41,6 +41,9 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
             expires: $scope.cookieExpirationDate()
         });
         $cookies.put('songPos', curStats[1], {
+            expires: $scope.cookieExpirationDate()
+        });
+		$cookies.put('songPaused', paused, {
             expires: $scope.cookieExpirationDate()
         });
     }
@@ -225,33 +228,30 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	
 	// this is for skipping to the previous song
 	$scope.prevPlayer = function() {
-		song_count -= 1;
-		if (song_count < 0) {
-			song_count = 0;
+		if (song_count == 0){
+			song_count = $scope.trackarray.length;
 		}
+		
+		song_count = (song_count - 1) % $scope.trackarray.length;
 		
 		paused = false;
 		var pauseButton = document.getElementById('pauseButton');
 		pauseButton.innerHTML = "<h4>Pause</h4>";
 
 		new_song = $scope.trackarray[song_count % $scope.trackarray.length][0];
-		song_count = song_count % $scope.trackarray.length;
+
 		new_url = '/tracks/' + new_song;
 		$scope.startStream(new_url, 0);
 	}
 
 	// this is for skipping to the next song
 	$scope.nextPlayer = function() {
-		song_count += 1;
-		if (song_count == $scope.trackarray.length) {
-			song_count = 0;
-		}
+		song_count = (song_count + 1) % $scope.trackarray.length;
 
 		paused = false;
 		var pauseButton = document.getElementById('pauseButton');
 		pauseButton.innerHTML = "<h4>Pause</h4>";
 
-		song_count = song_count % $scope.trackarray.length;
 		new_song = $scope.trackarray[song_count % $scope.trackarray.length][0];
 		new_url = '/tracks/' + new_song;
 		$scope.startStream(new_url, 0);
@@ -270,21 +270,25 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 			paused = false;
 			pauseButton.innerHTML = "<h4>Pause</h4>";
 		}
+		
+        //Update the music status via cookie data
+        musicStatus.setStatus(song_count % $scope.trackarray.length, globalPlayer.currentTime(), paused);
+		
+		$cookies.put('songPaused', paused, {
+            expires: $scope.cookieExpirationDate()
+        });
+
 	}
 		
     //Start the SoundCloud Stream!
     $scope.startStream = function(newSoundUrl, startingPosition) {
         $scope.setGraphics();
+		
         SC.stream(newSoundUrl).then(function(player) {
             globalPlayer = player
             window.globalPlayer = player;
 
-            //Check if we are in pause/play state
-            if (startingPosition != -2000) {
-                window.globalPlayer.play();
-            } else {
-                $scope.pause();
-            }
+			window.globalPlayer.play();
 
             globalPlayer.seek(startingPosition);
 
@@ -380,15 +384,22 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		var songNum = songData[0];
 		var songPos = songData[1];
 		var songPaused = songData[2];
+		paused = songPaused;
 		
 		song_count = songNum % $scope.trackarray.length;
 		new_url = '/tracks/' + $scope.trackarray[songNum][0];
 		
-		if (songPaused == false){
+		if (songPaused == true){
+			var pauseButton = document.getElementById('pauseButton');
+			pauseButton.innerHTML = "<h4>Play</h4>";
+		}
+		else{
 			$scope.startStream(new_url, songPos);
 		}
 		
 		$scope.setGraphics();
+		
+		$scope.updateCurrentPlayerGraphics();
 	}
 	
     $scope.users;
