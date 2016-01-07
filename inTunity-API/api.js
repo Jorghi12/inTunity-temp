@@ -78,7 +78,7 @@ app.get('/secured/account', function(req, res) {
 
 // this method is used for posting a song
 app.post('/secured/account/id/song', function(req, res) {
-     
+
   request({
     url: process.env.DATABASE + "/api/account/id/song", //URL to hit
     method: 'POST', //Specify the method
@@ -144,7 +144,7 @@ app.delete('/secured/account/id/song', function(req, res) {
       'Content-Type': 'application/json'
       },
       method: 'DELETE', //Specify the method
-      qs: {user_id: req.query["user_id"]}
+      qs: {user_id: req.query["user_id"], song_id: req.query["song_id"]}
   }, function(error, response, body){
       if(error) {
           console.log(error);
