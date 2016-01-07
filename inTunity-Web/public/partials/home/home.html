@@ -27,7 +27,7 @@
 </nav>
 
 <!--PAGE CONTENTS-->
-<div class = "bkg" style = "width:100%; height:100%; position:absolute">
+<div class = "bkg" style = "width:100%; height:100%; position:absolute" ng-controller="StreamCtrl">
   <div class="content">
     <div class="col-sm-12 text-center top-add-song">
       <h2>What is your motivation today? Tell a story with music:</h2>
@@ -38,7 +38,7 @@
       </div>
     </div>
 
-    <div class="col-sm-12" ng-controller="StreamCtrl">
+    <div class="col-sm-12">
       <div class = "container" id = "wallfeed" ng-repeat = "item in users | orderBy:'-[unix_time]'">
         <hr> 
         <div class = "row" id = "song{{users.indexOf(item)}}">
@@ -87,7 +87,7 @@
 
           <div class = "col-sm-12 col-md-6">
 
-            <div class = "row" align="center" id="playerButtons" ng-controller="StreamCtrl">
+            <div class = "row" align="center" id="playerButtons">
               <button class="playerButton" id="prevButton" ng-click="prevPlayer()"><h5><b>Previous</b></h5></button>
               <button class="playerButton" id="pauseButton" ng-click ="pause()" style="margin:10px 0px; min-height:50px;"><h4>Pause</h4></button>
               <button class="playerButton" id="nextButton" ng-click="nextPlayer()"><h5><b>Next</b></h5></button>

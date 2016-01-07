@@ -3,6 +3,10 @@ app = angular.module('inTunity.stream', [
 ]);
 
 app.controller('StreamCtrl', function StreamController($scope, auth, $http, $location, store, $compile, musicStatus, $cookies, $rootScope) {
+	SC.initialize({
+		client_id: 'a17d2904e0284ac32f1b5f9957fd7c3f'
+	});
+
 	//Load player Paused state
 	var paused = (musicStatus.getStatus()[2] != null) ? musicStatus.getStatus()[2] : false;
 	var song_count = 0;
@@ -15,6 +19,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         //Update the music status via cookie data
         musicStatus.setStatus(songNum, songPos, songPaused);
+		
+		return [songNum,songPos,songPaused];
     }
 
     //Check if we reached this page from another page. If so, keep the music state active.
@@ -27,7 +33,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         //Return information
         return startSpecific;
     }
-
+		
     //Stores our song state into the user cookies. Called when page routing and logging out.
     $scope.updateCookieData = function() {
         var curStats = musicStatus.getStatus();
@@ -97,6 +103,9 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         //STOP SOUND PLAYER
         window.globalPlayer.pause();
     }
+	
+	//Allow all pages to access logout
+	window.logout = $scope.logout;
 
     //Load profile information (when user clicks on someone's profile image)
     $scope.profile = function() {
@@ -161,7 +170,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
         currentuser = document.getElementById("currentuser");
 		
-        //currentuser.innerHTML = ($scope.correctUsers[song_count][0]["nickname"] != null) ? $scope.correctUsers[song_count][0]["nickname"] : $scope.correctUsers[song_count][0]["given_name"];
+        currentuser.innerHTML = ($scope.correctUsers[song_count]["user"][0]["nickname"] != null) ? $scope.correctUsers[song_count]["user"][0]["nickname"] : $scope.correctUsers[song_count]["user"][0]["given_name"];
         var album = document.getElementById("artwork");
         album.src = $scope.trackarray[song_count % $scope.trackarray.length][1];
         var title = document.getElementById("songtitle");
@@ -216,7 +225,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	
 	// this is for skipping to the previous song
 	$scope.prevPlayer = function() {
-		song_count = musicStatus.getStatus()[0];
 		song_count -= 1;
 		if (song_count < 0) {
 			song_count = 0;
@@ -234,9 +242,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 	// this is for skipping to the next song
 	$scope.nextPlayer = function() {
-		song_count = musicStatus.getStatus()[0];
 		song_count += 1;
-		if (song_count >= $scope.trackarray.length) {
+		if (song_count == $scope.trackarray.length) {
 			song_count = 0;
 		}
 
@@ -357,7 +364,33 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         });
     }
 
-
+	//Starts the player on Page Load
+	$scope.autoStart = function(){
+        //Load important data from cookies + server
+        songData = $scope.loadSongDataFromCookies();
+        startSpecific = $scope.routeFromAnotherPage();
+        $scope.loadUsers();
+        musicStatus.setPage($location.path());
+		
+		//Check if we routed from another page. If so play from where we left off
+		if (startSpecific == true){
+			return;
+		}
+		
+		var songNum = songData[0];
+		var songPos = songData[1];
+		var songPaused = songData[2];
+		
+		song_count = songNum % $scope.trackarray.length;
+		new_url = '/tracks/' + $scope.trackarray[songNum][0];
+		
+		if (songPaused == false){
+			$scope.startStream(new_url, songPos);
+		}
+		
+		$scope.setGraphics();
+	}
+	
     $scope.users;
 
     //Load Track Data
@@ -407,22 +440,23 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
             }
         } // end of for loop
 
+
+		//Sort Correct Users by Unix Time
+		$scope.correctUsers.sort(function(a,b){
+		  // Turn your strings into dates, and then subtract them
+		  // to get a value that is either negative, positive, or zero.
+		  return new Date(b.unix_time) - new Date(a.unix_time);
+		});
+		
         $scope.users = $scope.correctUsers;
-
-        console.log($scope.correctUsers);
-
+		
         $scope.trackarray = [];
 
         for (var i = 0; i < $scope.correctUsers.length; i++) {
             $scope.trackarray.push(new Array($scope.correctUsers[i]["user"][0]["today_song"][0]["track_id"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_album_pic"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_title"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_duration"]));
         }
 
-
-        //Load important data from cookies + server
-        $scope.loadSongDataFromCookies();
-        $scope.routeFromAnotherPage();
-        $scope.loadUsers();
-        musicStatus.setPage($location.path());
+        console.log($scope.trackarray);
 
         //Grab HTML Objects
         $scope.time = document.getElementById("time");
@@ -468,7 +502,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         }
 		
-		$scope.setGraphics();
+		$scope.autoStart();
     });
 
 
