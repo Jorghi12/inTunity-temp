@@ -7,6 +7,8 @@ var MongoStore = require('connect-mongo')(session);
 var app = express();
 var mongoose = require('mongoose');
 
+var ObjectId = require('mongoose').Types.ObjectId;
+
 var dotenv = require('dotenv');
 dotenv.load();
 
@@ -45,6 +47,7 @@ app.set('port', 3005);
 var User = require('./model/User.js');
 var Song = require('./model/Song.js');
 var location = require('./model/location.js');
+var Comment = require('./model/Comment.js');
 
 
 //routes
@@ -209,6 +212,10 @@ router.post('/api/account/id/song' , function (req, res, next) {
 			song_duration: req.body.song_duration
 	    });
 
+	
+
+
+
 
 	  	userObj.song_history.unshift(song);
 
@@ -277,13 +284,26 @@ router.get('/api/account/id/' , function (req, res, next) {
 
 // deleting a specific song 
 router.delete('/api/account/id/song' , function (req, res, next) {
-	Song.findOne({_id:req.query["song_id"] }, function(err, songObj) {
+	User.findOne({_id:ObjectId(req.query["user_id"]) }, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);
-	  } 
-	}).remove().exec();
-
+	  } else if (userObj) {
+	  	if (userObj["today_song"][0].id == ObjectId(req.query["song_id"])) {
+	  		userObj["today_song"].shift();
+	  	}
+	  	for (var i = 0; i < userObj["song_history"].length; i++) {
+	  		if (userObj["song_history"][i].id == ObjectId(req.query["song_id"])) {
+	  			userObj["song_history"].splice(i, 1);
+	  		}
+	  	}
+	  	userObj.save(function(err) {
+	    	if (err) {
+	    		throw err;
+	    	}	
+		 });	
+	  }
+	});
 	res.sendStatus(200);	
 });
 

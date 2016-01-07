@@ -163,6 +163,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
         $scope.users = correctUsers;
 
+        console.log(correctUsers);
+
 
 
         for (var i = 0; i < correctUsers.length; i++) {
