@@ -21,6 +21,8 @@ angular.module( 'inTunity.profile', [
   var id = prof["identities"][0]["user_id"];
 
 
+
+
   $scope.logout = function() {
     if (count_todaysongs > 0) {
        window.globalPlayer.pause();
@@ -67,9 +69,9 @@ angular.module( 'inTunity.profile', [
             id: id
         }
   }).then(function(response) {
-        var personalusername = response["data"]["user"]["url_username"];
+        var ownpersonalusername = response["data"]["user"]["url_username"];
         var username_clicked = store.get('username_clicked');
-        if (username_clicked != personalusername) {
+        if (username_clicked != ownpersonalusername) {
           document.getElementById("selected-link").id = "";
 
         }
@@ -78,20 +80,29 @@ angular.module( 'inTunity.profile', [
 
   // for deleting a particular song on your own account
   $scope.deleteSong = function(userid, songid) {
-
-    $http.delete('http://localhost:3001/secured/account/id/song', {
-        headers: {
-          'Accept': '*/*',
-          'Content-Type': 'application/json'
-        },
-        params: {user_id: userid, song_id, songid}
-    }).success(function(data, status, headers, config) {                
-      console.log(status);
-    }).error(function(data, status, headers, config) {
-        
-    });
-
-
+     $http({
+        url: 'http://localhost:3001/secured/account/id',
+        method: 'GET',
+        params: {
+            id: id
+        }
+    }).then(function(response) {
+        var ownpersonalusername = response["data"]["user"]["url_username"];
+        var username_clicked = store.get('username_clicked');
+        if (username_clicked == ownpersonalusername) {
+             $http.delete('http://localhost:3001/secured/account/id/song', {
+                headers: {
+                  'Accept': '*/*',
+                  'Content-Type': 'application/json'
+                },
+                params: {user_id: userid, song_id, songid}
+            }).success(function(data, status, headers, config) {                
+              console.log(status);
+            }).error(function(data, status, headers, config) {
+                
+            });
+        }
+    }); // end of http get
   }
 
 
