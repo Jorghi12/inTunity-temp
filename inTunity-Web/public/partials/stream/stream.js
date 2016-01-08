@@ -357,9 +357,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
     // this is for skipping to the next song
     $scope.nextPlayer = function() {
-		if (song_count < $scope.trackarray.length - 1){
-			song_count = (song_count + 1) % $scope.trackarray.length;
-		}
+        song_count = (song_count + 1) % $scope.trackarray.length;
 
         var pauseButton = document.getElementById('pauseButton');
         pauseButton.innerHTML = "<h4>Pause</h4>";
