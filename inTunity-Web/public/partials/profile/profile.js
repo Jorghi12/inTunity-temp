@@ -20,9 +20,6 @@ angular.module( 'inTunity.profile', [
   } 
   var id = prof["identities"][0]["user_id"];
 
-
-
-
   $scope.logout = function() {
     window.logout();
   }
@@ -152,8 +149,8 @@ angular.module( 'inTunity.profile', [
     return minutes + ":" + (seconds < 10 ? '0' : '') + seconds; 
   }
    
-    var progressBall = document.getElementById('playHead');
-    var time = document.getElementById('time');
+  var progressBall = document.getElementById('playHead');
+  var time = document.getElementById('time');
 	
   $scope.startStreamingProfileSong = function(songUrl, artworkUrl,myTitle, trackid, duration) {
     var poster = document.getElementById("currentuser");
