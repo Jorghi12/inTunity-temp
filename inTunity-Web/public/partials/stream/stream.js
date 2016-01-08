@@ -429,15 +429,15 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 	  var confirmButton = document.createElement("button");
 	  confirmButton.onclick = function() {
-		$scope.selectSong(songUrl, artworkUrl, myTitle, trackid, duration);
+		$scope.selectSong(songUrl, artworkUrl, myTitle, trackid, songDuration);
 	  }
 
-		var confirmTitle = document.createElement("h4");
-		confirmTitle.innerHTML = "Confirm";
+	  var confirmTitle = document.createElement("h4");
+      confirmTitle.innerHTML = "Confirm";
 	  confirmButton.appendChild(confirmTitle);
 	  confirmButton.setAttribute("id", "playerConfirm");
 	  confirmButton.className = "playerButton";
-	  confirmButton.style = "margin:10px 0px; min-height:50px;";
+	  confirmButton.style = "margin:30px 0px; min-height:50px;";
 	  playerButtons.appendChild(confirmButton);
 
 	  $scope.confirmSong = true;
