@@ -198,11 +198,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         }
     }
 
-    //Navigates to another profile
-    $scope.otherprofiles = function(username) {
-        store.set('username_clicked', username);
-        $location.path("/profile/" + username);
-    }
 
     //Logout of Intunity
     $scope.logout = function() {
@@ -223,45 +218,9 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     //Allow all pages to access logout
     window.logout = $scope.logout;
 
-    //Load profile information (when user clicks on someone's profile image)
-    $scope.profile = function() {
-        var ppl = store.get('profile');
-        var ppl_id = ppl["identities"][0]["user_id"];
+   
 
 
-        $http({
-            url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/specificUser',
-            method: 'GET',
-            params: {
-                id: ppl_id
-            }
-        }).then(function(response) {
-            console.log(response["data"]["user"]);
-
-            console.log(username_url);
-            username_url = response["data"]["user"]["url_username"];
-            // console.log(username_url);
-            store.set('username_clicked', username_url);
-            $location.path('/profile/' + username_url);
-
-
-        }); // end of http get
-    }
-
-    //Navigate to home page
-    $scope.home = function() {
-        $location.path('/');
-    }
-
-    //Navigate to add song page
-    $scope.addSong = function() {
-        $location.path('/add-song');
-    }
-
-    //Navigate to about page
-    $scope.about = function() {
-        $location.path('/about');
-    }
 
     //Convert milliseconds to (MM:SS)
     $scope.millisToMinutesAndSeconds = function(millis) {
