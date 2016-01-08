@@ -312,9 +312,12 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
     //Updates the graphics of the player GUI
     $scope.updateCurrentPlayerGraphics = function() {
+		$scope.time = document.getElementById("time");
+		
         globalPlayer = window.globalPlayer;
 
         songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
+		
         var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
         var progressBall = document.getElementById('playHead');
         progressBall.style.width = percent + "px";
