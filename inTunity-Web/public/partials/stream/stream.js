@@ -345,7 +345,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         var pauseButton = document.getElementById('pauseButton');
         pauseButton.innerHTML = "<h4>Pause</h4>";
-
+		
         $scope.startStream(song_count, 0);
     }
 
@@ -355,7 +355,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         var pauseButton = document.getElementById('pauseButton');
         pauseButton.innerHTML = "<h4>Pause</h4>";
-
+		
         $scope.startStream(song_count, 0);
     }
 
@@ -401,14 +401,14 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     //Start the SoundCloud Stream!
 	$scope.startStreamFULL = function(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype) {
         $scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
-
+		if (window.globalPlayer != null){window.globalPlayer.seek(0);}
         SC.stream("/tracks/" + trackid).then(function(player) {
             globalPlayer = player
             window.globalPlayer = player;
 
             window.globalPlayer.play();
-
-            globalPlayer.seek(0);
+			
+			window.globalPlayer.seek(0);
 
             //Add on Play-Start event code
             globalPlayer.on('play-start', function() {
