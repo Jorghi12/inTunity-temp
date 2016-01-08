@@ -492,23 +492,25 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         var songPaused = songData[2];
         paused = songPaused;
 
-        song_count = songNum % $scope.trackarray.length;
+		if ($scope.trackarray.length > 0){
+			song_count = songNum % $scope.trackarray.length;
 
-        if (songPaused == "true") {
-            var pauseButton = document.getElementById('pauseButton');
-            pauseButton.innerHTML = "<h4>Play</h4>";
+			if (songPaused == "true") {
+				var pauseButton = document.getElementById('pauseButton');
+				pauseButton.innerHTML = "<h4>Play</h4>";
+				
+				artworkUrl = $scope.trackarray[song_count % $scope.trackarray.length][1];
+				myTitle =  $scope.trackarray[song_count % $scope.trackarray.length][2];
+				songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
+				userDisplay = ($scope.correctUsers[song_count]["user"][0]["nickname"] != null) ? $scope.correctUsers[song_count]["user"][0]["nickname"] : $scope.correctUsers[song_count]["user"][0]["given_name"];
 			
-			artworkUrl = $scope.trackarray[song_count % $scope.trackarray.length][1];
-			myTitle =  $scope.trackarray[song_count % $scope.trackarray.length][2];
-			songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
-			userDisplay = ($scope.correctUsers[song_count]["user"][0]["nickname"] != null) ? $scope.correctUsers[song_count]["user"][0]["nickname"] : $scope.correctUsers[song_count]["user"][0]["given_name"];
-		
-			$scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
-        } else {
-			$scope.startStream(song_count, songPos);
-        }
+				$scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
+			} else {
+				$scope.startStream(song_count, songPos);
+			}
 
-        $scope.updateCurrentPlayerGraphics();
+			$scope.updateCurrentPlayerGraphics();
+		}
     }
 
     $scope.users;
