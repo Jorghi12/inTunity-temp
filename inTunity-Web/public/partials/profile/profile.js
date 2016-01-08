@@ -62,7 +62,6 @@ angular.module('inTunity.profile', [
         var username_clicked = store.get('username_clicked');
         if (username_clicked != ownpersonalusername) {
             document.getElementById("selected-link").id = "";
-
         }
     }); // end of http get
 
