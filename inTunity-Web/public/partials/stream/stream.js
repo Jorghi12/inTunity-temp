@@ -43,7 +43,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         $cookies.put('songPos', curStats[1], {
             expires: $scope.cookieExpirationDate()
         });
-        $cookies.put('songPaused', window.globalPlayer._isPlaying, {
+        $cookies.put('songPaused', !window.globalPlayer._isPlaying, {
             expires: $scope.cookieExpirationDate()
         });
     }
@@ -263,9 +263,9 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         }
 
         //Update the music status via cookie data
-        musicStatus.setStatus(song_count % $scope.trackarray.length, globalPlayer.currentTime(), window.globalPlayer._isPlaying);
+        musicStatus.setStatus(song_count % $scope.trackarray.length, globalPlayer.currentTime(), !window.globalPlayer._isPlaying);
 
-        $cookies.put('songPaused', window.globalPlayer._isPlaying, {
+        $cookies.put('songPaused', !window.globalPlayer._isPlaying, {
             expires: $scope.cookieExpirationDate()
         });
 
@@ -387,11 +387,18 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         song_count = songNum % $scope.trackarray.length;
 
-        if (songPaused == true) {
+        if (songPaused == "true") {
             var pauseButton = document.getElementById('pauseButton');
             pauseButton.innerHTML = "<h4>Play</h4>";
+			
+			artworkUrl = $scope.trackarray[song_count % $scope.trackarray.length][1];
+			myTitle =  $scope.trackarray[song_count % $scope.trackarray.length][2];
+			songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
+			userDisplay = ($scope.correctUsers[song_count]["user"][0]["nickname"] != null) ? $scope.correctUsers[song_count]["user"][0]["nickname"] : $scope.correctUsers[song_count]["user"][0]["given_name"];
+		
+			$scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
         } else {
-            $scope.startStream(songNum, songPos);
+			$scope.startStream(songNum, songPos);
         }
 
         $scope.updateCurrentPlayerGraphics();
