@@ -360,6 +360,11 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
     //Toggle (play/pause) the current song
     $scope.pause = function() {
+		//No song has ever started.
+		if (window.globalPlayer == null){
+			return;
+		}
+		
         var pauseButton = document.getElementById('pauseButton');
         if (window.globalPlayer._isPlaying) {
             window.globalPlayer.pause();
