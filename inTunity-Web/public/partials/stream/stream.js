@@ -342,11 +342,12 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     // this is for skipping to the previous song
     $scope.prevPlayer = function() {
         if (song_count == 0) {
-            song_count = $scope.trackarray.length;
+            song_count = 0;
         }
-
-        song_count = (song_count - 1) % $scope.trackarray.length;
-
+		else{
+			song_count = (song_count - 1) % $scope.trackarray.length;
+		}
+		
         var pauseButton = document.getElementById('pauseButton');
         pauseButton.innerHTML = "<h4>Pause</h4>";
 		if (window.globalPlayer != null ){window.globalPlayer.seek(0);}
@@ -356,7 +357,9 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
     // this is for skipping to the next song
     $scope.nextPlayer = function() {
-        song_count = (song_count + 1) % $scope.trackarray.length;
+		if (song_count < $scope.trackarray.length - 1){
+			song_count = (song_count + 1) % $scope.trackarray.length;
+		}
 
         var pauseButton = document.getElementById('pauseButton');
         pauseButton.innerHTML = "<h4>Pause</h4>";
