@@ -9,7 +9,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 	//Load Track Data
     $http({
-         url: 'http://localhost:3001/secured/accounts',
+         url: 'http://localhost:3001/secured/account',
         method: 'GET'
     }).then(function(response) {
         var users = response["data"]["songs"];
