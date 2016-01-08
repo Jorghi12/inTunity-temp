@@ -34,17 +34,19 @@
   </div>
   
   <div id = "song-grid" align="center" ng-repeat = "item in correctPerson[0].song_history | orderBy:'-unix_time' " >
-    <a href="" ng-click = "deleteSongFromDB()">
-      <div class="delete-button">X</div>
-    </a>
-    <a href="" ng-click = 'startStreamingProfileSong(item.song_url,item.song_album_pic,item.song_title,item.track_id,item.song_duration)'>
-      <div class="col-md-4 song-tile">
-        <img class="song-image" ng-src="{{item.song_album_pic}}">
-        <h4>{{item.song_title}}</h4>
-        <h5>Posted: {{item.formmatedDay}}</h5>
-        <!--<h5>100 Views | 15 Likes</h5>-->
-      </div>
-    </a>
+    <div class="col-md-4 song-tile">
+      <a href="" ng-click = "deleteSongFromDB()">
+        <div class="delete-button">X</div>
+      </a>
+      <a href="" ng-click = 'startStreamingProfileSong(item.song_url,item.song_album_pic,item.song_title,item.track_id,item.song_duration)'>
+        
+          <img class="song-image" ng-src="{{item.song_album_pic}}">
+          <h4>{{item.song_title}}</h4>
+          <h5>Posted: {{item.formmatedDay}}</h5>
+          <!--<h5>100 Views | 15 Likes</h5>-->
+        
+      </a>
+    </div>
   
   </div>
   
