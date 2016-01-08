@@ -7,13 +7,120 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         client_id: 'a17d2904e0284ac32f1b5f9957fd7c3f'
     });
 
+	//Load Track Data
+    $http({
+        url: 'http://localhost:3001/secured/account',
+        method: 'GET'
+    }).then(function(response) {
+        var users = response["data"]["songs"];
+
+        // this array has users who only have songs for today with it
+        $scope.correctUsers = [];
+
+        // makes sure we only show users who have songs
+        for (var i = 0; i < users.length; i++) {
+            if (users[i]["today_song"].length > 0) {
+
+                var date = new Date(users[i]["today_song"][0]["unix_time"] * 1000);
+                var year = date.getFullYear();
+                var month = date.getMonth();
+                var day = date.getDate();
+                var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+                var formmatedDay = monthNames[month] + " " + day + ", " + year;
+                var hours = date.getHours();
+                var minutes = "0" + date.getMinutes();
+                var am_pm = "AM";
+                if (hours == 12) {
+                    am_pm = "PM";
+                }
+                if (hours > 12) {
+                    hours = hours - 12;
+                    am_pm = "PM";
+                }
+                if (hours == 0) {
+                    hours = 12;
+                }
+
+                var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
+                $scope.correctUsers.push({
+                    user: new Array(users[i]),
+                    formattedTime: formattedTime,
+                    formmatedDay: formmatedDay,
+                    unix_time: users[i]["today_song"][0]["unix_time"] * 1000
+                })
+
+            } else {
+
+            }
+        } // end of for loop
+
+
+        //Sort Correct Users by Unix Time
+        $scope.correctUsers.sort(function(a, b) {
+            // Turn your strings into dates, and then subtract them
+            // to get a value that is either negative, positive, or zero.
+            return new Date(b.unix_time) - new Date(a.unix_time);
+        });
+
+        $scope.users = $scope.correctUsers;
+
+        $scope.trackarray = [];
+
+        for (var i = 0; i < $scope.correctUsers.length; i++) {
+            $scope.trackarray.push(new Array($scope.correctUsers[i]["user"][0]["today_song"][0]["track_id"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_album_pic"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_title"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_duration"]));
+        }
+
+        console.log($scope.trackarray);
+
+        //Grab HTML Objects
+        $scope.time = document.getElementById("time");
+        $scope.songDuration = 0;
+
+
+        //Handles the progress bar.
+        if ($scope.trackarray.length > 0) {
+            var playHead = document.getElementById('playHead');
+            var timelineWidth = time.offsetWidth - playHead.offsetWidth;
+
+            time.addEventListener('click', function(event) {
+                changePosition(event);
+            }, false);
+
+            function changePosition(click) {
+                var timelength = window.globalPlayer.streamInfo["duration"];
+                var col1 = document.getElementById("col1");
+
+                console.log($(window).width());
+
+                var marginLeft;
+                if ($(window).width() < 992) {
+                    marginLeft = click.pageX - 10;
+                } else {
+                    marginLeft = click.pageX - col1.offsetWidth - 10;
+                }
+
+                var percentageClicked = (marginLeft / time.offsetWidth);
+                window.globalPlayer.seek(Math.floor(percentageClicked * timelength));
+                var currentTime = percentageClicked * timelength;
+                var progressBall = document.getElementById('playHead');
+                progressBall.style.width = ((currentTime / timelength) * time.offsetWidth) + "px";
+
+            }
+
+
+
+        }
+
+        $scope.autoStart();
+    });
+	
     //Load player Paused state
     var paused = (musicStatus.getStatus()[2] != null) ? musicStatus.getStatus()[2] : false;
     var song_count = 0;
 
     //Loads the current player state (song number, song position, song pause state) from the user cookies.
     $scope.loadSongDataFromCookies = function() {
-        var songNum = ($cookies.get('songNum') != null) ? $cookies.get('songNum') : 0;
+        var songNum = ($cookies.get('songNum') != null) ? $cookies.get('songNum') % $scope.trackarray.length : 0;
         var songPos = ($cookies.get('songPos') != null) ? $cookies.get('songPos') : -1;
         var songPaused = ($cookies.get('songPaused') != null) ? $cookies.get('songPaused') : false;
 
@@ -406,112 +513,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
     $scope.users;
 
-    //Load Track Data
-    $http({
-        url: 'http://localhost:3001/secured/account',
-        method: 'GET'
-    }).then(function(response) {
-        var users = response["data"]["songs"];
-
-        // this array has users who only have songs for today with it
-        $scope.correctUsers = [];
-
-        // makes sure we only show users who have songs
-        for (var i = 0; i < users.length; i++) {
-            if (users[i]["today_song"].length > 0) {
-
-                var date = new Date(users[i]["today_song"][0]["unix_time"] * 1000);
-                var year = date.getFullYear();
-                var month = date.getMonth();
-                var day = date.getDate();
-                var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
-                var formmatedDay = monthNames[month] + " " + day + ", " + year;
-                var hours = date.getHours();
-                var minutes = "0" + date.getMinutes();
-                var am_pm = "AM";
-                if (hours == 12) {
-                    am_pm = "PM";
-                }
-                if (hours > 12) {
-                    hours = hours - 12;
-                    am_pm = "PM";
-                }
-                if (hours == 0) {
-                    hours = 12;
-                }
-
-                var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
-                $scope.correctUsers.push({
-                    user: new Array(users[i]),
-                    formattedTime: formattedTime,
-                    formmatedDay: formmatedDay,
-                    unix_time: users[i]["today_song"][0]["unix_time"] * 1000
-                })
-
-            } else {
-
-            }
-        } // end of for loop
-
-
-        //Sort Correct Users by Unix Time
-        $scope.correctUsers.sort(function(a, b) {
-            // Turn your strings into dates, and then subtract them
-            // to get a value that is either negative, positive, or zero.
-            return new Date(b.unix_time) - new Date(a.unix_time);
-        });
-
-        $scope.users = $scope.correctUsers;
-
-        $scope.trackarray = [];
-
-        for (var i = 0; i < $scope.correctUsers.length; i++) {
-            $scope.trackarray.push(new Array($scope.correctUsers[i]["user"][0]["today_song"][0]["track_id"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_album_pic"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_title"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_duration"]));
-        }
-
-        console.log($scope.trackarray);
-
-        //Grab HTML Objects
-        $scope.time = document.getElementById("time");
-        $scope.songDuration = 0;
-
-
-        //Handles the progress bar.
-        if ($scope.trackarray.length > 0) {
-            var playHead = document.getElementById('playHead');
-            var timelineWidth = time.offsetWidth - playHead.offsetWidth;
-
-            time.addEventListener('click', function(event) {
-                changePosition(event);
-            }, false);
-
-            function changePosition(click) {
-                var timelength = window.globalPlayer.streamInfo["duration"];
-                var col1 = document.getElementById("col1");
-
-                console.log($(window).width());
-
-                var marginLeft;
-                if ($(window).width() < 992) {
-                    marginLeft = click.pageX - 10;
-                } else {
-                    marginLeft = click.pageX - col1.offsetWidth - 10;
-                }
-
-                var percentageClicked = (marginLeft / time.offsetWidth);
-                window.globalPlayer.seek(Math.floor(percentageClicked * timelength));
-                var currentTime = percentageClicked * timelength;
-                var progressBall = document.getElementById('playHead');
-                progressBall.style.width = ((currentTime / timelength) * time.offsetWidth) + "px";
-
-            }
-
-
-
-        }
-
-        $scope.autoStart();
-    });
+    
 
 
 
