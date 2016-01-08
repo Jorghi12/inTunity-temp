@@ -5,6 +5,7 @@ angular.module('inTunity.addSong', [
         $scope.auth = auth;
         $scope.tgState = false;
         $scope.search = "";
+		
         var globalPlayer;
 
         var prof = (store.get('profile'));
@@ -22,8 +23,6 @@ angular.module('inTunity.addSong', [
         var trackarray;
         var song_count;
         var prevTime;
-
-        $scope.confirmCounter = 0;
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -52,9 +51,9 @@ angular.module('inTunity.addSong', [
             }
         }
 
-
-        $scope.startStreamingAddSong = function(songUrl, artworkUrl, myTitle, trackid, duration) {
-            window.startStreamCustom(songUrl, artworkUrl, myTitle, trackid, duration, "addsong");
+		
+        $scope.startStreamingAddSong = function(songUrl, artworkUrl, myTitle, trackid, songDuration) {
+            window.startStreamCustom(songUrl, artworkUrl, myTitle, trackid, songDuration, "", "addsong");
         }
 
 
@@ -164,10 +163,7 @@ angular.module('inTunity.addSong', [
                                 var selectedSong = obj[this.id];
                                 var id = (selectedSong["id"]);
 
-                                $scope.confirmCounter++;
-
                                 $scope.startStreamingAddSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
-
 
 
                             }
@@ -189,7 +185,7 @@ angular.module('inTunity.addSong', [
                             confirmSong.id = i;
 
                             var playElement = $compile(playbutton)($scope)[0];
-
+							
                             col2.appendChild(songTitle);
                             col2.appendChild(likes);
                             col2.appendChild(duration);

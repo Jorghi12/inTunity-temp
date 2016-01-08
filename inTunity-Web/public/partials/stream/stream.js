@@ -7,6 +7,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         client_id: 'a17d2904e0284ac32f1b5f9957fd7c3f'
     });
 
+	$scope.confirmSong = false;
+	
 	//Load Track Data
     $http({
          url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account',
@@ -293,15 +295,15 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         var endTime = document.getElementById("endTime");
         endTime.innerHTML = $scope.millisToMinutesAndSeconds(songDuration);
 
-        $scope.changeBack();
+        $scope.changeBack(album.src);
     }
 
     //Apply the Color-Thief background transformation
-    $scope.changeBack = function() {
+    $scope.changeBack = function(image_source) {
         // this is used to change the background for player using color-thief
         var image = document.createElement("img");
         image.crossOrigin = "Anonymous";
-        image.src = $scope.trackarray[song_count % $scope.trackarray.length][1];
+        image.src = image_source;
         image.onload = function() {
             var colorThief = new ColorThief();
             var cp = colorThief.getPalette(image, 2, 5);
@@ -311,12 +313,12 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     }
 
     //Updates the graphics of the player GUI
-    $scope.updateCurrentPlayerGraphics = function() {
+    $scope.updateCurrentPlayerGraphics = function(songDuration) {
 		$scope.time = document.getElementById("time");
 		
         globalPlayer = window.globalPlayer;
 
-        songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
+        //songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
 		
         var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
         var progressBall = document.getElementById('playHead');
@@ -405,9 +407,49 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		$scope.startStreamFULL(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype);
 	}
 	
+	//Update GUI for AddSong sampling
+	$scope.addSongUpdateGUI = function(){
+	  if ($scope.confirmSong == true){return;}
+	  var prevButton = document.getElementById("prevButton");
+	  prevButton.style.visibility = "hidden";
+
+	  var nextButton = document.getElementById("nextButton");
+	  nextButton.style.visibility = "hidden";
+
+	  var poster = document.getElementById("currentuser");
+	  poster.style.visibility = "hidden";
+
+	  var selectedBy = document.getElementById("selectedBy");
+	  selectedBy.style.visibility = "hidden";
+
+
+
+	  var playerButtons = document.getElementById("playerButtons");
+
+
+	  var confirmButton = document.createElement("button");
+	  confirmButton.onclick = function() {
+		$scope.selectSong(songUrl, artworkUrl, myTitle, trackid, duration);
+	  }
+
+		var confirmTitle = document.createElement("h4");
+		confirmTitle.innerHTML = "Confirm";
+	  confirmButton.appendChild(confirmTitle);
+	  confirmButton.setAttribute("id", "playerConfirm");
+	  confirmButton.className = "playerButton";
+	  confirmButton.style = "margin:10px 0px; min-height:50px;";
+	  playerButtons.appendChild(confirmButton);
+
+	  $scope.confirmSong = true;
+	}
+		
     //Start the SoundCloud Stream!
 	$scope.startStreamFULL = function(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype) {
         $scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
+		if (pagetype == "addsong"){
+			$scope.addSongUpdateGUI();
+		}
+		
         SC.stream("/tracks/" + trackid).then(function(player) {
             globalPlayer = player
             window.globalPlayer = player;
@@ -415,7 +457,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
             window.globalPlayer.play();
 			
 			window.globalPlayer.seek(0);
-
+			
+				
             //Add on Play-Start event code
             globalPlayer.on('play-start', function() {
                 //songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
@@ -444,14 +487,16 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
                 //Updates information about our currently playing song (shared cross page)
                 if (globalPlayer.currentTime() < songDuration) {
                     //Set music status
-                    musicStatus.setStatus(song_count % $scope.trackarray.length, globalPlayer.currentTime(), false);
-
+					if (pagetype == "home"){
+						musicStatus.setStatus(song_count % $scope.trackarray.length, globalPlayer.currentTime(), false);
+					}
+					
                     //Update cookie data
                     $scope.updateCookieData();
                 }
 
                 //Updates the current state of the player footer GUI
-                $scope.updateCurrentPlayerGraphics();
+                $scope.updateCurrentPlayerGraphics(songDuration);
 
                 //Cool Sound Effects
                 if (globalPlayer.currentTime() <= (songDuration * 0.02)) {
