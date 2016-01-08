@@ -515,8 +515,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 			} else {
 				$scope.startStream(song_count, songPos);
 			}
-
-			$scope.updateCurrentPlayerGraphics();
 		}
     }
 
