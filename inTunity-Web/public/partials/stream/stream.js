@@ -43,7 +43,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         $cookies.put('songPos', curStats[1], {
             expires: $scope.cookieExpirationDate()
         });
-        $cookies.put('songPaused', paused, {
+        $cookies.put('songPaused', window.globalPlayer._isPlaying, {
             expires: $scope.cookieExpirationDate()
         });
     }
@@ -171,17 +171,17 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     }
 
     //Set the graphics of the player instantly
-    $scope.setGraphics = function() {
-        songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
+    $scope.setGraphics = function(userDisplayName,artworkUrl,title,songDuration) {
         currentuser = document.getElementById("currentuser");
 
-        currentuser.innerHTML = ($scope.correctUsers[song_count]["user"][0]["nickname"] != null) ? $scope.correctUsers[song_count]["user"][0]["nickname"] : $scope.correctUsers[song_count]["user"][0]["given_name"];
+        currentuser.innerHTML = userDisplayName;
+
         var album = document.getElementById("artwork");
-        album.src = $scope.trackarray[song_count % $scope.trackarray.length][1];
-        var title = document.getElementById("songtitle");
-        title.innerHTML = $scope.trackarray[song_count % $scope.trackarray.length][2];
+        album.src = (artworkUrl != null) ? artworkUrl : "/images/no-art.png";
+		
+        var titleObj = document.getElementById("songtitle");
+        titleObj.innerHTML = title;
         var endTime = document.getElementById("endTime");
-        songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
         endTime.innerHTML = $scope.millisToMinutesAndSeconds(songDuration);
 
         $scope.changeBack();
@@ -223,9 +223,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         }
 
         song_count = index;
-        new_song = $scope.trackarray[song_count % $scope.trackarray.length][0];
-        var new_url = '/tracks/' + new_song;
-        $scope.startStream(new_url, 0);
+        $scope.startStream(song_count, 0);
     }
 
     // this is for skipping to the previous song
@@ -236,72 +234,71 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         song_count = (song_count - 1) % $scope.trackarray.length;
 
-        paused = false;
         var pauseButton = document.getElementById('pauseButton');
         pauseButton.innerHTML = "<h4>Pause</h4>";
 
-        new_song = $scope.trackarray[song_count % $scope.trackarray.length][0];
-
-        new_url = '/tracks/' + new_song;
-        $scope.startStream(new_url, 0);
+        $scope.startStream(song_count, 0);
     }
 
     // this is for skipping to the next song
     $scope.nextPlayer = function() {
         song_count = (song_count + 1) % $scope.trackarray.length;
 
-        paused = false;
         var pauseButton = document.getElementById('pauseButton');
         pauseButton.innerHTML = "<h4>Pause</h4>";
 
-        new_song = $scope.trackarray[song_count % $scope.trackarray.length][0];
-        new_url = '/tracks/' + new_song;
-        $scope.startStream(new_url, 0);
+        $scope.startStream(song_count, 0);
     }
 
 
     //Toggle (play/pause) the current song
     $scope.pause = function() {
         var pauseButton = document.getElementById('pauseButton');
-        if (paused == false) {
+        if (window.globalPlayer._isPlaying) {
             window.globalPlayer.pause();
-            paused = true;
             pauseButton.innerHTML = "<h4>Play</h4>";
         } else {
             window.globalPlayer.play();
-            paused = false;
             pauseButton.innerHTML = "<h4>Pause</h4>";
         }
 
         //Update the music status via cookie data
-        musicStatus.setStatus(song_count % $scope.trackarray.length, globalPlayer.currentTime(), paused);
+        musicStatus.setStatus(song_count % $scope.trackarray.length, globalPlayer.currentTime(), window.globalPlayer._isPlaying);
 
-        $cookies.put('songPaused', paused, {
+        $cookies.put('songPaused', window.globalPlayer._isPlaying, {
             expires: $scope.cookieExpirationDate()
         });
 
     }
 
+	//Start the SoundCloud Stream (From MainPlaylist)
+	$scope.startStream = function(song_count, pos){
+		songUrl = "";
+		artworkUrl = $scope.trackarray[song_count % $scope.trackarray.length][1];
+		myTitle =  $scope.trackarray[song_count % $scope.trackarray.length][2];
+		trackid = $scope.trackarray[song_count][0];
+		songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
+		pagetype = "home";
+		userDisplay = ($scope.correctUsers[song_count]["user"][0]["nickname"] != null) ? $scope.correctUsers[song_count]["user"][0]["nickname"] : $scope.correctUsers[song_count]["user"][0]["given_name"];
+		
+		$scope.startStreamFULL(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype);
+	}
+	
     //Start the SoundCloud Stream!
-    $scope.startStream = function(newSoundUrl, startingPosition) {
-        $scope.setGraphics();
+	$scope.startStreamFULL = function(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype) {
+        $scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
 
-        SC.stream(newSoundUrl).then(function(player) {
+        SC.stream("/tracks/" + trackid).then(function(player) {
             globalPlayer = player
             window.globalPlayer = player;
 
             window.globalPlayer.play();
 
-            globalPlayer.seek(startingPosition);
+            globalPlayer.seek(0);
 
             //Add on Play-Start event code
             globalPlayer.on('play-start', function() {
-                //Whether we should start specific or not
-                if ($scope.startSpecific == false) {
-                    globalPlayer.seek(startingPosition);
-                } else {
-                    songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
-                }
+                //songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
 
 
                 //If we are on the Home Page
@@ -325,7 +322,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
             //Event asynchronously runs while the song is streaming
             globalPlayer.on('time', function() {
                 //Updates information about our currently playing song (shared cross page)
-                if (globalPlayer.currentTime() < parseInt($scope.trackarray[song_count % $scope.trackarray.length][3])) {
+                if (globalPlayer.currentTime() < songDuration) {
                     //Set music status
                     musicStatus.setStatus(song_count % $scope.trackarray.length, globalPlayer.currentTime(), false);
 
@@ -358,11 +355,9 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
                 if (length == globalPlayer.currentTime()) {
                     song_count = (song_count + 1) % $scope.trackarray.length;
                     musicStatus.setStatus(song_count, 0, false);
-                    new_url = '/tracks/' + $scope.trackarray[song_count][0];
 
-                    console.log(new_url);
                     globalPlayer.seek(0); //Do this before startStream
-                    $scope.startStream(new_url, 0);
+                    $scope.startStream(song_count, 0);
                 }
 
             }); // end of finish
@@ -370,120 +365,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         });
     }
 
-    //Starts the player for AddSong & Profile
-    $scope.startStreamingCustom = function(songUrl, artworkUrl, myTitle, trackid, duration, pagetype) {
-        if (pagetype == "profile") {
-            var poster = document.getElementById("currentuser");
-            currentuser.innerHTML = $scope.correctPerson[0].nickname;
-        }
-        var albumPic = artworkUrl;
-
-        if (artworkUrl != null) {
-            if (pagetype == "addsong") {
-                var index = artworkUrl.indexOf("large");
-                albumPic = artworkUrl.substring(0, index) + "t500x500.jpg";
-            }
-        } else {
-            albumPic = "/images/no-art.png";
-        }
-
-        // this is used to change the background for player using color-thief
-        var image = document.createElement("img");
-        image.crossOrigin = "Anonymous";
-        image.src = albumPic;
-        image.onload = function() {
-            var colorThief = new ColorThief();
-            var cp = colorThief.getPalette(image, 2, 5);
-            document.getElementById("footer1").style.background = 'linear-gradient(#f5f5f5, rgb(' + cp[2][0] + ',' + cp[2][1] + ',' + cp[2][2] + '))';
-        };
-
-        if ($scope.confirmCounter == 1) {
-            var prevButton = document.getElementById("prevButton");
-            prevButton.style.visibility = "hidden";
-
-            var nextButton = document.getElementById("nextButton");
-            nextButton.style.visibility = "hidden";
-
-            var poster = document.getElementById("currentuser");
-            poster.style.visibility = "hidden";
-
-            var selectedBy = document.getElementById("selectedBy");
-            selectedBy.style.visibility = "hidden";
-
-
-
-            var playerButtons = document.getElementById("playerButtons");
-
-
-            var confirmButton = document.createElement("button");
-            confirmButton.onclick = function() {
-                $scope.selectSong(songUrl, artworkUrl, myTitle, trackid, duration);
-            }
-
-            var confirmTitle = document.createElement("h4");
-            confirmTitle.innerHTML = "Confirm";
-            confirmButton.appendChild(confirmTitle);
-            confirmButton.setAttribute("id", "playerConfirm");
-            confirmButton.className = "playerButton";
-            confirmButton.style = "margin:10px 0px; min-height:50px;";
-            playerButtons.appendChild(confirmButton);
-
-        }
-
-
-        songDuration = duration;
-
-        SC.stream("/tracks/" + trackid).then(function(player) {
-            globalPlayer = player;
-            window.globalPlayer = player;
-            globalPlayer.play();
-
-            globalPlayer.on('play-start', function() {
-                var endTime = document.getElementById("endTime");
-                endTime.innerHTML = $scope.millisToMinutesAndSeconds(songDuration);
-
-                var album = document.getElementById("artwork");
-                album.src = albumPic;
-
-                var title = document.getElementById("songtitle");
-                title.innerHTML = myTitle;
-            });
-
-            globalPlayer.on('time', function() {
-                var percent = ((globalPlayer.currentTime() / songDuration)) * time.offsetWidth;
-                var progressBall = document.getElementById('playHead');
-                progressBall.style.width = percent + "px";
-                var currentTime = document.getElementById("currentTime");
-                currentTime.innerHTML = $scope.millisToMinutesAndSeconds(globalPlayer.currentTime());
-            });
-
-            globalPlayer.on('finish', function() {
-                globalPlayer.seek(0);
-
-                $scope.confirmCounter--;
-
-                document.getElementsByClassName("footer footer-sample")[0].className = "footer";
-
-
-                prevButton.style.visibility = "visible";
-                nextButton.style.visibility = "visible";
-                poster.style.visibility = "visible";
-                selectedBy.style.visibility = "visible";
-
-                confirmButton.style.visibility = "hidden";
-                $(confirmButton).remove();
-
-
-
-                //Need to invoke startStream on home.js somehow....
-                //-2000 is code for go back to feed songs
-                window.playSpecificSong(musicStatus.getStatus()[0], -2000);
-            }); // end of finish
-
-        });
-    }
-
-    window.startStreamCustom = $scope.startStreamingCustom;
+    window.startStreamCustom = $scope.startStreamFULL;
 
     //Starts the player on Page Load
     $scope.autoStart = function() {
@@ -504,16 +386,13 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         paused = songPaused;
 
         song_count = songNum % $scope.trackarray.length;
-        new_url = '/tracks/' + $scope.trackarray[songNum][0];
 
         if (songPaused == true) {
             var pauseButton = document.getElementById('pauseButton');
             pauseButton.innerHTML = "<h4>Play</h4>";
         } else {
-            $scope.startStream(new_url, songPos);
+            $scope.startStream(songNum, songPos);
         }
-
-        $scope.setGraphics();
 
         $scope.updateCurrentPlayerGraphics();
     }
@@ -600,7 +479,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
             }, false);
 
             function changePosition(click) {
-                var timelength = window.globalPlayer.streamInfo["duration"]; //parseInt(trackarray[song_count % trackarray.length][3]);
+                var timelength = window.globalPlayer.streamInfo["duration"];
                 var col1 = document.getElementById("col1");
 
                 console.log($(window).width());

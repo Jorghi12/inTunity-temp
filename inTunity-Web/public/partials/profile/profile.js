@@ -129,7 +129,7 @@ angular.module('inTunity.profile', [
 
 
     $scope.startStreamingProfileSong = function(songUrl, artworkUrl, myTitle, trackid, duration) {
-        window.startStreamCustom(songUrl, artworkUrl, myTitle, trackid, duration, "profile");
+        window.startStreamCustom(songUrl, artworkUrl, myTitle, trackid, duration, $scope.owner,"profile");
     }
 
 })
