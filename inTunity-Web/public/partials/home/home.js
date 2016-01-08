@@ -1,17 +1,17 @@
 app = angular.module('inTunity.home', [
-    'auth0',
+    'auth0', 
     'ngCookies'
 
 ]);
 
-app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus, $cookies, $rootScope) {
+app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus,$cookies, $rootScope) {
     $scope.auth = auth;
     var prof = (store.get('profile'));
     $scope.owner;
     var id = prof["identities"][0]["user_id"];
     var trackarray = [];
     var username_url;
-
+    
     if (prof["given_name"] != null) {
         $scope.owner = prof["given_name"];
     } else {
@@ -20,18 +20,18 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
     //use this function when you click on individual profile pics
     $scope.otherprofiles = function(username) {
-        store.set('username_clicked', username);
-        $location.path("/profile/" + username);
+      store.set('username_clicked', username);
+      $location.path("/profile/" + username);
     }
 
-    $scope.logout = function() {
-        //Calls the logout code inside stream.js
-        window.logout();
-    }
-
+	$scope.logout = function(){
+		//Calls the logout code inside stream.js
+		window.logout();
+	}
+	
     $scope.profile = function() {
         $http({
-            url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+            url: 'http://localhost:3001/secured/account/id',
             method: 'GET',
             params: {
                 id: id
