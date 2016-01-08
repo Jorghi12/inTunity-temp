@@ -11,7 +11,6 @@ angular.module('inTunity.profile', [
     var prof = (store.get('profile'));
     var count_todaysongs = 0;
 
-
     $scope.owner;
     if (prof["given_name"] != null) {
         $scope.owner = prof["given_name"];
@@ -128,10 +127,10 @@ angular.module('inTunity.profile', [
             $scope.correctPerson[0].song_history[i].formmatedDay = formmatedDay;
         }
 
-    }); // end of http get
 
     $scope.startStreamingProfileSong = function(songUrl, artworkUrl, myTitle, trackid, duration) {
         window.startStreamCustom(songUrl, artworkUrl, myTitle, trackid, duration, "profile");
     }
 
+})
 });

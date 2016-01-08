@@ -600,7 +600,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
             }, false);
 
             function changePosition(click) {
-                console.log($location.path());
                 var timelength = window.globalPlayer.streamInfo["duration"]; //parseInt(trackarray[song_count % trackarray.length][3]);
                 var col1 = document.getElementById("col1");
 
@@ -608,16 +607,12 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
                 var marginLeft;
                 if ($(window).width() < 992) {
-                    console.log("here");
                     marginLeft = click.pageX - 10;
                 } else {
-                    console.log("here!");
                     marginLeft = click.pageX - col1.offsetWidth - 10;
                 }
 
                 var percentageClicked = (marginLeft / time.offsetWidth);
-
-                console.log(percentageClicked);
                 window.globalPlayer.seek(Math.floor(percentageClicked * timelength));
                 var currentTime = percentageClicked * timelength;
                 var progressBall = document.getElementById('playHead');
