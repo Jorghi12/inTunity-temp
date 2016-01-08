@@ -144,7 +144,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     //Stores our song state into the user cookies. Called when page routing and logging out.
     $scope.updateCookieData = function() {
         var curStats = musicStatus.getStatus();
-		var playing = (window.globalPlayer != null) ? false : !window.globalPlayer._isPlaying;
+		var playing = (window.globalPlayer != null) ? !window.globalPlayer._isPlaying : false;
 	
         $cookies.put('songNum', curStats[0], {
             expires: $scope.cookieExpirationDate()
