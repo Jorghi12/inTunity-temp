@@ -332,6 +332,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         }
 
         song_count = index;
+		if (window.globalPlayer != null ){window.globalPlayer.seek(0);}
         $scope.startStream(song_count, 0);
     }
 
@@ -345,6 +346,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         var pauseButton = document.getElementById('pauseButton');
         pauseButton.innerHTML = "<h4>Pause</h4>";
+		if (window.globalPlayer != null ){window.globalPlayer.seek(0);}
 		
         $scope.startStream(song_count, 0);
     }
@@ -355,6 +357,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         var pauseButton = document.getElementById('pauseButton');
         pauseButton.innerHTML = "<h4>Pause</h4>";
+		if (window.globalPlayer != null ){window.globalPlayer.seek(0);}
 		
         $scope.startStream(song_count, 0);
     }
@@ -401,7 +404,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     //Start the SoundCloud Stream!
 	$scope.startStreamFULL = function(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype) {
         $scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
-		if (window.globalPlayer != null){window.globalPlayer.seek(0);}
         SC.stream("/tracks/" + trackid).then(function(player) {
             globalPlayer = player
             window.globalPlayer = player;
