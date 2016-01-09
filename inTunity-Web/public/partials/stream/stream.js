@@ -290,7 +290,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     // when you press on album pic, it will play that song
     $scope.playSpecificSong = function(index) {
         //If we're already on that song, just toggle. --- Design Update
-        if (song_count == index) {
+        if (song_count == index && window.globalPlayer != null) {
             $scope.pause();
             return;
         }
@@ -332,6 +332,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     $scope.pause = function() {
 		//No song has ever started.
 		if (window.globalPlayer == null){
+			$scope.startStream(song_count, 0);
+            pauseButton.innerHTML = "<h4>Pause</h4>";
 			return;
 		}
 		
@@ -507,7 +509,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 		if ($scope.trackarray.length > 0){
 			song_count = songNum % $scope.trackarray.length;
-
 			if (songPaused == "true") {
 				var pauseButton = document.getElementById('pauseButton');
 				pauseButton.innerHTML = "<h4>Play</h4>";
