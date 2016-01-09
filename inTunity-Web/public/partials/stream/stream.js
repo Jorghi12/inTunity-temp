@@ -365,48 +365,44 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		
 		$scope.startStreamFULL(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype);
 	}
-	
-	//Update GUI for AddSong sampling
-	$scope.addSongUpdateGUI = function(){
-	  if ($scope.confirmSong == true){return;}
-	  var prevButton = document.getElementById("prevButton");
-	  prevButton.style.visibility = "hidden";
-
-	  var nextButton = document.getElementById("nextButton");
-	  nextButton.style.visibility = "hidden";
-
-	  var poster = document.getElementById("currentuser");
-	  poster.style.visibility = "hidden";
-
-	  var selectedBy = document.getElementById("selectedBy");
-	  selectedBy.style.visibility = "hidden";
-
-
-
-	  var playerButtons = document.getElementById("playerButtons");
-
-
-	  var confirmButton = document.createElement("button");
-	  confirmButton.onclick = function() {
-		$scope.selectSong(songUrl, artworkUrl, myTitle, trackid, songDuration);
-	  }
-
-	  var confirmTitle = document.createElement("h4");
-      confirmTitle.innerHTML = "Confirm";
-	  confirmButton.appendChild(confirmTitle);
-	  confirmButton.setAttribute("id", "playerConfirm");
-	  confirmButton.className = "playerButton";
-	  confirmButton.style = "margin:30px 0px; min-height:50px;";
-	  playerButtons.appendChild(confirmButton);
-
-	  $scope.confirmSong = true;
-	}
 		
     //Start the SoundCloud Stream!
 	$scope.startStreamFULL = function(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype) {
         $scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
 		if (pagetype == "addsong"){
-			$scope.addSongUpdateGUI();
+		  if ($scope.confirmSong == false){
+			  var prevButton = document.getElementById("prevButton");
+			  prevButton.style.visibility = "hidden";
+
+			  var nextButton = document.getElementById("nextButton");
+			  nextButton.style.visibility = "hidden";
+
+			  var poster = document.getElementById("currentuser");
+			  poster.style.visibility = "hidden";
+ 
+			  var selectedBy = document.getElementById("selectedBy");
+			  selectedBy.style.visibility = "hidden";
+
+
+
+			  var playerButtons = document.getElementById("playerButtons");
+
+
+			  var confirmButton = document.createElement("button");
+			  confirmButton.onclick = function() {
+				$scope.selectSong(songUrl, artworkUrl, myTitle, trackid, songDuration);
+			  }
+
+			  var confirmTitle = document.createElement("h4");
+			  confirmTitle.innerHTML = "Confirm";
+			  confirmButton.appendChild(confirmTitle);
+			  confirmButton.setAttribute("id", "playerConfirm");
+			  confirmButton.className = "playerButton";
+			  confirmButton.style = "margin:30px 0px; min-height:50px;";
+			  playerButtons.appendChild(confirmButton);
+
+			  $scope.confirmSong = true;
+		  }
 		}
 		
         SC.stream("/tracks/" + trackid).then(function(player) {
