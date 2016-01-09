@@ -301,8 +301,11 @@ router.delete('/api/account/id/song' , function (req, res, next) {
 	  			userObj["today_song"].shift();
 	  		}
 
-	  		if (userObj["song_history"].length > 0 && userObj["today_song"][0].id != ObjectId(req.query["song_id"]) ) {
-	  			userObj["today_song"][0] = userObj["song_history"][0];
+	  		if (userObj["song_history"].length > 0) {
+	  			if (userObj["today_song"][0].id != ObjectId(req.query["song_id"])) {
+	  				userObj["today_song"][0] = userObj["song_history"][0];
+	  			}
+	  			
 	  		}
 	  	}
 
