@@ -379,15 +379,11 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		
 		$scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
 		
-		//Paused Mode
-		if (pos == -2000){
-			return;
-		}
-		$scope.startStreamFULL(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype);
+		$scope.startStreamFULL(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype, pos);
 	}
 		
     //Start the SoundCloud Stream!
-	$scope.startStreamFULL = function(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype) {
+	$scope.startStreamFULL = function(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype, pos) {
         $scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
 		if (pagetype == "addsong"){
 		  if ($scope.confirmSong == false){
@@ -429,7 +425,10 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
             globalPlayer = player
             window.globalPlayer = player;
 
-            window.globalPlayer.play();
+			//If not Start Paused
+			if (pos != -2000){
+				window.globalPlayer.play();
+			}
 			
 			window.globalPlayer.seek(0);
 			

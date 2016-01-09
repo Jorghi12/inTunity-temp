@@ -53,7 +53,7 @@ angular.module('inTunity.addSong', [
 
 		
         $scope.startStreamingAddSong = function(songUrl, artworkUrl, myTitle, trackid, songDuration) {
-            window.startStreamCustom(songUrl, artworkUrl, myTitle, trackid, songDuration, "", "addsong");
+            window.startStreamCustom(songUrl, artworkUrl, myTitle, trackid, songDuration, "", "addsong",false);
         }
 
 
