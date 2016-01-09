@@ -289,16 +289,24 @@ router.delete('/api/account/id/song' , function (req, res, next) {
 	    console.log(err);
 	    res.sendStatus(500);
 	  } else if (userObj) {
-	  	if (userObj["today_song"].length > 0) {
-	  		if (userObj["today_song"][0].id == ObjectId(req.query["song_id"])) {
-	  			userObj["today_song"].shift();
-	  		}
-	  	}
+	  	
 	  	for (var i = 0; i < userObj["song_history"].length; i++) {
 	  		if (userObj["song_history"][i].id == ObjectId(req.query["song_id"])) {
 	  			userObj["song_history"].splice(i, 1);
 	  		}
 	  	}
+
+	  	if (userObj["today_song"].length > 0) {
+	  		if (userObj["today_song"][0].id == ObjectId(req.query["song_id"])) {
+	  			userObj["today_song"].shift();
+	  		}
+
+	  		if (userObj["song_history"].length > 0) {
+	  			userObj["today_song"].unshift(userObj["song_history"][0]);
+	  		}
+	  	}
+
+
 	  	userObj.save(function(err) {
 	    	if (err) {
 	    		throw err;

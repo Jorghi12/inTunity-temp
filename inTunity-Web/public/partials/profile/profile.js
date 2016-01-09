@@ -100,7 +100,6 @@ angular.module('inTunity.profile', [
            
 
             if (username_clicked == ownpersonalusername) {
-                console.log("hit");
                 var deleteButton = document.getElementsByClassName("delete");
 
                 console.log(deleteButton);
@@ -116,7 +115,7 @@ angular.module('inTunity.profile', [
         }); // end of http get
 
 
-        
+
 
         $scope.startStreamingProfileSong = function(songUrl, artworkUrl, myTitle, trackid, duration) {
             window.startStreamCustom(songUrl, artworkUrl, myTitle, trackid, duration, $scope.owner,"profile",false);
