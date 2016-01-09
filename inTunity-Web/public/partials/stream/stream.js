@@ -315,10 +315,10 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     $scope.prevPlayer = function() {
         if (song_count == 0) {
             song_count = 0;
-			if (window.globalPlayer != null && window.globalPlayer._isPlaying == true){
+			//if (window.globalPlayer != null && window.globalPlayer._isPlaying == true){
 				//Don't interrupt
-				return;
-			}
+			//	return;
+			//}
         }
 		else{
 			song_count = (song_count - 1) % $scope.trackarray.length;
@@ -584,6 +584,11 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         var songPos = songData[1];
         var songPaused = songData[2];
         paused = songPaused;
+		
+		//Start at 0 - if someone pushed a new song - We'll improve our newsfeed algorithm later
+		//if ($cookies.get('firstSong') != null && $cookies.get('firstSong') != ){
+		//	songNum = 0;
+		//}
 		
 		if ($scope.trackarray.length > 0){
 			song_count = songNum % $scope.trackarray.length;
