@@ -43,7 +43,7 @@ angular.module('inTunity.profile', [
 
     $scope.profile = function() {
         $http({
-            url: 'http://localhost:3001/secured/account/id',
+            url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account/id',
             method: 'GET',
             params: {
                 id: id
@@ -59,7 +59,7 @@ angular.module('inTunity.profile', [
 
 
     $http({
-        url: 'http://localhost:3001/secured/account',
+        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account',
         method: 'GET'
     }).then(function(response) {
         var users = response["data"]["songs"];
@@ -95,7 +95,7 @@ angular.module('inTunity.profile', [
 
 
         $http({
-            url: 'http://localhost:3001/secured/account/id',
+            url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account/id',
             method: 'GET',
             params: {
                 id: id
@@ -107,12 +107,11 @@ angular.module('inTunity.profile', [
 
 
             if (username_clicked == ownpersonalusername) {
-                var deleteButton =document.getElementsByClassName("delete-button");
+                var deleteButton = document.getElementsByClassName("delete");
                 $(deleteButton).append("X");
                 $(deleteButton).click(function() {
                   $scope.deleteSong($scope.user_id,this.getAttribute('value'));
-                });
-                           
+                });                  
             }
 
             if (username_clicked != ownpersonalusername) {
@@ -132,7 +131,7 @@ angular.module('inTunity.profile', [
       // for deleting a particular song on your own account
     $scope.deleteSong = function(userid, songid) {
         $http({
-            url: 'http://localhost:3001/secured/account/id',
+            url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account/id',
             method: 'GET',
             params: {
                 id: id
@@ -144,7 +143,7 @@ angular.module('inTunity.profile', [
 
             if (username_clicked == ownpersonalusername) {
                 console.log("about to delete...");
-                $http.delete('http://localhost:3001/secured/account/id/song', {
+                $http.delete('http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account/id/song', {
                     headers: {
                         'Accept': '*/*',
                         'Content-Type': 'application/json'
