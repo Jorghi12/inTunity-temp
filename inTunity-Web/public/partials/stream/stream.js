@@ -315,6 +315,10 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     $scope.prevPlayer = function() {
         if (song_count == 0) {
             song_count = 0;
+			if (window.globalPlayer != null && window.globalPlayer._isPlaying == true){
+				//Don't interrupt
+				return;
+			}
         }
 		else{
 			song_count = (song_count - 1) % $scope.trackarray.length;
@@ -385,7 +389,14 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     //Start the SoundCloud Stream!
 	$scope.startStreamFULL = function(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype, pos) {
         $scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
-		if (pagetype == "addsong"){
+		if (pagetype == "profile"){
+			  var prevButton = document.getElementById("prevButton");
+			  prevButton.style.visibility = "hidden";
+
+			  var nextButton = document.getElementById("nextButton");
+			  nextButton.style.visibility = "hidden";
+		}
+		else if (pagetype == "addsong"){
 			  var prevButton = document.getElementById("prevButton");
 			  prevButton.style.visibility = "hidden";
 
@@ -442,14 +453,15 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 				window.globalPlayer.play();
 			}
 			
-			window.globalPlayer.seek(0);
 			
 				
             //Add on Play-Start event code
             globalPlayer.on('play-start', function() {
                 //songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
-
-
+				if (pos == 0){
+					window.globalPlayer.seek(0);
+				}
+				
                 //If we are on the Home Page
                 if ($location.path() == "/") {
                     //this is for resetting all the background color to its natural settings
@@ -510,9 +522,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 				}
 			
                 if (length == globalPlayer.currentTime()) {
-                    song_count = (song_count + 1) % $scope.trackarray.length;
-                    musicStatus.setStatus(song_count, 0, false);
-
 					//Return to Pause Mode for addsong + profile
 					if (pagetype == "addsong" || pagetype == "profile"){
 						var pauseButton = document.getElementById('pauseButton');
@@ -543,6 +552,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					}
 					else
 					{
+						song_count = (song_count + 1) % $scope.trackarray.length;
+						musicStatus.setStatus(song_count, 0, false);
 						globalPlayer.seek(0); //Do this before startStream
 						$scope.startStream(song_count, 0);
 					}
@@ -573,7 +584,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         var songPos = songData[1];
         var songPaused = songData[2];
         paused = songPaused;
-
+		
 		if ($scope.trackarray.length > 0){
 			song_count = songNum % $scope.trackarray.length;
 			if (songPaused == "true") {
