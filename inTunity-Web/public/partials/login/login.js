@@ -1,7 +1,7 @@
 angular.module( 'inTunity.login', [
   'auth0'
 ])
-.controller( 'LoginCtrl', function LoginController( $scope, auth, $location, store, $http ) {
+.controller( 'LoginCtrl', function LoginController( $scope, auth, $location, store, $http) {
 
   $scope.about = function() {
     $location.path('/about');
@@ -58,11 +58,7 @@ angular.module( 'inTunity.login', [
         url_username: url_username
       });
 		
-		//So we don't stay paused on the next login.
-		$cookies.put('songPaused', false, {
-			expires: $scope.cookieExpirationDate()
-		});
-      
+		
       $location.path("/");
 
       $http.post('http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account', {data: user_account}, { 

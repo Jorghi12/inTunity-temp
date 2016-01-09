@@ -165,7 +165,16 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         $cookies.put('routeChange', true, {
             expires: $scope.cookieExpirationDate()
         });
-        $scope.updateCookieData();
+		
+		//If just logging in don't update cookies + turn on auto play
+		if (current["loadedTemplateUrl"] == "/partials/login/login.html"){
+			$cookies.put('songPaused', false, {
+				expires: $scope.cookieExpirationDate()
+			});
+		}
+		else{
+			$scope.updateCookieData();
+		}
     });
 
 
@@ -421,7 +430,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
                 //songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
 
 
-			window.globalPlayer.seek(0);
                 //If we are on the Home Page
                 if ($location.path() == "/") {
                     //this is for resetting all the background color to its natural settings
@@ -508,7 +516,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         var songPaused = songData[2];
         paused = songPaused;
 
-		alert(songPaused);
 		if ($scope.trackarray.length > 0){
 			song_count = songNum % $scope.trackarray.length;
 			if (songPaused == "true") {
