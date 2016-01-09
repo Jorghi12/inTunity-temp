@@ -146,7 +146,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     //Stores our song state into the user cookies. Called when page routing and logging out.
     $scope.updateCookieData = function() {
         var curStats = musicStatus.getStatus();
-		var playing = (window.globalPlayer != null) ? !window.globalPlayer._isPlaying : false;
+		var isPaused = (window.globalPlayer != null) ? !window.globalPlayer._isPlaying : false;
 	
         $cookies.put('songNum', curStats[0], {
             expires: $scope.cookieExpirationDate()
@@ -154,7 +154,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         $cookies.put('songPos', curStats[1], {
             expires: $scope.cookieExpirationDate()
         });
-        $cookies.put('songPaused', playing, {
+        $cookies.put('songPaused', isPaused, {
             expires: $scope.cookieExpirationDate()
         });
     }
@@ -296,7 +296,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         }
 
         song_count = index;
-		if (window.globalPlayer != null ){window.globalPlayer.seek(0);}
+		//if (window.globalPlayer != null ){window.globalPlayer.seek(0);}
         $scope.startStream(song_count, 0);
     }
 
@@ -311,7 +311,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		
         var pauseButton = document.getElementById('pauseButton');
         pauseButton.innerHTML = "<h4>Pause</h4>";
-		if (window.globalPlayer != null ){window.globalPlayer.seek(0);}
+		//if (window.globalPlayer != null ){window.globalPlayer.seek(0);}
 		
         $scope.startStream(song_count, 0);
     }
@@ -322,7 +322,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         var pauseButton = document.getElementById('pauseButton');
         pauseButton.innerHTML = "<h4>Pause</h4>";
-		if (window.globalPlayer != null ){window.globalPlayer.seek(0);}
+		//if (window.globalPlayer != null ){window.globalPlayer.seek(0);}
 		
         $scope.startStream(song_count, 0);
     }
@@ -421,6 +421,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
                 //songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
 
 
+			window.globalPlayer.seek(0);
                 //If we are on the Home Page
                 if ($location.path() == "/") {
                     //this is for resetting all the background color to its natural settings
