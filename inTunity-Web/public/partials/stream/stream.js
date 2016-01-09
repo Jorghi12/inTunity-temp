@@ -208,11 +208,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         //STORE COOKIE DATA
         $scope.updateCookieData();
-		
-		//So we don't stay paused on the next login.
-        $cookies.put('songPaused', false, {
-            expires: $scope.cookieExpirationDate()
-        });
 
         //STOP SOUND PLAYER
         if (window.globalPlayer != null) {
@@ -513,6 +508,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         var songPaused = songData[2];
         paused = songPaused;
 
+		alert(songPaused);
 		if ($scope.trackarray.length > 0){
 			song_count = songNum % $scope.trackarray.length;
 			if (songPaused == "true") {

@@ -57,6 +57,11 @@ angular.module( 'inTunity.login', [
         picture: picture,
         url_username: url_username
       });
+		
+		//So we don't stay paused on the next login.
+		$cookies.put('songPaused', false, {
+			expires: $scope.cookieExpirationDate()
+		});
       
       $location.path("/");
 
