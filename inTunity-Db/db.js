@@ -284,13 +284,16 @@ router.get('/api/account/id/' , function (req, res, next) {
 
 // deleting a specific song 
 router.delete('/api/account/id/song' , function (req, res, next) {
-	User.findOne({_id:ObjectId(req.query["user_id"]) }, function(err, userObj) {
+	User.findOne({user_id: req.query["user_id"]}, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);
 	  } else if (userObj) {
-	  	if (userObj["today_song"][0].id == ObjectId(req.query["song_id"])) {
-	  		userObj["today_song"].shift();
+	  	console.log(userObj);
+	  	if (userObj["today_song"].length > 0) {
+	  		if (userObj["today_song"][0].id == ObjectId(req.query["song_id"])) {
+	  			userObj["today_song"].shift();
+	  		}
 	  	}
 	  	for (var i = 0; i < userObj["song_history"].length; i++) {
 	  		if (userObj["song_history"][i].id == ObjectId(req.query["song_id"])) {
@@ -301,7 +304,7 @@ router.delete('/api/account/id/song' , function (req, res, next) {
 	    	if (err) {
 	    		throw err;
 	    	}	
-		 });	
+		});	
 	  }
 	});
 	res.sendStatus(200);	

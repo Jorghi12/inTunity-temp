@@ -150,7 +150,6 @@ app.delete('/secured/account/id/song', function(req, res) {
           console.log(error);
       } else {
         if (response.statusCode == 200) {
-          console.log(data);
           res.send(200);
         }
       }

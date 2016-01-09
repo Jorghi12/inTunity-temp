@@ -36,7 +36,7 @@
   <div id = "song-grid" align="center" ng-repeat = "item in correctPerson[0].song_history | orderBy:'-unix_time' " >
     <div class="col-md-4 song-tile">
       <a href="" ng-click = "deleteSongFromDB()">
-        <div class="delete-button">X</div>
+        <div class="delete-button" ng-click='deleteSong(user_id, item._id)'>X</div>
       </a>
       <a href="" ng-click = 'startStreamingProfileSong(item.song_url,item.song_album_pic,item.song_title,item.track_id,item.song_duration)'>
         

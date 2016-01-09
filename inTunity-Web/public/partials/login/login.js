@@ -76,15 +76,15 @@ angular.module( 'inTunity.login', [
 			
       $location.path("/");
 
-      $http.post('http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account', {data: user_account}, { 
+      $http.post('http://localhost:3001/secured/account', {data: user_account}, { 
           headers: {
           'Accept' : '*/*',
           'Content-Type': 'application/json'
          }
       }).success(function(data, status, headers, config) {
-       
+        console.log(status);
       }).error(function(data, status, headers, config) {
-
+        console.log(status);
       });
 
     }, function(error) {
