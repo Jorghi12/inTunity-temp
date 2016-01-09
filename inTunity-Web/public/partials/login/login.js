@@ -1,7 +1,7 @@
 angular.module( 'inTunity.login', [
   'auth0'
 ])
-.controller( 'LoginCtrl', function LoginController( $scope, auth, $location, store, $http) {
+.controller( 'LoginCtrl', function LoginController( $scope, auth, $location, store, $http, $cookies) {
 
   $scope.about = function() {
     $location.path('/about');
@@ -57,8 +57,23 @@ angular.module( 'inTunity.login', [
         picture: picture,
         url_username: url_username
       });
-		
-		
+
+		  
+		//Return our preset Expiration Dates for new Cookies
+		$scope.cookieExpirationDate = function() {
+			//Perhaps in the future optimize this based on our findings
+			var expirationDate = new Date();
+			var numberOfDaysToAdd = 10;
+			expirationDate.setDate(expirationDate.getDate() + numberOfDaysToAdd);
+
+			//Return the Date Object
+			return expirationDate;
+		}
+	
+		$cookies.put('songPaused', false, {
+			expires: $scope.cookieExpirationDate()
+		});
+			
       $location.path("/");
 
       $http.post('http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account', {data: user_account}, { 
