@@ -341,6 +341,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
     //Toggle (play/pause) the current song
     $scope.pause = function() {
+        var pauseButton = document.getElementById('pauseButton');
+		
 		//No song has ever started.
 		if (window.globalPlayer == null){
 			$scope.startStream(song_count, 0);
@@ -348,7 +350,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 			return;
 		}
 		
-        var pauseButton = document.getElementById('pauseButton');
         if (window.globalPlayer._isPlaying) {
             window.globalPlayer.pause();
             pauseButton.innerHTML = "<h4>Play</h4>";
@@ -376,6 +377,12 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		pagetype = "home";
 		userDisplay = ($scope.correctUsers[song_count]["user"][0]["nickname"] != null) ? $scope.correctUsers[song_count]["user"][0]["nickname"] : $scope.correctUsers[song_count]["user"][0]["given_name"];
 		
+		$scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
+		
+		//Paused Mode
+		if (pos == -2000){
+			return;
+		}
 		$scope.startStreamFULL(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype);
 	}
 		
@@ -490,12 +497,24 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 				else{
 					var length = songDuration;
 				}
+			
                 if (length == globalPlayer.currentTime()) {
                     song_count = (song_count + 1) % $scope.trackarray.length;
                     musicStatus.setStatus(song_count, 0, false);
 
-                    globalPlayer.seek(0); //Do this before startStream
-                    $scope.startStream(song_count, 0);
+					//Return to Pause Mode for addsong + profile
+					if (pagetype == "addsong" || pagetype == "profile"){
+						var pauseButton = document.getElementById('pauseButton');
+						pauseButton.innerHTML = "<h4>Play</h4>";
+						globalPlayer.seek(0); //Do this before startStream
+						$scope.startStream(song_count, -2000);
+					}
+					else
+					{
+						globalPlayer.seek(0); //Do this before startStream
+						$scope.startStream(song_count, 0);
+					}
+					
                 }
 
             }); // end of finish
