@@ -417,8 +417,15 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		  if ($scope.confirmSong == false){
 			  var confirmButton = document.createElement("button");
 			  
+              var numClicked = 0;
 			  confirmButton.onclick = function() {
-				$scope.selectSong(songUrl, artworkUrl, myTitle, trackid, songDuration);
+
+                // this is to prevent button smashing (i.e. getting like 5 same songs)
+                numClicked += 1;
+                if (numClicked == 1) {
+                    $scope.selectSong(songUrl, artworkUrl, myTitle, trackid, songDuration);
+                }
+				
 			  }
 
 			  var confirmTitle = document.createElement("h4");

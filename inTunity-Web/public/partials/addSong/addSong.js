@@ -171,11 +171,19 @@ angular.module('inTunity.addSong', [
                             var confirmSong = document.createElement("div");
                             confirmSong.innerHTML = "<h4>Confirm</h4>";
 
+
+                            var numClicked = 0;
                             confirmSong.onclick = function() {
+
                                 var selectedSong = obj[this.id];
                                 var id = (selectedSong["id"]);
 
-                                $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
+                                numClicked += 1;
+                                if (numClicked == 1) {
+                                    $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
+                                }
+
+                              
 
                             }
 
