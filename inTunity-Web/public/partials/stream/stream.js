@@ -305,6 +305,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         }
 
         song_count = index;
+        var pauseButton = document.getElementById('pauseButton');
+        pauseButton.innerHTML = "<h4>Pause</h4>";
 		//if (window.globalPlayer != null ){window.globalPlayer.seek(0);}
         $scope.startStream(song_count, 0);
     }
@@ -482,7 +484,12 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 
             globalPlayer.on('finish', function() {
-                var length = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
+				if (pagetype == "home"){
+					var length = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
+				}
+				else{
+					var length = songDuration;
+				}
                 if (length == globalPlayer.currentTime()) {
                     song_count = (song_count + 1) % $scope.trackarray.length;
                     musicStatus.setStatus(song_count, 0, false);
