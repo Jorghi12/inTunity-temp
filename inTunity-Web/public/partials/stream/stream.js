@@ -208,6 +208,11 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         //STORE COOKIE DATA
         $scope.updateCookieData();
+		
+		//So we don't stay paused on the next login.
+        $cookies.put('songPaused', false, {
+            expires: $scope.cookieExpirationDate()
+        });
 
         //STOP SOUND PLAYER
         if (window.globalPlayer != null) {
