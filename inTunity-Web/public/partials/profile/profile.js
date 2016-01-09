@@ -87,14 +87,7 @@ angular.module('inTunity.profile', [
             $scope.correctPerson[0].song_history[i].formmatedDay = formmatedDay;
         }
 
-        $scope.startStreamingProfileSong = function(songUrl, artworkUrl, myTitle, trackid, duration) {
-            window.startStreamCustom(songUrl, artworkUrl, myTitle, trackid, duration, $scope.owner,"profile",false);
-        }
-
-    });
-
-
-        $http({
+          $http({
             url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account/id',
             method: 'GET',
             params: {
@@ -104,10 +97,13 @@ angular.module('inTunity.profile', [
             var ownpersonalusername = response["data"]["user"]["url_username"];
             var username_clicked = store.get('username_clicked');
 
-
+           
 
             if (username_clicked == ownpersonalusername) {
+                console.log("hit");
                 var deleteButton = document.getElementsByClassName("delete");
+
+                console.log(deleteButton);
                 $(deleteButton).append("X");
                 $(deleteButton).click(function() {
                   $scope.deleteSong($scope.user_id,this.getAttribute('value'));
@@ -118,6 +114,18 @@ angular.module('inTunity.profile', [
                 document.getElementById("selected-link").id = "";
             }
         }); // end of http get
+
+
+        
+
+        $scope.startStreamingProfileSong = function(songUrl, artworkUrl, myTitle, trackid, duration) {
+            window.startStreamCustom(songUrl, artworkUrl, myTitle, trackid, duration, $scope.owner,"profile",false);
+        }
+
+    });
+
+
+
 
 
 
@@ -154,7 +162,7 @@ angular.module('inTunity.profile', [
                     }
                 }).success(function(data, status, headers, config) {
                     store.set('username_clicked', ownpersonalusername);
-                    location.reload();
+                    window.location.reload()
                 }).error(function(data, status, headers, config) {
                   console.log(status);
                 });
