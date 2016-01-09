@@ -153,6 +153,7 @@ angular.module('inTunity.profile', [
                         song_id: songid
                     }
                 }).success(function(data, status, headers, config) {
+                    store.set('username_clicked', ownpersonalusername);
                     location.reload();
                 }).error(function(data, status, headers, config) {
                   console.log(status);
