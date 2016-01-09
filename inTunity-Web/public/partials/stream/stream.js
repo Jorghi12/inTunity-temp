@@ -586,9 +586,14 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         paused = songPaused;
 		
 		//Start at 0 - if someone pushed a new song - We'll improve our newsfeed algorithm later
-		//if ($cookies.get('firstSong') != null && $cookies.get('firstSong') != ){
-		//	songNum = 0;
-		//}
+		if ($cookies.get('firstSong') != null && $cookies.get('firstSong') != $scope.trackarray[0]){
+			songNum = 0;
+		}
+		
+		//Store our first song inside the cookie to help the check above.
+		$cookies.put('firstSong', $scope.trackarray[0], {
+            expires: $scope.cookieExpirationDate()
+        });
 		
 		if ($scope.trackarray.length > 0){
 			song_count = songNum % $scope.trackarray.length;
