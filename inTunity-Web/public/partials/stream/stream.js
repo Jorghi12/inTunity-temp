@@ -386,7 +386,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	$scope.startStreamFULL = function(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype, pos) {
         $scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
 		if (pagetype == "addsong"){
-		  if ($scope.confirmSong == false){
 			  var prevButton = document.getElementById("prevButton");
 			  prevButton.style.visibility = "hidden";
 
@@ -404,12 +403,16 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 			  var playerButtons = document.getElementById("playerButtons");
 
 
+		  if ($scope.confirmSong == false){
 			  var confirmButton = document.createElement("button");
+			  
 			  confirmButton.onclick = function() {
 				$scope.selectSong(songUrl, artworkUrl, myTitle, trackid, songDuration);
 			  }
 
 			  var confirmTitle = document.createElement("h4");
+			  confirmTitle.setAttribute("id", "confirmTitle");
+			  
 			  confirmTitle.innerHTML = "Confirm";
 			  confirmButton.appendChild(confirmTitle);
 			  confirmButton.setAttribute("id", "playerConfirm");
@@ -419,6 +422,13 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 			  $scope.confirmSong = true;
 		  }
+		  else{
+			  var confirmButton = document.getElementById("playerConfirm");
+			  confirmButton.style.visibility = "visible";
+			  
+			  var confirmTitle = document.getElementById("confirmTitle");
+			  confirmTitle.style.visibility = "visible";
+		  }
 		}
 		
         SC.stream("/tracks/" + trackid).then(function(player) {
@@ -427,6 +437,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 			//If not Start Paused
 			if (pos != -2000){
+				var pauseButton = document.getElementById('pauseButton');
+				pauseButton.innerHTML = "<h4>Pause</h4>";
 				window.globalPlayer.play();
 			}
 			
@@ -507,6 +519,27 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 						pauseButton.innerHTML = "<h4>Play</h4>";
 						globalPlayer.seek(0); //Do this before startStream
 						$scope.startStream(song_count, -2000);
+						
+						
+			  var prevButton = document.getElementById("prevButton");
+			  prevButton.style.visibility = "visible";
+
+			  var nextButton = document.getElementById("nextButton");
+			  nextButton.style.visibility = "visible";
+
+			  var poster = document.getElementById("currentuser");
+			  poster.style.visibility = "visible";
+ 
+			  var selectedBy = document.getElementById("selectedBy");
+			  selectedBy.style.visibility = "visible";
+
+			  var confirmButton = document.getElementById("playerConfirm");
+			  confirmButton.style.visibility = "hidden";
+			  
+			  var confirmTitle = document.getElementById("confirmTitle");
+			  confirmTitle.style.visibility = "hidden";
+
+			  $scope.confirmSong = true;
 					}
 					else
 					{
