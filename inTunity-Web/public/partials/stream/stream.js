@@ -197,7 +197,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         var id = prof["identities"][0]["user_id"];
 
-        console.log(prof);
+        // console.log(prof);
 
         //Sets user display name
         if (prof["given_name"] != null) {

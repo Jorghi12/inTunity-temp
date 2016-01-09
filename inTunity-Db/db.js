@@ -289,7 +289,6 @@ router.delete('/api/account/id/song' , function (req, res, next) {
 	    console.log(err);
 	    res.sendStatus(500);
 	  } else if (userObj) {
-	  	console.log(userObj);
 	  	if (userObj["today_song"].length > 0) {
 	  		if (userObj["today_song"][0].id == ObjectId(req.query["song_id"])) {
 	  			userObj["today_song"].shift();

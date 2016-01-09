@@ -55,24 +55,81 @@ angular.module('inTunity.profile', [
         }); // end of http get
     }
 
+  
+
 
     $http({
-        url: 'http://localhost:3001/secured/account/id',
-        method: 'GET',
-        params: {
-            id: id
-        }
+        url: 'http://localhost:3001/secured/account',
+        method: 'GET'
     }).then(function(response) {
-        var ownpersonalusername = response["data"]["user"]["url_username"];
-        var username_clicked = store.get('username_clicked');
-        if (username_clicked != ownpersonalusername) {
-            document.getElementById("selected-link").id = "";
+        var users = response["data"]["songs"];
 
+        $scope.correctPerson = [];
+        for (var i = 0; i < users.length; i++) {
+            if (users[i]["url_username"] == $routeParams.itemId) {
+                $scope.correctPerson.push(users[i]);
+            }
+            if (users[i]["today_song"].length > 0) {
+                count_todaysongs++;
+            }
         }
-    }); // end of http get
+
+        $scope.numPosts = $scope.correctPerson[0].song_history.length;
+
+        for (var i = 0; i < $scope.correctPerson[0].song_history.length; i++) {
+            var date = new Date($scope.correctPerson[0].song_history[i]["unix_time"] * 1000);
+            var year = date.getFullYear();
+            var month = date.getMonth();
+            var day = date.getDate();
+            var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+            var formmatedDay = monthNames[month] + " " + day + ", " + year;
+
+            $scope.correctPerson[0].song_history[i].formmatedDay = formmatedDay;
+        }
+
+        $scope.startStreamingProfileSong = function(songUrl, artworkUrl, myTitle, trackid, duration) {
+            window.startStreamCustom(songUrl, artworkUrl, myTitle, trackid, duration, $scope.owner,"profile",false);
+        }
+
+    });
 
 
-    // for deleting a particular song on your own account
+        $http({
+            url: 'http://localhost:3001/secured/account/id',
+            method: 'GET',
+            params: {
+                id: id
+            }
+        }).then(function(response) {
+            var ownpersonalusername = response["data"]["user"]["url_username"];
+            var username_clicked = store.get('username_clicked');
+
+
+
+            if (username_clicked == ownpersonalusername) {
+                var deleteButton =document.getElementsByClassName("delete-button");
+                $(deleteButton).append("X");
+                $(deleteButton).click(function() {
+                  $scope.deleteSong($scope.user_id,this.getAttribute('value'));
+                });
+                           
+            }
+
+            if (username_clicked != ownpersonalusername) {
+                document.getElementById("selected-link").id = "";
+            }
+        }); // end of http get
+
+
+
+
+
+ 
+
+
+
+
+      // for deleting a particular song on your own account
     $scope.deleteSong = function(userid, songid) {
         $http({
             url: 'http://localhost:3001/secured/account/id',
@@ -105,39 +162,7 @@ angular.module('inTunity.profile', [
         }); // end of http get
     }
 
-    $http({
-        url: 'http://localhost:3001/secured/account',
-        method: 'GET'
-    }).then(function(response) {
-        var users = response["data"]["songs"];
-
-        $scope.correctPerson = [];
-        for (var i = 0; i < users.length; i++) {
-            if (users[i]["url_username"] == $routeParams.itemId) {
-                $scope.correctPerson.push(users[i]);
-            }
-            if (users[i]["today_song"].length > 0) {
-                count_todaysongs++;
-            }
-        }
-
-        $scope.numPosts = $scope.correctPerson[0].song_history.length;
-
-        for (var i = 0; i < $scope.correctPerson[0].song_history.length; i++) {
-            var date = new Date($scope.correctPerson[0].song_history[i]["unix_time"] * 1000);
-            var year = date.getFullYear();
-            var month = date.getMonth();
-            var day = date.getDate();
-            var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
-            var formmatedDay = monthNames[month] + " " + day + ", " + year;
-
-            $scope.correctPerson[0].song_history[i].formmatedDay = formmatedDay;
-        }
 
 
-    $scope.startStreamingProfileSong = function(songUrl, artworkUrl, myTitle, trackid, duration) {
-        window.startStreamCustom(songUrl, artworkUrl, myTitle, trackid, duration, $scope.owner,"profile",false);
-    }
 
-})
 });
