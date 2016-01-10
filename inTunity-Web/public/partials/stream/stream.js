@@ -592,13 +592,82 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		//Currently Playing Song
 		if ($scope.trackID == trackID){
 			//Continue playing previous song. ($scope.song_count) instead of ($scope.song_count + 1)
-			$scope.song_count = ($scope.song_count + 1) % $scope.trackarray.length;
-			musicStatus.setStatus($scope.song_count, 0, false);
-			globalPlayer.seek(0); //Do this before startStream
-			$scope.startStream($scope.song_count, 0);
+			$scope.updateTrackSongs();
 		}
 	}
 	window.nextSong = $scope.nextSong;
+	
+	//Update the Mainfeed TrackSongs
+	//Load Track Data
+	$scope.updateTrackSongs = function(){
+		$http({
+         url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account',
+        method: 'GET'
+    }).then(function(response) {
+        var users = response["data"]["songs"];
+
+        // this array has users who only have songs for today with it
+        $scope.correctUsers = [];
+
+        // makes sure we only show users who have songs
+        for (var i = 0; i < users.length; i++) {
+            if (users[i]["today_song"].length > 0) {
+
+                var date = new Date(users[i]["today_song"][0]["unix_time"] * 1000);
+                var year = date.getFullYear();
+                var month = date.getMonth();
+                var day = date.getDate();
+                var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+                var formmatedDay = monthNames[month] + " " + day + ", " + year;
+                var hours = date.getHours();
+                var minutes = "0" + date.getMinutes();
+                var am_pm = "AM";
+                if (hours == 12) {
+                    am_pm = "PM";
+                }
+                if (hours > 12) {
+                    hours = hours - 12;
+                    am_pm = "PM";
+                }
+                if (hours == 0) {
+                    hours = 12;
+                }
+
+                var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
+                $scope.correctUsers.push({
+                    user: new Array(users[i]),
+                    formattedTime: formattedTime,
+                    formmatedDay: formmatedDay,
+                    unix_time: users[i]["today_song"][0]["unix_time"] * 1000
+                })
+
+            } else {
+
+            }
+        } // end of for loop
+
+
+        //Sort Correct Users by Unix Time
+        $scope.correctUsers.sort(function(a, b) {
+            // Turn your strings into dates, and then subtract them
+            // to get a value that is either negative, positive, or zero.
+            return new Date(b.unix_time) - new Date(a.unix_time);
+        });
+
+        $scope.users = $scope.correctUsers;
+
+        $scope.trackarray = [];
+
+        for (var i = 0; i < $scope.correctUsers.length; i++) {
+            $scope.trackarray.push(new Array($scope.correctUsers[i]["user"][0]["today_song"][0]["track_id"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_album_pic"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_title"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_duration"]));
+        }
+		
+			$scope.song_count = ($scope.song_count) % $scope.trackarray.length;
+			musicStatus.setStatus($scope.song_count, 0, false);
+			globalPlayer.seek(0); //Do this before startStream
+			$scope.startStream($scope.song_count, 0);
+    });
+	}
 	
     //Starts the player on Page Load
     $scope.autoStart = function() {
