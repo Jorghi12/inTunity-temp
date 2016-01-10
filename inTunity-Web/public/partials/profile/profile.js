@@ -195,7 +195,7 @@ angular.module('inTunity.profile', [
 
             					//Check if the deleted song is currently playing, if so tell the player to go to the next HomePage Song.
             					if (window.globalPlayer._isPlaying){
-            						window.nextSong();
+            						window.nextSong(song_track_id);
             					}
             					
                       $location.path("/profile/" + ownpersonalusername);

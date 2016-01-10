@@ -8,6 +8,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     });
 
 	$scope.confirmSong = false;
+	$scope.trackID;
 	
 	//Load Track Data
     $http({
@@ -389,6 +390,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     //Start the SoundCloud Stream!
 	$scope.startStreamFULL = function(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype, pos) {
         $scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
+		$scope.trackID = trackid;
 		if (pagetype == "profile"){
 			  var prevButton = document.getElementById("prevButton");
 			  prevButton.style.visibility = "hidden";
@@ -532,7 +534,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 
             globalPlayer.on('finish', function() {
-				if (pagetype == "home"){
+				if (pagetype == "home" || $location.path() == "/") {
 					var length = parseInt($scope.trackarray[$scope.song_count % $scope.trackarray.length][3]);
 				}
 				else{
@@ -541,7 +543,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 			
                 if (length == globalPlayer.currentTime()) {
 					//Return to Pause Mode for addsong + profile
-					if (pagetype == "addsong" || pagetype == "profile"){
+					if ((pagetype == "addsong" || pagetype == "profile") && $location.path() != "/"){
 						var pauseButton = document.getElementById('pauseButton');
 						pauseButton.innerHTML = "<h4>Play</h4>";
 						globalPlayer.seek(0); //Do this before startStream
@@ -585,12 +587,16 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
     window.startStreamCustom = $scope.startStreamFULL;
 
-	//Load next song
-	$scope.nextSong = function(){
-		$scope.song_count = ($scope.song_count + 1) % $scope.trackarray.length;
-		musicStatus.setStatus($scope.song_count, 0, false);
-		globalPlayer.seek(0); //Do this before startStream
-		$scope.startStream($scope.song_count, 0);
+	//Load next song (used for Profile where we may delete a song that's currently playing.. want to go to main feed)
+	$scope.nextSong = function(trackID){
+		//Currently Playing Song
+		if ($scope.trackID == trackID){
+			//Continue playing previous song. ($scope.song_count) instead of ($scope.song_count + 1)
+			$scope.song_count = ($scope.song_count) % $scope.trackarray.length;
+			musicStatus.setStatus($scope.song_count, 0, false);
+			globalPlayer.seek(0); //Do this before startStream
+			$scope.startStream($scope.song_count, 0);
+		}
 	}
 	window.nextSong = $scope.nextSong;
 	
