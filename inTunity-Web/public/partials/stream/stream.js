@@ -472,8 +472,23 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 				window.globalPlayer.play();
 			}
 			
+		
 			
-				
+			//If we are on the Home Page
+			if ($location.path() == "/") {
+				//this is for resetting all the background color to its natural settings
+				for (var i = 0; i < $scope.trackarray.length; i++) {
+					var row = document.getElementById("song" + i);
+					row.style.backgroundColor = "#f5f5f5";
+				}
+
+				// this targets which row to highlight
+				var rowCurrent = document.getElementById("song" + $scope.song_count);
+				rowCurrent.style.backgroundColor = "#ffe4c4";
+				window.scroll(0, $scope.findPos(rowCurrent));
+
+			}
+			
             //Add on Play-Start event code
             globalPlayer.on('play-start', function() {
                 //songDuration = parseInt($scope.trackarray[$scope.song_count % $scope.trackarray.length][3]);
@@ -481,23 +496,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					window.globalPlayer.seek(0);
 				}
 				
-                //If we are on the Home Page
-                if ($location.path() == "/") {
-                    //this is for resetting all the background color to its natural settings
-                    for (var i = 0; i < $scope.trackarray.length; i++) {
-                        var row = document.getElementById("song" + i);
-                        row.style.backgroundColor = "#f5f5f5";
-                    }
-
-                    // this targets which row to highlight
-                    var rowCurrent = document.getElementById("song" + $scope.song_count);
-                    rowCurrent.style.backgroundColor = "#ffe4c4";
-                    window.scroll(0, $scope.findPos(rowCurrent));
-
-                }
             });
-
-
 
             //Event asynchronously runs while the song is streaming
             globalPlayer.on('time', function() {
