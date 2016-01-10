@@ -105,7 +105,12 @@ angular.module('inTunity.profile', [
                 console.log(deleteButton);
                 $(deleteButton).append("X");
                 $(deleteButton).click(function() {
-                  $scope.deleteSong($scope.user_id,this.getAttribute('value'));
+                  var item = this.getAttribute('value');
+                  console.log(item["song_duration"])
+                  var str = JSON.stringify(item);
+                  console.log(JSON.parse(str));
+
+                  // $scope.deleteSong($scope.user_id,this.getAttribute('value'), this.getAttribute('value'));
                 });                  
             }
 
@@ -136,7 +141,8 @@ angular.module('inTunity.profile', [
 
 
       // for deleting a particular song on your own account
-    $scope.deleteSong = function(userid, songid) {
+    $scope.deleteSong = function(userid, songid, song_track_id) {
+
         $http({
             url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account/id',
             method: 'GET',
@@ -174,9 +180,6 @@ angular.module('inTunity.profile', [
                             if (users[i]["url_username"] == $routeParams.itemId) {
                                 $scope.correctPerson.push(users[i]);
                             }
-                            if (users[i]["today_song"].length > 0) {
-                                count_todaysongs++;
-                            }
                         }
 
                         $scope.numPosts = $scope.correctPerson[0].song_history.length;
@@ -193,21 +196,18 @@ angular.module('inTunity.profile', [
                         }
                      });
 
-
-
-
-					//Check if the deleted song is currently playing, if so tell the player to go to the next HomePage Song.
-					if (window.globalPlayer._isPlaying && ){
-						window.nextSong();
-					}
-					
-                    $location.path("/profile/" + ownpersonalusername);
-                    // window.location.reload();
-                }).error(function(data, status, headers, config) {
-                  console.log(status);
-                });
-            }
-        }); // end of http get
+            					//Check if the deleted song is currently playing, if so tell the player to go to the next HomePage Song.
+            					if (window.globalPlayer._isPlaying){
+            						window.nextSong();
+            					}
+            					
+                      $location.path("/profile/" + ownpersonalusername);
+                      // window.location.reload();
+                  }).error(function(data, status, headers, config) {
+                    console.log(status);
+                  });
+              }
+          }); // end of http get
     }
 
 
