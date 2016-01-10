@@ -161,7 +161,46 @@ angular.module('inTunity.profile', [
                     }
                 }).success(function(data, status, headers, config) {
                     store.set('username_clicked', ownpersonalusername);
-                    window.location.reload()
+
+                    // UPDATE CONTENT WITHOUT ACTUALY REFRESHING PAGE
+                    $http({
+                        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account',
+                        method: 'GET'
+                    }).then(function(response) {
+                        var users = response["data"]["songs"];
+
+                        $scope.correctPerson = [];
+                        for (var i = 0; i < users.length; i++) {
+                            if (users[i]["url_username"] == $routeParams.itemId) {
+                                $scope.correctPerson.push(users[i]);
+                            }
+                            if (users[i]["today_song"].length > 0) {
+                                count_todaysongs++;
+                            }
+                        }
+
+                        $scope.numPosts = $scope.correctPerson[0].song_history.length;
+
+                        for (var i = 0; i < $scope.correctPerson[0].song_history.length; i++) {
+                            var date = new Date($scope.correctPerson[0].song_history[i]["unix_time"] * 1000);
+                            var year = date.getFullYear();
+                            var month = date.getMonth();
+                            var day = date.getDate();
+                            var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+                            var formmatedDay = monthNames[month] + " " + day + ", " + year;
+
+                            $scope.correctPerson[0].song_history[i].formmatedDay = formmatedDay;
+                        }
+                     });
+
+
+
+
+
+
+
+                    $location.path("/profile/" + ownpersonalusername);
+                    // window.location.reload();
                 }).error(function(data, status, headers, config) {
                   console.log(status);
                 });
