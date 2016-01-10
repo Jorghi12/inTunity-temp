@@ -413,9 +413,9 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 			  var playerButtons = document.getElementById("playerButtons");
 
-
+                var confirmButton = document.createElement("button");
 		  if ($scope.confirmSong == false){
-			  var confirmButton = document.createElement("button");
+
 			  
               var numClicked = 0;
 			  confirmButton.onclick = function() {
