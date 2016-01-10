@@ -106,11 +106,8 @@ angular.module('inTunity.profile', [
                 $(deleteButton).append("X");
                 $(deleteButton).click(function() {
                   var item = this.getAttribute('value');
-                  console.log(item["song_duration"])
-                  var str = JSON.stringify(item);
-                  console.log(JSON.parse(str));
-
-                  // $scope.deleteSong($scope.user_id,this.getAttribute('value'), this.getAttribute('value'));
+                  var obj = JSON.parse(item);
+                  $scope.deleteSong($scope.user_id,obj["_id"], obj["track_id"]);
                 });                  
             }
 
