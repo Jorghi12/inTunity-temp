@@ -442,6 +442,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		  }
 		  else{
               var numClicked = 0;
+			  var confirmButton = document.getElementById("playerConfirm");
 			  confirmButton.onclick = function() {
 
                 // this is to prevent button smashing (i.e. getting like 5 same songs)
