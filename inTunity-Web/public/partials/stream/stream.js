@@ -585,6 +585,15 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
     window.startStreamCustom = $scope.startStreamFULL;
 
+	//Load next song
+	$scope.nextSong = function(){
+		$scope.song_count = ($scope.song_count + 1) % $scope.trackarray.length;
+		musicStatus.setStatus($scope.song_count, 0, false);
+		globalPlayer.seek(0); //Do this before startStream
+		$scope.startStream($scope.song_count, 0);
+	}
+	window.nextSong = $scope.nextSong;
+	
     //Starts the player on Page Load
     $scope.autoStart = function() {
         //Load important data from cookies + server
