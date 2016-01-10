@@ -606,7 +606,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		//Start at 0 - if someone pushed a new song - We'll improve our newsfeed algorithm later
 		if ($cookies.get('firstSong') != null && $cookies.get('firstSong') != $scope.trackarray[0]){
 			//If we aren't in the middle of a song, reset
-			if (window.globalPlayer._isPlaying == false){
+			if (window.globalPlayer == null || window.globalPlayer._isPlaying == false){
 				songNum = 0;
 			}
 		}
