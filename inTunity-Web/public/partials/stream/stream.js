@@ -624,6 +624,9 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 				songDuration = parseInt($scope.trackarray[song_count % $scope.trackarray.length][3]);
 				userDisplay = ($scope.correctUsers[song_count]["user"][0]["nickname"] != null) ? $scope.correctUsers[song_count]["user"][0]["nickname"] : $scope.correctUsers[song_count]["user"][0]["given_name"];
 			
+                //Updates the current state of the player footer GUI
+                $scope.updateCurrentPlayerGraphics(songDuration);
+				
 				$scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
 			} else {
 				$scope.startStream(song_count, songPos);
