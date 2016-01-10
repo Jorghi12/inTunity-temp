@@ -592,7 +592,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		//Currently Playing Song
 		if ($scope.trackID == trackID){
 			//Continue playing previous song. ($scope.song_count) instead of ($scope.song_count + 1)
-			$scope.song_count = ($scope.song_count) % $scope.trackarray.length;
+			$scope.song_count = ($scope.song_count + 1) % $scope.trackarray.length;
 			musicStatus.setStatus($scope.song_count, 0, false);
 			globalPlayer.seek(0); //Do this before startStream
 			$scope.startStream($scope.song_count, 0);
