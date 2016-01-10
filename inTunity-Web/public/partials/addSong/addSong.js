@@ -100,7 +100,7 @@ angular.module('inTunity.addSong', [
 
                 if (name == "") {
                     container.innerHTML = "<h3>Please Enter a Search Query</h3>";
-                } else if (name.indexOf("<") != 1 || name.indexOf(">") != 1) {
+                } else if (name.indexOf("<") != -1 || name.indexOf(">") != -1) {
                     container.innerHTML = "<h3>Please Enter a Valid Query</h3>";
                 } else {
 
