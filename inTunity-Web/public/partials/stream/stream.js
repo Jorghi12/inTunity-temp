@@ -631,6 +631,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 				}
 				
 				$scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
+				
+				$scope.startStream(song_count, -2000);
 			} else {
 				$scope.startStream(song_count, songPos);
 			}
