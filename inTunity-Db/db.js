@@ -209,7 +209,8 @@ router.post('/api/account/id/song' , function (req, res, next) {
 			song_url: req.body.song_url,
 			unix_time: req.body.unix_time,
 			track_id: req.body.track_id,
-			song_duration: req.body.song_duration
+			song_duration: req.body.song_duration,
+			likes: 0
 	    });
 
 	
@@ -283,7 +284,7 @@ router.get('/api/account/id/' , function (req, res, next) {
 });
 
 // deleting a specific song 
-router.delete('/api/account/id/song' , function (req, res, next) {
+router.delete('/api/account/id/song/id' , function (req, res, next) {
 	User.findOne({user_id: req.query["user_id"]}, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
@@ -304,12 +305,8 @@ router.delete('/api/account/id/song' , function (req, res, next) {
 		  				userObj["today_song"][0] = userObj["song_history"][0];
 		  			}	
 		  		}
-	  		}
-
-	  		
+	  		}	
 	  	}
-
-
 	  	userObj.save(function(err) {
 	    	if (err) {
 	    		throw err;
@@ -319,6 +316,73 @@ router.delete('/api/account/id/song' , function (req, res, next) {
 	});
 	res.sendStatus(200);	
 });
+
+
+router.post('/api/account/id/likes/song/id', function (req, res, next) {
+
+	User.findOne({user_id: req.body.posted_user_id}, function (err, userObj) {
+	    if (err) {
+	      console.log(err);
+	      res.sendStatus(500);
+	    } else if (userObj) {
+
+	    
+	     	for (var i = 0; i < userObj["song_history"].length; i++) {
+		  		if (userObj["song_history"][i].id == ObjectId(req.body.song_id)) {
+
+		  			// item not there
+		  			if (userObj["song_history"][i].who_liked.indexOf(req.body.liked_user_id) == -1) {
+		  				userObj["song_history"][i].likes += 1;
+		  				userObj["song_history"][i].who_liked.unshift(req.body.liked_user_id);
+		  			} else {
+		  				console.log("hit");
+		  				var index = userObj["song_history"][i].who_liked.indexOf(req.body.liked_user_id);
+		  				userObj["song_history"][i].likes -= 1;
+		  				userObj["song_history"][i].who_liked.splice(index, 1);
+		  			}
+		  		}
+		  	}
+
+
+
+		  	if (userObj["today_song"].length == 1) {
+		  		if (userObj["today_song"][0].id == ObjectId(req.body.song_id)) {
+
+		  			// item not there
+		  			if(userObj["today_song"][0].who_liked.indexOf(req.body.liked_user_id) == -1) {
+		  				userObj["today_song"][0].likes += 1;
+		  				userObj["today_song"][0].who_liked.unshift(req.body.liked_user_id);
+		  			} else {
+		  				var index = userObj["today_song"][0].who_liked.indexOf(req.body.liked_user_id);
+		  				userObj["today_song"][0].likes -= 1;
+		  				userObj["today_song"][0].who_liked.splice(index, 1);
+		  			}	
+		  		}
+		  	}	
+
+		  	// this userObj represents who posted that song
+			userObj.save(function(err) {
+		    	if (err) {
+		    		throw err;
+		    	}	
+			});	
+
+	      
+
+		  	res.sendStatus(200);
+
+	    } 
+
+
+	 });
+});
+
+
+
+
+
+
+
 
 
 

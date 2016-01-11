@@ -137,9 +137,9 @@ app.get('/secured/account/id', function(req, res) {
 });
 
 // deleting a song on your own account
-app.delete('/secured/account/id/song', function(req, res) {
+app.delete('/secured/account/id/song/id', function(req, res) {
   request({
-      url: process.env.DATABASE + '/api/account/id/song',
+      url: process.env.DATABASE + '/api/account/id/song/id',
       headers: {
       'Content-Type': 'application/json'
       },
@@ -155,6 +155,33 @@ app.delete('/secured/account/id/song', function(req, res) {
       }
   });
 });
+
+
+
+// this method is used for liking a certain song
+app.post('/secured/account/id/likes/song/id', function(req, res) {
+  request({
+    url: process.env.DATABASE + "/api/account/id/likes/song/id", //URL to hit
+    method: 'POST', //Specify the method
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: req.body["data"]
+
+  }, function(error, response, body) {
+      if(error) {
+          console.log(error);
+      } else {
+          res.send(200);
+      }
+  });
+});
+
+
+
+
+
+
 
 
 

@@ -12,7 +12,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	
 	//Load Track Data
     $http({
-         url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account',
+         url: 'http://localhost:3001/secured/account',
         method: 'GET'
     }).then(function(response) {
         var users = response["data"]["songs"];
@@ -65,7 +65,11 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
             return new Date(b.unix_time) - new Date(a.unix_time);
         });
 
+
+
         $scope.users = $scope.correctUsers;
+
+                console.log($scope.users);
 
         $scope.trackarray = [];
 
@@ -601,7 +605,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	//Load Track Data
 	$scope.updateTrackSongs = function(){
 		$http({
-         url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account',
+         url: 'http://localhost:3001/secured/account',
         method: 'GET'
     }).then(function(response) {
         var users = response["data"]["songs"];
