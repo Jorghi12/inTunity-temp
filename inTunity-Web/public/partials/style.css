@@ -402,3 +402,8 @@ hr {
 	height: 30px;
 	float: right;
 }
+
+.likes {
+	cursor:pointer;
+}
+

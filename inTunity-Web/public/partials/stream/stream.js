@@ -12,7 +12,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	
 	//Load Track Data
     $http({
-         url: 'http://localhost:3001/secured/account',
+         url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account',
         method: 'GET'
     }).then(function(response) {
         var users = response["data"]["songs"];
@@ -69,7 +69,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         $scope.users = $scope.correctUsers;
 
-                console.log($scope.users);
+
 
         $scope.trackarray = [];
 
@@ -605,50 +605,50 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	//Load Track Data
 	$scope.updateTrackSongs = function(){
 		$http({
-         url: 'http://localhost:3001/secured/account',
-        method: 'GET'
-    }).then(function(response) {
-        var users = response["data"]["songs"];
+            url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account',
+            method: 'GET'
+        }).then(function(response) {
+            var users = response["data"]["songs"];
 
-        // this array has users who only have songs for today with it
-        $scope.correctUsers = [];
+            // this array has users who only have songs for today with it
+            $scope.correctUsers = [];
 
-        // makes sure we only show users who have songs
-        for (var i = 0; i < users.length; i++) {
-            if (users[i]["today_song"].length > 0) {
+            // makes sure we only show users who have songs
+            for (var i = 0; i < users.length; i++) {
+                if (users[i]["today_song"].length > 0) {
 
-                var date = new Date(users[i]["today_song"][0]["unix_time"] * 1000);
-                var year = date.getFullYear();
-                var month = date.getMonth();
-                var day = date.getDate();
-                var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
-                var formmatedDay = monthNames[month] + " " + day + ", " + year;
-                var hours = date.getHours();
-                var minutes = "0" + date.getMinutes();
-                var am_pm = "AM";
-                if (hours == 12) {
-                    am_pm = "PM";
+                    var date = new Date(users[i]["today_song"][0]["unix_time"] * 1000);
+                    var year = date.getFullYear();
+                    var month = date.getMonth();
+                    var day = date.getDate();
+                    var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+                    var formmatedDay = monthNames[month] + " " + day + ", " + year;
+                    var hours = date.getHours();
+                    var minutes = "0" + date.getMinutes();
+                    var am_pm = "AM";
+                    if (hours == 12) {
+                        am_pm = "PM";
+                    }
+                    if (hours > 12) {
+                        hours = hours - 12;
+                        am_pm = "PM";
+                    }
+                    if (hours == 0) {
+                        hours = 12;
+                    }
+
+                    var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
+                    $scope.correctUsers.push({
+                        user: new Array(users[i]),
+                        formattedTime: formattedTime,
+                        formmatedDay: formmatedDay,
+                        unix_time: users[i]["today_song"][0]["unix_time"] * 1000
+                    })
+
+                } else {
+
                 }
-                if (hours > 12) {
-                    hours = hours - 12;
-                    am_pm = "PM";
-                }
-                if (hours == 0) {
-                    hours = 12;
-                }
-
-                var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
-                $scope.correctUsers.push({
-                    user: new Array(users[i]),
-                    formattedTime: formattedTime,
-                    formmatedDay: formmatedDay,
-                    unix_time: users[i]["today_song"][0]["unix_time"] * 1000
-                })
-
-            } else {
-
-            }
-        } // end of for loop
+            } // end of for loop
 
 
         //Sort Correct Users by Unix Time
