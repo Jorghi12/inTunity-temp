@@ -16,7 +16,8 @@ var Song = new Schema({
 	track_id: String,
 	song_duration: String,
 	likes: Number,
-	comments: [Comment]
+	comments: [Comment],
+	who_liked: [String]
 });
 
 module.exports = mongoose.model('Song', Song);
