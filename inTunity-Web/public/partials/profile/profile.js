@@ -98,7 +98,6 @@ angular.module('inTunity.profile', [
             var username_clicked = store.get('username_clicked');
 
            
-
             if (username_clicked == ownpersonalusername) {
                 var deleteButton = document.getElementsByClassName("delete");
 
@@ -150,7 +149,6 @@ angular.module('inTunity.profile', [
             var ownpersonalusername = response["data"]["user"]["url_username"];
             var username_clicked = store.get('username_clicked');
 
-
             if (username_clicked == ownpersonalusername) {
                 console.log("about to delete...");
                 $http.delete('http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account/id/song/id', {
@@ -166,32 +164,18 @@ angular.module('inTunity.profile', [
                     store.set('username_clicked', ownpersonalusername);
 
                     // UPDATE CONTENT WITHOUT ACTUALY REFRESHING PAGE
-                    $http({
-                        url: 'http://ec2-52-33-76-106.us-west-2.compute.amazonaws.com:3001/secured/account',
-                        method: 'GET'
-                    }).then(function(response) {
-                        var users = response["data"]["songs"];
-
-                        $scope.correctPerson = [];
-                        for (var i = 0; i < users.length; i++) {
-                            if (users[i]["url_username"] == $routeParams.itemId) {
-                                $scope.correctPerson.push(users[i]);
-                            }
-                        }
-
-                        $scope.numPosts = $scope.correctPerson[0].song_history.length;
-
-                        for (var i = 0; i < $scope.correctPerson[0].song_history.length; i++) {
-                            var date = new Date($scope.correctPerson[0].song_history[i]["unix_time"] * 1000);
-                            var year = date.getFullYear();
-                            var month = date.getMonth();
-                            var day = date.getDate();
-                            var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
-                            var formmatedDay = monthNames[month] + " " + day + ", " + year;
-
-                            $scope.correctPerson[0].song_history[i].formmatedDay = formmatedDay;
-                        }
-                     });
+					//Doesn't need another http request. Since we KNOW which song we are deleting.
+					//Just delete the correct one.
+					for (var i =0;i<$scope.correctPerson[0]["song_history"].length;i++){
+						if ($scope.correctPerson[0]["song_history"][i]._id == songid){
+							$scope.correctPerson[0]["song_history"].splice(i,1);
+							
+							//Do this in order to delete the first occurance (in case the id hashing fails - not likely)
+							i = $scope.correctPerson[0]["song_history"].length;
+						}
+					}
+                    
+						
 
             					//Check if the deleted song is currently playing, if so tell the player to go to the next HomePage Song.
             					if (window.globalPlayer._isPlaying){
