@@ -12,7 +12,7 @@ angular.module('inTunity.profile', [
     var count_todaysongs = 0;
 
 
-
+    $scope.numPosts;
     $scope.owner;
     if (prof["given_name"] != null) {
         $scope.owner = prof["given_name"];
@@ -22,7 +22,7 @@ angular.module('inTunity.profile', [
     var id = prof["identities"][0]["user_id"];
     $scope.user_id = id;
 
-    console.log(id);
+  
 
     $scope.logout = function() {
         window.logout();
@@ -169,20 +169,24 @@ angular.module('inTunity.profile', [
 					for (var i =0;i<$scope.correctPerson[0]["song_history"].length;i++){
 						if ($scope.correctPerson[0]["song_history"][i]._id == songid){
 							$scope.correctPerson[0]["song_history"].splice(i,1);
+
+                             $scope.numPosts = $scope.correctPerson[0]["song_history"].length;
 							
 							//Do this in order to delete the first occurance (in case the id hashing fails - not likely)
 							i = $scope.correctPerson[0]["song_history"].length;
 						}
 					}
+
+
                     
 						
 
-            					//Check if the deleted song is currently playing, if so tell the player to go to the next HomePage Song.
-            					if (window.globalPlayer._isPlaying){
-            						window.nextSong(song_track_id);
-            					}
-            					
-                      $location.path("/profile/" + ownpersonalusername);
+					//Check if the deleted song is currently playing, if so tell the player to go to the next HomePage Song.
+					if (window.globalPlayer._isPlaying){
+						window.nextSong(song_track_id);
+					}
+					
+                    $location.path("/profile/" + ownpersonalusername);
                       // window.location.reload();
                   }).error(function(data, status, headers, config) {
                     console.log(status);
