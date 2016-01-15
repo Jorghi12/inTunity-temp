@@ -136,6 +136,31 @@ app.get('/secured/account/id', function(req, res) {
   });
 });
 
+
+//getting a specific song
+app.get('/secured/song/id', function(req, res) {
+  request({
+      url: process.env.DATABASE + '/api/song/id', //URL to hit
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      method: 'GET', //Specify the method
+      qs: {song_id: req.query["song_id"]}
+  }, function(error, response, body){
+      if(error) {
+          console.log(error);
+      } else {
+        if (response.statusCode == 200) {
+          var data = JSON.parse(response.body);
+          res.send(200, {user:data});
+        }
+      }
+  });
+});
+
+
+
+
 // deleting a song on your own account
 app.delete('/secured/account/id/song/id', function(req, res) {
   request({

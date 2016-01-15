@@ -1,12 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
-
-var Comment = new Schema({
-	content: String,
-	unix_time: String,
-	user_id: String
-});
+var ObjectId = Schema.ObjectId;
 
 var Song = new Schema({
 	song_title: String,
@@ -16,8 +10,9 @@ var Song = new Schema({
 	track_id: String,
 	song_duration: String,
 	likes: Number,
-	comments: [Comment],
-	who_liked: [String]
+	who_posted: ObjectId,
+	comments: [ObjectId],
+	who_liked: [ObjectId]
 });
 
 module.exports = mongoose.model('Song', Song);

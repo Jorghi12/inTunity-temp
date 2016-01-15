@@ -1,23 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var ObjectId = Schema.ObjectId;
 
-var Comment = new Schema({
-	content: String,
-	unix_time: String,
-	user_id: String
-});
-
-var Song = new Schema({
-	song_title: String,
-	song_album_pic: String,
-	song_url: String,
-	unix_time: String,
-	track_id: String,
-	song_duration: String,
-	likes: Number,
-	comments: [Comment],
-	who_liked: [String]
-});
 
 var User = new Schema({
 	user_id: {type: String, unique: true },
@@ -25,10 +9,10 @@ var User = new Schema({
 	picture: String,
 	email: String,
 	url_username: String,
-	song_history: [Song],
-	today_song: [Song],
-	saved_song: [Song],
-	friends: [User]
+	song_history: [ObjectId],
+	today_song: [ObjectId],
+	saved_song: [ObjectId],
+	friends: [ObjectId]
 });
 
 
