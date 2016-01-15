@@ -266,7 +266,7 @@ angular.module('inTunity.addSong', [
                                     song_duration: duration,
                                     state: state,
                                     city: city,
-                                    locationFlag: true,
+                                    locationFlag: true
                                  
                                 });
 
