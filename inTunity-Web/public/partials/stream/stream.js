@@ -81,7 +81,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					//Asynch programming
 					if ($scope.trackarray.length == total_num_possible){
 						//Auto Start Song
-						$scope.autoStart();
 						
 						//Sort the trackarray by Unix Time
 						/*$scope.correctUsers.sort(function(a, b) {
@@ -107,6 +106,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 						}
 						
 						window.traks = $scope.trackarray;
+						$scope.autoStart();
 					}
 				});
 
