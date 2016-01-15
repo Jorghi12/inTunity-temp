@@ -33,7 +33,7 @@
     <h4>{{numPosts}} posts</h4>
   </div>
   
-  <div id = "song-grid" align="center" ng-repeat = "item in correctPerson[0].song_history | orderBy:'-unix_time' " >
+  <div id = "song-grid" align="center" ng-repeat = "item in my_profile_songs | orderBy:'-unix_time' " >
     <div class="col-md-4 song-tile">
       <a class = "delete" value = '{{item}}'>
       </a>

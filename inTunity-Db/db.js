@@ -196,13 +196,11 @@ router.get('/api/account/' , function (req, res, next) {
 
 
 router.post('/api/account/id/song' , function (req, res, next) {
-
 	User.findOne({user_id: req.body.user_id}, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);
 	  } else if(userObj) {
-
 	  	var song = new Song({
 		   	song_title: req.body.song_title,
 			song_album_pic: req.body.song_artwork,
@@ -213,14 +211,12 @@ router.post('/api/account/id/song' , function (req, res, next) {
 			likes: 0,
 			who_posted: userObj.id
 	    });
-
 	  	// Save it to Song Table
 	    song.save(function(err) {
            if (err) {
            	 throw err;
            } 
         });
-
 
 	  	userObj.song_history.unshift(song.id);
 
@@ -247,7 +243,7 @@ router.post('/api/account/id/song' , function (req, res, next) {
 		    	});
 		    	locObj.save(function(err) {
 			    	if (err) {
-			    		throw err;
+			    		//throw err;
 			    	}	
 	
 		  		});	
@@ -291,7 +287,7 @@ router.get('/api/account/id/' , function (req, res, next) {
 
 // getting a specific song
 router.get('/api/song/id/' , function (req, res, next) {
-	User.findOne({_id:ObjectId(req.query["song_id"])}, function(err, songObj) {
+	Song.findOne({_id:ObjectId(req.query["song_id"])}, function(err, songObj) {
 	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);

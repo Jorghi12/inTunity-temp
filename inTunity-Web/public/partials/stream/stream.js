@@ -10,47 +10,67 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	$scope.confirmSong = false;
 	$scope.trackID;
 	
+
+	
 	//Load Track Data
     $http({
          url: 'http://localhost:3001/secured/account',
         method: 'GET'
     }).then(function(response) {
         var users = response["data"]["songs"];
-		window.legend = response["data"]["songs"];
+		
         // this array has users who only have songs for today with it
         $scope.correctUsers = [];
 
         // makes sure we only show users who have songs
         for (var i = 0; i < users.length; i++) {
             if (users[i]["today_song"].length > 0) {
+				//Pull Song from 
+				var songid = users[i]["today_song"][0];
+				
+				$http({
+				 url: 'http://localhost:3001/secured/song/id',
+				 params: {song_id: songid},
+				 method: 'GET'
+				}).then(function(responseSong) {
+					responseSong = responseSong["data"]["user"];
+					var date = new Date(responseSong["unix_time"] * 1000);
+					var year = date.getFullYear();
+					var month = date.getMonth();
+					var day = date.getDate();
+					var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+					var formmatedDay = monthNames[month] + " " + day + ", " + year;
+					var hours = date.getHours();
+					var minutes = "0" + date.getMinutes();
+					var am_pm = "AM";
+					if (hours == 12) {
+						am_pm = "PM";
+					}
+					if (hours > 12) {
+						hours = hours - 12;
+						am_pm = "PM";
+					}
+					if (hours == 0) {
+						hours = 12;
+					}
 
-                var date = new Date(users[i]["today_song"][0]["unix_time"] * 1000);
-                var year = date.getFullYear();
-                var month = date.getMonth();
-                var day = date.getDate();
-                var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
-                var formmatedDay = monthNames[month] + " " + day + ", " + year;
-                var hours = date.getHours();
-                var minutes = "0" + date.getMinutes();
-                var am_pm = "AM";
-                if (hours == 12) {
-                    am_pm = "PM";
-                }
-                if (hours > 12) {
-                    hours = hours - 12;
-                    am_pm = "PM";
-                }
-                if (hours == 0) {
-                    hours = 12;
-                }
-
-                var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
-                $scope.correctUsers.push({
-                    user: new Array(users[i]),
-                    formattedTime: formattedTime,
-                    formmatedDay: formmatedDay,
-                    unix_time: users[i]["today_song"][0]["unix_time"] * 1000
-                })
+					var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
+					$scope.correctUsers.push({
+						user: new Array(users[i]),
+						formattedTime: formattedTime,
+						formmatedDay: formmatedDay,
+						unix_time: responseSong["unix_time"] * 1000,
+						user_song: responseSong
+					});
+					
+					
+					$scope.trackarray.push(new Array(responseSong["track_id"], responseSong["song_album_pic"], responseSong["song_title"], responseSong["song_duration"]));
+				
+					//Auto Start if the last newsfeed item
+					if (i == users.length - 1){
+						$scope.autoStart();
+					}
+				});
 
             } else {
 
@@ -69,23 +89,22 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         $scope.users = $scope.correctUsers;
 
-
-
         $scope.trackarray = [];
 
         for (var i = 0; i < $scope.correctUsers.length; i++) {
-            $scope.trackarray.push(new Array($scope.correctUsers[i]["user"][0]["today_song"][0]["track_id"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_album_pic"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_title"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_duration"]));
+            $scope.trackarray.push(new Array($scope.correctUsers[i]["user_song"]["track_id"], $scope.correctUsers[i]["user_song"]["song_album_pic"], $scope.correctUsers[i]["user_song"]["song_title"], $scope.correctUsers[i]["user_song"]["song_duration"]));
         }
 
         console.log($scope.trackarray);
 
+		
         //Grab HTML Objects
         $scope.time = document.getElementById("time");
         $scope.songDuration = 0;
 
 
         //Handles the progress bar.
-        if ($scope.trackarray.length > 0) {
+        if (true){//$scope.trackarray.length > 0) {
             var playHead = document.getElementById('playHead');
             var timelineWidth = time.offsetWidth - playHead.offsetWidth;
 
@@ -118,7 +137,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         }
 
-        $scope.autoStart();
+        
     });
 	
     //Load player Paused state
@@ -394,6 +413,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     //Start the SoundCloud Stream!
 	$scope.startStreamFULL = function(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype, pos) {
         $scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
+
 		$scope.trackID = trackid;
 		if (pagetype == "profile"){
 			  var prevButton = document.getElementById("prevButton");
@@ -604,51 +624,65 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	//Update the Mainfeed TrackSongs
 	//Load Track Data
 	$scope.updateTrackSongs = function(){
-		$http({
-            url: 'http://localhost:3001/secured/account',
-            method: 'GET'
-        }).then(function(response) {
-            var users = response["data"]["songs"];
+		    $http({
+         url: 'http://localhost:3001/secured/account',
+        method: 'GET'
+    }).then(function(response) {
+        var users = response["data"]["songs"];
+		
+        // this array has users who only have songs for today with it
+        $scope.correctUsers = [];
 
-            // this array has users who only have songs for today with it
-            $scope.correctUsers = [];
+        // makes sure we only show users who have songs
+        for (var i = 0; i < users.length; i++) {
+            if (users[i]["today_song"].length > 0) {
+				//Pull Song from 
+				var songid = users[i]["today_song"][0];
+				
+				$http({
+				 url: 'http://localhost:3001/secured/song/id',
+				 params: {song_id: songid},
+				 method: 'GET'
+				}).then(function(responseSong) {
+					responseSong = responseSong["data"]["user"];
+					var date = new Date(responseSong["unix_time"] * 1000);
+					var year = date.getFullYear();
+					var month = date.getMonth();
+					var day = date.getDate();
+					var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+					var formmatedDay = monthNames[month] + " " + day + ", " + year;
+					var hours = date.getHours();
+					var minutes = "0" + date.getMinutes();
+					var am_pm = "AM";
+					if (hours == 12) {
+						am_pm = "PM";
+					}
+					if (hours > 12) {
+						hours = hours - 12;
+						am_pm = "PM";
+					}
+					if (hours == 0) {
+						hours = 12;
+					}
 
-            // makes sure we only show users who have songs
-            for (var i = 0; i < users.length; i++) {
-                if (users[i]["today_song"].length > 0) {
+					var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
+					$scope.correctUsers.push({
+						user: new Array(users[i]),
+						formattedTime: formattedTime,
+						formmatedDay: formmatedDay,
+						unix_time: responseSong["unix_time"] * 1000,
+						user_song: responseSong
+					});
+					
+					
+					$scope.trackarray.push(new Array(responseSong["track_id"], responseSong["song_album_pic"], responseSong["song_title"], responseSong["song_duration"]));
+				
+				});
 
-                    var date = new Date(users[i]["today_song"][0]["unix_time"] * 1000);
-                    var year = date.getFullYear();
-                    var month = date.getMonth();
-                    var day = date.getDate();
-                    var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
-                    var formmatedDay = monthNames[month] + " " + day + ", " + year;
-                    var hours = date.getHours();
-                    var minutes = "0" + date.getMinutes();
-                    var am_pm = "AM";
-                    if (hours == 12) {
-                        am_pm = "PM";
-                    }
-                    if (hours > 12) {
-                        hours = hours - 12;
-                        am_pm = "PM";
-                    }
-                    if (hours == 0) {
-                        hours = 12;
-                    }
+            } else {
 
-                    var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
-                    $scope.correctUsers.push({
-                        user: new Array(users[i]),
-                        formattedTime: formattedTime,
-                        formmatedDay: formmatedDay,
-                        unix_time: users[i]["today_song"][0]["unix_time"] * 1000
-                    })
-
-                } else {
-
-                }
-            } // end of for loop
+            }
+        } // end of for loop
 
 
         //Sort Correct Users by Unix Time
@@ -660,11 +694,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         $scope.users = $scope.correctUsers;
 
-        $scope.trackarray = [];
-
-        for (var i = 0; i < $scope.correctUsers.length; i++) {
-            $scope.trackarray.push(new Array($scope.correctUsers[i]["user"][0]["today_song"][0]["track_id"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_album_pic"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_title"], $scope.correctUsers[i]["user"][0]["today_song"][0]["song_duration"]));
-        }
 		
 			$scope.song_count = ($scope.song_count) % $scope.trackarray.length;
 			musicStatus.setStatus($scope.song_count, 0, false);

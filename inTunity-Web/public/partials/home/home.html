@@ -39,16 +39,16 @@
     </div>
 
     <div class="col-sm-12">
-      <div class = "container" id = "wallfeed" ng-repeat = "item in users | orderBy:'-[unix_time]'">
+      <div class = "container" id = "wallfeed" ng-repeat = "item in correctUsers | orderBy:'-[unix_time]'">
         <hr> 
-        <div class = "row" id = "song{{users.indexOf(item)}}">
+        <div class = "row" id = "song{{correctUsers.indexOf(item)}}">
           <div class = "col-md-6 text-center album">
-            <button class = "playButton" ng-click = 'playSpecificSong(users.indexOf(item))'>
-              <img style = "width:250px; height:250px;" ng-src = "{{item['user'][0].song_history[0].song_album_pic}}">
+            <button class = "playButton" ng-click = 'playSpecificSong(correctUsers.indexOf(item))'>
+              <img style = "width:250px; height:250px;" ng-src = "{{item['user_song'].song_album_pic}}">
             </button>  
           </div>
           <div class = "col-md-6 text-center info">
-            <h2>{{item["user"][0].song_history[0].song_title}}</h2>
+            <h2>{{item['user_song'].song_title}}</h2>
             <div class="col-md-4 col-md-offset-1">
               <a href="" ng-click = "otherprofiles(item['user'][0].url_username)"> 
                 <img class = "img-circle" ng-src = "{{item['user'][0].picture}}">
@@ -59,8 +59,8 @@
               <a href="" ng-click = "otherprofiles(item[0].url_username)"> <h3>{{item["user"][0].nickname}}</h3></a>
               <h4>{{item["formattedTime"]}} | {{item["formmatedDay"]}}</h4>
               <div class="col-md-4">
-                <h5 ng-click = "likes(item['user'][0].user_id, item['user'][0].song_history[0]['_id'], users.indexOf(item))" class = "likes">Like</h5>
-                <h4 id = 'like{{users.indexOf(item)}}' class = "numLikes">{{item["user"][0].today_song[0].likes}}</h4>
+                <h5 ng-click = "likes(item['user'][0].user_id, item['user_song']['id'], correctUsers.indexOf(item))" class = "likes">Like</h5>
+                <h4 id = 'like{{correctUsers.indexOf(item)}}' class = "numLikes">{{item['user_song'].likes}}</h4>
               </div>
               <div class="col-md-4">
                 <h5>Favorite</h5>

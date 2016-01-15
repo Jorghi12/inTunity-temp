@@ -63,7 +63,7 @@ angular.module('inTunity.profile', [
         method: 'GET'
     }).then(function(response) {
         var users = response["data"]["songs"];
-
+		
         $scope.correctPerson = [];
         for (var i = 0; i < users.length; i++) {
             if (users[i]["url_username"] == $routeParams.itemId) {
@@ -73,9 +73,9 @@ angular.module('inTunity.profile', [
                 count_todaysongs++;
             }
         }
-
+	
         $scope.numPosts = $scope.correctPerson[0].song_history.length;
-
+	
         for (var i = 0; i < $scope.correctPerson[0].song_history.length; i++) {
             var date = new Date($scope.correctPerson[0].song_history[i]["unix_time"] * 1000);
             var year = date.getFullYear();
@@ -86,7 +86,59 @@ angular.module('inTunity.profile', [
 
             $scope.correctPerson[0].song_history[i].formmatedDay = formmatedDay;
         }
+		
+		$scope.my_profile_songs = [];
+		
+		for (var i = 0; i < $scope.correctPerson[0].song_history.length; i++){
+		$http({
+		 url: 'http://localhost:3001/secured/song/id',
+		 params: {song_id: $scope.correctPerson[0].song_history[i]},
+		 method: 'GET'
+		}).then(function(responseSong) {
+			responseSong = responseSong["data"]["user"];
+			var date = new Date(responseSong["unix_time"] * 1000);
+			var year = date.getFullYear();
+			var month = date.getMonth();
+			var day = date.getDate();
+			var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+			var formmatedDay = monthNames[month] + " " + day + ", " + year;
+			var hours = date.getHours();
+			var minutes = "0" + date.getMinutes();
+			var am_pm = "AM";
+			if (hours == 12) {
+				am_pm = "PM";
+			}
+			if (hours > 12) {
+				hours = hours - 12;
+				am_pm = "PM";
+			}
+			if (hours == 0) {
+				hours = 12;
+			}
 
+			var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
+			$scope.my_profile_songs.push({
+				track_id: responseSong["track_id"],
+				song_album_pic: responseSong["song_album_pic"],
+				song_title: responseSong["song_title"],
+				song_duration: responseSong["song_duration"]
+			});
+			
+		});
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
           $http({
             url: 'http://localhost:3001/secured/account/id',
             method: 'GET',
