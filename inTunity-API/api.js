@@ -225,7 +225,25 @@ app.post('/secured/account/id/likes/song/id', function(req, res) {
 });
 
 
+//Add Follower to List
+app.post('/secured/account/id/addfollower', function(req, res) {
+  request({
+    url: process.env.DATABASE + "/api/account/id/addfollower", //URL to hit
+    method: 'POST', //Specify the method
+    headers: {
+      'Content-Type': 'application/json'
+    }, 
+    body: req.body["data"]
 
+  }, function(error, response, body) {
+      if(error) {
+          console.log(error);
+      } else {
+          var data = JSON.parse(response.body);
+		  res.send(200);
+      }
+  });
+});
 
 
 

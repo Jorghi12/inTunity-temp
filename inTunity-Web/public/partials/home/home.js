@@ -13,6 +13,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     var trackarray = [];
     var username_url;
     
+	window.legendX = auth;
     if (prof["given_name"] != null) {
         $scope.owner = prof["given_name"];
     } else {
@@ -76,5 +77,30 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         });
        
     }
+	
+	//Function to add a friend
+	//Haven't tested - not complete
+    $scope.addFollower = function(follower_user_id) {
+        var followerData = JSON.stringify({
+			user_id: myUserId,
+            other_id: follower_user_id
+        });
+        $http.post('http://localhost:3001/secured/account/id/addfollower', {data: followerData}, { 
+              headers: {
+              'Accept' : '*/*',
+              'Content-Type': 'application/json'
+             }
+        }).success(function(data, status, headers, config) {
+                ;
+            })
+		.error(function(data, status, headers, config) {
+            ;
+        });
+       
+    }
+	
+	$scope.findMutualFriends = function(){
+		
+	}
 
 });

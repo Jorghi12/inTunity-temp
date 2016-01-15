@@ -350,6 +350,37 @@ router.delete('/api/account/id/song/id' , function (req, res, next) {
 });
 
 
+//Add follower to user's list
+//  
+router.post('/api/account/id/addfollower', function (req, res, next) {
+	User.findOne({user_id: req.body.user_id}, function(err, myUserObj) {
+		
+		User.findOne({user_id: req.body.other_id}, function(err, otherUserObj) {
+			var found = false;
+			for (var i = 0;i < myUserObj["friends"].length;i++){
+				if (myUserObj["friends"][i] == otherUserObj.id){
+					found = true;
+				}
+			}
+			
+			//First time following user
+			if (found == false){
+				myUserObj["friends"].unshift(otherUserObj.id);
+			}
+			else{
+				//Follower is already in the User's list
+				;
+			}
+			
+			myUserObj.save(function(err) {
+				if (err) {
+					throw err;
+				}	
+			});	
+		});
+		
+	});
+});
 
 
 
