@@ -56,7 +56,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
 					
 					$scope.correctUsers.push({
-						user: new Array(users[i]),
+						user: new Array(users[$scope.correctUsers.length]),
 						formattedTime: formattedTime,
 						formmatedDay: formmatedDay,
 						unix_time: responseSong["unix_time"] * 1000,
