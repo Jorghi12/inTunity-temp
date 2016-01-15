@@ -16,7 +16,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         method: 'GET'
     }).then(function(response) {
         var users = response["data"]["songs"];
-
+		window.legend = response;
         // this array has users who only have songs for today with it
         $scope.correctUsers = [];
 
