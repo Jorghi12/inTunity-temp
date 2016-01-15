@@ -21,7 +21,18 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		
         // this array has users who only have songs for today with it
         $scope.correctUsers = [];
+        $scope.trackarray = [];
 		window.love = users;
+		
+		//Deterministically calculate the total number of users who have a song!
+		var total_num_possible = 0;
+		
+        for (var i = 0; i < users.length; i++) {
+            if (users[i]["today_song"].length > 0) {
+				total_num_possible +=1;
+			}
+		}
+		
         // makes sure we only show users who have songs
         for (var i = 0; i < users.length; i++) {
             if (users[i]["today_song"].length > 0) {
@@ -67,8 +78,34 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					$scope.trackarray.push(new Array(responseSong["track_id"], responseSong["song_album_pic"], responseSong["song_title"], responseSong["song_duration"]));
 				
 					//Auto Start if the last newsfeed item
-					if (i == users.length - 1){
+					//Asynch programming
+					if ($scope.correctUsers.length == total_num_possible - 1){
+						//Auto Start Song
 						$scope.autoStart();
+						
+						//Sort the trackarray by Unix Time
+						/*$scope.correctUsers.sort(function(a, b) {
+							// Turn your strings into dates, and then subtract them
+							// to get a value that is either negative, positive, or zero.
+							return new Date(b.unix_time) - new Date(a.unix_time);
+						});*/
+						
+						$scope.TOGETHER = [];
+						
+						for (var j =0;j < $scope.correctUsers.length;j++){
+							$scope.TOGETHER.push({"song":$scope.trackarray[j],"user":$scope.correctUsers[j]})
+						}
+						
+						$scope.TOGETHER.sort(function(a, b) {
+								return new Date(b.user.unix_time) - Date(a.user.unix_time);
+								
+						});
+						
+						for (var j =0;j < $scope.correctUsers.length;j++){
+							$scope.trackarray[j] = $scope.TOGETHER[j].song;
+							$scope.correctUsers[j] = $scope.TOGETHER[j].user;
+						}
+						
 					}
 				});
 
@@ -77,7 +114,9 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
             }
         } // end of for loop
 
-
+	
+		
+		
         //Sort Correct Users by Unix Time
         $scope.correctUsers.sort(function(a, b) {
             // Turn your strings into dates, and then subtract them
@@ -85,18 +124,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
             return new Date(b.unix_time) - new Date(a.unix_time);
         });
 
-
-
         $scope.users = $scope.correctUsers;
-
-        $scope.trackarray = [];
-
-        for (var i = 0; i < $scope.correctUsers.length; i++) {
-            $scope.trackarray.push(new Array($scope.correctUsers[i]["user_song"]["track_id"], $scope.correctUsers[i]["user_song"]["song_album_pic"], $scope.correctUsers[i]["user_song"]["song_title"], $scope.correctUsers[i]["user_song"]["song_duration"]));
-        }
-
-        console.log($scope.trackarray);
-
 		
         //Grab HTML Objects
         $scope.time = document.getElementById("time");
