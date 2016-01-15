@@ -21,13 +21,12 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		
         // this array has users who only have songs for today with it
         $scope.correctUsers = [];
-
+		window.love = users;
         // makes sure we only show users who have songs
         for (var i = 0; i < users.length; i++) {
             if (users[i]["today_song"].length > 0) {
 				//Pull Song from 
 				var songid = users[i]["today_song"][0];
-				
 				$http({
 				 url: 'http://localhost:3001/secured/song/id',
 				 params: {song_id: songid},
@@ -55,6 +54,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					}
 
 					var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
+					
 					$scope.correctUsers.push({
 						user: new Array(users[i]),
 						formattedTime: formattedTime,
