@@ -158,6 +158,27 @@ app.get('/secured/song/id', function(req, res) {
   });
 });
 
+//getting a multiple songs
+app.get('/secured/song/id_multiple', function(req, res) {
+  request({
+      url: process.env.DATABASE + '/api/song/id_multiple', //URL to hit
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      method: 'GET', //Specify the method
+      qs: {song_ids: req.query["song_ids"]}
+  }, function(error, response, body){
+      if(error) {
+          console.log(error);
+      } else {
+        if (response.statusCode == 200) {
+          var data = JSON.parse(response.body);
+          res.send(200, {user:data});
+        }
+      }
+  });
+});
+
 
 
 
@@ -197,7 +218,8 @@ app.post('/secured/account/id/likes/song/id', function(req, res) {
       if(error) {
           console.log(error);
       } else {
-          res.send(200);
+          var data = JSON.parse(response.body);
+		  res.send(200, {likes: data["current_likes"]});
       }
   });
 });

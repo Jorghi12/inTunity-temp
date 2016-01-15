@@ -9,6 +9,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     var prof = (store.get('profile'));
     $scope.owner;
     var id = prof["identities"][0]["user_id"];
+	var myUserId = prof["identities"][0]["user_id"];
     var trackarray = [];
     var username_url;
     
@@ -55,76 +56,22 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
     //when you like a song
-    $scope.likes = function(posted_id, song_id, index) {
+    $scope.likes = function(song_id, index) {
         var likes = JSON.stringify({
-            posted_user_id:posted_id, 
+            posted_user_id: myUserId, 
             song_id: song_id, 
             liked_user_id: id
         });
-
         $http.post('http://localhost:3001/secured/account/id/likes/song/id', {data: likes}, { 
               headers: {
               'Accept' : '*/*',
               'Content-Type': 'application/json'
              }
         }).success(function(data, status, headers, config) {
-            //Load Track Data
-            $http({
-                 url: 'http://localhost:3001/secured/account',
-                method: 'GET'
-            }).then(function(response) {
-                var users = response["data"]["songs"];
-
-                // this array has users who only have songs for today with it
-                $scope.correctUsers = [];
-
-                // makes sure we only show users who have songs
-                for (var i = 0; i < users.length; i++) {
-                    if (users[i]["today_song"].length > 0) {
-
-                        var date = new Date(users[i]["today_song"][0]["unix_time"] * 1000);
-                        var year = date.getFullYear();
-                        var month = date.getMonth();
-                        var day = date.getDate();
-                        var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
-                        var formmatedDay = monthNames[month] + " " + day + ", " + year;
-                        var hours = date.getHours();
-                        var minutes = "0" + date.getMinutes();
-                        var am_pm = "AM";
-                        if (hours == 12) {
-                            am_pm = "PM";
-                        }
-                        if (hours > 12) {
-                            hours = hours - 12;
-                            am_pm = "PM";
-                        }
-                        if (hours == 0) {
-                            hours = 12;
-                        }
-
-                        var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
-                        $scope.correctUsers.push({
-                            user: new Array(users[i]),
-                            formattedTime: formattedTime,
-                            formmatedDay: formmatedDay,
-                            unix_time: users[i]["today_song"][0]["unix_time"] * 1000
-                        })
-
-                    }
-                } // end of for loop
-
-
-                $scope.correctUsers.sort(function(a, b) {
-                    return new Date(b.unix_time) - new Date(a.unix_time);
-                });
-
-
                 var likes = document.getElementById("like" + index);
-                likes.innerHTML = $scope.correctUsers[index]["user"][0]["today_song"][0]["likes"]
-                $scope.users = $scope.correctUsers;  
-            });    
-
-        }).error(function(data, status, headers, config) {
+                likes.innerHTML = data["likes"];
+            })
+		.error(function(data, status, headers, config) {
             console.log(status);
         });
        

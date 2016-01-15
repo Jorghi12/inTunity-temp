@@ -22,22 +22,34 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         // this array has users who only have songs for today with it
         $scope.correctUsers = [];
         $scope.trackarray = [];
-		window.love = users;
 		
 		//Deterministically calculate the total number of users who have a song!
 		var total_num_possible = 0;
+		//var musicIDS = [];
 		
         for (var i = 0; i < users.length; i++) {
             if (users[i]["today_song"].length > 0) {
 				total_num_possible +=1;
+				//musicIDS.push(users[i]["today_song"][0]);
 			}
 		}
+		
+		//Code to load multiple songs at once (Store in musicIDS). Useful for timeline.
+		/*$http({
+		 url: 'http://localhost:3001/secured/song/id_multiple',
+		 params: {song_ids: musicIDS},
+		 method: 'GET'
+		}).then(function(responseSongs) {
+			;
+		})*/
+		
 		
         // makes sure we only show users who have songs
         for (var i = 0; i < users.length; i++) {
             if (users[i]["today_song"].length > 0) {
 				//Pull Song from 
 				var songid = users[i]["today_song"][0];
+					
 				$http({
 				 url: 'http://localhost:3001/secured/song/id',
 				 params: {song_id: songid},
@@ -74,7 +86,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 						user_song: responseSong
 					});
 					
-					
+					window.legend = responseSong;
 					$scope.trackarray.push(new Array(responseSong["track_id"], responseSong["song_album_pic"], responseSong["song_title"], responseSong["song_duration"]));
 				
 					//Auto Start if the last newsfeed item
@@ -82,19 +94,13 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					if ($scope.trackarray.length == total_num_possible){
 						//Auto Start Song
 						
-						//Sort the trackarray by Unix Time
-						/*$scope.correctUsers.sort(function(a, b) {
-							// Turn your strings into dates, and then subtract them
-							// to get a value that is either negative, positive, or zero.
-							return new Date(b.unix_time) - new Date(a.unix_time);
-						});*/
-						
 						$scope.TOGETHER = [];
 						
 						for (var j =0;j < $scope.correctUsers.length;j++){
 							$scope.TOGETHER.push({"song":$scope.trackarray[j],"user":$scope.correctUsers[j]})
 						}
 						
+						//Sort by Unix Time
 						$scope.TOGETHER.sort(function(a, b) {
 								return new Date(b.user.unix_time) - new Date(a.user.unix_time);
 								
