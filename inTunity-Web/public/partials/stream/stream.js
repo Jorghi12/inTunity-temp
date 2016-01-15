@@ -79,7 +79,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 				
 					//Auto Start if the last newsfeed item
 					//Asynch programming
-					if ($scope.correctUsers.length == total_num_possible - 1){
+					if ($scope.trackarray.length == total_num_possible){
 						//Auto Start Song
 						$scope.autoStart();
 						
@@ -97,7 +97,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 						}
 						
 						$scope.TOGETHER.sort(function(a, b) {
-								return new Date(b.user.unix_time) - Date(a.user.unix_time);
+								return new Date(b.user.unix_time) - new Date(a.user.unix_time);
 								
 						});
 						
@@ -106,6 +106,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 							$scope.correctUsers[j] = $scope.TOGETHER[j].user;
 						}
 						
+						window.traks = $scope.trackarray;
 					}
 				});
 
@@ -701,7 +702,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 						unix_time: responseSong["unix_time"] * 1000,
 						user_song: responseSong
 					});
-					
 					
 					$scope.trackarray.push(new Array(responseSong["track_id"], responseSong["song_album_pic"], responseSong["song_title"], responseSong["song_duration"]));
 				
