@@ -211,7 +211,7 @@ app.post('/secured/account/id/likes/song/id', function(req, res) {
     method: 'POST', //Specify the method
     headers: {
       'Content-Type': 'application/json'
-    },
+    }, 
     body: req.body["data"]
 
   }, function(error, response, body) {

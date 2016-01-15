@@ -281,7 +281,7 @@ router.get('/api/account/id/' , function (req, res, next) {
 	  } else if(userObj) {
 	  	res.send(userObj);
 	  } 
-	});
+	}); 
 });
 
 

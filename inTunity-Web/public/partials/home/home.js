@@ -53,7 +53,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         $location.path('/add-song');
     }
 
-
+ 
 
     //when you like a song
     $scope.likes = function(song_id, index) {

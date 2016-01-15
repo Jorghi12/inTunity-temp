@@ -10,7 +10,7 @@ angular.module('inTunity.profile', [
 
     var prof = (store.get('profile'));
     var count_todaysongs = 0;
-
+ 
 
     $scope.numPosts;
     $scope.owner;
