@@ -356,7 +356,12 @@ router.delete('/api/account/id/song/id' , function (req, res, next) {
 
 // haven't reworked this yet
 router.post('/api/account/id/likes/song/id', function (req, res, next) {
-	Song.findOne({_id: ObjectId(req.body.song_id)}, function (err, songObj) {
+	//Step 1 - Convert UserId into its Object ID
+	var userID;
+	User.findOne({user_id: req.body.posted_user_id}, function(err, userObj) {
+		userID = userObj.id;
+		
+		Song.findOne({_id: ObjectId(req.body.song_id)}, function (err, songObj) {
 	    if (err) {
 	      console.log(err);
 		  res.sendStatus(500);
@@ -365,8 +370,7 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 			var found = false;
 	     	for (var i = 0; i < songObj["who_liked"].length; i++) {
 				//Our user has already liked this song
-				console.log(songObj["who_liked"][i]);
-		  		if (songObj["who_liked"][i] == req.body.posted_user_id) {
+		  		if (songObj["who_liked"][i] == userID) {
 					found = true;
 					
 					songObj["who_liked"].splice(i,1);
@@ -376,9 +380,7 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 			
 			//Couldn't find user in who_liked info of the song! Let him like for the first time.
 			if (found == false){
-				console.log("SHIT");
-				console.log(req.body.posted_user_id);
-				songObj["who_liked"].unshift(req.body.posted_user_id);
+				songObj["who_liked"].unshift(userID);
 				songObj["likes"] +=1;
 			}
 
@@ -391,8 +393,10 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 			res.send(200, {current_likes: songObj["likes"]});
 	    }
 
-
 	 });
+	});
+	
+	
 });
 
 
