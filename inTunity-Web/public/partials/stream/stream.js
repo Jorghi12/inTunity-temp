@@ -458,11 +458,15 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 			  nextButton.style.visibility = "hidden";
 		}
 		else if (pagetype == "addsong"){
-			  var prevButton = document.getElementById("prevButton");
+			var prevButton = document.getElementById("prevButton");
 			  prevButton.style.visibility = "hidden";
+
+              // $(prevButton).remove();
 
 			  var nextButton = document.getElementById("nextButton");
 			  nextButton.style.visibility = "hidden";
+
+             // $(nextButton).remove();
 
 			  var poster = document.getElementById("currentuser");
 			  poster.style.visibility = "hidden";
@@ -474,7 +478,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 			  var playerButtons = document.getElementById("playerButtons");
 
-                var confirmButton = document.createElement("button");
+            var confirmButton = document.createElement("button");
 		  if ($scope.confirmSong == false){
 
 			  
@@ -496,7 +500,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 			  confirmButton.appendChild(confirmTitle);
 			  confirmButton.setAttribute("id", "playerConfirm");
 			  confirmButton.className = "playerButton";
-			  confirmButton.style = "margin:30px 0px; min-height:50px;";
+			  confirmButton.style = "margin:0px 0px; min-height:50px;";
 			  playerButtons.appendChild(confirmButton);
 
 			  $scope.confirmSong = true;
@@ -605,6 +609,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					if ((pagetype == "addsong" || pagetype == "profile") && $location.path() != "/"){
 						var pauseButton = document.getElementById('pauseButton');
 						pauseButton.innerHTML = "<h4>Play</h4>";
+
+                        
 						globalPlayer.seek(0); //Do this before startStream
 						$scope.startStream($scope.song_count, -2000);
 						
