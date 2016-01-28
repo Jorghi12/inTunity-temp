@@ -34,7 +34,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     $scope.profile = function() {
         console.log("test");
         $http({
-            url: 'http://ec2-52-72-145-44.compute-1.amazonaws.com:3001/secured/account/id',
+            url: 'http://localhost:3001/secured/account/id',
             method: 'GET',
             params: {
                 id: id
@@ -63,7 +63,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             song_id: song_id, 
             liked_user_id: id
         });
-        $http.post('http://ec2-52-72-145-44.compute-1.amazonaws.com:3001/secured/account/id/likes/song/id', {data: likes}, { 
+        $http.post('http://localhost:3001/secured/account/id/likes/song/id', {data: likes}, { 
               headers: {
               'Accept' : '*/*',
               'Content-Type': 'application/json'
@@ -85,7 +85,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			user_id: myUserId,
             other_id: follower_user_id
         });
-        $http.post('http://ec2-52-72-145-44.compute-1.amazonaws.com:3001/secured/account/id/addfollower', {data: followerData}, { 
+        $http.post('http://localhost:3001/secured/account/id/addfollower', {data: followerData}, { 
               headers: {
               'Accept' : '*/*',
               'Content-Type': 'application/json'

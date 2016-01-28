@@ -14,7 +14,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	
 	//Load Track Data
     $http({
-         url: 'http://ec2-52-72-145-44.compute-1.amazonaws.com:3001/secured/account',
+         url: 'http://localhost:3001/secured/account',
         method: 'GET'
     }).then(function(response) {
         var users = response["data"]["songs"];
@@ -36,7 +36,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		
 		//Code to load multiple songs at once (Store in musicIDS). Useful for timeline.
 		/*$http({
-		 url: 'http://ec2-52-72-145-44.compute-1.amazonaws.com:3001/secured/song/id_multiple',
+		 url: 'http://localhost:3001/secured/song/id_multiple',
 		 params: {song_ids: musicIDS},
 		 method: 'GET'
 		}).then(function(responseSongs) {
@@ -51,7 +51,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 				var songid = users[i]["today_song"][0];
 					
 				$http({
-				 url: 'http://ec2-52-72-145-44.compute-1.amazonaws.com:3001/secured/song/id',
+				 url: 'http://localhost:3001/secured/song/id',
 				 params: {song_id: songid},
 				 method: 'GET'
 				}).then(function(responseSong) {
@@ -85,6 +85,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 						unix_time: responseSong["unix_time"] * 1000,
 						user_song: responseSong
 					});
+
+                    console.log($scope.correctUsers);
 					
 					window.legend = responseSong;
 					$scope.trackarray.push(new Array(responseSong["track_id"], responseSong["song_album_pic"], responseSong["song_title"], responseSong["song_duration"]));
@@ -438,6 +440,9 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		trackid = $scope.trackarray[$scope.song_count][0];
 		songDuration = parseInt($scope.trackarray[$scope.song_count % $scope.trackarray.length][3]);
 		pagetype = "home";
+
+        console.log($scope.correctUsers);
+
 		userDisplay = ($scope.correctUsers[$scope.song_count]["user"][0]["nickname"] != null) ? $scope.correctUsers[$scope.song_count]["user"][0]["nickname"] : $scope.correctUsers[$scope.song_count]["user"][0]["given_name"];
 		
 		$scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
@@ -610,7 +615,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 						var pauseButton = document.getElementById('pauseButton');
 						pauseButton.innerHTML = "<h4>Play</h4>";
 
-                        
+
 						globalPlayer.seek(0); //Do this before startStream
 						$scope.startStream($scope.song_count, -2000);
 						
@@ -666,7 +671,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	//Load Track Data
 	$scope.updateTrackSongs = function(){
 		    $http({
-         url: 'http://ec2-52-72-145-44.compute-1.amazonaws.com:3001/secured/account',
+         url: 'http://localhost:3001/secured/account',
         method: 'GET'
     }).then(function(response) {
         var users = response["data"]["songs"];
@@ -681,7 +686,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 				var songid = users[i]["today_song"][0];
 				
 				$http({
-				 url: 'http://ec2-52-72-145-44.compute-1.amazonaws.com:3001/secured/song/id',
+				 url: 'http://localhost:3001/secured/song/id',
 				 params: {song_id: songid},
 				 method: 'GET'
 				}).then(function(responseSong) {

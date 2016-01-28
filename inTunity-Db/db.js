@@ -313,18 +313,22 @@ router.get('/api/song/id_multiple/' , function (req, res, next) {
 
 // deleting a specific song 
 router.delete('/api/account/id/song/id' , function (req, res, next) {
+
 	User.findOne({user_id: req.query["user_id"]}, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);
 	  } else if (userObj) {
+	 
+	  	console.log(req.query["song_id"]);
 	  	for (var i = 0; i < userObj["song_history"].length; i++) {
-	  		if (userObj["song_history"][i].id == ObjectId(req.query["song_id"])) {
+	  		if (userObj["song_history"][i] == req.query["song_id"]) {
 	  			userObj["song_history"].splice(i, 1);
+
 	  		}
 	  	}
 	  	if (userObj["today_song"].length == 1) {
-	  		if (userObj["today_song"][0].id == ObjectId(req.query["song_id"])) {
+	  		if (userObj["today_song"][0] == req.query["song_id"]) {
 	  			userObj["today_song"].shift();
 	  			if (userObj["song_history"].length > 0) {
 		  			if (userObj["song_history"][0].id != ObjectId(req.query["song_id"])) {
@@ -333,14 +337,18 @@ router.delete('/api/account/id/song/id' , function (req, res, next) {
 		  		}
 	  		}	
 	  	}
+	  	 	
 	  	userObj.save(function(err) {
 	    	if (err) {
 	    		throw err;
 	    	}	
 		});	
-	  }
+	  } // end of else if
+	  
 	});
-	Song.findOne({_id:ObjectId(req.query["song_id"]) }, function(err, userObj) {
+
+
+	Song.findOne({_id:ObjectId(req.query["song_id"]) }, function(err, songObj) {
 	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);
