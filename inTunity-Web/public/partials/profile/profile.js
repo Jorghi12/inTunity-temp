@@ -73,8 +73,6 @@ angular.module('inTunity.profile', [
                 count_todaysongs++;
             }
         }
-
-        console.log($scope.correctPerson);
 	
         $scope.numPosts = $scope.correctPerson[0].song_history.length;
 	
@@ -119,14 +117,21 @@ angular.module('inTunity.profile', [
     			}
 
     			var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
+       
+
+
     			$scope.my_profile_songs.push({
     				track_id: responseSong["track_id"],
     				song_album_pic: responseSong["song_album_pic"],
     				song_title: responseSong["song_title"],
     				song_duration: responseSong["song_duration"],
-                    _id: responseSong["_id"]
+                    _id: responseSong["_id"],
+                    formmatedDay: formmatedDay 
     			});
+             
     		});
+
+            
 		}
 		
 		
@@ -225,6 +230,9 @@ angular.module('inTunity.profile', [
                     // UPDATE CONTENT WITHOUT ACTUALY REFRESHING PAGE
 					//Doesn't need another http request. Since we KNOW which song we are deleting.
 					//Just delete the correct one.
+
+
+
 					for (var i =0;i<$scope.correctPerson[0]["song_history"].length;i++){
 						if ($scope.correctPerson[0]["song_history"][i]._id == songid){
 							$scope.correctPerson[0]["song_history"].splice(i,1);

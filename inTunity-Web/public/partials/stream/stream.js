@@ -118,13 +118,11 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					}
 				});
 
-            } else {
-
             }
         } // end of for loop
 
 	
-		
+		console.log($scope.correctUsers);
 		
         //Sort Correct Users by Unix Time
         $scope.correctUsers.sort(function(a, b) {
@@ -134,6 +132,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         });
 
         $scope.users = $scope.correctUsers;
+
+        console.log($scope.users);
 		
         //Grab HTML Objects
         $scope.time = document.getElementById("time");
