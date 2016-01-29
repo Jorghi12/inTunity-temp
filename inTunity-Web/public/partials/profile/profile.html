@@ -30,11 +30,11 @@
   <div class="profile-info" align="center">
     <img id="profile-img" ng-src="{{correctPerson[0].picture}}"> 
     <h1>{{correctPerson[0].nickname}}</h1>
-    <h4>{{numPosts}} posts</h4>
+    <h4 id="numPostsObject">{{numPosts}} posts</h4>
   </div>
   
   <div id = "song-grid" align="center" ng-repeat = "item in my_profile_songs | orderBy:'-unix_time' " >
-    <div class="col-md-4 song-tile">
+    <div id="{{item._id}}" class="col-md-4 song-tile">
       <a class = "delete" value = '{{item}}'>
       </a>
       <a href="" ng-click = 'startStreamingProfileSong(item.song_url,item.song_album_pic,item.song_title,item.track_id,item.song_duration)'>

@@ -88,7 +88,7 @@ angular.module('inTunity.profile', [
         }
 		
 		$scope.my_profile_songs = [];
-		
+		window.swag3 = $scope.my_profile_songs;
 		for (var i = 0; i < $scope.correctPerson[0].song_history.length; i++){
     		$http({
     		 url: 'http://localhost:3001/secured/song/id',
@@ -231,30 +231,39 @@ angular.module('inTunity.profile', [
 					//Doesn't need another http request. Since we KNOW which song we are deleting.
 					//Just delete the correct one.
 
-
+					
 
 					for (var i =0;i<$scope.correctPerson[0]["song_history"].length;i++){
-						if ($scope.correctPerson[0]["song_history"][i]._id == songid){
+						if ($scope.correctPerson[0]["song_history"][i] == songid){
+							songHtmlObj = document.getElementById($scope.correctPerson[0]["song_history"][i]);
+							console.log("SWAG");
+							console.log(songHtmlObj);
+							$(songHtmlObj).remove();
+							
+                            $scope.numPosts = $scope.correctPerson[0]["song_history"].length;
+
 							$scope.correctPerson[0]["song_history"].splice(i,1);
-
-                             $scope.numPosts = $scope.correctPerson[0]["song_history"].length;
-
+							
 							
 							//Do this in order to delete the first occurance (in case the id hashing fails - not likely)
 							i = $scope.correctPerson[0]["song_history"].length;
+							
+							//Update Number of Posts
+							var postObj = document.getElementById("numPostsObject");
+							var ind1 = postObj.innerHTML.indexOf(" posts");
+							
+							var val = postObj.innerHTML.substring(0,ind1);
+							postObj.innerHTML = (val - 1) + " posts";
 						}
 					}
 
 
-                    
-						
 
 					//Check if the deleted song is currently playing, if so tell the player to go to the next HomePage Song.
 					if (window.globalPlayer._isPlaying){
 						window.nextSong(song_track_id);
 					}
 					
-                    $location.path("/profile/" + ownpersonalusername);
                       // window.location.reload();
                   }).error(function(data, status, headers, config) {
                     console.log(status);

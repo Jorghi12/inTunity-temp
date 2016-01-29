@@ -676,6 +676,32 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     }).then(function(response) {
         var users = response["data"]["songs"];
 		
+		//Deterministically calculate the total number of users who have a song!
+		var total_num_possible = 0;
+		//var musicIDS = [];
+		
+        for (var i = 0; i < users.length; i++) {
+            if (users[i]["today_song"].length > 0) {
+				total_num_possible +=1;
+				//musicIDS.push(users[i]["today_song"][0]);
+			}
+		}
+		
+		if (total_num_possible == 0){
+			 //STOP SOUND PLAYER
+			if (window.globalPlayer != null) {
+				artworkUrl = "";
+				myTitle =  "";
+				songDuration = "";
+				userDisplay = "";
+				
+				$scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
+				window.globalPlayer.pause();
+				$scope.startStream = null;
+				window.globalPlayer = null;
+			}
+			return;
+		}
         // this array has users who only have songs for today with it
         $scope.correctUsers = [];
 
@@ -721,7 +747,38 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					});
 					
 					$scope.trackarray.push(new Array(responseSong["track_id"], responseSong["song_album_pic"], responseSong["song_title"], responseSong["song_duration"]));
-				
+					console.log("Current " + $scope.trackarray.length);
+					console.log("Max " + total_num_possible);
+					if ($scope.trackarray.length == total_num_possible){
+						console.log("About to start stream");
+						console.log($scope.correctUsers);
+						
+						//Sort Correct Users by Unix Time
+						$scope.correctUsers.sort(function(a, b) {
+							// Turn your strings into dates, and then subtract them
+							// to get a value that is either negative, positive, or zero.
+							return new Date(b.unix_time) - new Date(a.unix_time);
+						});
+
+						$scope.users = $scope.correctUsers;
+					
+					
+						$scope.song_count = ($scope.song_count) % $scope.trackarray.length;
+						musicStatus.setStatus($scope.song_count, 0, false);
+						globalPlayer.seek(0); //Do this before startStream
+						
+						
+						if ($scope.trackarray.length == 0){
+							 //STOP SOUND PLAYER
+							if (window.globalPlayer != null) {
+								window.globalPlayer.pause();
+							}
+							return;
+						}
+						
+						$scope.startStream($scope.song_count, 0);
+					}
+					
 				});
 
             } else {
@@ -729,21 +786,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
             }
         } // end of for loop
 
-
-        //Sort Correct Users by Unix Time
-        $scope.correctUsers.sort(function(a, b) {
-            // Turn your strings into dates, and then subtract them
-            // to get a value that is either negative, positive, or zero.
-            return new Date(b.unix_time) - new Date(a.unix_time);
-        });
-
-        $scope.users = $scope.correctUsers;
-
 		
-			$scope.song_count = ($scope.song_count) % $scope.trackarray.length;
-			musicStatus.setStatus($scope.song_count, 0, false);
-			globalPlayer.seek(0); //Do this before startStream
-			$scope.startStream($scope.song_count, 0);
     });
 	}
 	
