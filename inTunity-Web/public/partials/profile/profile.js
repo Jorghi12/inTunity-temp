@@ -128,6 +128,41 @@ angular.module('inTunity.profile', [
                     _id: responseSong["_id"],
                     formmatedDay: formmatedDay 
     			});
+				
+			if ($scope.my_profile_songs.length == $scope.correctPerson[0].song_history.length){
+			   $http({
+				url: 'http://localhost:3001/secured/account/id',
+				method: 'GET',
+				params: {
+					id: id
+				}
+				}).then(function(response) {
+
+					console.log(response);
+
+					var ownpersonalusername = response["data"]["user"]["url_username"];
+					var username_clicked = store.get('username_clicked');
+
+				   
+					if (username_clicked == ownpersonalusername) {
+						var deleteButton = document.getElementsByClassName("delete");
+
+						console.log(deleteButton);
+						$(deleteButton).append("X");
+						$(deleteButton).click(function() {
+						  var item = this.getAttribute('value');
+						  var obj = JSON.parse(item);
+						  $scope.deleteSong($scope.user_id,obj["_id"], obj["track_id"]);
+
+						 
+						});                  
+					}
+
+					if (username_clicked != ownpersonalusername) {
+						document.getElementById("selected-link").id = "";
+					}
+				}); // end of http get
+			}
              
     		});
 
@@ -146,38 +181,7 @@ angular.module('inTunity.profile', [
 		
 		
 		
-        $http({
-            url: 'http://localhost:3001/secured/account/id',
-            method: 'GET',
-            params: {
-                id: id
-            }
-        }).then(function(response) {
-
-            console.log(response);
-
-            var ownpersonalusername = response["data"]["user"]["url_username"];
-            var username_clicked = store.get('username_clicked');
-
-           
-            if (username_clicked == ownpersonalusername) {
-                var deleteButton = document.getElementsByClassName("delete");
-
-                console.log(deleteButton);
-                $(deleteButton).append("X");
-                $(deleteButton).click(function() {
-                  var item = this.getAttribute('value');
-                  var obj = JSON.parse(item);
-                  $scope.deleteSong($scope.user_id,obj["_id"], obj["track_id"]);
-
-                 
-                });                  
-            }
-
-            if (username_clicked != ownpersonalusername) {
-                document.getElementById("selected-link").id = "";
-            }
-        }); // end of http get
+ 
 
 
 
