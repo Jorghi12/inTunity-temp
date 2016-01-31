@@ -402,6 +402,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		
         $scope.startStream($scope.song_count, 0);
     }
+	window.nextPlayer = $scope.nextPlayer;
 
 
     //Toggle (play/pause) the current song
@@ -665,6 +666,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 			$scope.updateTrackSongs();
 		}
 	}
+	
 	window.nextSong = $scope.nextSong;
 	
 	//Update the Mainfeed TrackSongs
@@ -704,7 +706,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		}
         // this array has users who only have songs for today with it
         $scope.correctUsers = [];
-
+		$scope.trackarray = [];
+		
         // makes sure we only show users who have songs
         for (var i = 0; i < users.length; i++) {
             if (users[i]["today_song"].length > 0) {
@@ -747,8 +750,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					});
 					
 					$scope.trackarray.push(new Array(responseSong["track_id"], responseSong["song_album_pic"], responseSong["song_title"], responseSong["song_duration"]));
-					console.log("Current " + $scope.trackarray.length);
-					console.log("Max " + total_num_possible);
+					
 					if ($scope.trackarray.length == total_num_possible){
 						console.log("About to start stream");
 						console.log($scope.correctUsers);
@@ -762,19 +764,12 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 						$scope.users = $scope.correctUsers;
 					
+						console.log("Current " + $scope.trackarray.length);
+						console.log("Max " + total_num_possible);
 					
 						$scope.song_count = ($scope.song_count) % $scope.trackarray.length;
 						musicStatus.setStatus($scope.song_count, 0, false);
 						globalPlayer.seek(0); //Do this before startStream
-						
-						
-						if ($scope.trackarray.length == 0){
-							 //STOP SOUND PLAYER
-							if (window.globalPlayer != null) {
-								window.globalPlayer.pause();
-							}
-							return;
-						}
 						
 						$scope.startStream($scope.song_count, 0);
 					}

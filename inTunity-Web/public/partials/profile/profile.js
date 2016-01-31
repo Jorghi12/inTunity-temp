@@ -88,7 +88,7 @@ angular.module('inTunity.profile', [
         }
 		
 		$scope.my_profile_songs = [];
-		window.swag3 = $scope.my_profile_songs;
+		
 		for (var i = 0; i < $scope.correctPerson[0].song_history.length; i++){
     		$http({
     		 url: 'http://localhost:3001/secured/song/id',
@@ -126,8 +126,15 @@ angular.module('inTunity.profile', [
     				song_title: responseSong["song_title"],
     				song_duration: responseSong["song_duration"],
                     _id: responseSong["_id"],
-                    formmatedDay: formmatedDay 
+                    formmatedDay: formmatedDay,
+					unix_time: responseSong["unix_time"]
     			});
+				
+				$scope.my_profile_songs.sort(function(a, b) {
+					// Turn your strings into dates, and then subtract them
+					// to get a value that is either negative, positive, or zero.
+					return new Date(b.unix_time) - new Date(a.unix_time);
+				});
 				
 			if ($scope.my_profile_songs.length == $scope.correctPerson[0].song_history.length){
 			   $http({
@@ -248,7 +255,6 @@ angular.module('inTunity.profile', [
 
 							$scope.correctPerson[0]["song_history"].splice(i,1);
 							
-							
 							//Do this in order to delete the first occurance (in case the id hashing fails - not likely)
 							i = $scope.correctPerson[0]["song_history"].length;
 							
@@ -264,9 +270,10 @@ angular.module('inTunity.profile', [
 
 
 					//Check if the deleted song is currently playing, if so tell the player to go to the next HomePage Song.
-					if (window.globalPlayer._isPlaying){
-						window.nextSong(song_track_id);
-					}
+					//if (window.globalPlayer._isPlaying){
+						window.nextPlayer();
+						//window.nextSong(song_track_id);
+					//}
 					
                       // window.location.reload();
                   }).error(function(data, status, headers, config) {
