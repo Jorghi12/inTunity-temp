@@ -404,6 +404,11 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     }
 	window.nextPlayer = $scope.nextPlayer;
 
+	// this is for updating home song after profile removal of song
+	$scope.updateProfileSong = function(){
+		$scope.updateTrackSongs();
+	}
+	window.updateProfileSong = $scope.updateProfileSong;
 
     //Toggle (play/pause) the current song
     $scope.pause = function() {
@@ -739,10 +744,10 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					if (hours == 0) {
 						hours = 12;
 					}
-
+					
 					var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
 					$scope.correctUsers.push({
-						user: new Array(users[i]),
+						user: new Array(users[$scope.correctUsers.length]),
 						formattedTime: formattedTime,
 						formmatedDay: formmatedDay,
 						unix_time: responseSong["unix_time"] * 1000,
@@ -750,11 +755,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					});
 					
 					$scope.trackarray.push(new Array(responseSong["track_id"], responseSong["song_album_pic"], responseSong["song_title"], responseSong["song_duration"]));
-					
-					if ($scope.trackarray.length == total_num_possible){
-						console.log("About to start stream");
-						console.log($scope.correctUsers);
 						
+					if ($scope.trackarray.length == total_num_possible){
 						//Sort Correct Users by Unix Time
 						$scope.correctUsers.sort(function(a, b) {
 							// Turn your strings into dates, and then subtract them
@@ -764,8 +766,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 						$scope.users = $scope.correctUsers;
 					
-						console.log("Current " + $scope.trackarray.length);
-						console.log("Max " + total_num_possible);
 					
 						$scope.song_count = ($scope.song_count) % $scope.trackarray.length;
 						musicStatus.setStatus($scope.song_count, 0, false);
