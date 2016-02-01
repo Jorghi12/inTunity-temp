@@ -40,6 +40,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 id: id
             }
         }).then(function(response) {
+            console.log("hit");
             username_url = response["data"]["user"]["url_username"];
             store.set('username_clicked', username_url);
             $location.path('/profile/' + username_url);
