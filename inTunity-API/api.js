@@ -146,15 +146,14 @@ app.get('/secured/song/id', function(req, res) {
       'Content-Type': 'application/json'
       },
       method: 'GET', //Specify the method
-      qs: {song_id: req.query["song_id"]}
+      qs: {song_id: req.query["song_id"], userNum:req.query["userNum"]}
   }, function(error, response, body){
       if(error) {
           console.log(error);
       } else {
         if (response.statusCode == 200) {
           var data = JSON.parse(response.body);
-		  var uOut = JSON.parse(req.query["userNum"]);
-          res.send(200, {user:data, userNumber: uOut});
+          res.send(200, {user:data["songObject"], userNumber: data["userNum"]});
         }
       }
   });
