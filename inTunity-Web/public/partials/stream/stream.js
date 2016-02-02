@@ -55,8 +55,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 				 params: {song_id: songid, userNum: i},
 				 method: 'GET'
 				}).then(function(responseSong) {
-					responseSong = responseSong["data"]["user"];
 					userNumber = responseSong["data"]["userNumber"];
+					responseSong = responseSong["data"]["user"];
 					var date = new Date(responseSong["unix_time"] * 1000);
 					var year = date.getFullYear();
 					var month = date.getMonth();
