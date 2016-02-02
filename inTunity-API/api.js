@@ -153,7 +153,8 @@ app.get('/secured/song/id', function(req, res) {
       } else {
         if (response.statusCode == 200) {
           var data = JSON.parse(response.body);
-          res.send(200, {user:data, userNumber: req.query["userNum"]});
+		  var uOut = JSON.parse(req.query["userNum"]);
+          res.send(200, {user:data, userNumber: uOut});
         }
       }
   });
