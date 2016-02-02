@@ -52,10 +52,11 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					
 				$http({
 				 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/song/id',
-				 params: {song_id: songid},
+				 params: {song_id: songid, userNum: i},
 				 method: 'GET'
 				}).then(function(responseSong) {
 					responseSong = responseSong["data"]["user"];
+					userNumber = responseSong["data"]["userNumber"];
 					var date = new Date(responseSong["unix_time"] * 1000);
 					var year = date.getFullYear();
 					var month = date.getMonth();
@@ -75,20 +76,17 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					if (hours == 0) {
 						hours = 12;
 					}
-
+					
 					var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
 					
 					$scope.correctUsers.push({
-						user: new Array(users[$scope.correctUsers.length]),
+						user: new Array(users[userNumber]),
 						formattedTime: formattedTime,
 						formmatedDay: formmatedDay,
 						unix_time: responseSong["unix_time"] * 1000,
 						user_song: responseSong
 					});
 
-                    console.log($scope.correctUsers);
-					
-					window.legend = responseSong;
 					$scope.trackarray.push(new Array(responseSong["track_id"], responseSong["song_album_pic"], responseSong["song_title"], responseSong["song_duration"]));
 				
 					//Auto Start if the last newsfeed item
@@ -113,7 +111,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 							$scope.correctUsers[j] = $scope.TOGETHER[j].user;
 						}
 						
-						window.traks = $scope.trackarray;
 						$scope.autoStart();
 					}
 				});
@@ -721,10 +718,11 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 				
 				$http({
 				 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/song/id',
-				 params: {song_id: songid},
+				 params: {song_id: songid, userNum: i},
 				 method: 'GET'
 				}).then(function(responseSong) {
 					responseSong = responseSong["data"]["user"];
+					userNumber = responseSong["data"]["userNumber"];
 					var date = new Date(responseSong["unix_time"] * 1000);
 					var year = date.getFullYear();
 					var month = date.getMonth();
@@ -747,7 +745,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					
 					var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
 					$scope.correctUsers.push({
-						user: new Array(users[$scope.correctUsers.length]),
+						user: new Array(users[userNumber]),
 						formattedTime: formattedTime,
 						formmatedDay: formmatedDay,
 						unix_time: responseSong["unix_time"] * 1000,
