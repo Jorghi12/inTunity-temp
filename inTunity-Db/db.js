@@ -291,11 +291,11 @@ router.get('/api/account/id/' , function (req, res, next) {
 // getting a specific song
 router.get('/api/song/id/' , function (req, res, next) {
 	Song.findOne({_id:ObjectId(req.query["song_id"])}, function(err, songObj) {
-	  if (err) 
+	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);
 	  } else if(songObj) {
-	  	res.send(200,{songObject: songObj,userNum: req.query["userNum"]});
+	  	res.send(songObj);
 	  } 
 	});
 });
