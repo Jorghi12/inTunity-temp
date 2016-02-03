@@ -232,25 +232,26 @@ router.post('/api/account/id/song' , function (req, res, next) {
 	    	if (err) {
 	    		throw err;
 	    	}
-
-
-	    	if (req.body.locationFlag == true) {
-	    		var locObj = new location({
-			    	state: req.body.state,
-			    	city: req.body.city,
-			    	song_id: obj["song_history"][0].id,
-			    	user_id: userObj.id
-		    	});
-		    	locObj.save(function(err) {
-			    	if (err) {
-			    		//throw err;
-			    	}	
-	
-		  		});	
-
-		  		console.log(locObj);
-	    	}
   		});	
+
+	    if (req.body.locationFlag == true) {
+    		var locObj = new location({
+		    	state: req.body.state,
+		    	city: req.body.city,
+		    	song_id: obj["song_history"][0].id,
+		    	user_id: userObj.id
+	    	});
+	    	locObj.save(function(err) {
+		    	if (err) {
+		    		//throw err;
+		    	}	
+
+	  		});	
+	  		console.log(locObj);
+    	}
+
+
+
   		res.sendStatus(200);
 	  } 
 	});
