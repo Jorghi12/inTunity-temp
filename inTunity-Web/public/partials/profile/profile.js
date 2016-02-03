@@ -155,7 +155,7 @@ angular.module('inTunity.profile', [
 						var deleteButton = document.getElementsByClassName("delete");
 
 						console.log(deleteButton);
-						$(deleteButton).append("X");
+						$(deleteButton).append("<img src='../../images/close.png'>");
 						$(deleteButton).click(function() {
 						  var item = this.getAttribute('value');
 						  var obj = JSON.parse(item);

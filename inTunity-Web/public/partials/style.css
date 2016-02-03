@@ -61,16 +61,17 @@ hr {
 
 .content {
 	margin: 100px 9%;
-	background-color: #F5F5F5;
 	padding: 15px;
 	overflow: auto;	
 	margin-bottom: 175px;
 	margin-top: 120px;
+	background-color: #F5F5F5;
 }
 
 .content h3 {
 	margin: 5px 0px;
 }
+
 .img-circle {
   margin-top:18px;
   height:100px;
