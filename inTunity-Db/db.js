@@ -247,6 +247,8 @@ router.post('/api/account/id/song' , function (req, res, next) {
 			    	}	
 	
 		  		});	
+
+		  		console.log(locObj);
 	    	}
 	    	res.sendStatus(200);
 	    
