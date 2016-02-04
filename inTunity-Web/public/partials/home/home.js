@@ -105,30 +105,42 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	}
 
 
+    $scope.getUserInfo = function() {
+        $http({
+            url: 'http://localhost:3001/secured/account',
+            method: 'GET'
+        }).then(function(response) {
+            var data = (response['data']['songs']);
+            for (var i = 0; i < data.length; i++) {
+                if (data[i]["user_id"] == id) {
+                    $scope.profilepic = data[i]["picture"];
+                    $scope.numposts = data[i]["song_history"].length + " post";
 
-    $http({
-        url: 'http://localhost:3001/secured/account',
-        method: 'GET'
-    }).then(function(response) {
-        var data = (response['data']['songs']);
-
-        for (var i = 0; i < data.length; i++) {
-            if (data[i]["user_id"] == id) {
-                $scope.profilepic = data[i]["picture"];
-                $scope.numposts = data[i]["song_history"].length + " post";
-
+                }
             }
-        }
-
-        console.log(data);
-
-    });    
+        });  
+    }
 
 
+     
+    $scope.getAllLocations = function() {
+        $http({
+            url: 'http://localhost:3001/secured/location' ,
+            method: 'GET'
+        }).then(function(response) {  
+           $scope.locs = response["data"]["location"];
+
+        
+
+
+        }); // end of http get
+    }
 
 
 
 
+      $scope.getUserInfo();
+      $scope.getAllLocations();
 
 
 
