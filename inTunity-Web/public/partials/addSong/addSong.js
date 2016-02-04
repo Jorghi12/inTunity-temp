@@ -254,10 +254,10 @@ angular.module('inTunity.addSong', [
                         if (status === google.maps.GeocoderStatus.OK) {
                             if (results[1]) {
 
-                                console.log(results);
+                    
 
-                                var state = results[2]["address_components"][2]["short_name"];
-                                var city = results[2]["address_components"][1]["short_name"];
+                                var state = results[3]["address_components"][1]["short_name"];
+                                var city = results[3]["address_components"][0]["short_name"];
 
                                 var song = JSON.stringify({
                                     user_id: id,
