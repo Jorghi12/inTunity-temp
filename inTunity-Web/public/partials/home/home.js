@@ -129,7 +129,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             method: 'GET'
         }).then(function(response) {  
            $scope.locs = response["data"]["location"];
-
+           console.log($scope.locs);
         
 
 
