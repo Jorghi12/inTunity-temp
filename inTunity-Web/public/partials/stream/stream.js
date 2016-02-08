@@ -782,9 +782,12 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 						}
 						
 						//If currently playing start stream
-						if(window.globalPlayer._isPlaying)
+						if (window.globalPlayer._isPlaying)
 						{
-							$scope.startStream($scope.song_count,0);
+							//If a different song needs to be played
+							if (scope.trackarray[$scope.song_count][0] != $scope.trackID){
+								$scope.startStream($scope.song_count,0);
+							}
 						}
 						else
 						{
