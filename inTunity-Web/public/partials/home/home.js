@@ -9,7 +9,15 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     console.log($scope.auth);
     var prof = (store.get('profile'));
     $scope.owner;
-    $scope.fullname = auth.profile.name;
+    $scope.fullname;
+
+
+    if (auth.profile.name.indexOf("@") == -1) {
+        $scope.fullname = auth.profile.name;
+    } else {
+        $scope.fullname = prof["nickname"];
+    }
+
     var id = prof["identities"][0]["user_id"];
 	var myUserId = prof["identities"][0]["user_id"];
     var trackarray = [];
