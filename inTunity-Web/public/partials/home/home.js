@@ -6,8 +6,10 @@ app = angular.module('inTunity.home', [
 
 app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus,$cookies, $rootScope) {
     $scope.auth = auth;
+    console.log($scope.auth);
     var prof = (store.get('profile'));
     $scope.owner;
+    $scope.fullname = auth.profile.name;
     var id = prof["identities"][0]["user_id"];
 	var myUserId = prof["identities"][0]["user_id"];
     var trackarray = [];
@@ -114,8 +116,15 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             for (var i = 0; i < data.length; i++) {
                 if (data[i]["user_id"] == id) {
                     $scope.profilepic = data[i]["picture"];
-                    $scope.numposts = data[i]["song_history"].length + " post";
-
+                    $scope.numfollowers = 10 + " Followers";
+                    $scope.numfollowing = 15 + " Following";
+                    var postCount = data[i]["song_history"].length;
+                    if (postCount == 1) {
+                        $scope.numposts =  postCount + " Post";
+                    }
+                    else {
+                        $scope.numposts =  postCount + " Posts";
+                    };
                 }
             }
         });  

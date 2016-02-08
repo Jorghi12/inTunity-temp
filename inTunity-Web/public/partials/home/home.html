@@ -36,9 +36,26 @@
         <a href="" ng-click = "profile()"> 
           <img class = "img-circle" style="height: 75px; width: 75px;" ng-src = "{{profilepic}}">
         </a>
-        <h3 id="name-tag">{{owner}}</h3>
+        <a href="" ng-click = "profile()">
+          <h3 id="name-tag">{{fullname}}</h3>
+        </a>
         <br>
-         <h4>{{numposts}}</h4>
+        <div class = "profile-info-counts">
+          <a href="" ng-click = "profile()">
+            <h4 class="col-sm-4 numposts" style="padding: 5px 30px">{{numposts}}</h4>
+          </a>
+          <a href="">
+            <h4 class="col-sm-4 numfollowers">{{numfollowers}}</h4>
+          </a>
+          <a href="">
+            <h4 class="col-sm-4 numfollowing">{{numfollowing}}</h4>
+          </a>
+        </div>
+        <a href="">
+          <div class = "add-followers">
+            <h3>Add Followers</h3>
+          </div>
+        </a>
       </div>
 
 
