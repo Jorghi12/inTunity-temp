@@ -137,8 +137,25 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/location' ,
             method: 'GET'
         }).then(function(response) {  
-           $scope.locs = response["data"]["location"];
-           console.log($scope.locs);
+			//Remove Duplicates
+			$scope.locs = [];
+			for (var placeNum = 0; placeNum < response["data"]["location"].length; placeNum++){
+				place = response["data"]["location"][placeNum];
+				found = false;
+				for (var obj = 0; obj < $scope.locs.length; obj++){
+					if ($scope.locs[obj]["city"] == place["city"] && $scope.locs[obj]["state"] == place["state"]){
+						found = true
+					}
+				}
+				if (found == false){
+					$scope.locs.push(place);
+				}
+			}
+			
+           //$scope.locs = response["data"]["location"];
+		   console.log( response["data"]["location"]);
+		   console.log("FRESH");
+		   console.log($scope.locs);
         
 
 
