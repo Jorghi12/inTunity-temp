@@ -440,7 +440,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		songUrl = "";
 		artworkUrl = $scope.trackarray[$scope.song_count % $scope.trackarray.length][1];
 		myTitle =  $scope.trackarray[$scope.song_count % $scope.trackarray.length][2];
-		trackid = $scope.trackarray[$scope.song_count][0];
+		trackid = $scope.trackarray[$scope.song_count][0];  
 		songDuration = parseInt($scope.trackarray[$scope.song_count % $scope.trackarray.length][3]);
 		pagetype = "home";
 
@@ -773,14 +773,23 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 							$scope.trackarray[j] = $scope.TOGETHER[j].song;
 							$scope.correctUsers[j] = $scope.TOGETHER[j].user;
 						}
-					
-					
-						$scope.song_count = ($scope.song_count) % $scope.trackarray.length;
-						musicStatus.setStatus($scope.song_count, 0, false);
-						globalPlayer.seek(0); //Do this before startStream
+
+						//Different song
+						if (scope.trackarray[$scope.song_count][0] != $scope.trackID){
+							$scope.song_count = ($scope.song_count) % $scope.trackarray.length;
+							musicStatus.setStatus($scope.song_count, 0, false);
+							globalPlayer.seek(0); //Do this before startStream
+						}
 						
-						$scope.startStream($scope.song_count, 0);
-						//$scope.autoStart();
+						//If currently playing start stream
+						if(window.globalPlayer._isPlaying)
+						{
+							$scope.startStream($scope.song_count,0);
+						}
+						else
+						{
+							$scope.startStream($scope.song_count,-2000);
+						}
 					}
 					
 				});
