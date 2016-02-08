@@ -128,10 +128,12 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                     $scope.numfollowing = 15 + " Following";
                     var postCount = data[i]["song_history"].length;
                     if (postCount == 1) {
-                        $scope.numposts =  postCount + " Post";
+                        $scope.numposts =  postCount;
+                        $scope.posts = "Post"
                     }
                     else {
-                        $scope.numposts =  postCount + " Posts";
+                        $scope.numposts =  postCount;
+                        $scope.posts = "Posts";
                     };
                 }
             }
