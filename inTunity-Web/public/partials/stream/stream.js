@@ -775,17 +775,19 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 						}
 
 						//Different song
-						if (scope.trackarray[$scope.song_count][0] != $scope.trackID){
+						var newSong = false;
+						if ($scope.trackarray[$scope.song_count][0] != $scope.trackID){
 							$scope.song_count = ($scope.song_count) % $scope.trackarray.length;
 							musicStatus.setStatus($scope.song_count, 0, false);
-							globalPlayer.seek(0); //Do this before startStream
+							newSong = true;
 						}
 						
 						//If currently playing start stream
 						if (window.globalPlayer._isPlaying)
 						{
 							//If a different song needs to be played
-							if (scope.trackarray[$scope.song_count][0] != $scope.trackID){
+							if (newSong){
+								globalPlayer.seek(0);
 								$scope.startStream($scope.song_count,0);
 							}
 						}
