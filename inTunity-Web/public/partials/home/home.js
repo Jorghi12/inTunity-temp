@@ -99,7 +99,20 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		
 		
 		//Grab a list of all the users
-		
+		$http({
+         url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/accountSpecific',
+        method: 'GET',
+		params: {searchString: $scope.searchUsers}
+		}).then(function(response) {
+			var users = response["data"]["songs"];
+			
+			for (var i = 0; i < users.length; i++) {
+				if (users[i] > 0) {
+					
+				}
+			}
+		}
+		)
 	
 	}
 	

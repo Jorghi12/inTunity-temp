@@ -191,7 +191,46 @@ router.get('/api/account/' , function (req, res, next) {
 
 
 
+//Get all accounts that match a specific string
+router.get('/api/account/Specific' , function (req, res, next) {
+	//This is the search string req.query["searchString"]
+	User.find({}, function(err, userObj) {
+	  if (err) {
+	    console.log(err);
+	    res.sendStatus(500);
+	  } else if(userObj) {
 
+	  	// update the timer in here after expiration
+	  	// if expired, make that entry null in the db
+	  	var today = new Date();
+
+	  	// unix time 
+	  	var todayTime = today.getTime()/1000;
+
+	  	for (var i = 0; i < userObj.length; i++) {
+	  		if(userObj[i].today_song.length > 0) {
+
+	
+		  		// a diff of 600 is about 10 min
+		  		//86400 is one day
+		  		if (todayTime - userObj[i].today_song[0].unix_time >= 32140800) {		  		
+		  			userObj[i].today_song.shift();
+		  			userObj[i].save(function(err) {
+		           		if (err) {
+		             		throw err;
+		           		} else {
+		                 	console.log('song got updated');
+		           		}
+		         	});
+		  		}
+	  		}
+	  	} // end of for loop
+
+	  	res.send(userObj);
+	  } 
+	})
+
+});
 
 
 

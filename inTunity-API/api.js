@@ -75,6 +75,28 @@ app.get('/secured/account', function(req, res) {
 });
 
 
+// Get all accounts that match given search name
+app.get('/secured/accountSpecific', function(req, res) {
+  request({
+      url: process.env.DATABASE + '/api/account/Specific', //URL to hit
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      method: 'GET', //Specify the method,
+	  qs: {searchString: req.query["searchString"]}
+  }, function(error, response, body){
+      if(error) {
+          console.log(error);
+      } else {
+        if (response.statusCode == 200) {
+          var data = JSON.parse(response.body);
+          res.send(200, {songs: data});
+        }
+      }
+  });
+});
+
+
 
 // this method is used for posting a song
 app.post('/secured/account/id/song', function(req, res) {
