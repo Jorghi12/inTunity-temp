@@ -192,8 +192,9 @@ router.get('/api/account/' , function (req, res, next) {
 
 
 //Get all accounts that match a specific string
-router.get('/api/account/Specific' , function (req, res, next) {
+router.get('/api/account/id/search' , function (req, res, next) {
 	//This is the search string req.query["searchString"]
+	//req.query["currentUser"]
 	User.find({nickname: new RegExp(req.query["searchString"], "i")}, function(err, userObj) {
 	  if (err) {
 	    console.log(err);

@@ -89,6 +89,14 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
        
     }
 
+	$scope.clearFollowers = function(){
+		//Clear children
+		var container = document.getElementById("modalChildren");
+		container.innerHTML = "";
+		
+		//Clear text area
+		$scope.searchUsers = "";
+	}
 
    
 	
@@ -102,22 +110,18 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		
 		
 		var container = document.getElementById("modalChildren");
-				
+		
 		//Grab a list of all the users
 		$http({
-         url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account',
+         url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/search',
         method: 'GET',
-		params: {searchString: $scope.searchUsers}
+		params: {searchString: $scope.searchUsers, userID: myUserId}
 		}).then(function(response) {
 			var users = response["data"]["songs"];
-
-
 			
 			//Clear the body
 			document.getElementById("modalChildren").innerHTML = "";
 			
-
-
 			for (var i = 0; i < users.length; i++) {
 				//Create search results
 				var userNode = document.createElement("div");

@@ -79,12 +79,12 @@ app.get('/secured/account', function(req, res) {
 // used for searching a particular account
 app.get('/secured/account/id/search', function(req, res) {
   request({
-      url: process.env.DATABASE + '/api/account/Specific', //URL to hit
+      url: process.env.DATABASE + '/api/account/id/search', //URL to hit
       headers: {
       'Content-Type': 'application/json'
       },
       method: 'GET', //Specify the method,
-	  qs: {searchString: req.query["searchString"]}
+	  qs: {searchString: req.query["searchString"], currentUser: req.query["userID"]}
   }, function(error, response, body){
       if(error) {
           console.log(error);
