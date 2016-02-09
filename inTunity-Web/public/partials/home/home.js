@@ -116,6 +116,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			//Clear the body
 			document.getElementById("modalChildren").innerHTML = "";
 			
+
+
 			for (var i = 0; i < users.length; i++) {
 				//Create search results
 				var userNode = document.createElement("div");
@@ -133,18 +135,18 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				var img = document.createElement('img');
 				img.className = "img-circle";
 				img.src = users[i]["picture"];
+                img.id = i;
 
 
-                var userTarget = users[i];
-
-                img.onclick = function() {
-                    $rootScope.$apply(function() {
+                $(img).click(function($this) {
+                   $rootScope.$apply(function() {
                         $('#myModal').modal('hide');
                         $('.modal-backdrop').remove();
-                        $location.path('/add-song');
-                        // console.log($location.path());
+                        $location.path('/profile/' + users[$this.target.id]['url_username']);
                     });
-                }
+                });
+
+                
 				col1.appendChild(img);
 
 				//Create Profile Text
