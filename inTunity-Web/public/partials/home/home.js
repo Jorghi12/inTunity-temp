@@ -89,6 +89,20 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
        
     }
 	
+	//Function to pull search results for people to follow
+	$scope.findUsers = function(){
+		var searchText = document.getElementById("searchUsers");
+		//$scope.searchUsers 
+		//Need to find users that match "$scope.searchUsers"
+		//Need to load them into the popup (clear popup elements first)
+		//Then load profile pic + Link to Profile (Titled with name) + Checkbox (notifies whether already friends or not)
+		
+		
+		//Grab a list of all the users
+		
+	
+	}
+	
 	//Function to add a friend
 	//Haven't tested - not complete
     $scope.addFollower = function(follower_user_id) {
