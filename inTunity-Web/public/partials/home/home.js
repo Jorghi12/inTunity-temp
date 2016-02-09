@@ -98,18 +98,55 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		//Then load profile pic + Link to Profile (Titled with name) + Checkbox (notifies whether already friends or not)
 		
 		
+		var container = document.getElementById("modalChildren");
+				
 		//Grab a list of all the users
 		$http({
-         url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/accountSpecific',
+         url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account',
         method: 'GET',
 		params: {searchString: $scope.searchUsers}
 		}).then(function(response) {
 			var users = response["data"]["songs"];
+			console.log("DAMN");
+			console.log(users);
+			
+			//Clear the body
+			document.getElementById("modalChildren").innerHTML = "";
 			
 			for (var i = 0; i < users.length; i++) {
-				if (users[i] > 0) {
-					
-				}
+				//Create search results
+				var userNode = document.createElement("div");
+				userNode.style.clear = "left";
+				
+				//Column One
+				var col1 = document.createElement('div');
+				col1.className = "col-md-6";
+	
+				//Column Two
+				var col2 = document.createElement('div');
+				col2.className = "col-md-6";
+				
+				//Create Profile Image
+				var img = document.createElement('img');
+				img.className = "album-artwork";
+				img.src = users[i]["picture"];
+				
+				col1.appendChild(img);
+
+				//Create Profile Text
+				var userTitle = document.createElement("h4");
+				userTitle.innerHTML = users[i]["nickname"];
+				
+				col2.appendChild(userTitle);
+				
+				//Append children to userNode
+				userNode.appendChild(col1);
+				userNode.appendChild(col2);
+				
+				//Add element to container!
+				container.appendChild(userNode);
+				
+				
 			}
 		}
 		)
