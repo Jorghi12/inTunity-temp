@@ -88,6 +88,9 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         });
        
     }
+
+
+   
 	
 	//Function to pull search results for people to follow
 	$scope.findUsers = function(){
@@ -107,8 +110,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		params: {searchString: $scope.searchUsers}
 		}).then(function(response) {
 			var users = response["data"]["songs"];
-			console.log("DAMN");
-			console.log(users);
+
+
 			
 			//Clear the body
 			document.getElementById("modalChildren").innerHTML = "";
@@ -130,7 +133,18 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				var img = document.createElement('img');
 				img.className = "img-circle";
 				img.src = users[i]["picture"];
-				
+
+
+                var userTarget = users[i];
+
+                img.onclick = function() {
+                    $rootScope.$apply(function() {
+                        $('#myModal').modal('hide');
+                        $('.modal-backdrop').remove();
+                        $location.path('/add-song');
+                        // console.log($location.path());
+                    });
+                }
 				col1.appendChild(img);
 
 				//Create Profile Text
@@ -149,9 +163,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				
 				
 			}
-		}
-		)
-	
+		});
 	}
 	
 	//Function to add a friend
