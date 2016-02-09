@@ -76,7 +76,8 @@ app.get('/secured/account', function(req, res) {
 
 
 // Get all accounts that match given search name
-app.get('/secured/accountSpecific', function(req, res) {
+// used for searching a particular account
+app.get('/secured/account/id/search', function(req, res) {
   request({
       url: process.env.DATABASE + '/api/account/Specific', //URL to hit
       headers: {
@@ -138,6 +139,7 @@ app.get('/secured/location', function(req, res) {
 });
 
 // getting a specific user
+// this is mainly used for profile.js
 app.get('/secured/account/id', function(req, res) {
   request({
       url: process.env.DATABASE + '/api/account/id', //URL to hit
