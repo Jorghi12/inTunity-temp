@@ -128,7 +128,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				
 				//Create Profile Image
 				var img = document.createElement('img');
-				img.className = "album-artwork";
+				img.className = "img-circle";
 				img.src = users[i]["picture"];
 				
 				col1.appendChild(img);
@@ -136,6 +136,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				//Create Profile Text
 				var userTitle = document.createElement("h4");
 				userTitle.innerHTML = users[i]["nickname"];
+				userTitle.style.fontSize = "24px";
 				
 				col2.appendChild(userTitle);
 				
