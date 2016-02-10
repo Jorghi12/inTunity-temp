@@ -150,13 +150,15 @@ app.get('/secured/account/id', function(req, res) {
       qs: {user_id: req.query["id"]}
   }, function(error, response, body){
       if(error) {
-          console.log(error);
-          res.send(500);
+        console.log(error);
       } else {
         if (response.statusCode == 200) {
           console.log("success");
           var data = JSON.parse(response.body);
           res.send(200, {user:data});
+        } else {
+          console.log("does not exist");
+          res.send(500);
         }
       }
   });
