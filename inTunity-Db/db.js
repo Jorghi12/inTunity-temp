@@ -203,8 +203,9 @@ router.get('/api/account/id/search' , function (req, res, next) {
 		  
 	  	for (var i = 0; i < userObj.length; i++) {
 			//Check if user is a friend already or not.
-			if req.query["currentUser"] in userObj[i]["friends"]{
+			if (req.query["currentUser"] in userObj[i]["friends"]){
 				//Would like to mark this somehow.
+				;
 			}
 	  	} // end of for loop
 
