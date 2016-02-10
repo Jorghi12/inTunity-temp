@@ -89,7 +89,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
        
     }
 
-	$scope.clearFollowers = function(){
+	$scope.exitModal = function(){
 		//Clear children
 		var container = document.getElementById("modalChildren");
 		container.innerHTML = "";
@@ -134,7 +134,10 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 for (var i = 0; i < users.length; i++) {
                     //Create search results
                     var userNode = document.createElement("div");
-                    userNode.style.clear = "left";
+                    userNode.className = "row";
+          
+
+                    userNode.appendChild(document.createElement("hr"));
                     
                     //Column One
                     var col1 = document.createElement('div');
@@ -172,9 +175,14 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                     //Append children to userNode
                     userNode.appendChild(col1);
                     userNode.appendChild(col2);
+
+             
+
+                   
                     
                     //Add element to container!
                     container.appendChild(userNode);
+       
                     
                     
                 }
