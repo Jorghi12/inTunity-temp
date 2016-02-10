@@ -200,7 +200,9 @@ router.get('/api/account/id/search' , function (req, res, next) {
 	    console.log(err);
 	    res.sendStatus(500);
 	  } else if(userObj) {
-		  
+		console.log("KING");
+		console.log(req.query["searchString"]);
+		
 	  	for (var i = 0; i < userObj.length; i++) {
 			//Check if user is a friend already or not.
 			if (req.query["currentUser"] in userObj[i]["friends"]){
