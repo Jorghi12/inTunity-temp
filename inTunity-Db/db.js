@@ -319,7 +319,7 @@ router.get('/api/account/id/' , function (req, res, next) {
 	}); 
 
 	// basically give this if the user does not exist
-	res.send(500);
+	// res.send(500);
 
 });
 
