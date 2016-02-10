@@ -1572,3 +1572,4 @@ Error: Failed to lookup view "error" in views directory "/home/ubuntu/inTunity-v
 [0mGET /images/logo.png [36m304 [0m0.200 ms - -[0m
 [0mGET /app/style.css [36m304 [0m0.142 ms - -[0m
 [0mGET /images/back.png [36m304 [0m0.157 ms - -[0m
+Express server listening on port 3000
