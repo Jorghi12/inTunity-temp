@@ -117,6 +117,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         method: 'GET',
 		params: {searchString: $scope.searchUsers, userID: myUserId}
 		}).then(function(response) {
+			alert("DAMN");
 			var users = response["data"]["songs"];
 			
 			//Clear the body
