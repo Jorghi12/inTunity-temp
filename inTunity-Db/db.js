@@ -312,6 +312,7 @@ router.get('/api/account/id/' , function (req, res, next) {
 	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);
+	    res.send(500);
 	  } else if(userObj) {
 	  	console.log("hi");
 	  	console.log(userObj);
