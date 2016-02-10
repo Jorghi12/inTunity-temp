@@ -216,7 +216,7 @@ router.get('/api/account/id/search' , function (req, res, next) {
 				}
 			}
 			
-		});
+		};
 
 	  } 
 	});
