@@ -307,15 +307,17 @@ router.get('/api/location/' , function (req, res, next) {
 router.get('/api/account/id/' , function (req, res, next) {
 	console.log(req.query["user_id"]);
 	User.findOne({user_id:req.query["user_id"]}, function(err, userObj) {
-	  if (err) {
-	    console.log(err);
-	    res.sendStatus(500);
-	    res.send(500);
-	  } else if(userObj) {
-	  	console.log("hi");
-	  	console.log(userObj);
-	  	res.send(userObj);
-	  } 
+
+		if (userObj == null) {
+			res.send(500);
+		}
+	  	if (err) {
+	    	res.sendStatus(500);
+	    	res.send(500);
+	  	} else if(userObj) {
+	  		console.log("retrieved");
+	  		res.send(userObj);
+	  	}
 	}); 
 
 
