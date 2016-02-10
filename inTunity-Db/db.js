@@ -318,6 +318,10 @@ router.get('/api/account/id/' , function (req, res, next) {
 	  	res.send(userObj);
 	  } 
 	}); 
+
+	 res.sendStatus(500);
+	 res.send(500);
+
 });
 
 
