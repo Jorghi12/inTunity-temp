@@ -195,25 +195,33 @@ router.get('/api/account/' , function (req, res, next) {
 router.get('/api/account/id/search' , function (req, res, next) {
 	//This is the search string req.query["searchString"]
 	//req.query["currentUser"]
-	User.find({"nickname" : { "$regex": req.query["searchString"], "$options": "i" }}, function(err, userObj) {
-	  if (err) {
-	    console.log(err);
-	    res.sendStatus(500);
-	  } else if(userObj) {
-		console.log("KING");
-		console.log(req.query["searchString"]);
-		
-	  	for (var i = 0; i < userObj.length; i++) {
-			//Check if user is a friend already or not.
-			if (req.query["currentUser"] in userObj[i]["friends"]){
-				//Would like to mark this somehow.
-				;
-			}
-	  	} // end of for loop
 
-	  	res.send(userObj);
+	//Find current user
+	User.findOne({user_id: req.query["currentUser"]}, function(err, currUser) {
+		
+		User.find({"nickname" : { "$regex": req.query["searchString"], "$options": "i" }}, function(err, userObj) {
+		  if (err) {
+			console.log(err);
+			res.sendStatus(500);
+		  } else if(userObj) {
+			console.log("KING");
+			console.log(req.query["searchString"]);
+
+			for (var i = 0; i < userObj.length; i++) {
+				//Information for checkboxes/pluses
+				userObj[i]["alreadyFriends"] = false;
+				if (userObj[i]["user_id"] in currUser["friends"]){
+					//userObj[i] is already friends with the current user
+					userObj[i]["alreadyFriends"] = true;
+				}
+			}
+			
+		});
+
 	  } 
-	})
+	});
+	
+	res.send(userObj);
 
 });
 
@@ -390,27 +398,33 @@ router.post('/api/account/id/addfollower', function (req, res, next) {
 	User.findOne({user_id: req.body.user_id}, function(err, myUserObj) {
 		
 		User.findOne({user_id: req.body.other_id}, function(err, otherUserObj) {
-			var found = false;
+			//Check if the FRIEND is already inside the current user's friend list
+			var found_in_current = false;
 			for (var i = 0;i < myUserObj["friends"].length;i++){
 				if (myUserObj["friends"][i] == otherUserObj.id){
-					found = true;
+					found_in_current = true;
 				}
 			}
 			
-			//First time following user
-			if (found == false){
-				myUserObj["friends"].unshift(otherUserObj.id);
-			}
-			else{
+			//User isn't in the list yet?
+			if (found_in_current){
 				//Follower is already in the User's list
+				//Will just return a message to api.js about the result
 				;
 			}
+			else{
+				myUserObj["friends"].unshift(otherUserObj.id);
+			}
 			
+			//Update the User
 			myUserObj.save(function(err) {
 				if (err) {
 					throw err;
-				}	
+				}
 			});	
+			
+			//Send results
+			res.send(200, {userAlreadyInList: found_in_current});
 		});
 		
 	});

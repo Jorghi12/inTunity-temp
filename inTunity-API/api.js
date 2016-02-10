@@ -265,14 +265,11 @@ app.post('/secured/account/id/addfollower', function(req, res) {
           console.log(error);
       } else {
           var data = JSON.parse(response.body);
-		  res.send(200);
+		  //data["userAlreadyInList"], want to notify the View (HTML page) that we're already friends with this user
+		  res.send(200, {userAlreadyInList: data["userAlreadyInList"]});
       }
   });
 });
-
-
-
-
 
 
 var port = process.env.PORT || 3001;
