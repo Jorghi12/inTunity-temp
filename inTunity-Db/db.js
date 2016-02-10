@@ -305,8 +305,6 @@ router.get('/api/location/' , function (req, res, next) {
 //getting a specific user
 router.get('/api/account/id/' , function (req, res, next) {
 
-	console.log("getting specific user id")
-	console.log(req.query["user_id"]);
 	User.findOne({user_id:req.query["user_id"], $exists: true }, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
@@ -319,7 +317,8 @@ router.get('/api/account/id/' , function (req, res, next) {
 	  } 
 	}); 
 
-	 res.send(500);
+	// basically give this if the user does not exist
+	//res.send(500);
 
 });
 
