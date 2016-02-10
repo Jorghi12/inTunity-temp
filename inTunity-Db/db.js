@@ -305,7 +305,8 @@ router.get('/api/location/' , function (req, res, next) {
 //getting a specific user
 router.get('/api/account/id/' , function (req, res, next) {
 
-	User.findOne({user_id:req.query["user_id"], $exists: true }, function(err, userObj) {
+	console.log(req.query["user_id"]);
+	User.findOne({user_id:req.query["user_id"]}, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);
