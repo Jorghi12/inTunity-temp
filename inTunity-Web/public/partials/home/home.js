@@ -6,10 +6,11 @@ app = angular.module('inTunity.home', [
 
 app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus,$cookies, $rootScope) {
     $scope.auth = auth;
-    console.log($scope.auth);
     var prof = (store.get('profile'));
     $scope.owner;
     $scope.fullname;
+
+    $scope.suggestedFriends = auth.profile.context.mutual_friends.data;
 
 
     if (auth.profile.name.indexOf("@") == -1) {
@@ -29,6 +30,27 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     } else {
         $scope.owner = prof["nickname"];
     }
+
+
+
+    
+        console.log($scope.suggestedFriends[0]["id"]);
+        $http({
+            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+            method: 'GET',
+            params: {
+                id: $scope.suggestedFriends[0]["id"]
+            }
+        }).then(function(response) {
+          console.log(response);
+        }); // end of http get
+    
+
+
+
+
+
+
 
     //use this function when you click on individual profile pics
     $scope.otherprofiles = function(username) {
@@ -267,10 +289,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				}
 			}
 			
-           //$scope.locs = response["data"]["location"];
-		   console.log( response["data"]["location"]);
-		   console.log("FRESH");
-		   console.log($scope.locs);
         
 
 
