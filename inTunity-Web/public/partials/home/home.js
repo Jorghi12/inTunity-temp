@@ -4,11 +4,13 @@ app = angular.module('inTunity.home', [
 
 ]);
 
-app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus,$cookies, $rootScope) {
+app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus,$cookies, $rootScope, $q) {
     $scope.auth = auth;
     var prof = (store.get('profile'));
     $scope.owner;
     $scope.fullname;
+
+    
 
     $scope.suggestedFriends = auth.profile.context.mutual_friends.data;
 
@@ -31,30 +33,66 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         $scope.owner = prof["nickname"];
     }
 
-
+    $scope.test = function() {
+        console.log("test");
+    }
+   
+    $scope.suggested = [];
 
     $scope.initialFollowers = function() {
+
+        // var deferred = $q.defer();
+
+        // var promise;
+        // var promises = [];
+
+        // angular.forEach($scope.suggestedFriends, function(item) {
+        //      $http({
+        //         url: 'http://localhost:3001/secured/account/id',
+        //         method: 'GET',
+        //         params: {
+        //             id: item["id"]
+        //         }
+        //     }).then(function(response) {
+        //         if (response.status == 200) {
+        //             console.log(response);
+        //             // promises.push(response["data"]["user"]);
+        //         }
+        //     }); // end of http get
+        // });
+
+        //  $q.all(promises).then(function(result){
+        //     console.log(result);
+        // });
+
+
+
+
         for (var i = 0; i < $scope.suggestedFriends.length; i++) {
             $http({
-                url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+                url: 'http://localhost:3001/secured/account/id',
                 method: 'GET',
                 params: {
                     id: $scope.suggestedFriends[i]["id"]
                 }
             }).then(function(response) {
                 if (response.status == 200) {
-                    console.log("user is not stored in database");
+                   console.log(response["data"]["user"]);
+                   $scope.suggested.push(response["data"]["user"]);
                 }
              
 
             }); // end of http get
         }
+
+       
     }
     
 
 
-    $scope.initialFollowers();
 
+    $scope.initialFollowers();
+    console.log($scope.suggested);
 
 
 
@@ -72,7 +110,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     $scope.profile = function() {
         console.log("test");
         $http({
-            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+            url: 'http://localhost:3001/secured/account/id',
             method: 'GET',
             params: {
                 id: id
@@ -102,7 +140,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             song_id: song_id, 
             liked_user_id: id
         });
-        $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/likes/song/id', {data: likes}, { 
+        $http.post('http://localhost:3001/secured/account/id/likes/song/id', {data: likes}, { 
               headers: {
               'Accept' : '*/*',
               'Content-Type': 'application/json'
@@ -135,7 +173,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
 
-
 		//$scope.searchUsers 
 		//Need to find users that match "$scope.searchUsers"
 		//Need to load them into the popup (clear popup elements first)
@@ -150,10 +187,12 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         
             //Grab a list of all the users
             $http({
-             url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/search',
+             url: 'http://localhost:3001/secured/account/id/search',
             method: 'GET',
             params: {searchString: $scope.searchUsers, userID: myUserId}
             }).then(function(response) {
+
+                console.log(response);
                 var users = response["data"]["songs"];
                 
                 //Clear the body
@@ -229,7 +268,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			user_id: myUserId,
             other_id: follower_user_id
         });
-        $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/addfollower', {data: followerData}, { 
+        $http.post('http://localhost:3001/secured/account/id/addfollower', {data: followerData}, { 
               headers: {
               'Accept' : '*/*',
               'Content-Type': 'application/json'
@@ -250,7 +289,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
     $scope.getUserInfo = function() {
         $http({
-            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account',
+            url: 'http://localhost:3001/secured/account',
             method: 'GET'
         }).then(function(response) {
             var data = (response['data']['songs']);
@@ -277,7 +316,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
      
     $scope.getAllLocations = function() {
         $http({
-            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/location' ,
+            url: 'http://localhost:3001/secured/location' ,
             method: 'GET'
         }).then(function(response) {  
 			//Remove Duplicates
