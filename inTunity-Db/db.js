@@ -296,7 +296,6 @@ router.get('/api/location/' , function (req, res, next) {
 	    console.log(err);
 	    res.sendStatus(500);
 	  } else if(locationObj) {
-	  	console.log(locationObj);
 	  	res.send(locationObj);
 	  } 
 	});
@@ -308,7 +307,7 @@ router.get('/api/account/id/' , function (req, res, next) {
 
 	console.log("getting specific user id")
 	console.log(req.query["user_id"]);
-	User.findOne({user_id:req.query["user_id"] }, function(err, userObj) {
+	User.findOne({user_id:req.query["user_id"], $exists: true }, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);
