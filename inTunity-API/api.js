@@ -157,9 +157,9 @@ app.get('/secured/account/id', function(req, res) {
           console.log("success");
           var data = JSON.parse(response.body);
           res.send(200, {user:data});
-        } else {
-          console.log("does not exist");
-          res.send(500);
+        } else if (response.statusCode == 205){
+          console.log("user does not exist");
+          res.send(205);
         }
       }
   });

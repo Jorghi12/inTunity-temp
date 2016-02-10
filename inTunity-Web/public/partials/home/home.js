@@ -33,20 +33,27 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
 
-    for (var i = 0; i < $scope.suggestedFriends.length; i++) {
-        $http({
-            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
-            method: 'GET',
-            params: {
-                id: $scope.suggestedFriends[i]["id"]
-            }
-        }).then(function(response) {
-          console.log(response);
-        }); // end of http get
+    $scope.initialFollowers = function() {
+        for (var i = 0; i < $scope.suggestedFriends.length; i++) {
+            $http({
+                url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+                method: 'GET',
+                params: {
+                    id: $scope.suggestedFriends[i]["id"]
+                }
+            }).then(function(response) {
+                if (response.status == 200) {
+                    console.log("user is not stored in database");
+                }
+             
+
+            }); // end of http get
+        }
     }
+    
 
 
-
+    $scope.initialFollowers();
 
 
 

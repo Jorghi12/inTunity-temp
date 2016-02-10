@@ -309,7 +309,7 @@ router.get('/api/account/id/' , function (req, res, next) {
 	User.findOne({user_id:req.query["user_id"]}, function(err, userObj) {
 
 		if (userObj == null) {
-			res.send(500);
+			res.send(205);
 		}
 	  	if (err) {
 	    	res.sendStatus(500);
