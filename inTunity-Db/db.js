@@ -195,7 +195,8 @@ router.get('/api/account/' , function (req, res, next) {
 router.get('/api/account/id/search' , function (req, res, next) {
 	//This is the search string req.query["searchString"]
 	//req.query["currentUser"]
-	User.find({nickname: new RegExp(req.query["searchString"], "i")}, function(err, userObj) {
+	//nickname: new RegExp(req.query["searchString"], "i")
+	User.find({}, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);
