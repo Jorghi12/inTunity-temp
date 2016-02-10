@@ -316,7 +316,7 @@ router.get('/api/account/id/' , function (req, res, next) {
 	  	console.log(userObj);
 	  	res.send(userObj);
 	  } 
-	}); 
+	}).count(); 
 
 	// basically give this if the user does not exist
 	// res.send(500);
