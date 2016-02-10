@@ -319,7 +319,6 @@ router.get('/api/account/id/' , function (req, res, next) {
 	  } 
 	}); 
 
-	 res.sendStatus(500);
 	 res.send(500);
 
 });
