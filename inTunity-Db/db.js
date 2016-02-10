@@ -303,10 +303,10 @@ router.get('/api/location/' , function (req, res, next) {
 
 
 //getting a specific user
+// need to return something if user does not exist
 router.get('/api/account/id/' , function (req, res, next) {
-
 	console.log(req.query["user_id"]);
-	User.findOne({user_id:10154550391401808}, function(err, userObj) {
+	User.findOne({user_id:req.query["user_id"]}, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);
@@ -318,8 +318,7 @@ router.get('/api/account/id/' , function (req, res, next) {
 	  } 
 	}); 
 
-	// basically give this if the user does not exist
-	// res.send(500);
+
 
 });
 
