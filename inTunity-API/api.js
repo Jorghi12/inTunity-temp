@@ -149,6 +149,7 @@ app.get('/secured/account/id', function(req, res) {
       method: 'GET', //Specify the method
       qs: {user_id: req.query["id"]}
   }, function(error, response, body){
+    console.log("test");
       if(error) {
           console.log(error);
       } else {

@@ -33,18 +33,18 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
 
-    
-        console.log($scope.suggestedFriends[0]["id"]);
+    for (var i = 0; i < $scope.suggestedFriends.length; i++) {
+        console.log($scope.suggestedFriends[i]);
         $http({
             url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
             method: 'GET',
             params: {
-                id: $scope.suggestedFriends[0]["id"]
+                id: 10206238501336239
             }
         }).then(function(response) {
           console.log(response);
         }); // end of http get
-    
+    }
 
 
 

@@ -306,12 +306,14 @@ router.get('/api/location/' , function (req, res, next) {
 //getting a specific user
 router.get('/api/account/id/' , function (req, res, next) {
 
+	console.log("getting specific user id")
 	console.log(req.query["user_id"]);
 	User.findOne({user_id:req.query["user_id"] }, function(err, userObj) {
 	  if (err) {
 	    console.log(err);
 	    res.sendStatus(500);
 	  } else if(userObj) {
+	  	console.log("hi");
 	  	console.log(userObj);
 	  	res.send(userObj);
 	  } 
