@@ -218,7 +218,7 @@ router.get('/api/account/id/search' , function (req, res, next) {
 			
 		};
 
-	  } 
+	}); 
 	});
 	
 	res.send(userObj);
