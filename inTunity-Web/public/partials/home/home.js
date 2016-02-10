@@ -39,7 +39,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
             method: 'GET',
             params: {
-                id: 10206238501336239
+                id: 10207920325064310
             }
         }).then(function(response) {
           console.log(response);
