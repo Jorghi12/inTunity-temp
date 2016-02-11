@@ -9,10 +9,11 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     var prof = (store.get('profile'));
     $scope.owner;
     $scope.fullname;
-
+	$scope.suggestedFriends = [];
     
-
-    $scope.suggestedFriends = auth.profile.context.mutual_friends.data;
+	if (auth.profile.context != null){
+		$scope.suggestedFriends = auth.profile.context.mutual_friends.data;
+	}
 
 
     if (auth.profile.name.indexOf("@") == -1) {
@@ -67,7 +68,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
 
-
+		
         for (var i = 0; i < $scope.suggestedFriends.length; i++) {
             $http({
                 url: 'http://localhost:3001/secured/account/id',
@@ -79,6 +80,10 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 if (response.status == 200) {
                    console.log(response["data"]["user"]);
                    $scope.suggested.push(response["data"]["user"]);
+				   
+				   if ($scope.suggested.length == $scope.suggestedFriends.length){
+					console.log($scope.suggested);
+				   }
                 }
              
 
@@ -92,7 +97,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
     $scope.initialFollowers();
-    console.log($scope.suggested);
 
 
 
