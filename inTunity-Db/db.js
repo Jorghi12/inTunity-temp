@@ -205,7 +205,7 @@ router.get('/api/account/id/search' , function (req, res, next) {
 			res.sendStatus(500);
 		  } else if(userObj) {
 			console.log(req.query["searchString"]);
-
+			
 			for (var i = 0; i < userObj.length; i++) {
 				//Information for checkboxes/pluses
 				userObj[i]["alreadyFriends"] = false;

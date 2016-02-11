@@ -218,6 +218,10 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                     var col2 = document.createElement('div');
                     col2.className = "col-md-6";
                     
+                    //Column Three
+                    var col3 = document.createElement('div');
+                    col3.className = "col-md-6";
+                    
                     //Create Profile Image
                     var img = document.createElement('img');
                     img.className = "img-circle";
@@ -239,15 +243,27 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                     //Create Profile Text
                     var userTitle = document.createElement("h4");
                     userTitle.innerHTML = users[i]["nickname"];
+					//users[i]["alreadyFriends"]
                     userTitle.style.fontSize = "24px";
                     
                     col2.appendChild(userTitle);
                     
+					//Create addfollower Button
+					var buttonObj = document.createElement("button");
+					col3.appendChild(buttonObj);
+					var t = document.createTextNode("Add follower");       // Create a text node
+					buttonObj.appendChild(t); 
+					buttonObj.addEventListener("click", function() {
+						alert("Blah blah...");
+					}, false);
+					buttonObj.className = "";
+					
                     //Append children to userNode
                     userNode.appendChild(col1);
                     userNode.appendChild(col2);
+					userNode.appendChild(col3);
 
-             
+				
 
                    
                     
