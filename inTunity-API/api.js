@@ -180,7 +180,7 @@ app.get('/secured/account/idBatch', function(req, res) {
 
       if(error) {
         console.log(error);
-      } else {
+      } else { 
         if (response.statusCode == 200) {
           console.log("success");
           var data = JSON.parse(response.body);

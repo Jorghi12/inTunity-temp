@@ -336,7 +336,7 @@ router.get('/api/account/idBatch' , function (req, res, next) {
 		
 		if (userObj == null) {
 			res.send(205);
-		}
+		} 
 	  	if (err) {
 	    	res.sendStatus(500);
 	    	res.send(500);
