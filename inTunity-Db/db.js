@@ -319,9 +319,32 @@ router.get('/api/account/id/' , function (req, res, next) {
 	  		res.send(userObj);
 	  	}
 	}); 
+});
 
+//
 
-
+//getting a list of specific users 
+// need to return something if user does not exist
+router.get('/api/account/idBatch' , function (req, res, next) {
+	var ids = [];
+	for (var i = 0;i < req.query["users"].length; i++){
+		ids.push(req.query["users"][i]["id"]);
+	}
+	
+	console.log(req.query["users"]);
+	User.find({user_id: { $in: ids}}, function(err, userObj) {
+		
+		if (userObj == null) {
+			res.send(205);
+		}
+	  	if (err) {
+	    	res.sendStatus(500);
+	    	res.send(500);
+	  	} else if(userObj) {
+	  		console.log("retrieved");
+	  		res.send(userObj);
+	  	}
+	}); 
 });
 
 

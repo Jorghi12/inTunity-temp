@@ -67,29 +67,22 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         // });
 
 
-
-		
-        for (var i = 0; i < $scope.suggestedFriends.length; i++) {
             $http({
-                url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+                url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/idBatch',
                 method: 'GET',
                 params: {
-                    id: $scope.suggestedFriends[i]["id"]
+                    users: $scope.suggestedFriends
                 }
             }).then(function(response) {
                 if (response.status == 200) {
                    console.log(response["data"]["user"]);
-                   $scope.suggested.push(response["data"]["user"]);
+                   $scope.suggested = response["data"]["user"];
 				   
-				   if ($scope.suggested.length == $scope.suggestedFriends.length){
 					console.log($scope.suggested);
-				   }
                 }
              
 
             }); // end of http get
-        }
-
        
     }
     
@@ -195,10 +188,12 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             method: 'GET',
             params: {searchString: $scope.searchUsers, userID: myUserId}
             }).then(function(response) {
-
+				
                 console.log(response);
                 var users = response["data"]["songs"];
-                
+				console.log("SWAG");
+                console.log(users);
+				window.boss = users;
                 //Clear the body
                 document.getElementById("modalChildren").innerHTML = "";
                 

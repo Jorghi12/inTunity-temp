@@ -166,6 +166,34 @@ app.get('/secured/account/id', function(req, res) {
 });
 
 
+// getting a list of specific users
+// this is mainly used for profile.js
+app.get('/secured/account/idBatch', function(req, res) {
+  request({
+      url: process.env.DATABASE + '/api/account/idBatch', //URL to hit
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      method: 'GET', //Specify the method
+      qs: {users: req.query["users"]}
+  }, function(error, response, body){
+
+      if(error) {
+        console.log(error);
+      } else {
+        if (response.statusCode == 200) {
+          console.log("success");
+          var data = JSON.parse(response.body);
+          res.send(200, {user:data});
+        } else if (response.statusCode == 205){
+          console.log("user does not exist");
+          res.send(205);
+        }
+      }
+  });
+});
+
+
 //getting a specific song
 app.get('/secured/song/id', function(req, res) {
   request({
