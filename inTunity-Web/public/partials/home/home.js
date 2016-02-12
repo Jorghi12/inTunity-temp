@@ -351,7 +351,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 likes.innerHTML = data["likes"];
 
 
-
+                var likestatus = document.getElementById("likestatus" + index);
+                likestatus.innerHTML = data["response"];
 
             })
 		.error(function(data, status, headers, config) {

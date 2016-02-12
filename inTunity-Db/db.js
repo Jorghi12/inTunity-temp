@@ -578,7 +578,7 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 				//Our user has already liked this song
 		  		if (songObj["who_liked"][i] == userID) {
 					found = true;
-					status = "Unlike";
+					status = "Like";
 					
 					songObj["who_liked"].splice(i,1);
 					songObj["likes"] -=1;
@@ -589,7 +589,7 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 			if (found == false){
 				songObj["who_liked"].unshift(userID);
 				songObj["likes"] +=1;
-				status = "Like";
+				status = "Unlike";
 			}
 
 		  	// this songObj represents the song information

@@ -148,7 +148,7 @@
                 <a href="" ng-click = "otherprofiles(item['user'][0].url_username)"> <h3>{{item["user"][0].nickname}}</h3></a>
                 <h4>{{item["formattedTime"]}} | {{item["formmatedDay"]}}</h4>
                 <div class="col-md-4">
-                  <h5 ng-click = "likes(item['user_song']['_id'], correctUsers.indexOf(item))" class = "likes">Like</h5>
+                  <h5 ng-click = "likes(item['user_song']['_id'], correctUsers.indexOf(item))" class = "likes" id = "likestatus{{correctUsers.indexOf(item)}}">Like</h5>
                   <h4 id = 'like{{correctUsers.indexOf(item)}}' class = "numLikes">{{item['user_song'].likes}}</h4>
                 </div>
                 <div class="col-md-4">
