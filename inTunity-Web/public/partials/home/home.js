@@ -184,12 +184,17 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
         var container = document.getElementById("modalChildren");
         
+		var ids = [];
+		for (var i = 0;i < $scope.suggestedFriends.length; i++){
+			ids.push($scope.suggestedFriends[i]["id"]);
+		}
+			
         if (searchText.value != "") {
             //Grab a list of all the users
             $http({
              url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/search',
             method: 'GET',
-            params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: $scope.suggestedFriends}
+            params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: ids}
             }).then(function(response) {
 				
 				//Obtain the search suggestions

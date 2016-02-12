@@ -209,7 +209,6 @@ router.get('/api/account/id/search' , function (req, res, next) {
 		console.log(ids);
 		
 		User.find({"user_id": { $in: ids}}, function(err, suggestedFriends) {
-			var myfriends = suggestedFriends;
 			User.find({"nickname" : { "$regex": req.query["searchString"], "$options": "i" }}, function(err, userObj) {
 				  if (err) {
 					console.log(err);
@@ -237,9 +236,9 @@ router.get('/api/account/id/search' , function (req, res, next) {
 					}*/
 					
 					console.log("JORG SWAG");
-					console.log(myfriends);
+					console.log(suggestedFriends);
 					
-					var return_obj = [userObj,myfriends];
+					var return_obj = [userObj,suggestedFriends];
 					res.send(return_obj); 
 				};
 
