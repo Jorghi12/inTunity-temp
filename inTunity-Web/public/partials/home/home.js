@@ -57,11 +57,17 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			//Obtain t he mutual friend suggestions
 			var m_users = response["data"]["suggestions"][1];
 			
+			//already friends?
+			var s_already = response["data"]["suggestions"][2];
+			var m_already = response["data"]["suggestions"][3];
+			
 			//Which set to use?
 			if (searchText.value == ""){
 				users = m_users;
+				already = m_already;
 			}else{
 				users = s_users;
+				already = s_already;
 			}
 			
 			//Clear the body
@@ -113,16 +119,32 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				
 				col2.appendChild(userTitle);
 				
-				//Create addfollower Button
-				var buttonObj = document.createElement("button");
-				col3.appendChild(buttonObj);
-				var t = document.createTextNode("Add follower");       // Create a text node
-				buttonObj.appendChild(t); 
-				buttonObj.setAttribute("userID",users[i]['user_id']);
-				$(buttonObj).click(function($this) {
-					var userid = $this.target.getAttribute("userID");
-					$scope.addFollower(userid);
-				});
+				//Already friends with this guy
+				if (already[i]){
+					//Create addfollower Button
+					var buttonObj = document.createElement("button");
+					col3.appendChild(buttonObj);
+					var t = document.createTextNode("Unfollow");       // Create a text node
+					buttonObj.appendChild(t); 
+					buttonObj.setAttribute("userID",users[i]['user_id']);
+					$(buttonObj).click(function($this) {
+						var userid = $this.target.getAttribute("userID");
+						;
+						//$scope.addFollower(userid);
+					});
+				}
+				else{
+					//Create addfollower Button
+					var buttonObj = document.createElement("button");
+					col3.appendChild(buttonObj);
+					var t = document.createTextNode("Add follower");       // Create a text node
+					buttonObj.appendChild(t); 
+					buttonObj.setAttribute("userID",users[i]['user_id']);
+					$(buttonObj).click(function($this) {
+						var userid = $this.target.getAttribute("userID");
+						$scope.addFollower(userid);
+					});
+				}
 				
 				buttonObj.className = "";
 				

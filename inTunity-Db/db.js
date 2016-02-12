@@ -216,30 +216,36 @@ router.get('/api/account/id/search' , function (req, res, next) {
 					res.sendStatus(500);
 				  } else if(userObj) {
 					console.log(req.query["searchString"]);
+					var alreadyFriendsUSER = [];
+					var alreadyFriendsSUGG = [];
 					
-					/*for (var i = 0; i < userObj.length; i++) {
+					for (var i = 0; i < userObj.length; i++) {
 						//Information for checkboxes/pluses
-						userObj[i]["alreadyFriends"] = false;
-						if (userObj[i]["user_id"] in currUser["friends"]){
+						if (userObj[i]["user_id"] in currUser["following"]){
 							//userObj[i] is already friends with the current user
-							userObj[i]["alreadyFriends"] = true;
+							alreadyFriendsUSER.push(true);
 						}
-					}*/
+						else{
+							alreadyFriendsUSER.push(false);
+						}
+					}
 					
-					
-					/*for (var i = 0; i < suggestedFriends.length; i++) {
+					for (var i = 0; i < suggestedFriends.length; i++) {
 						//Information for checkboxes/pluses
-						suggestedFriends[i]["alreadyFriends"] = false;
-						if (suggestedFriends[i]["user_id"] in currUser["friends"]){
+						if (suggestedFriends[i]["user_id"] in currUser["following"]){
 							//userObj[i] is already friends with the current user
-							suggestedFriends[i]["alreadyFriends"] = true;
+							alreadyFriendsSUGG.push(true);
 						}
-					}*/
+						else{
+							alreadyFriendsSUGG.push(false);
+						}
+					}
+					
 					
 					console.log("JORG SWAG");
 					console.log(suggestedFriends);
 					
-					var return_obj = [userObj,suggestedFriends];
+					var return_obj = [userObj,suggestedFriends,alreadyFriendsUSER,alreadyFriendsSUGG];
 					res.send(return_obj); 
 				};
 
