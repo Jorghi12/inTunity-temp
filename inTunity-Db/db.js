@@ -515,7 +515,7 @@ router.post('/api/account/id/removefollower', function (req, res, next) {
 			for (var i = 0;i < myUserObj["following"].length;i++){
 				if (myUserObj["following"][i] == otherUserObj["user_id"]){
 					found_in_current = true;
-					myUserObj["following"][i].splice(i,1);
+					myUserObj["following"].splice(i,1);
 				}
 			}
 			
@@ -524,7 +524,7 @@ router.post('/api/account/id/removefollower', function (req, res, next) {
 			for (var i = 0;i < otherUserObj["followers"].length;i++){
 				if (otherUserObj["followers"][i] == req.body.user_id){
 					found_in_other = true;
-					otherUserObj["followers"][i].splice(i,1);
+					otherUserObj["followers"].splice(i,1);
 				}
 			}
 			
