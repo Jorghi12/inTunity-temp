@@ -276,6 +276,7 @@ app.post('/secured/account/id/likes/song/id', function(req, res) {
           console.log(error);
       } else {
           var data = JSON.parse(response.body);
+          console.log(data);
 		  res.send(200, {likes: data["current_likes"]});
       }
   });
