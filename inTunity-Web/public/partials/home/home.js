@@ -143,7 +143,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 						$scope.removeFollower(userid);
 					}
 					else{
-						$scope.addFollower(userid);
 						($this.target.firstElementChild||$this.target.firstChild).nodeValue = "Unfollow";
 						$this.target.setAttribute("following","true");
 						$scope.addFollower(userid);
@@ -311,7 +310,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		.error(function(data, status, headers, config) {
             ;
         });
-       
+        
     }
 	
 	//Function to unfollow someone
