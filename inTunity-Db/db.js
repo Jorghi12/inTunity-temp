@@ -198,29 +198,51 @@ router.get('/api/account/id/search' , function (req, res, next) {
 
 	//Find current user
 	User.findOne({user_id: req.query["currentUser"]}, function(err, currUser) {
-		
-		User.find({"nickname" : { "$regex": req.query["searchString"], "$options": "i" }}, function(err, userObj) {
-		  if (err) {
-			console.log(err);
-			res.sendStatus(500);
-		  } else if(userObj) {
-			console.log(req.query["searchString"]);
-			
-			for (var i = 0; i < userObj.length; i++) {
-				//Information for checkboxes/pluses
-				userObj[i]["alreadyFriends"] = false;
-				if (userObj[i]["user_id"] in currUser["friends"]){
-					//userObj[i] is already friends with the current user
-					userObj[i]["alreadyFriends"] = true;
-				}
-			}
-			res.send(userObj); 
-		};
 
-	});
+		//Pull user ids from the suggested friends
+		var ids = req.query["suggestedFriends"];
+		 
+		var ids = Object.keys(ids).map(function(key){
+			return ids[key];
+		});
+
+		User.find({"user_id": { $in: ids}}, function(err, suggestedFriends) {
+		
+			User.find({"nickname" : { "$regex": req.query["searchString"], "$options": "i" }}, function(err, userObj) {
+				  if (err) {
+					console.log(err);
+					res.sendStatus(500);
+				  } else if(userObj) {
+					console.log(req.query["searchString"]);
+					
+					for (var i = 0; i < userObj.length; i++) {
+						//Information for checkboxes/pluses
+						userObj[i]["alreadyFriends"] = false;
+						if (userObj[i]["user_id"] in currUser["friends"]){
+							//userObj[i] is already friends with the current user
+							userObj[i]["alreadyFriends"] = true;
+						}
+					}
+					
+					
+					for (var i = 0; i < suggestedFriends.length; i++) {
+						//Information for checkboxes/pluses
+						suggestedFriends[i]["alreadyFriends"] = false;
+						if (suggestedFriends[i]["user_id"] in currUser["friends"]){
+							//userObj[i] is already friends with the current user
+							suggestedFriends[i]["alreadyFriends"] = true;
+						}
+					}
+					
+					var return_obj = [userObj,suggestedFriends];
+					res.send(return_obj); 
+				};
+
+			});
 
 	});
 	
+	}); 
 	
 
 });

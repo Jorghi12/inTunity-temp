@@ -84,14 +84,14 @@ app.get('/secured/account/id/search', function(req, res) {
       'Content-Type': 'application/json'
       },
       method: 'GET', //Specify the method,
-	  qs: {searchString: req.query["searchString"], currentUser: req.query["userID"]}
+	  qs: {searchString: req.query["searchString"], currentUser: req.query["userID"], suggestedFriends: req.query["suggestedFriends"]}
   }, function(error, response, body){
       if(error) {
           console.log(error);
       } else {
         if (response.statusCode == 200) {
           var data = JSON.parse(response.body);
-          res.send(200, {songs: data});
+          res.send(200, {suggestions: data});
         }
       }
   });

@@ -71,7 +71,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			for (var i = 0;i < $scope.suggestedFriends.length; i++){
 				ids.push($scope.suggestedFriends[i]["id"]);
 			}
-			window.xxx = ids;
+			
 			console.log(ids);
             $http({
                 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/idBatch',
@@ -87,10 +87,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				   
 					console.log($scope.suggested);
                 }
-             
-
             }); // end of http get
-       
+     
     }
     
 
@@ -187,16 +185,14 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         var container = document.getElementById("modalChildren");
         
         if (searchText.value != "") {
-            
-        
             //Grab a list of all the users
             $http({
              url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/search',
             method: 'GET',
-            params: {searchString: $scope.searchUsers, userID: myUserId}
+            params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: $scope.suggestedFriends}
             }).then(function(response) {
 				
-                var users = response["data"]["songs"];
+                var users = response["data"]["suggestions"][0];
                 //Clear the body
                 document.getElementById("modalChildren").innerHTML = "";
                 
