@@ -11,8 +11,8 @@ var Song = new Schema({
 	song_duration: String,
 	likes: Number,
 	who_posted: ObjectId,
-	comments: [ObjectId],
-	who_liked: [ObjectId]
+	comments: {type: Array,'default': []},
+	who_liked: {type: Array,'default': []}
 });
 
 module.exports = mongoose.model('Song', Song);
