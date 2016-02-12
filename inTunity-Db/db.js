@@ -201,7 +201,8 @@ router.get('/api/account/id/search' , function (req, res, next) {
 
 		//Pull user ids from the suggested friends
 		var ids = req.query["suggestedFriends"];
-		 
+		console.log("JORG IS A BOSS");
+		console.log(ids);
 		var ids = Object.keys(ids).map(function(key){
 			return ids[key];
 		});
