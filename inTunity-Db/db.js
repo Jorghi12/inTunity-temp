@@ -327,10 +327,9 @@ router.get('/api/account/id/' , function (req, res, next) {
 // need to return something if user does not exist
 router.get('/api/account/idBatch' , function (req, res, next) {
 	//Pull user ids from the suggested friends
-	req.query["users"] = JSON.parse(req.query["users"])
 	var ids = [];
 	for (var i = 0;i < req.query["users"].length; i++){
-		ids.push(req.query["users"][i]["id"]);
+		ids.push(JSON.parse(req.query["users"][i])["id"]);
 	}
 	
 	console.log("my ids");
