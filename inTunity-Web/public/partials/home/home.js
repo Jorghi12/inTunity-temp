@@ -14,7 +14,128 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	if (auth.profile.context != null){
 		$scope.suggestedFriends = auth.profile.context.mutual_friends.data;
 	}
+	
+	//Function to pull search results for people to follow
+	$scope.findUsers = function(){
+		var searchText = document.getElementById("searchUsers");
 
+		//Need to load them into the popup (clear popup elements first)
+		//Then load profile pic + Link to Profile (Titled with name) + Checkbox (notifies whether already friends or not)
+		
+        var container = document.getElementById("modalChildren");
+        
+		var ids = [];
+		for (var i = 0;i < $scope.suggestedFriends.length; i++){
+			ids.push($scope.suggestedFriends[i]["id"]);
+		}
+		
+        //if (searchText.value != "") {
+            //Grab a list of all the users
+            $http({
+             url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/search',
+            method: 'GET',
+            params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: ids}
+            }).then(function(response) {
+				
+				//Obtain the search suggestions
+                var s_users = response["data"]["suggestions"][0];
+				
+				//Obtain t he mutual friend suggestions
+				var m_users = response["data"]["suggestions"][1];
+				
+				window.legend = response["data"]["suggestions"];
+				
+				//Which set to use?
+				if (searchText.value == ""){
+					users = m_users;
+				}else{
+					users = s_users;
+				}
+				
+                //Clear the body
+                document.getElementById("modalChildren").innerHTML = "";
+                
+                for (var i = 0; i < users.length; i++) {
+                    //Create search results
+                    var userNode = document.createElement("div");
+                    userNode.className = "row";
+          
+
+                    userNode.appendChild(document.createElement("hr"));
+                    
+                    //Column One
+                    var col1 = document.createElement('div');
+                    col1.className = "col-md-6";
+        
+                    //Column Two
+                    var col2 = document.createElement('div');
+                    col2.className = "col-md-6";
+                    
+                    //Column Three
+                    var col3 = document.createElement('div');
+                    col3.className = "col-md-6";
+                    
+                    //Create Profile Image
+                    var img = document.createElement('img');
+                    img.className = "img-circle";
+                    img.src = users[i]["picture"];
+                    img.id = i;
+
+
+                    $(img).click(function($this) {
+                       $rootScope.$apply(function() {
+                            $('#myModal').modal('hide');
+                            $('.modal-backdrop').remove();
+                            $location.path('/profile/' + users[$this.target.id]['url_username']);
+                        });
+                    });
+
+                    
+                    col1.appendChild(img);
+
+                    //Create Profile Text
+                    var userTitle = document.createElement("h4");
+                    userTitle.innerHTML = users[i]["nickname"];
+					//users[i]["alreadyFriends"]
+                    userTitle.style.fontSize = "24px";
+                    
+                    col2.appendChild(userTitle);
+                    
+					//Create addfollower Button
+					var buttonObj = document.createElement("button");
+					col3.appendChild(buttonObj);
+					var t = document.createTextNode("Add follower");       // Create a text node
+					buttonObj.appendChild(t); 
+					buttonObj.addEventListener("click", function() {
+						alert("Blah blah...");
+					}, false);
+					buttonObj.className = "";
+					
+                    //Append children to userNode
+                    userNode.appendChild(col1);
+                    userNode.appendChild(col2);
+					userNode.appendChild(col3);
+
+				
+
+                   
+                    
+                    //Add element to container!
+                    container.appendChild(userNode);
+       
+                    
+                    
+                }
+            });
+       } /*else {
+        $(container).empty();*/
+       //}
+
+		
+	//}
+	
+	
+	$scope.findUsers();
 
     if (auth.profile.name.indexOf("@") == -1) {
         $scope.fullname = auth.profile.name;
@@ -168,131 +289,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
    
 	
-	//Function to pull search results for people to follow
-	$scope.findUsers = function(){
-		var searchText = document.getElementById("searchUsers");
-
-
-
-
-		//$scope.searchUsers 
-		//Need to find users that match "$scope.searchUsers"
-		//Need to load them into the popup (clear popup elements first)
-		//Then load profile pic + Link to Profile (Titled with name) + Checkbox (notifies whether already friends or not)
-		
-		
-
-        var container = document.getElementById("modalChildren");
-        
-		var ids = [];
-		for (var i = 0;i < $scope.suggestedFriends.length; i++){
-			ids.push($scope.suggestedFriends[i]["id"]);
-		}
-			
-        if (searchText.value != "") {
-            //Grab a list of all the users
-            $http({
-             url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/search',
-            method: 'GET',
-            params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: ids}
-            }).then(function(response) {
-				
-				//Obtain the search suggestions
-                var s_users = response["data"]["suggestions"][0];
-				
-				//Obtain t he mutual friend suggestions
-				var m_users = response["data"]["suggestions"][1];
-				
-				window.legend = response["data"]["suggestions"];
-				
-				//Which set to use?
-				if (searchText.value == "$"){
-					users = m_users;
-				}else{
-					users = s_users;
-				}
-				
-                //Clear the body
-                document.getElementById("modalChildren").innerHTML = "";
-                
-                for (var i = 0; i < users.length; i++) {
-                    //Create search results
-                    var userNode = document.createElement("div");
-                    userNode.className = "row";
-          
-
-                    userNode.appendChild(document.createElement("hr"));
-                    
-                    //Column One
-                    var col1 = document.createElement('div');
-                    col1.className = "col-md-6";
-        
-                    //Column Two
-                    var col2 = document.createElement('div');
-                    col2.className = "col-md-6";
-                    
-                    //Column Three
-                    var col3 = document.createElement('div');
-                    col3.className = "col-md-6";
-                    
-                    //Create Profile Image
-                    var img = document.createElement('img');
-                    img.className = "img-circle";
-                    img.src = users[i]["picture"];
-                    img.id = i;
-
-
-                    $(img).click(function($this) {
-                       $rootScope.$apply(function() {
-                            $('#myModal').modal('hide');
-                            $('.modal-backdrop').remove();
-                            $location.path('/profile/' + users[$this.target.id]['url_username']);
-                        });
-                    });
-
-                    
-                    col1.appendChild(img);
-
-                    //Create Profile Text
-                    var userTitle = document.createElement("h4");
-                    userTitle.innerHTML = users[i]["nickname"];
-					//users[i]["alreadyFriends"]
-                    userTitle.style.fontSize = "24px";
-                    
-                    col2.appendChild(userTitle);
-                    
-					//Create addfollower Button
-					var buttonObj = document.createElement("button");
-					col3.appendChild(buttonObj);
-					var t = document.createTextNode("Add follower");       // Create a text node
-					buttonObj.appendChild(t); 
-					buttonObj.addEventListener("click", function() {
-						alert("Blah blah...");
-					}, false);
-					buttonObj.className = "";
-					
-                    //Append children to userNode
-                    userNode.appendChild(col1);
-                    userNode.appendChild(col2);
-					userNode.appendChild(col3);
-
-				
-
-                   
-                    
-                    //Add element to container!
-                    container.appendChild(userNode);
-       
-                    
-                    
-                }
-            });
-       } else {
-        $(container).empty();
-       }
-
-		
-	}
 	
 	//Function to add a friend
 	//Haven't tested - not complete
