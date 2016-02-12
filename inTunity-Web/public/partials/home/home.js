@@ -14,7 +14,19 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	if (auth.profile.context != null){
 		$scope.suggestedFriends = auth.profile.context.mutual_friends.data;
 	}
-	
+
+    if (auth.profile.name.indexOf("@") == -1) {
+        $scope.fullname = auth.profile.name;
+    } else {
+        $scope.fullname = prof["nickname"];
+    }
+
+    var id = prof["identities"][0]["user_id"];
+	var myUserId = prof["identities"][0]["user_id"];
+    var trackarray = [];
+    var username_url;
+    
+		
 	//Function to pull search results for people to follow
 	$scope.findUsers = function(){
 		var searchText = document.getElementById("searchUsers");
@@ -151,18 +163,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	
 	$scope.findUsers();
 	$scope.loadProfileInfo();
-
-    if (auth.profile.name.indexOf("@") == -1) {
-        $scope.fullname = auth.profile.name;
-    } else {
-        $scope.fullname = prof["nickname"];
-    }
-
-    var id = prof["identities"][0]["user_id"];
-	var myUserId = prof["identities"][0]["user_id"];
-    var trackarray = [];
-    var username_url;
-    
+	
 	window.legendX = auth;
     if (prof["given_name"] != null) {
         $scope.owner = prof["given_name"];
