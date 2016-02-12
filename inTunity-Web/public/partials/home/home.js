@@ -345,8 +345,14 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
               'Content-Type': 'application/json'
              }
         }).success(function(data, status, headers, config) {
+        	console.log(data);
+
                 var likes = document.getElementById("like" + index);
                 likes.innerHTML = data["likes"];
+
+
+
+
             })
 		.error(function(data, status, headers, config) {
             console.log(status);
