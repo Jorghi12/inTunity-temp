@@ -489,6 +489,8 @@ router.post('/api/account/id/addfollower', function (req, res, next) {
 router.post('/api/account/id/profileInfo', function (req, res, next) {
 	User.findOne({user_id: req.body.user_id}, function(err, myUserObj) {		
 		//Send results
+		console.log("GAINS");
+		console.log(myUserObj);
 		res.send(200, {num_followers: myUserObj["followers"].length, num_following: myUserObj["following"].length});
 	});
 });

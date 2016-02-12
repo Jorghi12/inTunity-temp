@@ -129,6 +129,25 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		});
    }
 	
+	//Load Profile Information
+    $scope.loadProfileInfo = function() {
+        var followerData = JSON.stringify({
+			user_id: myUserId
+        });
+        $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/profileInfo', {data: followerData}, { 
+              headers: {
+              'Accept' : '*/*',
+              'Content-Type': 'application/json'
+             }
+        }).success(function(data, status, headers, config) {
+				$scope.numfollowers = data["followers"];
+				$scope.numfollowing = data["following"];
+            })
+		.error(function(data, status, headers, config) {
+            ;
+        });
+       
+    }
 	
 	$scope.findUsers();
 	$scope.loadProfileInfo();
@@ -308,25 +327,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     }
 	
 	
-	//Load Profile Information
-    $scope.loadProfileInfo = function() {
-        var followerData = JSON.stringify({
-			user_id: myUserId
-        });
-        $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/profileInfo', {data: followerData}, { 
-              headers: {
-              'Accept' : '*/*',
-              'Content-Type': 'application/json'
-             }
-        }).success(function(data, status, headers, config) {
-				$scope.numfollowers = data["followers"];
-				$scope.numfollowing = data["following"];
-            })
-		.error(function(data, status, headers, config) {
-            ;
-        });
-       
-    }
+	
 	
 	$scope.findMutualFriends = function(){
 		
