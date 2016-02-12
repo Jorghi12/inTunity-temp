@@ -328,7 +328,7 @@ router.get('/api/account/id/' , function (req, res, next) {
 router.get('/api/account/idBatch' , function (req, res, next) {
 	//Pull user ids from the suggested friends
 	var ids = req.query["users"];
-	
+	 
 	var ids = Object.keys(ids).map(function(key){
 		return ids[key];
 	});
