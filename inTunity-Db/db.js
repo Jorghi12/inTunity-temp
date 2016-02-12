@@ -201,8 +201,6 @@ router.get('/api/account/id/search' , function (req, res, next) {
 
 		//Pull user ids from the suggested friends
 		var ids = req.query["suggestedFriends"];
-		console.log("JORG IS A BOSS");
-		console.log(ids);
 		var ids = Object.keys(ids).map(function(key){
 			return ids[key];
 		});
@@ -216,24 +214,27 @@ router.get('/api/account/id/search' , function (req, res, next) {
 				  } else if(userObj) {
 					console.log(req.query["searchString"]);
 					
-					for (var i = 0; i < userObj.length; i++) {
+					/*for (var i = 0; i < userObj.length; i++) {
 						//Information for checkboxes/pluses
 						userObj[i]["alreadyFriends"] = false;
 						if (userObj[i]["user_id"] in currUser["friends"]){
 							//userObj[i] is already friends with the current user
 							userObj[i]["alreadyFriends"] = true;
 						}
-					}
+					}*/
 					
 					
-					for (var i = 0; i < suggestedFriends.length; i++) {
+					/*for (var i = 0; i < suggestedFriends.length; i++) {
 						//Information for checkboxes/pluses
 						suggestedFriends[i]["alreadyFriends"] = false;
 						if (suggestedFriends[i]["user_id"] in currUser["friends"]){
 							//userObj[i] is already friends with the current user
 							suggestedFriends[i]["alreadyFriends"] = true;
 						}
-					}
+					}*/
+					
+					console.log("JORG SWAG");
+					console.log(suggestedFriends);
 					
 					var return_obj = [userObj,suggestedFriends];
 					res.send(return_obj); 

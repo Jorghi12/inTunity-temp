@@ -192,7 +192,21 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: $scope.suggestedFriends}
             }).then(function(response) {
 				
-                var users = response["data"]["suggestions"][0];
+				//Obtain the search suggestions
+                var s_users = response["data"]["suggestions"][0];
+				
+				//Obtain t he mutual friend suggestions
+				var m_users = response["data"]["suggestions"][1];
+				
+				window.legend = response["data"]["suggestions"];
+				
+				//Which set to use?
+				if (searchText.value == "$"){
+					users = m_users;
+				}else{
+					users = s_users;
+				}
+				
                 //Clear the body
                 document.getElementById("modalChildren").innerHTML = "";
                 
