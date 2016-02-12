@@ -326,7 +326,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
               'Content-Type': 'application/json'
              }
         }).success(function(data, status, headers, config) {
-				if (data["userAlreadyInList"] == false){
+				if (data["userAlreadyInList"] == true){
 					
 					$scope.followingNumber -=1;
 					
