@@ -35,44 +35,11 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		ids.push($scope.suggestedFriends[i]["id"]);
 	}
 	
-	//Function to pull search results for people to follow
-	$scope.findUsers = function(){
-		var searchText = document.getElementById("searchUsers");
-
-		//Need to load them into the popup (clear popup elements first)
-		//Then load profile pic + Link to Profile (Titled with name) + Checkbox (notifies whether already friends or not)
-		
-        var container = document.getElementById("modalChildren");
-		
-		//Grab a list of all the users
-		$http({
-		 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/search',
-		method: 'GET',
-		params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: ids}
-		}).then(function(response) {
-			
-			//Obtain the search suggestions
-			var s_users = response["data"]["suggestions"][0];
-			
-			//Obtain t he mutual friend suggestions
-			var m_users = response["data"]["suggestions"][1];
-			
-			//already friends?
-			var s_already = response["data"]["suggestions"][2];
-			var m_already = response["data"]["suggestions"][3];
-			
-			//Which set to use?
-			if (searchText.value == ""){
-				users = m_users;
-				already = m_already;
-			}else{
-				users = s_users;
-				already = s_already;
-			}
-			
+	$scope.loadToUI = function(users,already){
 			//Clear the body
 			document.getElementById("modalChildren").innerHTML = "";
 			
+			var container = document.getElementById("modalChildren");
 			for (var i = 0; i < users.length; i++) {
 				//Create search results
 				var userNode = document.createElement("div");
@@ -166,9 +133,121 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				
 				
 			}
+	}
+	
+	//Function to pull search results for people to follow
+	$scope.findUsers = function(){
+		var searchText = document.getElementById("searchUsers");
+
+		//Need to load them into the popup (clear popup elements first)
+		//Then load profile pic + Link to Profile (Titled with name) + Checkbox (notifies whether already friends or not)
+		
+		
+		//Grab a list of all the users
+		$http({
+		 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/search',
+		method: 'GET',
+		params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: ids}
+		}).then(function(response) {
+			
+			//Obtain the search suggestions
+			var s_users = response["data"]["suggestions"][0];
+			
+			//Obtain t he mutual friend suggestions
+			var m_users = response["data"]["suggestions"][1];
+			
+			//already friends?
+			var s_already = response["data"]["suggestions"][2];
+			var m_already = response["data"]["suggestions"][3];
+			
+			//Which set to use?
+			if (searchText.value == ""){
+				users = m_users;
+				already = m_already;
+			}else{
+				users = s_users;
+				already = s_already;
+			}
+			
+			$scope.loadToUI(users,already);
+			
+
 		});
    }
 	
+	$scope.pullIDS = function(users){
+		var ids = [];
+		for (var i = 0;i < users.length; i++){
+			ids.push(users[i]["user_id"]);
+		}
+		
+		return ids;
+	}
+	
+	//Same as "Add Followers" code.. but literally just pulling from your followers list
+	$scope.pullPeople = function(people){
+		$http({
+            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account',
+            method: 'GET'
+        }).then(function(response) {
+            var data = (response['data']['songs']);
+            for (var i = 0; i < data.length; i++) {
+                if (data[i]["user_id"] == id) {
+                    $scope.profilepic = data[i]["picture"];
+					$scope.followers = data[i]["followers"];
+					$scope.following = data[i]["following"];
+                }
+            }
+		
+		if (people == "followers"){
+			var people_type = $scope.followers;
+		}
+		else if (people == "following"){
+			var people_type = $scope.following;
+		}
+		else{
+			;//Impossible Case
+		}
+		
+		$http({
+		 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/search',
+		method: 'GET',
+		params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: people_type}
+		}).then(function(response) {
+			users = response["data"]["suggestions"][1];
+			already = response["data"]["suggestions"][3];
+			$scope.loadToUI(users,already);
+		});
+		
+			
+        });  
+	}
+	
+	$scope.updateResults = function(){
+		//Find which choice has been tabbed
+		var choice = 0;
+		for (var i = 0;i < document.getElementById("tabContent").children.length;i++){
+			if (document.getElementById("tabContent").children[i].className == "active"){
+				choice = i;
+			}
+		}
+		
+		//If the first tab (Add Followers) is selected, do action.
+		if (choice == 0){
+			$scope.findUsers();
+		}
+		//My Followers
+		else if (choice == 1){
+			$scope.pullPeople("followers");
+		}
+		//Who I'm Following
+		else if (choice == 2){
+			$scope.pullPeople("following");
+		}
+		else{
+			//Impossible case.
+		}
+	}
 	
 	$scope.findUsers();
 	
