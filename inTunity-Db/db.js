@@ -485,17 +485,6 @@ router.post('/api/account/id/addfollower', function (req, res, next) {
 });
 
 
-//Load follower + following information
-router.post('/api/account/id/profileInfo', function (req, res, next) {
-	User.findOne({user_id: req.body.user_id}, function(err, myUserObj) {		
-		//Send results
-		console.log("GAINS"); 
-		console.log(req.body.user_id);
-		res.send(200, {num_followers: myUserObj["followers"].length, num_following: myUserObj["following"].length});
-	});
-});
-
-
 // haven't reworked this yet
 router.post('/api/account/id/likes/song/id', function (req, res, next) {
 	//Step 1 - Convert UserId into its Object ID

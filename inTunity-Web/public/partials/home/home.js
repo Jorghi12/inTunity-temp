@@ -24,7 +24,10 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     var id = prof["identities"][0]["user_id"];
 	var myUserId = prof["identities"][0]["user_id"];
     var trackarray = [];
-    var username_url;
+	var username_url;
+	
+	$scope.followersNumber = 0
+	$scope.followingNumber = 0;
     
 		
 	//Function to pull search results for people to follow
@@ -141,28 +144,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		});
    }
 	
-	//Load Profile Information
-    $scope.loadProfileInfo = function() {
-        var followerData = JSON.stringify({
-			user_id: myUserId
-        });
-        $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/profileInfo', {data: followerData}, { 
-              headers: {
-              'Accept' : '*/*',
-              'Content-Type': 'application/json'
-             }
-        }).success(function(data, status, headers, config) {
-				$scope.numfollowers = data["followers"];
-				$scope.numfollowing = data["following"];
-            })
-		.error(function(data, status, headers, config) {
-            ;
-        });
-       
-    }
 	
 	$scope.findUsers();
-	$scope.loadProfileInfo();
 	
 	window.legendX = auth;
     if (prof["given_name"] != null) {
@@ -170,7 +153,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     } else {
         $scope.owner = prof["nickname"];
     }
-
+	
     $scope.test = function() {
         console.log("test");
     }
@@ -318,8 +301,13 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
               'Content-Type': 'application/json'
              }
         }).success(function(data, status, headers, config) {
-                alert("GOOD SHIT");
-				console.log(data);
+				if (data["userAlreadyInList"] == false){
+					
+					$scope.followingNumber +=1;
+					
+					$scope.numfollowers = ($scope.followersNumber) + " Followers";
+					$scope.numfollowing = ($scope.followingNumber) + " Following";
+				}
             })
 		.error(function(data, status, headers, config) {
             ;
@@ -344,8 +332,11 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             for (var i = 0; i < data.length; i++) {
                 if (data[i]["user_id"] == id) {
                     $scope.profilepic = data[i]["picture"];
-                    $scope.numfollowers = 10 + " Followers";
-                    $scope.numfollowing = 15 + " Following";
+					$scope.followersNumber = data[i]["followers"].length;
+					$scope.followingNumber = data[i]["following"].length;
+					
+                    $scope.numfollowers = data[i]["followers"].length + " Followers";
+                    $scope.numfollowing = data[i]["following"].length + " Following";
                     var postCount = data[i]["song_history"].length;
                     if (postCount == 1) {
                         $scope.numposts =  postCount;
