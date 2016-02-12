@@ -157,6 +157,16 @@ router.get('/api/account/' , function (req, res, next) {
 	    res.sendStatus(500);
 	  } else if(userObj) {
 
+	  userObj[i]["followers"] = [];
+	  userObj[i]["following"] = [];
+	  userObj[i].save(function(err) {
+		           		if (err) {
+		             		throw err;
+		           		} else {
+		                 	console.log('song got updated');
+		           		}
+		});
+					
 	  	// update the timer in here after expiration
 	  	// if expired, make that entry null in the db
 	  	var today = new Date();

@@ -12,7 +12,6 @@ var User = new Schema({
 	song_history: [ObjectId],
 	today_song: [ObjectId],
 	saved_song: [ObjectId],
-	friends: [ObjectId],
 	followers: {type: Array,'default': []},
 	following: {type: Array,'default': []}
 });
