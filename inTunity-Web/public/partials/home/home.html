@@ -43,8 +43,8 @@
   
 		<ul class="nav nav-tabs" id="tabContent" style="font-size:15px;font-weight:bolder">
 			<li class="active"><a href="" data-toggle="tab">Add Followers</a></li>
-			<li><a href="" data-toggle="tab">Followers</a></li>
-			<li><a href "" data-toggle="tab">Following</a></li>
+			<li id="follRTab"><a href="" data-toggle="tab">Followers</a></li>
+			<li id="follGTab"><a href "" data-toggle="tab">Following</a></li>
 		</ul>
 		
       <div class="modal-body" id="modalBase">
@@ -85,10 +85,10 @@
           <a href="" ng-click = "profile()">
             <h4 class="col-sm-4 numposts" style="padding: 5px 30px">{{numposts}}<br>{{posts}}</h4>
           </a>
-          <a href="">
+          <a href="" data-toggle="modal" data-target="#myModal" onclick="$(follRTab).addClass('active').siblings().removeClass('active');">
             <h4 class="col-sm-4 numfollowers" id ="numfollowers">{{numfollowers}} <br> Followers</h4>
           </a>
-          <a href="">
+          <a href="" data-toggle="modal" data-target="#myModal" onclick="$(follGTab).addClass('active').siblings().removeClass('active');">
             <h4 class="col-sm-4 numfollowing" id="numfollowing">{{numfollowing}} <br> Following</h4>
           </a>
         </div>
