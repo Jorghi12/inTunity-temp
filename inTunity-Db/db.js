@@ -190,8 +190,6 @@ router.get('/api/account/' , function (req, res, next) {
 
 });
 
-
-
 //Get all accounts that match a specific string
 router.get('/api/account/id/search' , function (req, res, next) {
 	//This is the search string req.query["searchString"]
@@ -221,7 +219,7 @@ router.get('/api/account/id/search' , function (req, res, next) {
 					
 					for (var i = 0; i < userObj.length; i++) {
 						//Information for checkboxes/pluses
-						if (currUser["following"].includes(userObj[i]["user_id"])){
+						if (currUser["following"].indexOf(userObj[i]["user_id"]) > -1){
 							//userObj[i] is already friends with the current user
 							alreadyFriendsUSER.push(true);
 						}
@@ -236,7 +234,7 @@ router.get('/api/account/id/search' , function (req, res, next) {
 						//Information for checkboxes/pluses
 						console.log("GAINS");
 						console.log(suggestedFriends[i]["user_id"]);
-						if (currUser["following"].includes(suggestedFriends[i]["user_id"])){
+						if (currUser["following"].indexOf(suggestedFriends[i]["user_id"]) > -1){
 							//userObj[i] is already friends with the current user
 							alreadyFriendsSUGG.push(true);
 						}
