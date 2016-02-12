@@ -71,6 +71,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			for (var i = 0;i < $scope.suggestedFriends.length; i++){
 				ids.push($scope.suggestedFriends[i]["id"]);
 			}
+			window.xxx = ids;
 			console.log(ids);
             $http({
                 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/idBatch',

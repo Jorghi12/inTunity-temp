@@ -329,6 +329,11 @@ router.get('/api/account/idBatch' , function (req, res, next) {
 	//Pull user ids from the suggested friends
 	var ids = req.query["users"];
 	
+	var ids = Object.keys(ids).map(function(key){
+		return ids[key];
+	});
+	
+	
 	console.log("my ids");
 	console.log(ids);
 	User.find({"user_id": { $in: ids}}, function(err, userObj) {
