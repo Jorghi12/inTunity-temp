@@ -41,8 +41,9 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     $scope.suggested = [];
 
     $scope.initialFollowers = function() {
-		console.log("JORG");
-		window.jx = $scope.suggestedFriends;
+		console.log ("Suggested Swag");
+		console.log($scope.suggestedFriends);
+		
         // var deferred = $q.defer();
 
         // var promise;
@@ -66,12 +67,16 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         //  $q.all(promises).then(function(result){
         //     console.log(result);
         // });
-
+			var ids = [];
+			for (var i = 0;i < $scope.suggestedFriends.length; i++){
+				ids.push($scope.suggestedFriends[i]["id"]);
+			}
+			console.log(ids);
             $http({
                 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/idBatch',
                 method: 'GET',
                 params: {
-                    users: $scope.suggestedFriends
+                    users: ids
                 }
             }).then(function(response) {
                 if (response.status == 200) {
@@ -190,11 +195,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             params: {searchString: $scope.searchUsers, userID: myUserId}
             }).then(function(response) {
 				
-                console.log(response);
                 var users = response["data"]["songs"];
-				console.log("SWAG");
-                console.log(users);
-				window.boss = users;
                 //Clear the body
                 document.getElementById("modalChildren").innerHTML = "";
                 
