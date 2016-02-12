@@ -278,8 +278,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 					
 					$scope.followingNumber +=1;
 					
-					$scope.numfollowers = ($scope.followersNumber) + " Followers";
-					$scope.numfollowing = ($scope.followingNumber) + " Following";
+					$scope.numfollowers = ($scope.followersNumber);
+					$scope.numfollowing = ($scope.followingNumber);
 				}
             })
 		.error(function(data, status, headers, config) {
