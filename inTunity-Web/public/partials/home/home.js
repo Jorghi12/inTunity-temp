@@ -154,9 +154,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         $scope.owner = prof["nickname"];
     }
 	
-    $scope.test = function() {
-        console.log("test");
-    }
    
     $scope.suggested = [];
 
@@ -164,50 +161,26 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		console.log ("Suggested Swag");
 		console.log($scope.suggestedFriends);
 		
-        // var deferred = $q.defer();
-
-        // var promise;
-        // var promises = [];
-
-        // angular.forEach($scope.suggestedFriends, function(item) {
-        //      $http({
-        //         url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
-        //         method: 'GET',
-        //         params: {
-        //             id: item["id"]
-        //         }
-        //     }).then(function(response) {
-        //         if (response.status == 200) {
-        //             console.log(response);
-        //             // promises.push(response["data"]["user"]);
-        //         }
-        //     }); // end of http get
-        // });
-
-        //  $q.all(promises).then(function(result){
-        //     console.log(result);
-        // });
-			var ids = [];
-			for (var i = 0;i < $scope.suggestedFriends.length; i++){
-				ids.push($scope.suggestedFriends[i]["id"]);
-			}
-			
-			console.log(ids);
-            $http({
-                url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/idBatch',
-                method: 'GET',
-                params: {
-                    users: ids
-                }
-            }).then(function(response) {
-                if (response.status == 200) {
-				   console.log("DAMN");
-                   console.log(response["data"]["user"]);
-                   $scope.suggested = response["data"]["user"];
-				   
-					console.log($scope.suggested);
-                }
-            }); // end of http get
+		var ids = [];
+		for (var i = 0;i < $scope.suggestedFriends.length; i++){
+			ids.push($scope.suggestedFriends[i]["id"]);
+		}
+		
+		console.log(ids);
+        $http({
+            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/idBatch',
+            method: 'GET',
+            params: {
+                users: ids
+            }
+        }).then(function(response) {
+            if (response.status == 200) {
+               console.log(response["data"]["user"]);
+               $scope.suggested = response["data"]["user"];
+			   
+				console.log($scope.suggested);
+            }
+        }); // end of http get
      
     }
     
@@ -335,8 +308,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 					$scope.followersNumber = data[i]["followers"].length;
 					$scope.followingNumber = data[i]["following"].length;
 					
-                    $scope.numfollowers = data[i]["followers"].length + " Followers";
-                    $scope.numfollowing = data[i]["following"].length + " Following";
+                    $scope.numfollowers = data[i]["followers"].length;
+                    $scope.numfollowing = data[i]["following"].length;
                     var postCount = data[i]["song_history"].length;
                     if (postCount == 1) {
                         $scope.numposts =  postCount;
@@ -384,6 +357,24 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
       $scope.getUserInfo();
       $scope.getAllLocations();
+
+
+
+       $(function() {
+            var offset = $("#sidebar").offset();
+            var topPadding = 0;
+            $(window).scroll(function() {
+                if ($(window).scrollTop() > offset.top) {
+                    $("#sidebar").stop().animate({
+                        marginTop: $(window).scrollTop() - offset.top + topPadding
+                    });
+                } else {
+                    $("#sidebar").stop().animate({
+                        marginTop: 0
+                    });
+                };
+            });
+        });
 
 
 

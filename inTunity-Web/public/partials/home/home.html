@@ -12,6 +12,8 @@
 
 </script>
 
+   
+
 <!--NAVBAR-->
 <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container">
@@ -54,11 +56,16 @@
   </div>
 </div>
 
+ 
+
 <!--PAGE CONTENTS-->
-<div class = "bkg" style = "width:100%; height:100%; position:absolute" ng-controller="StreamCtrl">
+<div class = "bkg" style = "width:100%; height:100%;" ng-controller="StreamCtrl" id="page-wrap">
+
+ 
+
 
   <div class="box-field">
-    <div class="left-col">
+    <div class="left-col" id="sidebar" style = "overflow:auto;">
       <div class="profile-info-box">
         <a href="" ng-click = "profile()"> 
           <img class = "img-circle" style="height: 75px; width: 75px;" ng-src = "{{profilepic}}">
@@ -72,10 +79,10 @@
             <h4 class="col-sm-4 numposts" style="padding: 5px 30px">{{numposts}}<br>{{posts}}</h4>
           </a>
           <a href="">
-            <h4 class="col-sm-4 numfollowers" id ="numfollowers">{{numfollowers}}</h4>
+            <h4 class="col-sm-4 numfollowers" id ="numfollowers">{{numfollowers}} <br> Followers</h4>
           </a>
           <a href="">
-            <h4 class="col-sm-4 numfollowing" id="numfollowing">{{numfollowing}}</h4>
+            <h4 class="col-sm-4 numfollowing" id="numfollowing">{{numfollowing}} <br> Following</h4>
           </a>
         </div>
         <a href="" data-toggle="modal" data-target="#myModal">
@@ -91,8 +98,16 @@
         <div ng-repeat = "location in locs">
           <p>{{location["city"]}}, {{location["state"]}}</p>
         </div>
-  
       </div>
+
+     <!--  <div class="trending-box" style = "overflow:hidden">
+        <h4>Locations & Trending</h4>
+        <div ng-repeat = "location in locs">
+          <p>{{location["city"]}}, {{location["state"]}}</p>
+        </div>
+      </div> -->
+
+
     </div>
 
     <div class="right-col">
@@ -105,10 +120,10 @@
         </div>
       </div>
   
-      <div class="col-sm-12">
+      <div class="col-sm-12" id = "main">
         <div class = "container" id = "wallfeed" ng-repeat = "item in correctUsers | orderBy:'-[unix_time]'">
           <hr> 
-          <div class = "row" id = "song{{correctUsers.indexOf(item)}}">
+          <div class = "row songrow" id = "song{{correctUsers.indexOf(item)}}" ng-click = 'playSpecificSong(correctUsers.indexOf(item))'>
             <div class = "col-md-6 text-center album">
               <button class = "playButton" ng-click = 'playSpecificSong(correctUsers.indexOf(item))'>
                 <img style = "width:250px; height:250px;" ng-src = "{{item['user_song'].song_album_pic}}">
