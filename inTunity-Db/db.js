@@ -568,10 +568,17 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 	    } else if (songObj) {
 
 			var found = false;
+
+
+			var status = "";
+
+
+
 	     	for (var i = 0; i < songObj["who_liked"].length; i++) {
 				//Our user has already liked this song
 		  		if (songObj["who_liked"][i] == userID) {
 					found = true;
+					status = "Unlike";
 					
 					songObj["who_liked"].splice(i,1);
 					songObj["likes"] -=1;
@@ -582,6 +589,7 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 			if (found == false){
 				songObj["who_liked"].unshift(userID);
 				songObj["likes"] +=1;
+				status = "Like";
 			}
 
 		  	// this songObj represents the song information
@@ -590,7 +598,7 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 		    		throw err;
 		    	}	
 			});	
-			res.send(200, {current_likes: songObj["likes"]});
+			res.send(200, {current_likes: songObj["likes"], response: status});
 	    }
 
 	 });
