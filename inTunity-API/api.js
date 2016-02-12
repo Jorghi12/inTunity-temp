@@ -277,7 +277,7 @@ app.post('/secured/account/id/likes/song/id', function(req, res) {
       } else {
           var data = JSON.parse(response.body);
           console.log(data);
-		  res.send(200, {likes: data["current_likes"]});
+		  res.send(200, {likes: data["current_likes"], response: data["response"]});
       }
   });
 });
