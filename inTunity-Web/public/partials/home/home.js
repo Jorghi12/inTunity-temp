@@ -26,6 +26,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     var trackarray = [];
 	var username_url;
 	
+	$scope.myUserId = myUserId;
 	$scope.followersNumber = 0
 	$scope.followingNumber = 0;
     

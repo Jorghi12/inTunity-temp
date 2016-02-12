@@ -556,11 +556,7 @@ router.post('/api/account/id/removefollower', function (req, res, next) {
 
 // haven't reworked this yet
 router.post('/api/account/id/likes/song/id', function (req, res, next) {
-	//Step 1 - Convert UserId into its Object ID
-	var userID;
-	User.findOne({user_id: req.body.posted_user_id}, function(err, userObj) {
-		userID = userObj.id;
-		
+	var userID = req.body.posted_user_id;
 		Song.findOne({_id: ObjectId(req.body.song_id)}, function (err, songObj) {
 	    if (err) {
 	      console.log(err);
@@ -571,8 +567,6 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 
 
 			var status = "";
-
-
 
 	     	for (var i = 0; i < songObj["who_liked"].length; i++) {
 				//Our user has already liked this song
@@ -602,7 +596,6 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 	    }
 
 	 });
-	});
 	
 	
 });
