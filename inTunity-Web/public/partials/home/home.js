@@ -30,6 +30,11 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	$scope.followingNumber = 0;
     
 		
+	var ids = [];
+	for (var i = 0;i < $scope.suggestedFriends.length; i++){
+		ids.push($scope.suggestedFriends[i]["id"]);
+	}
+	
 	//Function to pull search results for people to follow
 	$scope.findUsers = function(){
 		var searchText = document.getElementById("searchUsers");
@@ -38,11 +43,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		//Then load profile pic + Link to Profile (Titled with name) + Checkbox (notifies whether already friends or not)
 		
         var container = document.getElementById("modalChildren");
-        
-		var ids = [];
-		for (var i = 0;i < $scope.suggestedFriends.length; i++){
-			ids.push($scope.suggestedFriends[i]["id"]);
-		}
 		
 		//Grab a list of all the users
 		$http({

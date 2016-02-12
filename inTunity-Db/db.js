@@ -470,8 +470,28 @@ router.post('/api/account/id/addfollower', function (req, res, next) {
 				myUserObj["following"].unshift(otherUserObj["user_id"]);
 			}
 			
+			//Update the other person's "followers" list
+			var found_in_other = false;
+			for (var i = 0;i < otherUserObj["followers"].length;i++){
+				if (otherUserObj["followers"][i] == req.body.user_id){
+					found_in_other = true;
+				}
+			}
+			
+			if (! found_in_other){
+				otherUserObj["followers"].unshift(req.body.user_id);
+			}
+			
 			//Update the User
 			myUserObj.save(function(err) {
+				if (err) {
+					throw err;
+				}
+			});	
+			
+			
+			//Update the User
+			otherUserObj.save(function(err) {
 				if (err) {
 					throw err;
 				}
