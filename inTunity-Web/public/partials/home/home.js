@@ -29,7 +29,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			ids.push($scope.suggestedFriends[i]["id"]);
 		}
 		
-        //if (searchText.value != "") {
             //Grab a list of all the users
             $http({
              url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/search',
@@ -127,12 +126,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                     
                 }
             });
-       } /*else {
-        $(container).empty();*/
-       //}
-
-		
-	//}
+       }
 	
 	
 	$scope.findUsers();
