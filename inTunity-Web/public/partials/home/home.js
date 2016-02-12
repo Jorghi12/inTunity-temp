@@ -222,7 +222,10 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			
         });  
 	}
-	
+	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+		$scope.updateResults();
+	});
+
 	$scope.updateResults = function(){
 		//Find which choice has been tabbed
 		var choice = 0;
