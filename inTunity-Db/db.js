@@ -200,14 +200,12 @@ router.get('/api/account/id/search' , function (req, res, next) {
 
 		//Pull user ids from the suggested friends
 		var ids = req.query["suggestedFriends"];
+
 		if (ids != null) {
 			var ids = Object.keys(ids).map(function(key){
 				return ids[key];
 			});
 		}
-
-
-		
 
 		User.find({"user_id": { $in: ids}}, function(err, suggestedFriends) {
 			User.find({"nickname" : { "$regex": req.query["searchString"], "$options": "i" }}, function(err, userObj) {

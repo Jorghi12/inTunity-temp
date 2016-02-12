@@ -130,7 +130,7 @@
       <div class="col-sm-12" id = "main">
         <div class = "container" id = "wallfeed" ng-repeat = "item in correctUsers | orderBy:'-[unix_time]'">
           <hr> 
-          <div class = "row songrow" id = "song{{correctUsers.indexOf(item)}}" ng-click = 'playSpecificSong(correctUsers.indexOf(item))'>
+          <div class = "row" id = "song{{correctUsers.indexOf(item)}}">
             <div class = "col-md-6 text-center album">
               <button class = "playButton" ng-click = 'playSpecificSong(correctUsers.indexOf(item))'>
                 <img style = "width:250px; height:250px;" ng-src = "{{item['user_song'].song_album_pic}}">
