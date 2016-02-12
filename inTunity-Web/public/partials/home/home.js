@@ -140,11 +140,13 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 					if (following == "true"){
 						($this.target.firstElementChild||$this.target.firstChild).nodeValue = "Add follower";
 						$this.target.setAttribute("following","false");
+						$scope.removeFollower(userid);
 					}
 					else{
 						$scope.addFollower(userid);
 						($this.target.firstElementChild||$this.target.firstChild).nodeValue = "Unfollow";
 						$this.target.setAttribute("following","true");
+						$scope.addFollower(userid);
 					}
 				});
 				
@@ -312,6 +314,31 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
        
     }
 	
+	//Function to unfollow someone
+	$scope.removeFollower = function(follower_user_id) {
+        var followerData = JSON.stringify({
+			user_id: myUserId,
+            other_id: follower_user_id
+        });
+        $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/removefollower', {data: followerData}, { 
+              headers: {
+              'Accept' : '*/*',
+              'Content-Type': 'application/json'
+             }
+        }).success(function(data, status, headers, config) {
+				if (data["userAlreadyInList"] == false){
+					
+					$scope.followingNumber -=1;
+					
+					$scope.numfollowers = ($scope.followersNumber);
+					$scope.numfollowing = ($scope.followingNumber);
+				}
+            })
+		.error(function(data, status, headers, config) {
+            ;
+        });
+       
+    }
 	
 	
 	

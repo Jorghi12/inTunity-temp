@@ -304,6 +304,28 @@ app.post('/secured/account/id/addfollower', function(req, res) {
 });
 
 
+//Remove Follower from List
+app.post('/secured/account/id/removefollower', function(req, res) {
+  request({
+    url: process.env.DATABASE + "/api/account/id/removefollower", //URL to hit
+    method: 'POST', //Specify the method
+    headers: {
+      'Content-Type': 'application/json'
+    }, 
+    body: req.body["data"]
+
+  }, function(error, response, body) {
+      if(error) {
+          console.log(error);
+      } else {
+          var data = JSON.parse(response.body);
+		  //data["userAlreadyInList"], want to notify the View (HTML page) that we're already friends with this user
+		  res.send(200, {userAlreadyInList: data["userAlreadyInList"]});
+      }
+  });
+});
+
+
 var port = process.env.PORT || 3001;
 
 http.createServer(app).listen(port, function (err) {

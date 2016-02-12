@@ -510,17 +510,13 @@ router.post('/api/account/id/removefollower', function (req, res, next) {
 	User.findOne({user_id: req.body.user_id}, function(err, myUserObj) {
 		
 		User.findOne({user_id: req.body.other_id}, function(err, otherUserObj) {
-			//Check if the FRIEND is already inside the current user's friend list
+			//Remove other from your following list
 			var found_in_current = false;
 			for (var i = 0;i < myUserObj["following"].length;i++){
 				if (myUserObj["following"][i] == otherUserObj["user_id"]){
 					found_in_current = true;
+					myUserObj["following"][i].splice(i,1);
 				}
-			}
-			
-			//User isn't already in list.. just add it!
-			if (! found_in_current){
-				myUserObj["following"].unshift(otherUserObj["user_id"]);
 			}
 			
 			//Update the other person's "followers" list
@@ -528,12 +524,10 @@ router.post('/api/account/id/removefollower', function (req, res, next) {
 			for (var i = 0;i < otherUserObj["followers"].length;i++){
 				if (otherUserObj["followers"][i] == req.body.user_id){
 					found_in_other = true;
+					otherUserObj["followers"][i].splice(i,1);
 				}
 			}
 			
-			if (! found_in_other){
-				otherUserObj["followers"].unshift(req.body.user_id);
-			}
 			
 			//Update the User
 			myUserObj.save(function(err) {
