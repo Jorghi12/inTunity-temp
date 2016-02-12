@@ -69,7 +69,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				users = s_users;
 				already = s_already;
 			}
-			
+			alert(already);
 			//Clear the body
 			document.getElementById("modalChildren").innerHTML = "";
 			

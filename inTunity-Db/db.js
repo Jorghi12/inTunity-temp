@@ -230,8 +230,12 @@ router.get('/api/account/id/search' , function (req, res, next) {
 						}
 					}
 					
+					console.log("Legend");
+					console.log(currUser["following"]);
 					for (var i = 0; i < suggestedFriends.length; i++) {
 						//Information for checkboxes/pluses
+						console.log("GAINS");
+						console.log(suggestedFriends[i]["user_id"]);
 						if (suggestedFriends[i]["user_id"] in currUser["following"]){
 							//userObj[i] is already friends with the current user
 							alreadyFriendsSUGG.push(true);
