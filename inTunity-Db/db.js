@@ -166,15 +166,6 @@ router.get('/api/account/' , function (req, res, next) {
 	  	var todayTime = today.getTime()/1000;
 
 	  	for (var i = 0; i < userObj.length; i++) {
-			  userObj[i]["followers"] = [];
-			  userObj[i]["following"] = [];
-			  userObj[i].save(function(err) {
-								if (err) {
-									throw err;
-								} else {
-									console.log('song got updated');
-								}
-				});
 	  		if(userObj[i].today_song.length > 0) {
 
 	
