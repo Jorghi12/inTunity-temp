@@ -42,7 +42,7 @@
       </div>
   
 		<ul class="nav nav-tabs" id="tabContent" style="font-size:15px;font-weight:bolder">
-			<li class="active"><a href="" data-toggle="tab">Add Followers</a></li>
+			<li class="active" id="addFoll"><a href="" data-toggle="tab">Add Followers</a></li>
 			<li id="follRTab"><a href="" data-toggle="tab">Followers</a></li>
 			<li id="follGTab"><a href "" data-toggle="tab">Following</a></li>
 		</ul>
@@ -92,7 +92,7 @@
             <h4 class="col-sm-4 numfollowing" id="numfollowing">{{numfollowing}} <br> Following</h4>
           </a>
         </div>
-        <a href="" data-toggle="modal" data-target="#myModal">
+        <a href="" data-toggle="modal" data-target="#myModal" onclick="$(addFollTab).addClass('active').siblings().removeClass('active');">
           <div class = "add-followers" >
             <h3>Add Followers</h3>
           </div>
