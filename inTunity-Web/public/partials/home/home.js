@@ -41,7 +41,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     $scope.suggested = [];
 
     $scope.initialFollowers = function() {
-
+		console.log("JORG");
+		window.jx = $scope.suggestedFriends;
         // var deferred = $q.defer();
 
         // var promise;
@@ -66,7 +67,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         //     console.log(result);
         // });
 
-
             $http({
                 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/idBatch',
                 method: 'GET',
@@ -75,6 +75,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 }
             }).then(function(response) {
                 if (response.status == 200) {
+				   console.log("DAMN");
                    console.log(response["data"]["user"]);
                    $scope.suggested = response["data"]["user"];
 				   
