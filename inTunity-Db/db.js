@@ -459,20 +459,15 @@ router.post('/api/account/id/addfollower', function (req, res, next) {
 		User.findOne({user_id: req.body.other_id}, function(err, otherUserObj) {
 			//Check if the FRIEND is already inside the current user's friend list
 			var found_in_current = false;
-			for (var i = 0;i < myUserObj["friends"].length;i++){
-				if (myUserObj["friends"][i] == otherUserObj.id){
+			for (var i = 0;i < myUserObj["following"].length;i++){
+				if (myUserObj["following"][i] == otherUserObj["user_id"]){
 					found_in_current = true;
 				}
 			}
 			
-			//User isn't in the list yet?
-			if (found_in_current){
-				//Follower is already in the User's list
-				//Will just return a message to api.js about the result
-				;
-			}
-			else{
-				myUserObj["friends"].unshift(otherUserObj.id);
+			//User isn't already in list.. just add it!
+			if (! found_in_current){
+				myUserObj["following"].unshift(otherUserObj["user_id"]);
 			}
 			
 			//Update the User
@@ -490,6 +485,13 @@ router.post('/api/account/id/addfollower', function (req, res, next) {
 });
 
 
+//Load follower + following information
+router.post('/api/account/id/profileInfo', function (req, res, next) {
+	User.findOne({user_id: req.body.user_id}, function(err, myUserObj) {		
+		//Send results
+		res.send(200, {num_followers: myUserObj["followers"].length, num_following: myUserObj["following"].length});
+	});
+});
 
 
 // haven't reworked this yet

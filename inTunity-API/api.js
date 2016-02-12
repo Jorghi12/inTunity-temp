@@ -303,6 +303,26 @@ app.post('/secured/account/id/addfollower', function(req, res) {
   });
 });
 
+//Pull Profile Information
+app.post('/secured/account/id/profileInfo', function(req, res) {
+  request({
+    url: process.env.DATABASE + "/api/account/id/profileInfo", //URL to hit
+    method: 'POST', //Specify the method
+    headers: {
+      'Content-Type': 'application/json'
+    }, 
+    body: req.body["data"]
+
+  }, function(error, response, body) {
+      if(error) {
+          console.log(error);
+      } else {
+          var data = JSON.parse(response.body);
+		  //data["userAlreadyInList"], want to notify the View (HTML page) that we're already friends with this user
+		  res.send(200, {followers: data["num_followers"], following: data["num_following"]});
+      }
+  });
+});
 
 var port = process.env.PORT || 3001;
 
