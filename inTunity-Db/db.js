@@ -204,9 +204,6 @@ router.get('/api/account/id/search' , function (req, res, next) {
 			return ids[key];
 		});
 
-		console.log("YEN ids");
-		console.log(ids);
-		
 		User.find({"user_id": { $in: ids}}, function(err, suggestedFriends) {
 			User.find({"nickname" : { "$regex": req.query["searchString"], "$options": "i" }}, function(err, userObj) {
 				  if (err) {
@@ -232,8 +229,6 @@ router.get('/api/account/id/search' , function (req, res, next) {
 					console.log(currUser["following"]);
 					for (var i = 0; i < suggestedFriends.length; i++) {
 						//Information for checkboxes/pluses
-						console.log("GAINS");
-						console.log(suggestedFriends[i]["user_id"]);
 						if (currUser["following"].indexOf(suggestedFriends[i]["user_id"]) > -1){
 							//userObj[i] is already friends with the current user
 							alreadyFriendsSUGG.push(true);
@@ -242,10 +237,6 @@ router.get('/api/account/id/search' , function (req, res, next) {
 							alreadyFriendsSUGG.push(false);
 						}
 					}
-					
-					
-					console.log("JORG SWAG");
-					console.log(suggestedFriends);
 					
 					var return_obj = [userObj,suggestedFriends,alreadyFriendsUSER,alreadyFriendsSUGG];
 					res.send(return_obj); 
@@ -513,6 +504,58 @@ router.post('/api/account/id/addfollower', function (req, res, next) {
 	});
 });
 
+
+//Remove follower from list
+router.post('/api/account/id/removefollower', function (req, res, next) {
+	User.findOne({user_id: req.body.user_id}, function(err, myUserObj) {
+		
+		User.findOne({user_id: req.body.other_id}, function(err, otherUserObj) {
+			//Check if the FRIEND is already inside the current user's friend list
+			var found_in_current = false;
+			for (var i = 0;i < myUserObj["following"].length;i++){
+				if (myUserObj["following"][i] == otherUserObj["user_id"]){
+					found_in_current = true;
+				}
+			}
+			
+			//User isn't already in list.. just add it!
+			if (! found_in_current){
+				myUserObj["following"].unshift(otherUserObj["user_id"]);
+			}
+			
+			//Update the other person's "followers" list
+			var found_in_other = false;
+			for (var i = 0;i < otherUserObj["followers"].length;i++){
+				if (otherUserObj["followers"][i] == req.body.user_id){
+					found_in_other = true;
+				}
+			}
+			
+			if (! found_in_other){
+				otherUserObj["followers"].unshift(req.body.user_id);
+			}
+			
+			//Update the User
+			myUserObj.save(function(err) {
+				if (err) {
+					throw err;
+				}
+			});	
+			
+			
+			//Update the User
+			otherUserObj.save(function(err) {
+				if (err) {
+					throw err;
+				}
+			});	
+			
+			//Send results
+			res.send(200, {userAlreadyInList: found_in_current});
+		});
+		
+	});
+});
 
 // haven't reworked this yet
 router.post('/api/account/id/likes/song/id', function (req, res, next) {

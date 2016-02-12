@@ -69,7 +69,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				users = s_users;
 				already = s_already;
 			}
-			alert(already);
+			
 			//Clear the body
 			document.getElementById("modalChildren").innerHTML = "";
 			
@@ -119,32 +119,34 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				
 				col2.appendChild(userTitle);
 				
-				//Already friends with this guy
+				//Create Button
+				var buttonObj = document.createElement("button");
+				col3.appendChild(buttonObj);
 				if (already[i]){
-					//Create addfollower Button
-					var buttonObj = document.createElement("button");
-					col3.appendChild(buttonObj);
 					var t = document.createTextNode("Unfollow");       // Create a text node
-					buttonObj.appendChild(t); 
-					buttonObj.setAttribute("userID",users[i]['user_id']);
-					$(buttonObj).click(function($this) {
-						var userid = $this.target.getAttribute("userID");
-						;
-						//$scope.addFollower(userid);
-					});
 				}
 				else{
-					//Create addfollower Button
-					var buttonObj = document.createElement("button");
-					col3.appendChild(buttonObj);
-					var t = document.createTextNode("Add follower");       // Create a text node
-					buttonObj.appendChild(t); 
-					buttonObj.setAttribute("userID",users[i]['user_id']);
-					$(buttonObj).click(function($this) {
-						var userid = $this.target.getAttribute("userID");
-						$scope.addFollower(userid);
-					});
+					var t = document.createTextNode("Add follower");
 				}
+				
+				//Create the button
+				buttonObj.appendChild(t);
+				buttonObj.setAttribute("userID",users[i]['user_id']);
+				buttonObj.setAttribute("following",already[i]);
+				
+				$(buttonObj).click(function($this) {
+					var userid = $this.target.getAttribute("userID");
+					var following = $this.target.getAttribute("following");
+					if (following == "true"){
+						($this.target.firstElementChild||$this.target.firstChild).nodeValue = "Add follower";
+						$this.target.setAttribute("following","false");
+					}
+					else{
+						$scope.addFollower(userid);
+						($this.target.firstElementChild||$this.target.firstChild).nodeValue = "Unfollow";
+						$this.target.setAttribute("following","true");
+					}
+				});
 				
 				buttonObj.className = "";
 				
