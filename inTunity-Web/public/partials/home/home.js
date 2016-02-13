@@ -387,7 +387,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				}
 				else{
 					favorites.style.color = "black"
-				}
+				} 
 
 
                 var favorites_status = document.getElementById("favorites_status" + index);
