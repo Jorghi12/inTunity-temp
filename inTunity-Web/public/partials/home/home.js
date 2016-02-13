@@ -42,7 +42,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			
 			var container = document.getElementById("modalChildren");
 			for (var i = 0; i < users.length; i++) {
-				if (mode != "filter" || (mode == "filter" && users[i]["nickname"].toLowerCase().startsWith($scope.searchUsers.toLowerCase()))){
+				var choice = $scope.searchUsers != null ? $scope.searchUsers : "";
+				if (mode != "filter" || (users[i]["nickname"].toLowerCase().startsWith(choice.toLowerCase())) || choice == ""){
 						
 					//Create search results
 					var userNode = document.createElement("div");
