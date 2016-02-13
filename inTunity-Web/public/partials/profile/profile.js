@@ -58,7 +58,7 @@ angular.module('inTunity.profile', [
 	$scope.loadSongsOnProfile = function(historyORfav){
 		//historyORfav .. history = 0, favorite = 1
 	$http({
-		url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/user_url',
+		url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/url_username',
 		method: 'GET',
 		params: {
 			url_username: $routeParams.itemId
