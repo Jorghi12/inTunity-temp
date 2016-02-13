@@ -54,6 +54,26 @@ app.post('/secured/account', function(req, res) {
   });
 });
 
+// getting all the accounts
+app.get('/secured/account', function(req, res) {
+  request({
+      url: process.env.DATABASE + '/api/account/', //URL to hit
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      method: 'GET' //Specify the method,
+  }, function(error, response, body){
+      if(error) {
+          console.log(error);
+      } else {
+        if (response.statusCode == 200) {
+          var data = JSON.parse(response.body);
+          res.send(200, {songs: data});
+        }
+      }
+  });
+});
+
 // load all of a user's friends on his or her's follow list
 app.get('/secured/account/loadFollowUsers', function(req, res) {
   request({
@@ -74,7 +94,6 @@ app.get('/secured/account/loadFollowUsers', function(req, res) {
       }
   });
 });
-
 
 // Get all accounts that match given search name
 // used for searching a particular account
