@@ -395,7 +395,7 @@ router.get('/api/account/loadFollowUsers' , function (req, res, next) {
 					res.send(500);
 				} else if(userFollowObj) {
 					console.log("retrieved");
-					res.send(userFollowObj);
+					res.send(userObj.concat(userFollowObj));
 				}
 			}); 
 	  	}

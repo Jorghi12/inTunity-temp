@@ -235,20 +235,20 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		var choice = 0;
 		for (var i = 0;i < document.getElementById("tabContent").children.length;i++){
 			if (document.getElementById("tabContent").children[i].className == "active"){
-				choice = i;
+				choice = document.getElementById("tabContent").children[i].text;
 			}
 		}
-		
+		alert(choice);
 		//If the first tab (Add Followers) is selected, do action.
-		if (choice == 0){
+		if (choice == "0"){
 			$scope.findUsers();
 		}
 		//My Followers
-		else if (choice == 1){
+		else if (choice == "1"){
 			$scope.pullPeople("followers");
 		}
 		//Who I'm Following
-		else if (choice == 2){
+		else if (choice == "2"){
 			$scope.pullPeople("following");
 		}
 		else{
