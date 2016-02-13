@@ -381,8 +381,13 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         }).success(function(data, status, headers, config) {
         	console.log(data);
 
-                var favorites = document.getElementById("favorite" + index);
-                favorites.innerHTML = data["favorites"];
+                var favorites = document.getElementById("favorites" + index);
+				if (data["response"] == "UnFavorite"){
+					favorites.style.color = "red"
+				}
+				else{
+					favorites.style.color = "black"
+				}
 
 
                 var favorites_status = document.getElementById("favorites_status" + index);
