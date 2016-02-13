@@ -55,50 +55,10 @@ angular.module('inTunity.profile', [
         }); // end of http get
     }
 
-    $scope.getFavorited = function() {
-        document.getElementById("history").className = "";
-        document.getElementById("favorites").className = "active";
-
-        document.getElementById("contentsongs").innerHTML = "";
-
-        $http({
-            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
-            method: 'GET',
-            params: {
-                id: id
-            }
-        }).then(function(response) {
-            var songs = (response['data']['user']["favorited_songs"]);
-
-            for (var i = 0; i < songs.length; i++) {
-                
-            }
-        
-        }); // end of http get
-
-         
-    }
-
-    $scope.getHistory = function() {
-        document.getElementById("history").className = "active";
-        document.getElementById("favorites").className = "";
-
-        document.getElementById("contentsongs").innerHTML = "";
-
-        $http({
-            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
-            method: 'GET'
-        }).then(function(response) {
-
-        });    
 
 
-    }
-
-  
-
-
-
+	$scope.loadSongsOnProfile = function(historyORfav){
+		//historyORfav .. history = 0, favorite = 1
 	$http({
 		url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
 		method: 'GET',
@@ -121,11 +81,11 @@ angular.module('inTunity.profile', [
         }
 		
 		$scope.my_profile_songs = [];
-		
-		for (var i = 0; i < $scope.correctPerson.song_history.length; i++){
+		var songCollectionArray = ((historyORfav == 0) ? $scope.correctPerson.song_history : $scope.correctPerson.favorited_songs);
+		for (var i = 0; i < songCollectionArray.length; i++){
     		$http({
     		 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/song/id',
-    		 params: {song_id: $scope.correctPerson.song_history[i]},
+    		 params: {song_id: songCollectionArray[i]},
     		 method: 'GET'
     		}).then(function(responseSong) {
     			responseSong = responseSong["data"]["user"];
@@ -172,7 +132,7 @@ angular.module('inTunity.profile', [
 					return new Date(b.unix_time) - new Date(a.unix_time);
 				});
 				
-			if ($scope.my_profile_songs.length == $scope.correctPerson.song_history.length){
+			if ($scope.my_profile_songs.length == songCollectionArray.length){
 			   $http({
 				url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
 				method: 'GET',
@@ -213,28 +173,34 @@ angular.module('inTunity.profile', [
 		}
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
- 
-
-
-
-
         $scope.startStreamingProfileSong = function(songUrl, artworkUrl, myTitle, trackid, duration) {
             window.startStreamCustom(songUrl, artworkUrl, myTitle, trackid, duration, $scope.owner,"profile",false);
         }
 
     });
+	}
 
+	
+    $scope.getFavorited = function() {
+        document.getElementById("history").className = "";
+        document.getElementById("favorites").className = "active";
+
+        //document.getElementById("contentsongs").innerHTML = "";
+
+        $scope.loadSongsOnProfile(1);
+         
+    }
+
+    $scope.getHistory = function() {
+        document.getElementById("history").className = "active";
+        document.getElementById("favorites").className = "";
+
+        //document.getElementById("contentsongs").innerHTML = "";
+
+        $scope.loadSongsOnProfile(0);
+    }
+	
+    $scope.loadSongsOnProfile(0);
 
 
 
