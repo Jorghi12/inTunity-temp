@@ -167,7 +167,7 @@ app.get('/secured/account/id', function(req, res) {
 
 // getting a specific user (USING THE URL_USERNAME) .. Helps for profile url routing.
 // this is mainly used for profile.js
-app.get('/secured/account/id', function(req, res) {
+app.get('secured/account/url_username', function(req, res) {
   request({
       url: process.env.DATABASE + '/api/account/url_username', //URL to hit
       headers: {
