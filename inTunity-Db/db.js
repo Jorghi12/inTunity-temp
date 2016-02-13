@@ -668,7 +668,7 @@ router.post('/api/account/id/favorite/song/id', function (req, res, next) {
 	
 	
 });
-
+});
 
 
 
