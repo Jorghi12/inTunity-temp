@@ -393,7 +393,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
 
                 var favorites_status = document.getElementById("favorites_status" + index);
-                favorites_status.innerHTML = data["response"];
 
             })
 		.error(function(data, status, headers, config) {
