@@ -13,7 +13,9 @@ var User = new Schema({
 	today_song: [ObjectId],
 	saved_song: [ObjectId],
 	followers: {type: Array,'default': []},
-	following: {type: Array,'default': []}
+	following: {type: Array,'default': []},
+	liked_songs: {type: Array,'default': []},
+	favorited_songs: {type: Array,'default': []}
 });
 
 

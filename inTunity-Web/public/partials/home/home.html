@@ -157,8 +157,8 @@
                   <h4 id = 'like{{correctUsers.indexOf(item)}}' class = "numLikes">{{item['user_song'].likes}}</h4>
                 </div>
                 <div class="col-md-4">
-                  <h5>Favorite</h5>
-                  <span class="glyphicon glyphicon-star-empty"></span>
+                  <h5 ng-click = "favorite(item['user_song']['_id'], correctUsers.indexOf(item))" class = "favorites" id = "favorites_status{{correctUsers.indexOf(item)}}">{{item['user_song'].who_favorited.indexOf(myUserId) > -1 ? "UnFavorite" : "Favorite"}}</h5>
+                  <span class="glyphicon glyphicon-star-empty" style="background-color:{{item['user_song'].who_favorited.indexOf(myUserId) > -1 ? 'red' : 'white'}}"></span>
                 </div>
                 <div class="col-md-4">
                   <h5>Comment</h5>

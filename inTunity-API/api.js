@@ -282,6 +282,26 @@ app.post('/secured/account/id/likes/song/id', function(req, res) {
   });
 });
 
+//Favorite a song
+app.post('/secured/account/id/favorite/song/id', function(req, res) {
+  request({
+    url: process.env.DATABASE + "/api/account/id/favorite/song/id", //URL to hit
+    method: 'POST', //Specify the method
+    headers: {
+      'Content-Type': 'application/json'
+    }, 
+    body: req.body["data"]
+
+  }, function(error, response, body) {
+      if(error) {
+          console.log(error);
+      } else {
+          var data = JSON.parse(response.body);
+          console.log(data);
+		  res.send(200, {favorites: data["current_favorites"], response: data["response"]});
+      }
+  });
+});
 
 //Add Follower to List
 app.post('/secured/account/id/addfollower', function(req, res) {

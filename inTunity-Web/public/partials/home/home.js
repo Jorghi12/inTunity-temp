@@ -364,6 +364,36 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         });
        
     }
+	
+	
+	//when you favorite a song
+    $scope.favorite = function(song_id, index) {
+        var favorites = JSON.stringify({
+            posted_user_id: myUserId, 
+            song_id: song_id, 
+            liked_user_id: id
+        });
+        $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/favorite/song/id', {data: favorites}, { 
+              headers: {
+              'Accept' : '*/*',
+              'Content-Type': 'application/json'
+             }
+        }).success(function(data, status, headers, config) {
+        	console.log(data);
+
+                var favorites = document.getElementById("favorite" + index);
+                favorites.innerHTML = data["favorites"];
+
+
+                var favorites_status = document.getElementById("favorites_status" + index);
+                favorites_status.innerHTML = data["response"];
+
+            })
+		.error(function(data, status, headers, config) {
+            console.log(status);
+        });
+       
+    }
 
 	$scope.exitModal = function(){
 		//Clear children

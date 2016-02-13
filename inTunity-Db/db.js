@@ -554,7 +554,7 @@ router.post('/api/account/id/removefollower', function (req, res, next) {
 	});
 });
 
-// haven't reworked this yet
+// Like a song
 router.post('/api/account/id/likes/song/id', function (req, res, next) {
 	var userID = req.body.posted_user_id;
 		Song.findOne({_id: ObjectId(req.body.song_id)}, function (err, songObj) {
@@ -601,7 +601,49 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 });
 
 
+//Favorite a song
+router.post('/api/account/id/favorite/song/id', function (req, res, next) {
+	var userID = req.body.posted_user_id;
+		Song.findOne({_id: ObjectId(req.body.song_id)}, function (err, songObj) {
+	    if (err) {
+	      console.log(err);
+		  res.sendStatus(500);
+	    } else if (songObj) {
 
+			var found = false;
+
+
+			var status = "";
+
+	     	for (var i = 0; i < songObj["who_favorited"].length; i++) {
+				//Our user has already liked this song
+		  		if (songObj["who_favorited"][i] == userID) {
+					found = true;
+					status = "Favorite";
+					
+					songObj["who_favorited"].splice(i,1);
+		  		}
+		  	}
+			
+			//Couldn't find user in who_liked info of the song! Let him like for the first time.
+			if (found == false){
+				songObj["who_favorited"].unshift(userID);
+				status = "UnFavorite";
+			}
+
+		  	// this songObj represents the song information
+			songObj.save(function(err) {
+		    	if (err) {
+		    		throw err;
+		    	}	
+			});	
+			res.send(200, {current_likes: songObj["who_favorited"].length, response: status});
+	    }
+
+	 });
+	
+	
+});
 
 
 
