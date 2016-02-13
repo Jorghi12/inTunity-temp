@@ -615,7 +615,7 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 
 //Favorite a song
 router.post('/api/account/id/favorite/song/id', function (req, res, next) {
-	var userID = req.body.posted_user_id;
+	var userID = req.body.posted_user_id; 
 	User.findOne({user_id: userID}, function(err, myUserObj) {
 		Song.findOne({_id: ObjectId(req.body.song_id)}, function (err, songObj) {
 	    if (err) {
