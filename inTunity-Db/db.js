@@ -557,34 +557,15 @@ router.post('/api/account/id/removefollower', function (req, res, next) {
 // Like a song
 router.post('/api/account/id/likes/song/id', function (req, res, next) {
 	var userID = req.body.posted_user_id;
-
-	User.findOne({user_id: userID}, function(err, userObj) {
-	  if (err) {
-	    console.log(err);
-	    res.sendStatus(500);
-	  } else if (userObj) {
-	 
-	  	userObj.push(req.body.song_id);
-
-
-	  	userObj.save(function(err) {
-	    	if (err) {
-	    		throw err;
-	    	}	
-		});	
-	  } // end of else if
-	  
-	});
-
-
-
-	Song.findOne({_id: ObjectId(req.body.song_id)}, function (err, songObj) {
+		Song.findOne({_id: ObjectId(req.body.song_id)}, function (err, songObj) {
 	    if (err) {
 	      console.log(err);
 		  res.sendStatus(500);
 	    } else if (songObj) {
 
 			var found = false;
+
+
 			var status = "";
 
 	     	for (var i = 0; i < songObj["who_liked"].length; i++) {
