@@ -11,13 +11,16 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	$scope.trackID;
 	
 
+     var prof = (store.get('profile'));
+     var userID = prof["identities"][0]["user_id"];
 	
 	//Load Track Data
     $http({
-         url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account',
-        method: 'GET'
+         url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/loadFollowUsers',
+        method: 'GET',
+		params: {user_id: userID}
     }).then(function(response) {
-        var users = response["data"]["songs"];
+        var users = response["data"]["followers"];
 		
         // this array has users who only have songs for today with it
         $scope.correctUsers = [];
@@ -254,7 +257,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         var prof = (store.get('profile'));
 
         var id = prof["identities"][0]["user_id"];
-
+		
         // console.log(prof);
 
         //Sets user display name

@@ -371,6 +371,37 @@ router.get('/api/account/url_username/' , function (req, res, next) {
 	}); 
 });
 
+
+//Pull follow users directly from USER's follow list
+router.get('/api/account/loadFollowUsers' , function (req, res, next) {
+	console.log(req.query["user_id"]);
+	User.findOne({user_id:req.query["user_id"]}, function(err, userObj) {
+
+		if (userObj == null) {
+			res.send(205);
+		}
+	  	if (err) {
+	    	res.sendStatus(500);
+	    	res.send(500);
+	  	} else if(userObj) {
+			
+			User.find({"user_id": { $in: userObj["followers"]}}, function(err, userFollowObj) {
+		
+				if (userFollowObj == null) {
+					res.send(205);
+				}
+				if (err) {
+					res.sendStatus(500);
+					res.send(500);
+				} else if(userFollowObj) {
+					console.log("retrieved");
+					res.send(userFollowObj);
+				}
+			}); 
+	  	}
+	}); 
+});
+
 //getting a list of specific users 
 // need to return something if user does not exist
 router.get('/api/account/idBatch' , function (req, res, next) {
