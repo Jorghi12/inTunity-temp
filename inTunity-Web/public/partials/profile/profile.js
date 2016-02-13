@@ -55,6 +55,18 @@ angular.module('inTunity.profile', [
         }); // end of http get
     }
 
+    $scope.getFavorited = function() {
+         $http({
+            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+            method: 'GET',
+            params: {
+                id: id
+            }
+        }).then(function(response) {
+          console.log(response);
+        }); // end of http get
+    }
+
   
 
 
@@ -96,6 +108,8 @@ angular.module('inTunity.profile', [
     		 method: 'GET'
     		}).then(function(responseSong) {
     			responseSong = responseSong["data"]["user"];
+
+                console.log(responseSong);
     			var date = new Date(responseSong["unix_time"] * 1000);
     			var year = date.getFullYear();
     			var month = date.getMonth();
@@ -127,7 +141,8 @@ angular.module('inTunity.profile', [
     				song_duration: responseSong["song_duration"],
                     _id: responseSong["_id"],
                     formmatedDay: formmatedDay,
-					unix_time: responseSong["unix_time"]
+					unix_time: responseSong["unix_time"],
+                    likes:responseSong["likes"]
     			});
 				
 				$scope.my_profile_songs.sort(function(a, b) {
