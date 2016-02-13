@@ -165,6 +165,33 @@ app.get('/secured/account/id', function(req, res) {
   });
 });
 
+// getting a specific user (USING THE URL_USERNAME) .. Helps for profile url routing.
+// this is mainly used for profile.js
+app.get('/secured/account/id', function(req, res) {
+  request({
+      url: process.env.DATABASE + '/api/account/url_username', //URL to hit
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      method: 'GET', //Specify the method
+      qs: {url_username: req.query["url_username"]}
+  }, function(error, response, body){
+
+      if(error) {
+        console.log(error);
+      } else {
+        if (response.statusCode == 200) {
+          console.log("success");
+          var data = JSON.parse(response.body);
+          res.send(200, {user:data});
+        } else if (response.statusCode == 205){
+          console.log("user does not exist");
+          res.send(205);
+        }
+      }
+  });
+});
+
 
 // getting a list of specific users
 // this is mainly used for profile.js

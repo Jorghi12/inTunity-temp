@@ -350,7 +350,26 @@ router.get('/api/account/id/' , function (req, res, next) {
 	}); 
 });
 
-//
+
+
+//getting a specific user (USING URL_USERNAME)
+// need to return something if user does not exist
+router.get('/api/account/id/' , function (req, res, next) {
+	console.log(req.query["url_username"]);
+	User.findOne({url_username:req.query["url_username"]}, function(err, userObj) {
+
+		if (userObj == null) {
+			res.send(205);
+		}
+	  	if (err) {
+	    	res.sendStatus(500);
+	    	res.send(500);
+	  	} else if(userObj) {
+	  		console.log("retrieved");
+	  		res.send(userObj);
+	  	}
+	}); 
+});
 
 //getting a list of specific users 
 // need to return something if user does not exist
