@@ -36,27 +36,29 @@
 
   <div class = "row">
     <ul class="nav nav-pills" style = "text-align:center">
-      <li role="presentation" class="active"><a href="#">History</a></li>
-      <li role="presentation"><a href="#" ng-click = "getFavorited()">Favorited</a></li>
+      <li role="presentation" id = "history" class="active"><a href="#" ng-click = "getHistory()">History</a></li>
+      <li role="presentation" id = "favorites"><a href="#" ng-click = "getFavorited()">Favorited</a></li>
     </ul>
   </div>
   
-  <div id = "song-grid" align="center" ng-repeat = "item in my_profile_songs | orderBy:'-unix_time' " >
-    <div id="{{item._id}}" class="col-md-4 song-tile">
-      <a class = "delete" value = '{{item}}'>
-      </a>
-      <a href="" ng-click = 'startStreamingProfileSong(item.song_url,item.song_album_pic,item.song_title,item.track_id,item.song_duration)'>
-        
-          <img class="song-image" ng-src="{{item.song_album_pic}}">
-          <h4>{{item.song_title}}</h4>
-          <h5>Posted: {{item.formmatedDay}}</h5>
-          <h5>Likes: {{item.likes}}</h5>
-          <!--<h5>100 Views | 15 Likes</h5>-->
-        
-      </a>
+  <div id = "contentsongs">
+    <div id = "song-grid" align="center" ng-repeat = "item in my_profile_songs | orderBy:'-unix_time' " >
+      <div id="{{item._id}}" class="col-md-4 song-tile">
+        <a class = "delete" value = '{{item}}'>
+        </a>
+        <a href="" ng-click = 'startStreamingProfileSong(item.song_url,item.song_album_pic,item.song_title,item.track_id,item.song_duration)'>
+          
+            <img class="song-image" ng-src="{{item.song_album_pic}}">
+            <h4>{{item.song_title}}</h4>
+            <h5>Posted: {{item.formmatedDay}}</h5>
+            <h5>Likes: {{item.likes}}</h5>
+            <!--<h5>100 Views | 15 Likes</h5>-->
+          
+        </a>
+      </div>
+    
     </div>
-  
-  </div>
+  </div>  
   
 </div>
 

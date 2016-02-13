@@ -56,18 +56,47 @@ angular.module('inTunity.profile', [
     }
 
     $scope.getFavorited = function() {
-         $http({
+        document.getElementById("history").className = "";
+        document.getElementById("favorites").className = "active";
+
+        document.getElementById("contentsongs").innerHTML = "";
+
+        $http({
             url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
             method: 'GET',
             params: {
                 id: id
             }
         }).then(function(response) {
-          console.log(response);
+            var songs = (response['data']['user']["favorited_songs"]);
+
+            for (var i = 0; i < songs.length; i++) {
+                
+            }
+        
         }); // end of http get
+
+         
+    }
+
+    $scope.getHistory = function() {
+        document.getElementById("history").className = "active";
+        document.getElementById("favorites").className = "";
+
+        document.getElementById("contentsongs").innerHTML = "";
+
+        $http({
+            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+            method: 'GET'
+        }).then(function(response) {
+
+        });    
+
+
     }
 
   
+
 
 
     $http({
