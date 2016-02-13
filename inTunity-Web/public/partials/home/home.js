@@ -36,103 +36,104 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		ids.push($scope.suggestedFriends[i]["id"]);
 	}
 	
-	$scope.loadToUI = function(users,already){
+	$scope.loadToUI = function(users,already,mode){
 			//Clear the body
 			document.getElementById("modalChildren").innerHTML = "";
 			
 			var container = document.getElementById("modalChildren");
 			for (var i = 0; i < users.length; i++) {
-				//Create search results
-				var userNode = document.createElement("div");
-				userNode.className = "row";
-	  
+				if (mode != "filter" || (mode == "filter" && users[i]["nickname"].toLowerCase().startsWith($scope.searchUsers.toLowerCase()))){
+						
+					//Create search results
+					var userNode = document.createElement("div");
+					userNode.className = "row";
+		  
 
-				userNode.appendChild(document.createElement("hr"));
-				
-				//Column One
-				var col1 = document.createElement('div');
-				col1.className = "col-md-6";
-	
-				//Column Two
-				var col2 = document.createElement('div');
-				col2.className = "col-md-6";
-				
-				//Column Three
-				var col3 = document.createElement('div');
-				col3.className = "col-md-6";
-				
-				//Create Profile Image
-				var img = document.createElement('img');
-				img.className = "img-circle";
-				img.src = users[i]["picture"];
-				img.id = i;
+					userNode.appendChild(document.createElement("hr"));
+					
+					//Column One
+					var col1 = document.createElement('div');
+					col1.className = "col-md-6";
+		
+					//Column Two
+					var col2 = document.createElement('div');
+					col2.className = "col-md-6";
+					
+					//Column Three
+					var col3 = document.createElement('div');
+					col3.className = "col-md-6";
+					
+					//Create Profile Image
+					var img = document.createElement('img');
+					img.className = "img-circle";
+					img.src = users[i]["picture"];
+					img.id = i;
 
 
-				$(img).click(function($this) {
-				   $rootScope.$apply(function() {
-						$('#myModal').modal('hide');
-						$('.modal-backdrop').remove();
-						$location.path('/profile/' + users[$this.target.id]['url_username']);
+					$(img).click(function($this) {
+					   $rootScope.$apply(function() {
+							$('#myModal').modal('hide');
+							$('.modal-backdrop').remove();
+							$location.path('/profile/' + users[$this.target.id]['url_username']);
+						});
 					});
-				});
 
-				
-				col1.appendChild(img);
+					
+					col1.appendChild(img);
 
-				//Create Profile Text
-				var userTitle = document.createElement("h4");
-				userTitle.innerHTML = users[i]["nickname"];
-				//users[i]["alreadyFriends"]
-				userTitle.style.fontSize = "24px";
-				
-				col2.appendChild(userTitle);
-				
-				//Create Button
-				var buttonObj = document.createElement("button");
-				col3.appendChild(buttonObj);
-				if (already[i]){
-					var t = document.createTextNode("Unfollow");       // Create a text node
-				}
-				else{
-					var t = document.createTextNode("Add follower");
-				}
-				
-				//Create the button
-				buttonObj.appendChild(t);
-				buttonObj.setAttribute("userID",users[i]['user_id']);
-				buttonObj.setAttribute("following",already[i]);
-				
-				$(buttonObj).click(function($this) {
-					var userid = $this.target.getAttribute("userID");
-					var following = $this.target.getAttribute("following");
-					if (following == "true"){
-						($this.target.firstElementChild||$this.target.firstChild).nodeValue = "Add follower";
-						$this.target.setAttribute("following","false");
-						$scope.removeFollower(userid);
+					//Create Profile Text
+					var userTitle = document.createElement("h4");
+					userTitle.innerHTML = users[i]["nickname"];
+					//users[i]["alreadyFriends"]
+					userTitle.style.fontSize = "24px";
+					
+					col2.appendChild(userTitle);
+					
+					//Create Button
+					var buttonObj = document.createElement("button");
+					col3.appendChild(buttonObj);
+					if (already[i]){
+						var t = document.createTextNode("Unfollow");       // Create a text node
 					}
 					else{
-						($this.target.firstElementChild||$this.target.firstChild).nodeValue = "Unfollow";
-						$this.target.setAttribute("following","true");
-						$scope.addFollower(userid);
+						var t = document.createTextNode("Add follower");
 					}
-				});
-				
-				buttonObj.className = "";
-				
-				//Append children to userNode
-				userNode.appendChild(col1);
-				userNode.appendChild(col2);
-				userNode.appendChild(col3);
+					
+					//Create the button
+					buttonObj.appendChild(t);
+					buttonObj.setAttribute("userID",users[i]['user_id']);
+					buttonObj.setAttribute("following",already[i]);
+					
+					$(buttonObj).click(function($this) {
+						var userid = $this.target.getAttribute("userID");
+						var following = $this.target.getAttribute("following");
+						if (following == "true"){
+							($this.target.firstElementChild||$this.target.firstChild).nodeValue = "Add follower";
+							$this.target.setAttribute("following","false");
+							$scope.removeFollower(userid);
+						}
+						else{
+							($this.target.firstElementChild||$this.target.firstChild).nodeValue = "Unfollow";
+							$this.target.setAttribute("following","true");
+							$scope.addFollower(userid);
+						}
+					});
+					
+					buttonObj.className = "";
+					
+					//Append children to userNode
+					userNode.appendChild(col1);
+					userNode.appendChild(col2);
+					userNode.appendChild(col3);
 
-			
+				
 
-			   
-				
-				//Add element to container!
-				container.appendChild(userNode);
-   
-				
-				
+				   
+					
+					//Add element to container!
+					container.appendChild(userNode);
+				}
+					
 			}
 	}
 	
@@ -170,7 +171,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				already = s_already;
 			}
 			
-			$scope.loadToUI(users,already);
+			$scope.loadToUI(users,already,"");
 			
 
 		});
@@ -217,12 +218,13 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		}).then(function(response) {
 			users = response["data"]["suggestions"][1];
 			already = response["data"]["suggestions"][3];
-			$scope.loadToUI(users,already);
+			$scope.loadToUI(users,already,"filter");
 		});
 		
 			
         });  
 	}
+	
 	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		$scope.updateResults(); 
 	});
