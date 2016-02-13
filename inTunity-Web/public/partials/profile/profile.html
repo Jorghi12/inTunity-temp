@@ -40,7 +40,7 @@
       <li role="presentation" id = "favorites"><a href="#" ng-click = "getFavorited()">Favorited</a></li>
     </ul>
   </div>
-  
+   
   <div id = "contentsongs">
     <div id = "song-grid" align="center" ng-repeat = "item in my_profile_songs | orderBy:'-unix_time' " >
       <div id="{{item._id}}" class="col-md-4 song-tile">

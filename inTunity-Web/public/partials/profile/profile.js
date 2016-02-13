@@ -158,7 +158,7 @@ angular.module('inTunity.profile', [
 						  $scope.deleteSong($scope.user_id,obj["_id"], obj["track_id"]);
 
 						 
-						});                  
+						});                   
 					}
 
 					if (username_clicked != ownpersonalusername) {
