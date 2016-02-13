@@ -557,6 +557,7 @@ router.post('/api/account/id/removefollower', function (req, res, next) {
 // Like a song
 router.post('/api/account/id/likes/song/id', function (req, res, next) {
 	var userID = req.body.posted_user_id;
+	User.findOne({user_id: req.body.user_id}, function(err, myUserObj) {
 		Song.findOne({_id: ObjectId(req.body.song_id)}, function (err, songObj) {
 	    if (err) {
 	      console.log(err);
@@ -576,6 +577,9 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 					
 					songObj["who_liked"].splice(i,1);
 					songObj["likes"] -=1;
+					
+					var songIndex = myUserObj["liked_songs"].indexOf(songObj["_id"]);
+					myUserObj["liked_songs"].splice(songIndex,1);
 		  		}
 		  	}
 			
@@ -583,6 +587,7 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 			if (found == false){
 				songObj["who_liked"].unshift(userID);
 				songObj["likes"] +=1;
+				myUserObj["liked_songs"].unshift(songObj["_id"]);
 				status = "Unlike";
 			}
 
@@ -592,11 +597,18 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 		    		throw err;
 		    	}	
 			});	
+			
+			// this myUserObj represents the user
+			myUserObj.save(function(err) {
+		    	if (err) {
+		    		throw err;
+		    	}	
+			});	
 			res.send(200, {current_likes: songObj["likes"], response: status});
 	    }
 
 	 });
-	
+	});
 	
 });
 
@@ -604,6 +616,7 @@ router.post('/api/account/id/likes/song/id', function (req, res, next) {
 //Favorite a song
 router.post('/api/account/id/favorite/song/id', function (req, res, next) {
 	var userID = req.body.posted_user_id;
+	User.findOne({user_id: req.body.user_id}, function(err, myUserObj) {
 		Song.findOne({_id: ObjectId(req.body.song_id)}, function (err, songObj) {
 	    if (err) {
 	      console.log(err);
@@ -622,17 +635,28 @@ router.post('/api/account/id/favorite/song/id', function (req, res, next) {
 					status = "Favorite";
 					
 					songObj["who_favorited"].splice(i,1);
+					
+					var songIndex = myUserObj["favorited_songs"].indexOf(songObj["_id"]);
+					myUserObj["favorited_songs"].splice(i,1);
 		  		}
 		  	}
 			
 			//Couldn't find user in who_liked info of the song! Let him like for the first time.
 			if (found == false){
 				songObj["who_favorited"].unshift(userID);
+				myUserObj["favorited_songs"].unshift(songObj["_id"]);
 				status = "UnFavorite";
 			}
 
 		  	// this songObj represents the song information
 			songObj.save(function(err) {
+		    	if (err) {
+		    		throw err;
+		    	}	
+			});	
+			
+			// this myUserObj represents the User information
+			myUserObj.save(function(err) {
 		    	if (err) {
 		    		throw err;
 		    	}	
