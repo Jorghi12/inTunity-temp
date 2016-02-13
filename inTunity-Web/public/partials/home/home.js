@@ -384,9 +384,11 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
                 var favorites = document.getElementById("favorites" + index);
 				if (data["response"] == "UnFavorite"){
 					favorites.style.color = "red"
+					favorites.className = "glyphicon glyphicon-star"
 				}
 				else{
 					favorites.style.color = "black"
+					favorites.className = "glyphicon glyphicon-star-empty";
 				} 
 
 
