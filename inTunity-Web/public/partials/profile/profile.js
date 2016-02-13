@@ -99,41 +99,33 @@ angular.module('inTunity.profile', [
 
 
 
-    $http({
-        url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account',
-        method: 'GET'
-    }).then(function(response) {
-        var users = response["data"]["songs"];
-		
-        $scope.correctPerson = [];
-        for (var i = 0; i < users.length; i++) {
-            if (users[i]["url_username"] == $routeParams.itemId) {
-                $scope.correctPerson.push(users[i]);
-            }
-            if (users[i]["today_song"].length > 0) {
-                count_todaysongs++;
-            }
-        }
+	$http({
+		url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+		method: 'GET',
+		params: {
+			id: id
+		}
+	}).then(function(responseA) {
+		$scope.correctPerson = responseA["data"]["user"];
+        $scope.numPosts = $scope.correctPerson.song_history.length;
 	
-        $scope.numPosts = $scope.correctPerson[0].song_history.length;
-	
-        for (var i = 0; i < $scope.correctPerson[0].song_history.length; i++) {
-            var date = new Date($scope.correctPerson[0].song_history[i]["unix_time"] * 1000);
+        for (var i = 0; i < $scope.correctPerson.song_history.length; i++) {
+            var date = new Date($scope.correctPerson.song_history[i]["unix_time"] * 1000);
             var year = date.getFullYear();
             var month = date.getMonth();
             var day = date.getDate();
             var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
             var formmatedDay = monthNames[month] + " " + day + ", " + year;
 
-            $scope.correctPerson[0].song_history[i].formmatedDay = formmatedDay;
+            $scope.correctPerson.song_history[i].formmatedDay = formmatedDay;
         }
 		
 		$scope.my_profile_songs = [];
 		
-		for (var i = 0; i < $scope.correctPerson[0].song_history.length; i++){
+		for (var i = 0; i < $scope.correctPerson.song_history.length; i++){
     		$http({
     		 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/song/id',
-    		 params: {song_id: $scope.correctPerson[0].song_history[i]},
+    		 params: {song_id: $scope.correctPerson.song_history[i]},
     		 method: 'GET'
     		}).then(function(responseSong) {
     			responseSong = responseSong["data"]["user"];
@@ -180,7 +172,7 @@ angular.module('inTunity.profile', [
 					return new Date(b.unix_time) - new Date(a.unix_time);
 				});
 				
-			if ($scope.my_profile_songs.length == $scope.correctPerson[0].song_history.length){
+			if ($scope.my_profile_songs.length == $scope.correctPerson.song_history.length){
 			   $http({
 				url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
 				method: 'GET',
@@ -288,19 +280,19 @@ angular.module('inTunity.profile', [
 
 					
 
-					for (var i =0;i<$scope.correctPerson[0]["song_history"].length;i++){
-						if ($scope.correctPerson[0]["song_history"][i] == songid){
-							songHtmlObj = document.getElementById($scope.correctPerson[0]["song_history"][i]);
+					for (var i =0;i<$scope.correctPerson["song_history"].length;i++){
+						if ($scope.correctPerson["song_history"][i] == songid){
+							songHtmlObj = document.getElementById($scope.correctPerson["song_history"][i]);
 							console.log("SWAG");
 							console.log(songHtmlObj);
 							$(songHtmlObj).remove();
 							
-                            $scope.numPosts = $scope.correctPerson[0]["song_history"].length;
+                            $scope.numPosts = $scope.correctPerson["song_history"].length;
 
-							$scope.correctPerson[0]["song_history"].splice(i,1);
+							$scope.correctPerson["song_history"].splice(i,1);
 							
 							//Do this in order to delete the first occurance (in case the id hashing fails - not likely)
-							i = $scope.correctPerson[0]["song_history"].length;
+							i = $scope.correctPerson["song_history"].length;
 							
 							//Update Number of Posts
 							var postObj = document.getElementById("numPostsObject");
