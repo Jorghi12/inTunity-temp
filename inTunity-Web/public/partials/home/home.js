@@ -235,10 +235,10 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		var choice = 0;
 		for (var i = 0;i < document.getElementById("tabContent").children.length;i++){
 			if (document.getElementById("tabContent").children[i].className == "active"){
-				choice = document.getElementById("tabContent").children[i].text;
+				choice = i;// document.getElementById("tabContent").children[i].text;
 			}
 		}
-		alert(choice);
+		//alert(choice);
 		//If the first tab (Add Followers) is selected, do action.
 		if (choice == "0"){
 			$scope.findUsers();
