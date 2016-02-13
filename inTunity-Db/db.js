@@ -385,7 +385,7 @@ router.get('/api/account/loadFollowUsers' , function (req, res, next) {
 	    	res.send(500);
 	  	} else if(userObj) {
 			
-			User.find({"user_id": { $in: userObj["followers"]}}, function(err, userFollowObj) {
+			User.find({"user_id": { $in: userObj["following"]}}, function(err, userFollowObj) {
 		
 				if (userFollowObj == null) {
 					res.send(205);
