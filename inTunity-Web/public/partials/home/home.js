@@ -208,12 +208,12 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: $scope.followers}
 			}).then(function(response) {
 				
-				users = response["data"]["suggestions"][1];
-				already = response["data"]["suggestions"][3];
-				
-				$scope.followers = users;
-				$scope.followers_already = already;
+				$scope.followers = response["data"]["suggestions"][1];
+				$scope.followers_already = response["data"]["suggestions"][3];
 		
+				$scope.searchedUsers = response["data"]["suggestions"][0];
+				$scope.searchedUsers_already = response["data"]["suggestions"][2];
+				
 			});
 			
 			
@@ -223,12 +223,12 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: $scope.following}
 			}).then(function(response) {
 				
-				users = response["data"]["suggestions"][1];
-				already = response["data"]["suggestions"][3];
-				
-				$scope.following = users;
-				$scope.following_already = already;
+				$scope.following = response["data"]["suggestions"][1];
+				$scope.following_already = response["data"]["suggestions"][3];
 		
+				$scope.searchedUsers = response["data"]["suggestions"][0];
+				$scope.searchedUsers_already = response["data"]["suggestions"][2];
+				
 			});
 			
 			
