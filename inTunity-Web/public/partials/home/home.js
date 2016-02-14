@@ -187,8 +187,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		return ids;
 	}
 	
-	//Same as "Add Followers" code.. but literally just pulling from your followers list
-	$scope.pullPeople = function(people){
+	//Load Data for Follower Modal
+	$scope.loadFollower_Following_Lists = function(){
 		$http({
             url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account',
             method: 'GET'
@@ -201,29 +201,57 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 					$scope.following = data[i]["following"];
                 }
             }
+			
+			$http({
+			 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/search',
+			method: 'GET',
+			params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: $scope.followers}
+			}).then(function(response) {
+				
+				users = response["data"]["suggestions"][1];
+				already = response["data"]["suggestions"][3];
+				
+				$scope.followers = users;
+				$scope.followers_already = already;
 		
+			});
+			
+			
+			$http({
+			 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/search',
+			method: 'GET',
+			params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: $scope.following}
+			}).then(function(response) {
+				
+				users = response["data"]["suggestions"][1];
+				already = response["data"]["suggestions"][3];
+				
+				$scope.following = users;
+				$scope.following_already = already;
+		
+			});
+			
+			
+		});
+	}
+	
+	$scope.loadFollower_Following_Lists();
+	
+	//Same as "Add Followers" code.. but literally just pulling from your followers list
+	$scope.pullPeople = function(people){
 		if (people == "followers"){
-			var people_type = $scope.followers;
+			var users = $scope.followers;
+			var already = $scope.followers_already;
 		}
 		else if (people == "following"){
-			var people_type = $scope.following;
+			var users = $scope.following;
+			var already = $scope.following_already;
 		}
 		else{
 			;//Impossible Case
 		}
 		
-		$http({
-		 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/search',
-		method: 'GET',
-		params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: people_type}
-		}).then(function(response) {
-			users = response["data"]["suggestions"][1];
-			already = response["data"]["suggestions"][3];
-			$scope.loadToUI(users,already,"filter");
-		});
-		
-			
-        });  
+		$scope.loadToUI(users,already,"filter");
 	}
 	
 	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
