@@ -65,6 +65,12 @@ angular.module('inTunity.profile', [
 		}
 	}).then(function(responseA) {
 		$scope.correctPerson = responseA["data"]["user"];
+
+        $scope.numFollowing = $scope.correctPerson["following"].length;
+        $scope.numFollowed = $scope.correctPerson["followers"].length;
+
+
+
         $scope.numPosts = $scope.correctPerson.song_history.length;
 	
         for (var i = 0; i < $scope.correctPerson.song_history.length; i++) {

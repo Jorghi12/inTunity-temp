@@ -28,10 +28,27 @@
 </nav>
 
 <div class="content" id = "content1">
-  <div class="profile-info" align="center">
+  <div class="profile-info" align="center" class = "col-md-6">
     <img id="profile-img" ng-src="{{correctPerson.picture}}"> 
     <h1>{{correctPerson.nickname}}</h1>
-    <h4 id="numPostsObject">{{numPosts}} posts</h4>
+    <div class = "row" style = "padding-left:200px; padding-right:200px;">
+      <div class = "col-md-4">
+        <h3 id="numPostsObject">{{numPosts}} Posts</h3>
+      </div>
+        
+        <div class = "col-md-4">
+          <h3>{{numFollowed}} Followers</h3>
+        </div>
+
+         <div class = "col-md-4">
+            <h3>{{numFollowing}} Following</h3>
+        </div>
+    </div>
+
+
+
+
+    <!-- <h4 id="numPostsObject">{{numPosts}} posts</h4> -->
   </div>
 
   <div class = "row">
@@ -62,7 +79,7 @@
   
 </div>
 
- <div class="footer" id = "footer1">
+ <div class="footer" id = "footer1" style = "opacity: 0.95;">
     <div class = "container" id = "widgetContainer">
 
       <div class = "col-md-6" id = "col1">

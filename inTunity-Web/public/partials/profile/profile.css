@@ -1,11 +1,7 @@
 /*Custom CSS for Profile Page*/
 
 .profile-info {
-	height: auto;
-	width: 100%;
-	display:block;
-	overflow:auto;
-	margin-bottom: 30px;
+	margin-bottom: 50px;
 }
 
 #profile-img {
