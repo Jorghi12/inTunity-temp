@@ -70,21 +70,21 @@ var router = express.Router();
 //       });
 // });
 
-// location.find({  }, function(err, loc) {
-//       if (err) {
-//       	throw err;
-//       }
+location.find({  }, function(err, loc) {
+      if (err) {
+      	throw err;
+      }
 
-//       console.log("delete");
-//         // delete him
-//       location.remove(function(err) {
-//       if (err) {
-//            throw err;
-//       }
-//       console.log('Location successfully deleted!');
+      console.log("delete");
+        // delete him
+      location.remove(function(err) {
+      if (err) {
+           throw err;
+      }
+      console.log('Location successfully deleted!');
  
-//       });
-// });
+      });
+});
 
 
 
