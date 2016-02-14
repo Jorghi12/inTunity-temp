@@ -256,18 +256,24 @@ angular.module('inTunity.addSong', [
 								var city = "";
 								var state = "";
 								var country = "";
-								
-								for (var ab = 0;ab < results[0]["address_components"].length; ab++){
-									if (results[0]["address_components"][ab]["types"].indexOf("locality") > -1){
-										city = results[0]["address_components"][ab]["short_name"];
-									}
-									
-									else if (results[0]["address_components"][ab]["types"].indexOf("administrative_area_level_1") > -1){
-										state = results[0]["address_components"][ab]["short_name"];
-									}
-									
-									else if (results[0]["address_components"][ab]["types"].indexOf("country") > -1){
-										country = results[0]["address_components"][ab]["short_name"];
+loopOuter:
+								for (var objN = 0; objN < results.length; objN++){
+									for (var ab = 0;ab < results[objN]["address_components"].length; ab++){
+										if (results[objN]["address_components"][ab]["types"].indexOf("locality") > -1){
+											city = results[objN]["address_components"][ab]["short_name"];
+										}
+										
+										else if (results[objN]["address_components"][ab]["types"].indexOf("administrative_area_level_1") > -1){
+											state = results[objN]["address_components"][ab]["short_name"];
+										}
+										
+										else if (results[objN]["address_components"][ab]["types"].indexOf("country") > -1){
+											country = results[objN]["address_components"][ab]["short_name"];
+										}
+										
+										if (city != "" && state != "" && country != ""){
+											break loopOuter;
+										}
 									}
 								}
 								
