@@ -253,12 +253,24 @@ angular.module('inTunity.addSong', [
                     }, function(results, status) {
                         if (status === google.maps.GeocoderStatus.OK) {
                             if (results[1]) {
-
-                    
-
-                                var state = results[3]["address_components"][1]["short_name"];
-                                var city = results[3]["address_components"][0]["short_name"];
-
+								var city = "";
+								var state = "";
+								var country = "";
+								
+								for (var ab = 0;ab < results[0]["address_components"].length; ab++){
+									if (results[0]["address_components"][ab]["types"].indexOf("locality") > -1){
+										city = results[0]["address_components"][ab]["short_name"];
+									}
+									
+									else if (results[0]["address_components"][ab]["types"].indexOf("administrative_area_level_1") > -1){
+										state = results[0]["address_components"][ab]["short_name"];
+									}
+									
+									else if (results[0]["address_components"][ab]["types"].indexOf("country") > -1){
+										country = results[0]["address_components"][ab]["short_name"];
+									}
+								}
+								
                                 var song = JSON.stringify({
                                     user_id: id,
                                     song_url: url,
