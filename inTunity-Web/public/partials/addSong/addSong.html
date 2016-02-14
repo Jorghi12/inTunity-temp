@@ -1,5 +1,11 @@
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
 <link rel="stylesheet" type="text/css" href="/partials/style.css">
 <link rel="stylesheet" type="text/css" href="/partials/addSong/addSong.css">
+
+
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -70,9 +76,9 @@
       <div class = "col-sm-12 col-md-6">
 
         <div class = "row" align="center" id="playerButtons" ng-controller="StreamCtrl">
-          <button class="playerButton" id="prevButton" ng-click="prevPlayer()"><h5><b>Previous</b></h5></button>
-          <button class="playerButton" id="pauseButton" ng-click ="pause()" style="margin:10px 0px; min-height:50px;"><h4>Pause</h4></button>
-          <button class="playerButton" id="nextButton" ng-click="nextPlayer()"><h5><b>Next</b></h5></button>
+          <button class="playerButton" id="prevButton" ng-click="prevPlayer()" style="margin:10px 0px; min-height:50px;"><span class = "glyphicon glyphicon-backward"></span></button>
+          <button class="playerButton" id="pauseButton" ng-click ="pause()" style="margin:10px 0px; min-height:50px;"><span class = "glyphicon glyphicon-pause"></span></button>
+          <button class="playerButton" id="nextButton" ng-click="nextPlayer()" style="margin:10px 0px; min-height:50px;"><span class = "glyphicon glyphicon-forward"></span></button>
         </div> 
 
 

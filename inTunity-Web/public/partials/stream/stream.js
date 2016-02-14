@@ -367,7 +367,16 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         $scope.song_count = index;
         var pauseButton = document.getElementById('pauseButton');
-        pauseButton.innerHTML = "<h4>Pause</h4>";
+        pauseButton.innerHTML = "";
+
+        var pauseb = document.createElement("span");
+        pauseb.className = "glyphicon glyphicon-pause";
+
+        pauseButton.appendChild(pauseb);
+
+  
+
+
 		//if (window.globalPlayer != null ){window.globalPlayer.seek(0);}
         $scope.startStream($scope.song_count, 0);
     }
@@ -386,7 +395,14 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		}
 		
         var pauseButton = document.getElementById('pauseButton');
-        pauseButton.innerHTML = "<h4>Pause</h4>";
+        pauseButton.innerHTML = "";
+
+        var pauseb = document.createElement("span");
+        pauseb.className = "glyphicon glyphicon-pause";
+
+        pauseButton.appendChild(pauseb);
+
+
 		//if (window.globalPlayer != null ){window.globalPlayer.seek(0);}
 		
         $scope.startStream($scope.song_count, 0);
@@ -397,7 +413,12 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         $scope.song_count = ($scope.song_count + 1) % $scope.trackarray.length;
 
         var pauseButton = document.getElementById('pauseButton');
-        pauseButton.innerHTML = "<h4>Pause</h4>";
+        pauseButton.innerHTML = "";
+
+        var pauseb = document.createElement("span");
+        pauseb.className = "glyphicon glyphicon-pause";
+
+        pauseButton.appendChild(pauseb);
 		//if (window.globalPlayer != null ){window.globalPlayer.seek(0);}
 		
         $scope.startStream($scope.song_count, 0);
@@ -417,16 +438,31 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		//No song has ever started.
 		if (window.globalPlayer == null){
 			$scope.startStream($scope.song_count, 0);
-            pauseButton.innerHTML = "<h4>Pause</h4>";
+            pauseButton.innerHTML = "";
+
+            var pauseb = document.createElement("span");
+            pauseb.className = "glyphicon glyphicon-pause";
+
+            pauseButton.appendChild(pauseb);
 			return;
 		}
 		
         if (window.globalPlayer._isPlaying) {
             window.globalPlayer.pause();
-            pauseButton.innerHTML = "<h4>Play</h4>";
+             pauseButton.innerHTML = "";
+
+            var pauseb = document.createElement("span");
+            pauseb.className = "glyphicon glyphicon-play";
+
+            pauseButton.appendChild(pauseb);
         } else {
             window.globalPlayer.play();
-            pauseButton.innerHTML = "<h4>Pause</h4>";
+             pauseButton.innerHTML = "";
+
+            var pauseb = document.createElement("span");
+            pauseb.className = "glyphicon glyphicon-pause";
+
+            pauseButton.appendChild(pauseb);
         }
 
         //Update the music status via cookie data
@@ -544,7 +580,12 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 			//If not Start Paused
 			if (pos != -2000){
 				var pauseButton = document.getElementById('pauseButton');
-				pauseButton.innerHTML = "<h4>Pause</h4>";
+				 pauseButton.innerHTML = "";
+
+                var pauseb = document.createElement("span");
+                pauseb.className = "glyphicon glyphicon-pause";
+
+                pauseButton.appendChild(pauseb);
 				window.globalPlayer.play();
 			}
 			
@@ -619,7 +660,13 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 					//Return to Pause Mode for addsong + profile
 					if ((pagetype == "addsong" || pagetype == "profile") && $location.path() != "/"){
 						var pauseButton = document.getElementById('pauseButton');
-						pauseButton.innerHTML = "<h4>Play</h4>";
+						pauseButton.innerHTML = "";
+
+                        var pauseb = document.createElement("span");
+                        pauseb.className = "glyphicon glyphicon-play";
+
+                        pauseButton.appendChild(pauseb);
+
 
 
 						globalPlayer.seek(0); //Do this before startStream
@@ -844,8 +891,20 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 			$scope.song_count = songNum % $scope.trackarray.length;
 			if (songPaused == "true") {
 				var pauseButton = document.getElementById('pauseButton');
-				pauseButton.innerHTML = "<h4>Play</h4>";
+
+
+
+				pauseButton.innerHTML = "";
+
+                var pauseb = document.createElement("span");
+                pauseb.className = "glyphicon glyphicon-play";
+
+                pauseButton.appendChild(pauseb);
+
 				
+
+
+
 				artworkUrl = $scope.trackarray[$scope.song_count % $scope.trackarray.length][1];
 				myTitle =  $scope.trackarray[$scope.song_count % $scope.trackarray.length][2];
 				songDuration = parseInt($scope.trackarray[$scope.song_count % $scope.trackarray.length][3]);

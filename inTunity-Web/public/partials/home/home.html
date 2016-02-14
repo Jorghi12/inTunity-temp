@@ -195,9 +195,10 @@
           <div class = "col-sm-12 col-md-6">
 
             <div class = "row" align="center" id="playerButtons">
-              <button class="playerButton" id="prevButton" ng-click="prevPlayer()"><h5><b>Previous</b></h5></button>
-              <button class="playerButton" id="pauseButton" ng-click ="pause()" style="margin:10px 0px; min-height:50px;"><h4>Pause</h4></button>
-              <button class="playerButton" id="nextButton" ng-click="nextPlayer()"><h5><b>Next</b></h5></button>
+              <!-- <button class="playerButton" id="prevButton" ng-click="prevPlayer()"><h5><b>Previous</b></h5></button> -->
+              <button class="playerButton" id="prevButton" ng-click="prevPlayer()" style="margin:10px 0px; min-height:50px;"><span class = "glyphicon glyphicon-backward"></span></button>
+              <button class="playerButton" id="pauseButton" ng-click ="pause()" style="margin:10px 0px; min-height:50px;"><span class = "glyphicon glyphicon-pause"></span></button>
+              <button class="playerButton" id="nextButton" ng-click="nextPlayer()" style="margin:10px 0px; min-height:50px;"><span class = "glyphicon glyphicon-forward"></span></button>
 
 
             </div> 
