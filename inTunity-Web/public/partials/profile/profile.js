@@ -266,10 +266,10 @@ angular.module('inTunity.profile', [
 							
 							//Update Number of Posts
 							var postObj = document.getElementById("numPostsObject");
-							var ind1 = postObj.innerHTML.indexOf(" posts");
+							var ind1 = postObj.innerHTML.indexOf(" Posts");
 							
 							var val = postObj.innerHTML.substring(0,ind1);
-							postObj.innerHTML = (val - 1) + " posts";
+							postObj.innerHTML = (val - 1) + " Posts";
 						}
 					}
 
