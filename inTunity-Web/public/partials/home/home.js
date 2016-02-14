@@ -462,6 +462,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 					
 					$scope.numfollowers = ($scope.followersNumber);
 					$scope.numfollowing = ($scope.followingNumber);
+					
+					$scope.loadFollower_Following_Lists();
 				}
             })
 		.error(function(data, status, headers, config) {
@@ -488,6 +490,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 					
 					$scope.numfollowers = ($scope.followersNumber);
 					$scope.numfollowing = ($scope.followingNumber);
+					
+					$scope.loadFollower_Following_Lists();
 				}
             })
 		.error(function(data, status, headers, config) {
