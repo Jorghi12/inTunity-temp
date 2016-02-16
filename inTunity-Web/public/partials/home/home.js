@@ -222,6 +222,9 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			method: 'GET',
 			params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: $scope.following}
 			}).then(function(response) {
+				console.log("LEGEND");
+				console.log($scope.following);
+				console.log(response["data"]);
 				
 				$scope.following = response["data"]["suggestions"][1];
 				$scope.following_already = response["data"]["suggestions"][3];
@@ -239,6 +242,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	
 	//Same as "Add Followers" code.. but literally just pulling from your followers list
 	$scope.pullPeople = function(people){
+		$scope.loadFollower_Following_Lists();
 		if (people == "followers"){
 			var users = $scope.followers;
 			var already = $scope.followers_already;
