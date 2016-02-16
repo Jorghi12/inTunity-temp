@@ -242,7 +242,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	
 	//Same as "Add Followers" code.. but literally just pulling from your followers list
 	$scope.pullPeople = function(people){
-		$scope.loadFollower_Following_Lists();
 		if (people == "followers"){
 			var users = $scope.followers;
 			var already = $scope.followers_already;
@@ -261,6 +260,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		$scope.updateResults(); 
 	});
+	
+	$scope.loadFollower_Following_Lists();
 
 	$scope.updateResults = function(){
 		//Find which choice has been tabbed
