@@ -17,9 +17,9 @@
 
 </script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
   
 <script type="text/babel">
+	alert("SUP");
       ReactDOM.render(
         <h1>Hello, world!</h1>,
         document.getElementById('LEGEND')
@@ -34,7 +34,7 @@
       <div class="navbar-links">
         <a ng-click = "logout()" href = ""><h4>Logout, {{owner}}</h4></a>
         <a ng-click = "profile()" href = ""><h4>My Profile</h4></a>
-        <a ng-click = "addSong()" href = ""><h4>Add a Song</h4></a>
+        <a ng-click = "addSong()" href = "" id="LEGEND"><h4>Add a Song</h4></a>
         <a ng-click="home()" href = "" id="selected-link"><h4>Home</h4></a>
       </div>
     </div>
