@@ -136,6 +136,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         console.log($scope.users);
 		
         //Grab HTML Objects
+		
         $scope.time = document.getElementById("time");
         $scope.songDuration = 0;
 

@@ -7,7 +7,7 @@ angular.module('inTunity.addSong', [
         $scope.search = "";
 		
         var globalPlayer;
-
+		
         var prof = (store.get('profile'));
         $scope.owner;
         if (prof["given_name"] != null) {
