@@ -16,7 +16,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	
 	//Load Track Data
     $http({
-         url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/loadFollowUsers',
+         url: 'http://localhost:3001/secured/account/loadFollowUsers',
         method: 'GET',
 		params: {user_id: userID}
     }).then(function(response) {
@@ -39,7 +39,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		
 		//Code to load multiple songs at once (Store in musicIDS). Useful for timeline.
 		/*$http({
-		 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/song/id_multiple',
+		 url: 'http://localhost:3001/secured/song/id_multiple',
 		 params: {song_ids: musicIDS},
 		 method: 'GET'
 		}).then(function(responseSongs) {
@@ -54,7 +54,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 				var songid = users[i]["today_song"][0];
 					
 				$http({
-				 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/song/id',
+				 url: 'http://localhost:3001/secured/song/id',
 				 params: {song_id: songid, userNum: i},
 				 method: 'GET'
 				}).then(function(responseSong) {
@@ -725,7 +725,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	//Load Track Data
 	$scope.updateTrackSongs = function(){
 		    $http({
-         url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account',
+         url: 'http://localhost:3001/secured/account',
         method: 'GET'
     }).then(function(response) {
         var users = response["data"]["songs"];
@@ -767,7 +767,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 				var songid = users[i]["today_song"][0];
 				
 				$http({
-				 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/song/id',
+				 url: 'http://localhost:3001/secured/song/id',
 				 params: {song_id: songid, userNum: i},
 				 method: 'GET'
 				}).then(function(responseSong) {
