@@ -98,10 +98,10 @@
             <h4 class="col-sm-4 numposts" style="padding: 5px 30px">{{numposts}}<br>{{posts}}</h4>
           </a>
           <a href=""  style = "outline:none" data-toggle="modal" data-target="#myModal" ng-click="updateResults(); " onclick="$(follRTab).addClass('active').siblings().removeClass('active');">
-            <h4 class="col-sm-4 numfollowers" id ="numfollowers">{{numfollowers}} <br> Followers</h4>
+            <h4 class="col-sm-4 numfollowers" id ="numfollowers">{{followers.length}} <br> Followers</h4>
           </a>
           <a href="" style = "outline:none" data-toggle="modal" data-target="#myModal" ng-click="updateResults(); " onclick="$(follGTab).addClass('active').siblings().removeClass('active');">
-            <h4 class="col-sm-4 numfollowing" id="numfollowing">{{numfollowing}} <br> Following</h4>
+            <h4 class="col-sm-4 numfollowing" id="numfollowing">{{following.length}} <br> Following</h4>
           </a>
         </div>
         <a href="" style = "outline:none" data-toggle="modal" data-target="#myModal" ng-click="updateResults(); " onclick="$(addFollTab).addClass('active').siblings().removeClass('active');">

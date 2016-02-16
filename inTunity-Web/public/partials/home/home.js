@@ -7,6 +7,7 @@ app = angular.module('inTunity.home', [
 app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus,$cookies, $rootScope, $q) {
     $scope.auth = auth;
     var prof = (store.get('profile'));
+	
     $scope.owner;
     $scope.fullname;
 	$scope.suggestedFriends = [];
@@ -15,12 +16,14 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		$scope.suggestedFriends = auth.profile.context.mutual_friends.data;
 	}
 
+	//If profile name is an email, use its nickname.
     if (auth.profile.name.indexOf("@") == -1) {
         $scope.fullname = auth.profile.name;
     } else {
         $scope.fullname = prof["nickname"];
     }
 
+	//Grab the user id
     var id = prof["identities"][0]["user_id"];
 	var myUserId = prof["identities"][0]["user_id"];
     var trackarray = [];
@@ -30,7 +33,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	$scope.followersNumber = 0
 	$scope.followingNumber = 0;
     
-		
+	
 	var ids = [];
 	for (var i = 0;i < $scope.suggestedFriends.length; i++){
 		ids.push($scope.suggestedFriends[i]["id"]);
@@ -507,32 +510,30 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	}
 
 
+	//Load the user information from the DataBase
     $scope.getUserInfo = function() {
         $http({
-            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account',
-            method: 'GET'
+            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+            method: 'GET',
+			params: {id: myUserId}
         }).then(function(response) {
-            var data = (response['data']['songs']);
-            for (var i = 0; i < data.length; i++) {
-                if (data[i]["user_id"] == id) {
-                    $scope.profilepic = data[i]["picture"];
-					$scope.followersNumber = data[i]["followers"].length;
-					$scope.followingNumber = data[i]["following"].length;
-					
-                    $scope.numfollowers = data[i]["followers"].length;
-                    $scope.numfollowing = data[i]["following"].length;
-                    var postCount = data[i]["song_history"].length;
-                    if (postCount == 1) {
-                        $scope.numposts =  postCount;
-                        $scope.posts = "Post"
-                    }
-                    else {
-                        $scope.numposts =  postCount;
-                        $scope.posts = "Posts";
-                    };
-                }
-            }
-        });  
+			var myUserObj = response["data"]["user"];
+	
+			$scope.profilepic = myUserObj["picture"];
+			$scope.followers = myUserObj["followers"];
+			$scope.following = myUserObj["following"];
+			
+			var postCount = myUserObj["song_history"].length;
+			if (postCount == 1) {
+				$scope.numposts = postCount;
+				$scope.posts = "Post"
+			}
+			else {
+				$scope.numposts = postCount;
+				$scope.posts = "Posts";
+			};
+                
+            });
     }
 
 
