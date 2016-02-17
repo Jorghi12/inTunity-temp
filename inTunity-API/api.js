@@ -405,5 +405,5 @@ app.post('/secured/account/id/removefollower', function(req, res) {
 var port = process.env.PORT || 3001;
 
 http.createServer(app).listen(port, function (err) {
-  console.log('listening in http://localhost:' + port);
+  console.log('listening in http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:' + port);
 });
