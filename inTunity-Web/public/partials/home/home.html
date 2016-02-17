@@ -98,10 +98,10 @@
             <h4 class="col-sm-4 numposts" style="padding: 5px 30px">{{numposts}}<br>{{posts}}</h4>
           </a>
           <a href=""  style = "outline:none" data-toggle="modal" data-target="#myModal" ng-click="updateResults(); " onclick="$(follRTab).addClass('active').siblings().removeClass('active');">
-            <h4 class="col-sm-4 numfollowers" id ="numfollowers">{{numfollowers}} <br> Followers</h4>
+            <h4 class="col-sm-4 numfollowers" id ="numfollowers">{{followers.length}} <br> Followers</h4>
           </a>
           <a href="" style = "outline:none" data-toggle="modal" data-target="#myModal" ng-click="updateResults(); " onclick="$(follGTab).addClass('active').siblings().removeClass('active');">
-            <h4 class="col-sm-4 numfollowing" id="numfollowing">{{numfollowing}} <br> Following</h4>
+            <h4 class="col-sm-4 numfollowing" id="numfollowing">{{following.length}} <br> Following</h4>
           </a>
         </div>
         <a href="" style = "outline:none" data-toggle="modal" data-target="#myModal" ng-click="updateResults(); " onclick="$(addFollTab).addClass('active').siblings().removeClass('active');">
@@ -160,12 +160,12 @@
                 <a href="" ng-click = "otherprofiles(item['user'][0].url_username)"> <h3>{{item["user"][0].nickname}}</h3></a>
                 <h4>{{item["formattedTime"]}} | {{item["formmatedDay"]}}</h4>
                 <div class="col-md-4">
-                  <h5 ng-click = "likes(item['user_song']['_id'], correctUsers.indexOf(item))" class = "likes" id = "likestatus{{correctUsers.indexOf(item)}}">{{item['user_song'].who_liked.indexOf(myUserId) > -1 ? "Unlike" : "Like"}}</h5>
-                  <h4 id = 'like{{correctUsers.indexOf(item)}}' class = "numLikes">{{item['user_song'].likes}}</h4>
+                  <h5 ng-click = "likes(item['user_song']['_id'], correctUsers.indexOf(item))" class = "likes disable-selection" id = "likestatus{{correctUsers.indexOf(item)}}">{{item['user_song'].who_liked.indexOf(myUserId) > -1 ? "Unlike" : "Like"}}</h5>
+                  <h4 id = 'like{{correctUsers.indexOf(item)}}' class = "disable-selection numLikes">{{item['user_song'].likes}}</h4>
                 </div>
                 <div class="col-md-4">
-                  <h5 ng-click = "favorite(item['user_song']['_id'], correctUsers.indexOf(item))" class = "likes" id = "favorites_status{{correctUsers.indexOf(item)}}">Favorite</h5>
-                  <span id = "favorites{{correctUsers.indexOf(item)}}" class="glyphicon glyphicon-star{{item['user_song'].who_favorited.indexOf(myUserId) > -1 ? '' : '-empty'}}" style="color:{{item['user_song'].who_favorited.indexOf(myUserId) > -1 ? 'red' : 'black'}}"></span>
+                  <h5 ng-click = "favorite(item['user_song']['_id'], correctUsers.indexOf(item))" class = "likes disable-selection" id = "favorites_status{{correctUsers.indexOf(item)}}">Favorite</h5>
+                  <span id = "favorites{{correctUsers.indexOf(item)}}" class="disable-selection glyphicon glyphicon-star{{item['user_song'].who_favorited.indexOf(myUserId) > -1 ? '' : '-empty'}}" style="color:{{item['user_song'].who_favorited.indexOf(myUserId) > -1 ? 'red' : 'black'}}"></span>
                 </div>
                 <div class="col-md-4">
                   <h5>Comment</h5> 
@@ -182,48 +182,7 @@
 
    
 
-  <div class="footer" id = "footer1"  style = "opacity: 0.95;">
-    <div class = "container" id = "widgetContainer">
-
-          <div class = "col-md-6" id = "col1">
-            <div class="row">
-            <div style="float:left">
-              <img crossOrigin = "Anonymous" id = "artwork" style = "width:100px; height:100px; margin:5% 0%; float:left">
-            </div>
-            <div style="margin-left:20px; float:left;width: 65%;text-overflow: ellipsis;white-space: nowrap; overflow: hidden;">
-              <h4>Current:</h4><span id = "songtitle" style = "font-weight: bold"></span>
-              <br>
-              <br>
-              <span style = "font-family: 'Archivo Narrow', sans-serif">Selected by: </span><span style = "font-family: 'Archivo Narrow', sans-serif" id = "currentuser"></span>
-            </div>
-            </div>
-          </div> 
-
-          <div class = "col-sm-12 col-md-6">
-
-            <div class = "row" align="center" id="playerButtons">
-              <!-- <button class="playerButton" id="prevButton" ng-click="prevPlayer()"><h5><b>Previous</b></h5></button> -->
-              <button class="playerButton" id="prevButton" ng-click="prevPlayer()" style="margin:10px 0px; min-height:50px;"><span class = "glyphicon glyphicon-backward"></span></button>
-              <button class="playerButton" id="pauseButton" ng-click ="pause()" style="margin:10px 0px; min-height:50px;"><span class = "glyphicon glyphicon-pause"></span></button>
-              <button class="playerButton" id="nextButton" ng-click="nextPlayer()" style="margin:10px 0px; min-height:50px;"><span class = "glyphicon glyphicon-forward"></span></button>
-
-
-            </div> 
-
-          
-            <div id='audplayer'>
-              <div id='time'>
-                <div id='playHead'></div>
-              </div>
-            </div>
-
-            <h5 id = "currentTime" style="float:left;">0:00</h5>
-            <h5 id = "endTime" style="float:right;">3:00</h5>
-
-          </div>
-
-      </div>
-  </div>
+  
 </div>
 
 

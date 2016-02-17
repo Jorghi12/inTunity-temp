@@ -7,6 +7,7 @@ app = angular.module('inTunity.home', [
 app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus,$cookies, $rootScope, $q) {
     $scope.auth = auth;
     var prof = (store.get('profile'));
+	
     $scope.owner;
     $scope.fullname;
 	$scope.suggestedFriends = [];
@@ -15,12 +16,14 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		$scope.suggestedFriends = auth.profile.context.mutual_friends.data;
 	}
 
+	//If profile name is an email, use its nickname.
     if (auth.profile.name.indexOf("@") == -1) {
         $scope.fullname = auth.profile.name;
     } else {
         $scope.fullname = prof["nickname"];
     }
 
+	//Grab the user id
     var id = prof["identities"][0]["user_id"];
 	var myUserId = prof["identities"][0]["user_id"];
     var trackarray = [];
@@ -30,7 +33,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	$scope.followersNumber = 0
 	$scope.followingNumber = 0;
     
-		
+	
 	var ids = [];
 	for (var i = 0;i < $scope.suggestedFriends.length; i++){
 		ids.push($scope.suggestedFriends[i]["id"]);
@@ -207,7 +210,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			method: 'GET',
 			params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: $scope.followers}
 			}).then(function(response) {
-				
 				$scope.followers = response["data"]["suggestions"][1];
 				$scope.followers_already = response["data"]["suggestions"][3];
 		
@@ -379,6 +381,19 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             song_id: song_id, 
             liked_user_id: id
         });
+		
+		var likestatus = document.getElementById("likestatus" + index);
+		var like = document.getElementById("like" + index);
+		
+		if (likestatus.innerHTML == "Unlike"){
+			like.innerHTML = parseInt(like.innerHTML) - 1;
+			document.getElementById("likestatus" + index).innerHTML = "Like";
+		}
+		else{
+			like.innerHTML = parseInt(like.innerHTML) + 1;
+			document.getElementById("likestatus" + index).innerHTML = "Unlike";
+		}
+				
         $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/likes/song/id', {data: likes}, { 
               headers: {
               'Accept' : '*/*',
@@ -386,14 +401,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
              }
         }).success(function(data, status, headers, config) {
         	console.log(data);
-
-                var likes = document.getElementById("like" + index);
-                likes.innerHTML = data["likes"];
-
-
-                var likestatus = document.getElementById("likestatus" + index);
-                likestatus.innerHTML = data["response"];
-
+				
             })
 		.error(function(data, status, headers, config) {
             console.log(status);
@@ -404,6 +412,17 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	
 	//when you favorite a song
     $scope.favorite = function(song_id, index) {
+		var favorites = document.getElementById("favorites" + index);
+		if (favorites.className == "glyphicon glyphicon-star-empty"){
+			favorites.style.color = "red"
+			favorites.className = "glyphicon glyphicon-star"
+		}
+		else{
+			favorites.style.color = "black"
+			favorites.className = "glyphicon glyphicon-star-empty";
+		} 
+
+				
         var favorites = JSON.stringify({
             posted_user_id: myUserId, 
             song_id: song_id, 
@@ -417,18 +436,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         }).success(function(data, status, headers, config) {
         	console.log(data);
 
-                var favorites = document.getElementById("favorites" + index);
-				if (data["response"] == "UnFavorite"){
-					favorites.style.color = "red"
-					favorites.className = "glyphicon glyphicon-star"
-				}
-				else{
-					favorites.style.color = "black"
-					favorites.className = "glyphicon glyphicon-star-empty";
-				} 
 
-
-                var favorites_status = document.getElementById("favorites_status" + index);
+                //var favorites_status = document.getElementById("favorites_status" + index);
 
             })
 		.error(function(data, status, headers, config) {
@@ -512,32 +521,30 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	}
 
 
+	//Load the user information from the DataBase
     $scope.getUserInfo = function() {
         $http({
-            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account',
-            method: 'GET'
+            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+            method: 'GET',
+			params: {id: myUserId}
         }).then(function(response) {
-            var data = (response['data']['songs']);
-            for (var i = 0; i < data.length; i++) {
-                if (data[i]["user_id"] == id) {
-                    $scope.profilepic = data[i]["picture"];
-					$scope.followersNumber = data[i]["followers"].length;
-					$scope.followingNumber = data[i]["following"].length;
-					
-                    $scope.numfollowers = data[i]["followers"].length;
-                    $scope.numfollowing = data[i]["following"].length;
-                    var postCount = data[i]["song_history"].length;
-                    if (postCount == 1) {
-                        $scope.numposts =  postCount;
-                        $scope.posts = "Post"
-                    }
-                    else {
-                        $scope.numposts =  postCount;
-                        $scope.posts = "Posts";
-                    };
-                }
-            }
-        });  
+			var myUserObj = response["data"]["user"];
+	
+			$scope.profilepic = myUserObj["picture"];
+			$scope.followers = myUserObj["followers"];
+			$scope.following = myUserObj["following"];
+			
+			var postCount = myUserObj["song_history"].length;
+			if (postCount == 1) {
+				$scope.numposts = postCount;
+				$scope.posts = "Post"
+			}
+			else {
+				$scope.numposts = postCount;
+				$scope.posts = "Posts";
+			};
+                
+            });
     }
 
 
