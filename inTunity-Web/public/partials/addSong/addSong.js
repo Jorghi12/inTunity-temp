@@ -168,7 +168,6 @@ angular.module('inTunity.addSong', [
 
                                 $scope.startStreamingAddSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
 
-
                             }
 
                             var confirmSong = document.createElement("div");

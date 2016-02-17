@@ -181,17 +181,18 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         var songPaused = ($cookies.get('songPaused') != null) ? $cookies.get('songPaused') : false;
 
 		//Validity Checks on the cookies
-		if (songNum == NaN){
+		if (isNaN(songNum)){
 			songNum = 0;
 		}
 		
-		if (songPos == NaN){
+		if (isNaN(songPos)){
 			songPos = 0;
 		}
 		
-		if (songPaused == NaN){
+		if (isNaN(songPaused)){
 			songPaused = false;
 		}
+		
         //Update the music status via cookie data
         musicStatus.setStatus(songNum, songPos, songPaused);
 
@@ -503,6 +504,10 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	//Start the SoundCloud Stream (From MainPlaylist)
 	$scope.startStream = function(song_count, pos){
 		songUrl = "";
+		if (isNaN($scope.song_count)){
+			$scope.song_count = 0;
+		}
+		window.money = $scope.song_count;
 		artworkUrl = $scope.trackarray[$scope.song_count % $scope.trackarray.length][1];
 		myTitle =  $scope.trackarray[$scope.song_count % $scope.trackarray.length][2];
 		trackid = $scope.trackarray[$scope.song_count][0];  
@@ -545,7 +550,9 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 			  poster.style.visibility = "hidden";
  
 			  var selectedBy = document.getElementById("selectedBy");
-			  selectedBy.style.visibility = "hidden";
+			  if (document.getElementById("selectedBy") != null){
+				selectedBy.style.visibility = "hidden";
+			  }
 
 
 
