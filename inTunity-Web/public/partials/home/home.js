@@ -148,6 +148,10 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		//Need to load them into the popup (clear popup elements first)
 		//Then load profile pic + Link to Profile (Titled with name) + Checkbox (notifies whether already friends or not)
 		
+		if (searchText.value == "" && $scope.mutualFriendsLoadedONCE){
+			$scope.loadToUI($scope.mutualRecommendedUsers,$scope.mutualRecommendedUsers_already,"");
+			return;
+		}
 		
 		//Grab a list of all the users
 		$http({
@@ -159,12 +163,19 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			//Obtain the search suggestions
 			var s_users = response["data"]["suggestions"][0];
 			
-			//Obtain t he mutual friend suggestions
+			//Obtain the mutual friend suggestions
 			var m_users = response["data"]["suggestions"][1];
 			
 			//already friends?
 			var s_already = response["data"]["suggestions"][2];
 			var m_already = response["data"]["suggestions"][3];
+			
+			//Store mutual suggestions for faster retrieval!
+			$scope.mutualRecommendedUsers = m_users;
+			$scope.mutualRecommendedUsers_already = m_already;
+			
+			//Let's us know we've loaded mutuals already so we don't need to reload every time.
+			$scope.mutualFriendsLoadedONCE = true; 
 			
 			//Which set to use?
 			if (searchText.value == ""){
@@ -172,7 +183,15 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 				already = m_already;
 			}else{
 				users = s_users;
-				already = s_already;
+				already = s_already;				
+				
+				//Remove yourself from the users list!
+				for (var i = 0;i<users.length;i++){
+					if (users[i]["user_id"] == myUserId){
+						users.splice(i,1);
+						already.splice(i,1);
+					}
+				}
 			}
 			
 			$scope.loadToUI(users,already,"");

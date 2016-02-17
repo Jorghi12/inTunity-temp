@@ -120,7 +120,8 @@ angular.module('inTunity.addSong', [
 
                         var obj = (streamableSongs);
                         for (var i = 0; i < obj.length; i++) {
-
+							console.log("LEGENDARY");
+							window.swag = obj;
                             var albumArtwork;
                             if (obj[i]['artwork_url'] != null) {
                                 var album = obj[i]['artwork_url'];
