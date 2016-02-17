@@ -179,7 +179,6 @@ angular.module('inTunity.addSong', [
 
                                 var selectedSong = obj[this.id];
                                 var id = (selectedSong["id"]);
-
                                 numClicked += 1;
                                 if (numClicked == 1) {
                                     $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);

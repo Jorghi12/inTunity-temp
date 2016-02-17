@@ -507,6 +507,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		if (isNaN($scope.song_count)){
 			$scope.song_count = 0;
 		}
+		
 		window.money = $scope.song_count;
 		artworkUrl = $scope.trackarray[$scope.song_count % $scope.trackarray.length][1];
 		myTitle =  $scope.trackarray[$scope.song_count % $scope.trackarray.length][2];
@@ -523,6 +524,169 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		$scope.startStreamFULL(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype, pos);
 	}
 		
+		  $scope.selectSong = function(url, artwork, title, trackid, duration) {
+
+                if (artwork != null) {
+                    var index = artwork.indexOf("large");
+                    updatedSongPic = artwork.substring(0, index) + "t500x500.jpg";
+                } else {
+                    updatedSongPic = "/images/no-art.png";
+                }
+
+
+                var today = new Date();
+
+
+
+
+                var location_error = localStorage.getItem("location-error");
+                var latitude = parseFloat(localStorage.getItem("latitude"));
+                var longitude = parseFloat(localStorage.getItem("longitude"));
+
+                if (location_error == "NO_ERROR" && localStorage.getItem("latitude") != "" && localStorage.getItem("longitude") != "") {
+
+                    var geocoder = new google.maps.Geocoder;
+                    var latlng = {
+                        lat: parseFloat(latitude),
+                        lng: parseFloat(longitude)
+                    };
+
+                    geocoder.geocode({
+                        'location': latlng
+                    }, function(results, status) {
+                        if (status === google.maps.GeocoderStatus.OK) {
+                            if (results[1]) {
+								var city = "";
+								var state = "";
+								var country = "";
+loopOuter:
+								for (var objN = 0; objN < results.length; objN++){
+									for (var ab = 0;ab < results[objN]["address_components"].length; ab++){
+										if (results[objN]["address_components"][ab]["types"].indexOf("locality") > -1){
+											city = results[objN]["address_components"][ab]["short_name"];
+										}
+										
+										else if (results[objN]["address_components"][ab]["types"].indexOf("administrative_area_level_1") > -1){
+											state = results[objN]["address_components"][ab]["short_name"];
+										}
+										
+										else if (results[objN]["address_components"][ab]["types"].indexOf("country") > -1){
+											country = results[objN]["address_components"][ab]["short_name"];
+										}
+										
+										if (city != "" && state != "" && country != ""){
+											break loopOuter;
+										}
+									}
+								}
+								
+								var prof = (store.get('profile'));
+								var userID = prof["identities"][0]["user_id"];
+								
+                                var song = JSON.stringify({
+                                    user_id: userID,
+                                    song_url: url,
+                                    song_artwork: updatedSongPic,
+                                    song_title: title,
+                                    unix_time: today.getTime() / 1000,
+                                    track_id: trackid,
+                                    song_duration: duration,
+                                    state: state,
+                                    city: city,
+                                    locationFlag: true
+                                 
+                                });
+
+
+
+							var expirationDate = new Date();
+							var numberOfDaysToAdd = 10;
+							expirationDate.setDate(expirationDate.getDate() + numberOfDaysToAdd);
+
+                                $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/song', {
+                                    data: song
+                                }, {
+                                    headers: {
+                                        'Accept': '*/*',
+                                        'Content-Type': 'application/json'
+                                    }
+                                }).success(function(data, status, headers, config) {
+
+                                    musicStatus.confirmSong();
+                                    curStats = musicStatus.getStatus();
+                                    $cookies.put('songNum', curStats[0], {
+                                        expires: expirationDate
+                                    });
+                                    $cookies.put('songPos', curStats[1], {
+                                        expires: expirationDate
+                                    });
+                                    $location.path('/');
+
+
+                                }).error(function(data, status, headers, config) {
+                                    console.log(status);
+                                });
+
+                                localStorage.removeItem("latitude");
+                                localStorage.removeItem("longitude");
+                                localStorage.removeItem("location-error");
+
+
+
+                            } else {
+                                window.alert('No results found');
+                            }
+                        } else {
+                            window.alert('Geocoder failed due to: ' + status);
+                        }
+                    });
+                } else {
+                    // there is location error
+                    var song = JSON.stringify({
+                        user_id: id,
+                        song_url: url,
+                        song_artwork: updatedSongPic,
+                        song_title: title,
+                        unix_time: today.getTime() / 1000,
+                        track_id: trackid,
+                        song_duration: duration,
+                        locationFlag: false
+                    });
+
+
+                    $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/song', {
+                        data: song
+                    }, {
+                        headers: {
+                            'Accept': '*/*',
+                            'Content-Type': 'application/json'
+                        }
+                    }).success(function(data, status, headers, config) {
+                        console.log(status);
+                        localStorage.removeItem("location-error");
+                        musicStatus.confirmSong();
+                        curStats = musicStatus.getStatus();
+                        $cookies.put('songNum', curStats[0], {
+                            expires: expirationDate
+                        });
+                        $cookies.put('songPos', curStats[1], {
+                            expires: expirationDate
+                        });
+                        $location.path('/');
+
+
+                    }).error(function(data, status, headers, config) {
+                        console.log(status);
+                    });
+
+                } // end of else statement
+
+
+
+
+            } // end of selectSong()
+			
+			
     //Start the SoundCloud Stream!
 	$scope.startStreamFULL = function(songUrl, artworkUrl, myTitle, trackid, songDuration, userDisplay, pagetype, pos) {
         $scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
