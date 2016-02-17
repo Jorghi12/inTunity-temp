@@ -377,6 +377,19 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
             song_id: song_id, 
             liked_user_id: id
         });
+		
+		var likestatus = document.getElementById("likestatus" + index);
+		var like = document.getElementById("like" + index);
+		
+		if (likestatus.innerHTML == "Unlike"){
+			like.innerHTML = parseInt(like.innerHTML) - 1;
+			document.getElementById("likestatus" + index).innerHTML = "Like";
+		}
+		else{
+			like.innerHTML = parseInt(like.innerHTML) + 1;
+			document.getElementById("likestatus" + index).innerHTML = "Unlike";
+		}
+				
         $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/likes/song/id', {data: likes}, { 
               headers: {
               'Accept' : '*/*',
@@ -384,14 +397,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
              }
         }).success(function(data, status, headers, config) {
         	console.log(data);
-
-                var likes = document.getElementById("like" + index);
-                likes.innerHTML = data["likes"];
-
-
-                var likestatus = document.getElementById("likestatus" + index);
-                likestatus.innerHTML = data["response"];
-
+				
             })
 		.error(function(data, status, headers, config) {
             console.log(status);
@@ -402,6 +408,17 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	
 	//when you favorite a song
     $scope.favorite = function(song_id, index) {
+		var favorites = document.getElementById("favorites" + index);
+		if (favorites.className == "glyphicon glyphicon-star-empty"){
+			favorites.style.color = "red"
+			favorites.className = "glyphicon glyphicon-star"
+		}
+		else{
+			favorites.style.color = "black"
+			favorites.className = "glyphicon glyphicon-star-empty";
+		} 
+
+				
         var favorites = JSON.stringify({
             posted_user_id: myUserId, 
             song_id: song_id, 
@@ -415,18 +432,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
         }).success(function(data, status, headers, config) {
         	console.log(data);
 
-                var favorites = document.getElementById("favorites" + index);
-				if (data["response"] == "UnFavorite"){
-					favorites.style.color = "red"
-					favorites.className = "glyphicon glyphicon-star"
-				}
-				else{
-					favorites.style.color = "black"
-					favorites.className = "glyphicon glyphicon-star-empty";
-				} 
 
-
-                var favorites_status = document.getElementById("favorites_status" + index);
+                //var favorites_status = document.getElementById("favorites_status" + index);
 
             })
 		.error(function(data, status, headers, config) {

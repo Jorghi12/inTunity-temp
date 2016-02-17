@@ -28,98 +28,90 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		
 		//Deterministically calculate the total number of users who have a song!
 		var total_num_possible = 0;
-		//var musicIDS = [];
+		var musicIDS = [];
 		
         for (var i = 0; i < users.length; i++) {
             if (users[i]["today_song"].length > 0) {
 				total_num_possible +=1;
-				//musicIDS.push(users[i]["today_song"][0]);
+				musicIDS.push(users[i]["today_song"][0]);
 			}
 		}
 		
 		//Code to load multiple songs at once (Store in musicIDS). Useful for timeline.
-		/*$http({
+		$http({
 		 url: 'http://localhost:3001/secured/song/id_multiple',
 		 params: {song_ids: musicIDS},
 		 method: 'GET'
 		}).then(function(responseSongs) {
-			;
-		})*/
+			//Helps keep 1 to 1 mapping with pulled songs from Mongoose (They have undefined ordering..)
+			var songs = responseSongs["data"]["user"];
 		
-		
-        // makes sure we only show users who have songs
-        for (var i = 0; i < users.length; i++) {
-            if (users[i]["today_song"].length > 0) {
-				//Pull Song from 
-				var songid = users[i]["today_song"][0];
-					
-				$http({
-				 url: 'http://localhost:3001/secured/song/id',
-				 params: {song_id: songid, userNum: i},
-				 method: 'GET'
-				}).then(function(responseSong) {
-					userNumber = responseSong["data"]["userNumber"];
-					responseSong = responseSong["data"]["user"];
-					var date = new Date(responseSong["unix_time"] * 1000);
-					var year = date.getFullYear();
-					var month = date.getMonth();
-					var day = date.getDate();
-					var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
-					var formmatedDay = monthNames[month] + " " + day + ", " + year;
-					var hours = date.getHours();
-					var minutes = "0" + date.getMinutes();
-					var am_pm = "AM";
-					if (hours == 12) {
-						am_pm = "PM";
-					}
-					if (hours > 12) {
-						hours = hours - 12;
-						am_pm = "PM";
-					}
-					if (hours == 0) {
-						hours = 12;
-					}
-					
-					var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
-					
-					$scope.correctUsers.push({
-						user: new Array(users[userNumber]),
-						formattedTime: formattedTime,
-						formmatedDay: formmatedDay,
-						unix_time: responseSong["unix_time"] * 1000,
-						user_song: responseSong
-					});
-
-					$scope.trackarray.push(new Array(responseSong["track_id"], responseSong["song_album_pic"], responseSong["song_title"], responseSong["song_duration"]));
+			for (var i = 0;i < musicIDS.length;i++){
+				responseSong = songs[i];
 				
-					//Auto Start if the last newsfeed item
-					//Asynch programming
-					if ($scope.trackarray.length == total_num_possible){
-						//Auto Start Song
-						
-						$scope.TOGETHER = [];
-						
-						for (var j =0;j < $scope.correctUsers.length;j++){
-							$scope.TOGETHER.push({"song":$scope.trackarray[j],"user":$scope.correctUsers[j]})
-						}
-						
-						//Sort by Unix Time
-						$scope.TOGETHER.sort(function(a, b) {
-								return new Date(b.user.unix_time) - new Date(a.user.unix_time);
-								
-						});
-						
-						for (var j =0;j < $scope.correctUsers.length;j++){
-							$scope.trackarray[j] = $scope.TOGETHER[j].song;
-							$scope.correctUsers[j] = $scope.TOGETHER[j].user;
-						}
-						
-						$scope.autoStart();
+				for (var x = 0; x < users.length; x++){
+					if (users[x]._id == responseSong.who_posted){
+						userNumber = x;
 					}
+				}
+				
+				var date = new Date(responseSong["unix_time"] * 1000);
+				var year = date.getFullYear();
+				var month = date.getMonth();
+				var day = date.getDate();
+				var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+				var formmatedDay = monthNames[month] + " " + day + ", " + year;
+				var hours = date.getHours();
+				var minutes = "0" + date.getMinutes();
+				var am_pm = "AM";
+				if (hours == 12) {
+					am_pm = "PM";
+				}
+				if (hours > 12) {
+					hours = hours - 12;
+					am_pm = "PM";
+				}
+				if (hours == 0) {
+					hours = 12;
+				}
+				
+				var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
+				
+				$scope.correctUsers.push({
+					user: new Array(users[userNumber]),
+					formattedTime: formattedTime,
+					formmatedDay: formmatedDay,
+					unix_time: responseSong["unix_time"] * 1000,
+					user_song: responseSong
 				});
 
-            }
-        } // end of for loop
+				$scope.trackarray.push(new Array(responseSong["track_id"], responseSong["song_album_pic"], responseSong["song_title"], responseSong["song_duration"]));
+			
+				//Auto Start if the last newsfeed item
+				//Asynch programming
+			  }
+		  
+				//Auto Start Song
+				$scope.TOGETHER = [];
+				
+				for (var j =0;j < $scope.correctUsers.length;j++){
+					$scope.TOGETHER.push({"song":$scope.trackarray[j],"user":$scope.correctUsers[j]})
+				}
+				
+				//Sort by Unix Time
+				$scope.TOGETHER.sort(function(a, b) {
+						return new Date(b.user.unix_time) - new Date(a.user.unix_time);
+						
+				});
+				
+				for (var j =0;j < $scope.correctUsers.length;j++){
+					$scope.trackarray[j] = $scope.TOGETHER[j].song;
+					$scope.correctUsers[j] = $scope.TOGETHER[j].user;
+				}
+				
+				$scope.autoStart();
+				
+			});
 
 	
 		console.log($scope.correctUsers);
@@ -136,7 +128,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         console.log($scope.users);
 		
         //Grab HTML Objects
-		
         $scope.time = document.getElementById("time");
         $scope.songDuration = 0;
 
@@ -224,19 +215,17 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
     //Updates cookie data if Angular detects movement to another page (within Intunity).
     $rootScope.$on('$routeChangeStart', function(event, next, current) {
+		
+				
+	  var prevButton = document.getElementById("prevButton");
+	  prevButton.style.visibility = "visible";
+
+	  var nextButton = document.getElementById("nextButton");
+	  nextButton.style.visibility = "visible";
+
         $cookies.put('routeChange', true, {
             expires: $scope.cookieExpirationDate()
         });
-		
-		//If just logging in don't update cookies + turn on auto play
-		if (current["loadedTemplateUrl"] == "/partials/login/login.html"){
-			$cookies.put('songPaused', false, {
-				expires: $scope.cookieExpirationDate()
-			});
-		}
-		else{
-			$scope.updateCookieData();
-		}
     });
 
 
