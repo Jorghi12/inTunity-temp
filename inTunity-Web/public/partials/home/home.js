@@ -210,7 +210,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			method: 'GET',
 			params: {searchString: $scope.searchUsers, userID: myUserId, suggestedFriends: $scope.followers}
 			}).then(function(response) {
-				
 				$scope.followers = response["data"]["suggestions"][1];
 				$scope.followers_already = response["data"]["suggestions"][3];
 		
