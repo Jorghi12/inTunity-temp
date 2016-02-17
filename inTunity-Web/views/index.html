@@ -67,14 +67,12 @@
 
 
   <!--This loads the view for our page-->
-  <body style = "margin:0">
+  <body style = "margin:0" ng-controller="StreamCtrl">
     <div ng-view></div>
 
 
 
     
-  </body>
-   
  <div class="footer" id = "footer1"  style = "opacity: 0.95;">
     <div class = "container" id = "widgetContainer">
 
@@ -89,12 +87,12 @@
               <br>
               <span style = "font-family: 'Archivo Narrow', sans-serif">Selected by: </span><span style = "font-family: 'Archivo Narrow', sans-serif" id = "currentuser"></span>
             </div>
-            </div>
+            </div>	
           </div> 
 
           <div class = "col-sm-12 col-md-6">
 
-            <div class = "row" align="center" id="playerButtons" ng-controller="StreamCtrl">
+            <div class = "row" align="center" id="playerButtons">
               <!-- <button class="playerButton" id="prevButton" ng-click="prevPlayer()"><h5><b>Previous</b></h5></button> -->
               <button class="playerButton" id="prevButton" ng-click="prevPlayer()" style="margin:10px 0px; min-height:50px;"><span class = "glyphicon glyphicon-backward"></span></button>
               <button class="playerButton" id="pauseButton" ng-click ="pause()" style="margin:10px 0px; min-height:50px;"><span class = "glyphicon glyphicon-pause"></span></button>
@@ -117,4 +115,6 @@
 
       </div>
   </div>
+ </body>
+   
 </html>
