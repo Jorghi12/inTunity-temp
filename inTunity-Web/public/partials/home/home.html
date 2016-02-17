@@ -45,10 +45,10 @@
         <h4 class="modal-title" style="text-align: center;">Add followers</h4>
       </div>
   
-		<ul class="nav nav-tabs btn-group" id="tabContent" style="width:100%;font-size:15px;font-weight:bolder" ng-click="pullPeople()">
-			<li class="active" id="addFollTab" style="width:33.333%"><a href="" data-toggle="tab" class="btn btn-primary">Add Followers</a></li>
-			<li id="follRTab" style="width:33.333%"><a href="" data-toggle="tab" class="btn btn-primary">Followers</a></li>
-			<li id="follGTab" style="width:33.333%"><a href "" data-toggle="tab" class="btn btn-primary">Following</a></li>
+		<ul class="nav nav-tabs btn-group" id="tabContent" style="width:100%;font-size:15px;font-weight:bolder">
+			<li class="active" id="addFollTab" style="width:33.333%"><a href="" data-toggle="tab" ng-click="pullPeople('')" class="btn btn-primary">Add Followers</a></li>
+			<li id="follRTab" style="width:33.333%"><a href="" data-toggle="tab" class="btn btn-primary" ng-click="pullPeople('followers')">Followers</a></li>
+			<li id="follGTab" style="width:33.333%"><a href "" data-toggle="tab" class="btn btn-primary" ng-click="pullPeople('following')">Following</a></li>
 		</ul>
 		
       <div class="modal-body" id="modalBase">

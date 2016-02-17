@@ -272,7 +272,9 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			var already = $scope.following_already;
 		}
 		else{
-			;//Impossible Case
+			//Only other case -> Add Followers
+			$scope.findUsers();
+			return;
 		}
 		
 		$scope.loadToUI(users,already,"filter");
@@ -307,6 +309,8 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		}
 		else{
 			//Impossible case.
+			$scope.findUsers();
+			alert($scope.mutualFriendsLoadedONCE);
 		}
 	}
 	
