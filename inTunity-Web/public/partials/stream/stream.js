@@ -234,20 +234,28 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	  //Check if logged in first to prevent accidently showing these buttons
 	 var prof = (store.get('profile'));
 	 if (prof){
+		$("#footer1").show();
+		$("#footer1").children().show();
+		
+		var userID = prof["identities"][0]["user_id"];
+		$scope.loadSongsFromServer();
+	 }
+	 else{
+		$("#footer1").hide();
+		$("#footer1").children().hide();
+	 }
+	 
+	 if (prof){
 		  var prevButton = document.getElementById("prevButton");
 		  prevButton.style.visibility = "visible";
 
 		  var nextButton = document.getElementById("nextButton");
 		  nextButton.style.visibility = "visible";
 	 }
-	 else{
-		 
-		$("#footer1").hide();
-		$("#footer1").children().hide();
-	 }
+	 
         $cookies.put('routeChange', true, {
             expires: $scope.cookieExpirationDate()
-        });
+        }); 
     });
 
 
