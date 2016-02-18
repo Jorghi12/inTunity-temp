@@ -74,6 +74,19 @@ angular.module( 'inTunity.login', [
 			expires: $scope.cookieExpirationDate()
 		});
 			
+	 //var prof = (store.get('profile'));
+	 //if (prof){
+		$("#footer1").show();
+		$("#footer1").children().show();
+		
+		//var userID = prof["identities"][0]["user_id"];
+		window.loadSongsFromServer();
+	 //}
+	 //else{
+	//	$("#footer1").hide();
+	//	$("#footer1").children().hide();
+	// }
+	 
       $location.path("/");
 
       $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account', {data: user_account}, { 

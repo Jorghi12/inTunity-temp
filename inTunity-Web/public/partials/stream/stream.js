@@ -174,6 +174,8 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		});
 	}
 
+	window.loadSongsFromServer = $scope.loadSongsFromServer;
+	
     //Loads the current player state (song number, song position, song pause state) from the user cookies.
     $scope.loadSongDataFromCookies = function() {
         var songNum = ($cookies.get('songNum') != null) ? $cookies.get('songNum') % $scope.trackarray.length : 0;
@@ -228,27 +230,20 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 
     //Updates cookie data if Angular detects movement to another page (within Intunity).
-    $rootScope.$on('$routeChangeStart', function(event, next, current) {
-     var prof = (store.get('profile'));
-	 if (prof){
-		$("#footer1").show();
-		$("#footer1").children().show();
-		
-		var userID = prof["identities"][0]["user_id"];
-		$scope.loadSongsFromServer();
-	 }
-	 else{
-		$("#footer1").hide();
-		$("#footer1").children().hide();
-	 }
-	 
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {	 
 	  //Check if logged in first to prevent accidently showing these buttons
+	 var prof = (store.get('profile'));
 	 if (prof){
 		  var prevButton = document.getElementById("prevButton");
 		  prevButton.style.visibility = "visible";
 
 		  var nextButton = document.getElementById("nextButton");
 		  nextButton.style.visibility = "visible";
+	 }
+	 else{
+		 
+		$("#footer1").hide();
+		$("#footer1").children().hide();
 	 }
         $cookies.put('routeChange', true, {
             expires: $scope.cookieExpirationDate()
@@ -304,7 +299,6 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		//HIDE PLAYER
 		$("#footer1").hide();
 		$("#footer1").children().hide();
-		
 
         //STOP SOUND PLAYER
         if (window.globalPlayer != null) {
