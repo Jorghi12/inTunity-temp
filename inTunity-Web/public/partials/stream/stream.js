@@ -535,7 +535,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 			var today = new Date();
 
-
+			
 			var location_error = localStorage.getItem("location-error");
 			var latitude = parseFloat(localStorage.getItem("latitude"));
 			var longitude = parseFloat(localStorage.getItem("longitude"));

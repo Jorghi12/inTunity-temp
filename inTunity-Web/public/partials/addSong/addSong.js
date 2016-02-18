@@ -222,6 +222,10 @@ angular.module('inTunity.addSong', [
 
         $scope.selectSong = function(url, artwork, title, trackid, duration) {
 
+				var confirmButtonOBJ = document.getElementById("confirmButtonOBJ");
+				var playerButtons = document.getElementById("playerButtons");
+				playerButtons.removeChild(confirmButtonOBJ);
+					
                 if (artwork != null) {
                     var index = artwork.indexOf("large");
                     updatedSongPic = artwork.substring(0, index) + "t500x500.jpg";
