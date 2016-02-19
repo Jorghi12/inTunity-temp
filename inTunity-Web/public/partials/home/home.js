@@ -435,14 +435,15 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	
 	//when you favorite a song
     $scope.favorite = function(song_id, index) {
-	
-		// if (favorites.className == "glyphicon glyphicon-star-empty"){
-		
-		// }
-		// else{
-		// 	favorites.style.color = "black"
-		// 	favorites.className = "glyphicon glyphicon-star-empty";
-		// } 
+		var favorites = document.getElementById("favorites" + index);
+
+		if (favorites.className == "disable-selection glyphicon glyphicon-star-empty"){
+			favorites.style.color = "red"
+			favorites.className = "disable-selection glyphicon glyphicon-star"
+		} else if (favorites.className == "disable-selection glyphicon glyphicon-star") {
+			favorites.style.color = "black"
+			favorites.className = "disable-selection glyphicon glyphicon-star-empty";
+		} 
 
 				
         var favorite = JSON.stringify({
@@ -456,17 +457,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
               'Content-Type': 'application/json'
              }
         }).success(function(data, status, headers, config) {
-			var favorites = document.getElementById("favorites" + index);
-        	if (data["response"] == "Favorite") {
-				favorites.style.color = "black"
-				favorites.className = "glyphicon glyphicon-star-empty";
-        	} else {
-        		favorites.style.color = "red"
-				favorites.className = "glyphicon glyphicon-star"
-        	}
 
-             var favorites_status = document.getElementById("favorites_status" + index);
-             //favorites_status.innerHTML = data["response"];
 
         }).error(function(data, status, headers, config) {
             console.log(status);
