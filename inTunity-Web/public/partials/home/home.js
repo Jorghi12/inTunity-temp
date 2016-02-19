@@ -435,35 +435,40 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	
 	//when you favorite a song
     $scope.favorite = function(song_id, index) {
-		var favorites = document.getElementById("favorites" + index);
-		if (favorites.className == "glyphicon glyphicon-star-empty"){
-			favorites.style.color = "red"
-			favorites.className = "glyphicon glyphicon-star"
-		}
-		else{
-			favorites.style.color = "black"
-			favorites.className = "glyphicon glyphicon-star-empty";
-		} 
+	
+		// if (favorites.className == "glyphicon glyphicon-star-empty"){
+		
+		// }
+		// else{
+		// 	favorites.style.color = "black"
+		// 	favorites.className = "glyphicon glyphicon-star-empty";
+		// } 
 
 				
-        var favorites = JSON.stringify({
+        var favorite = JSON.stringify({
             posted_user_id: myUserId, 
             song_id: song_id, 
             liked_user_id: id
         });
-        $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/favorite/song/id', {data: favorites}, { 
+        $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/favorite/song/id', {data: favorite}, { 
               headers: {
               'Accept' : '*/*',
               'Content-Type': 'application/json'
              }
         }).success(function(data, status, headers, config) {
-        	console.log(data);
+			var favorites = document.getElementById("favorites" + index);
+        	if (data["response"] == "Favorite") {
+				favorites.style.color = "black"
+				favorites.className = "glyphicon glyphicon-star-empty";
+        	} else {
+        		favorites.style.color = "red"
+				favorites.className = "glyphicon glyphicon-star"
+        	}
 
+             var favorites_status = document.getElementById("favorites_status" + index);
+             //favorites_status.innerHTML = data["response"];
 
-                //var favorites_status = document.getElementById("favorites_status" + index);
-
-            })
-		.error(function(data, status, headers, config) {
+        }).error(function(data, status, headers, config) {
             console.log(status);
         });
        
