@@ -732,8 +732,7 @@ loopOuter:
                 numClicked += 1;
                 if (numClicked == 1) {
 					var confirmButtonOBJ = document.getElementById("confirmButtonOBJ");
-					var playerButtons = document.getElementById("playerButtons");
-					playerButtons.removeChild(confirmButtonOBJ);
+					confirmButtonOBJ.parentNode.removeChild(confirmButtonOBJ);
                     $scope.selectSong(songUrl, artworkUrl, myTitle, trackid, songDuration);
                 }
 				
@@ -761,8 +760,7 @@ loopOuter:
                 numClicked += 1;
                 if (numClicked == 1) {
 					var confirmButtonOBJ = document.getElementById("confirmButtonOBJ");
-					var playerButtons = document.getElementById("playerButtons");
-					playerButtons.removeChild(confirmButtonOBJ);
+					confirmButtonOBJ.parentNode.removeChild(confirmButtonOBJ);
                     $scope.selectSong(songUrl, artworkUrl, myTitle, trackid, songDuration);
 	
                 }
