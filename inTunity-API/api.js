@@ -6,16 +6,8 @@ var jwt = require('express-jwt');
 var dotenv = require('dotenv');
 var request = require('request');
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var webpack = require('webpack');
 dotenv.load();
 
-new webpack.DefinePlugin({
-  "process.env": {
-    NODE_ENV: JSON.stringify("production")
-  }
-});
 
 var authenticate = jwt({ 
   secret: new Buffer(process.env.AUTH0_CLIENT_SECRET, 'base64'),
