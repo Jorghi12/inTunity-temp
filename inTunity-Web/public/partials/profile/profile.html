@@ -64,11 +64,11 @@
   </div>
    
   <div id = "contentsongs">
-    <div id = "song-grid" align="center" ng-repeat = "item in my_profile_songs | orderBy:'-unix_time' " >
-      <div id="{{item._id}}" class="col-md-4 song-tile">
+    <div id = "song-grid" align="center" ng-repeat = "(index,item) in my_profile_songs | orderBy:'-unix_time' " >
+      <div id="songBackground{{index}}" class="col-md-4 song-tile">
         <a class = "delete" value = '{{item}}'>
         </a>
-        <a href="" ng-click = 'startStreamingProfileSong(item.song_url,item.song_album_pic,item.song_title,item.track_id,item.song_duration)'>
+        <a href="" ng-click = 'startStreamingProfileSong(index)'>
           
             <img class="song-image" ng-src="{{item.song_album_pic}}">
             <h4>{{item.song_title}}</h4>
