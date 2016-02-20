@@ -753,7 +753,7 @@ loopOuter:
 		  }
 		  else{
               var numClicked = 0;
-			  var confirmButton = document.getElementById("playerConfirm");
+			  var confirmButton = document.getElementById("confirmButtonOBJ");
 			  confirmButton.onclick = function() {
 
                 // this is to prevent button smashing (i.e. getting like 5 same songs)
@@ -767,7 +767,7 @@ loopOuter:
 				
 			  }
 			  
-			  var confirmButton = document.getElementById("playerConfirm");
+			  var confirmButton = document.getElementById("confirmButtonOBJ");
 			  confirmButton.style.visibility = "visible";
 			  
 			  var confirmTitle = document.getElementById("confirmTitle");
