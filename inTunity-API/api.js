@@ -34,6 +34,26 @@ app.get('/secured/ping', function(req, res) {
   res.send(200, {text: "All good. You only get this message if you're authenticated"});
 });
 
+app.get('/secured/dummy', function(req, res) {
+ request({
+      url: "https://api.spotify.com/v1/search", //URL to hit
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      method: 'GET', //Specify the method,
+      qs: {q: "Kendrick Lamar", type: "artist"}
+  }, function(error, response, body){
+      if(error) {
+          console.log(error);
+      } else {
+        if (response.statusCode == 200) {
+          var data = JSON.parse(response.body);
+          res.send(200, {songs: data});
+        }
+      }
+  });
+});
+
 
 // adding a new account
 app.post('/secured/account', function(req, res) {
