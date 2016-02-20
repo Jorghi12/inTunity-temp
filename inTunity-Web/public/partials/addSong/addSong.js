@@ -7,6 +7,21 @@ angular.module('inTunity.addSong', [
         $scope.search = "";
 		
         var globalPlayer;
+
+
+
+        $http({
+            url: 'http://localhost:3000/secured/dummy',
+            method: 'GET'
+        }).then(function(response) {
+            console.log(response["response"]);
+           
+
+        }); // end of http get
+
+
+
+
 		
         var prof = (store.get('profile'));
         $scope.owner;
@@ -67,7 +82,7 @@ angular.module('inTunity.addSong', [
 
         $scope.profile = function() {
             $http({
-                url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+                url: 'http://localhost:3001/secured/account/id',
                 method: 'GET',
                 params: {
                     id: id
@@ -293,7 +308,7 @@ loopOuter:
 
 
 
-                                $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/song', {
+                                $http.post('http://localhost:3001/secured/account/id/song', {
                                     data: song
                                 }, {
                                     headers: {
@@ -344,7 +359,7 @@ loopOuter:
                     });
 
 
-                    $http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/song', {
+                    $http.post('http://localhost:3001/secured/account/id/song', {
                         data: song
                     }, {
                         headers: {
