@@ -9,15 +9,20 @@ angular.module('inTunity.addSong', [
         var globalPlayer;
 
 
+        $scope.findGenre = function(searchartist) {
+            $http({
+                url: 'http://localhost:3001/secured/search-genre',
+                method: 'GET',
+                params: {
+                    artist: searchartist
+                }
+            }).then(function(response) {
+                console.log(response);
+               
 
-        $http({
-            url: 'http://localhost:3000/secured/dummy',
-            method: 'GET'
-        }).then(function(response) {
-            console.log(response["response"]);
-           
-
-        }); // end of http get
+            }); // end of http get
+        }
+        
 
 
 
