@@ -130,13 +130,14 @@ angular.module('inTunity.profile', [
                     likes:responseSong["likes"]
     			});
 				
+				
+			if ($scope.my_profile_songs.length == songCollectionArray.length){
 				$scope.my_profile_songs.sort(function(a, b) {
 					// Turn your strings into dates, and then subtract them
 					// to get a value that is either negative, positive, or zero.
-					return new Date(b.unix_time) - new Date(a.unix_time);
+					return new Date(a.unix_time) - new Date(b.unix_time);
 				});
 				
-			if ($scope.my_profile_songs.length == songCollectionArray.length){
 			   $http({
 				url: 'http://localhost:3001/secured/account/id',
 				method: 'GET',

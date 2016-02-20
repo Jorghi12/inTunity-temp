@@ -25,7 +25,7 @@ angular.module('inTunity.addSong', [
         
 
 
-
+		console.log($scope.findGenre("Drake"));
 
 		
         var prof = (store.get('profile'));
