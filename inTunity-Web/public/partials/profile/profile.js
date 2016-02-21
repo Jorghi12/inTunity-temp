@@ -43,7 +43,7 @@ angular.module('inTunity.profile', [
 
     $scope.profile = function() {
         $http({
-            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+            url: 'http://localhost:3001/secured/account/id',
             method: 'GET',
             params: {
                 id: id
@@ -58,7 +58,7 @@ angular.module('inTunity.profile', [
 	$scope.loadSongsOnProfile = function(historyORfav){
 		//historyORfav .. history = 0, favorite = 1
 	$http({
-		url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/url_username',
+		url: 'http://localhost:3001/secured/account/url_username',
 		method: 'GET',
 		params: {
 			url_username: $routeParams.itemId
@@ -88,7 +88,7 @@ angular.module('inTunity.profile', [
 		var songCollectionArray = ((historyORfav == 0) ? $scope.correctPerson.song_history : $scope.correctPerson.favorited_songs);
 		for (var i = 0; i < songCollectionArray.length; i++){
     		$http({
-    		 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/song/id',
+    		 url: 'http://localhost:3001/secured/song/id',
     		 params: {song_id: songCollectionArray[i]},
     		 method: 'GET'
     		}).then(function(responseSong) {
@@ -139,7 +139,7 @@ angular.module('inTunity.profile', [
 				});
 				
 			   $http({
-				url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+				url: 'http://localhost:3001/secured/account/id',
 				method: 'GET',
 				params: {
 					id: id
@@ -171,33 +171,16 @@ angular.module('inTunity.profile', [
 					}
 				}); // end of http get
 			}
-          
+             
     		});
 
             
 		}
 		
-		$scope.current_profile_song = 0;
-        $scope.startStreamingProfileSong = function(itemNum) {
-			//-1 means on profile list
-			if (itemNum == -1){	
-				itemNum = $scope.current_profile_song;
-			}
-			
-			//Un-Highlight the rest
-			for (var i = 0;i < $scope.my_profile_songs.length;i++){
-				$("#songBackground" + i)[0].style.background = "";
-			}
-			
-			//Highlight the button
-			$("#songBackground" + itemNum)[0].style.background = "rgb(255, 228, 196)";
-			
-			var item = $scope.my_profile_songs[itemNum];
-			$scope.current_profile_song = (itemNum +1) % $scope.my_profile_songs.length;
-            window.startStreamCustom(item.song_url, item.song_album_pic, item.song_title, item.track_id, item.song_duration, $scope.owner,"profile",false);
-        }
 		
-		window.autoSlideNextSong = $scope.startStreamingProfileSong;
+        $scope.startStreamingProfileSong = function(songUrl, artworkUrl, myTitle, trackid, duration) {
+            window.startStreamCustom(songUrl, artworkUrl, myTitle, trackid, duration, $scope.owner,"profile",false);
+        }
 
     });
 	}
@@ -224,11 +207,22 @@ angular.module('inTunity.profile', [
 	
     $scope.loadSongsOnProfile(0);
 
-    // for deleting a particular song on your own account
+
+
+
+
+
+
+ 
+
+
+
+
+      // for deleting a particular song on your own account
     $scope.deleteSong = function(userid, songid, song_track_id) {
 
         $http({
-            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+            url: 'http://localhost:3001/secured/account/id',
             method: 'GET',
             params: {
                 id: id
@@ -239,7 +233,7 @@ angular.module('inTunity.profile', [
 
             if (username_clicked == ownpersonalusername) {
                 console.log("about to delete...");
-                $http.delete('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/song/id', {
+                $http.delete('http://localhost:3001/secured/account/id/song/id', {
                     headers: {
                         'Accept': '*/*',
                         'Content-Type': 'application/json'

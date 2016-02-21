@@ -9,6 +9,7 @@ angular.module('inTunity.addSong', [
         var globalPlayer;
 
 
+<<<<<<< HEAD
 
         $http({
             url: 'http://localhost:3000/secured/dummy',
@@ -21,6 +22,25 @@ angular.module('inTunity.addSong', [
 
 
 
+=======
+        $scope.findGenre = function(searchartist) {
+            $http({
+                url: 'http://localhost:3001/secured/search-genre',
+                method: 'GET',
+                params: {
+                    artist: searchartist
+                }
+            }).then(function(response) {
+                console.log(response);
+               
+
+            }); // end of http get
+        }
+        
+
+
+		console.log($scope.findGenre("Drake"));
+>>>>>>> 9ba94cf8b160ad83fb54401d405ae21e2e422763
 
 		
         var prof = (store.get('profile'));
@@ -236,6 +256,8 @@ angular.module('inTunity.addSong', [
 
 
         $scope.selectSong = function(url, artwork, title, trackid, duration) {
+				var confirmButtonOBJ = document.getElementById("confirmButtonOBJ");
+				confirmButtonOBJ.parentNode.removeChild(confirmButtonOBJ);
 					
                 if (artwork != null) {
                     var index = artwork.indexOf("large");

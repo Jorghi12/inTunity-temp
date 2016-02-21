@@ -20,7 +20,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	
 		//Load Track Data
 		$http({
-			 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/loadFollowUsers',
+			 url: 'http://localhost:3001/secured/account/loadFollowUsers',
 			method: 'GET',
 			params: {user_id: userID}
 		}).then(function(response) {
@@ -43,7 +43,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 			
 			//Code to load multiple songs at once (Store in musicIDS). Useful for timeline.
 			$http({
-			 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/song/id_multiple',
+			 url: 'http://localhost:3001/secured/song/id_multiple',
 			 params: {song_ids: musicIDS},
 			 method: 'GET'
 			}).then(function(responseSongs) {
@@ -174,7 +174,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		});
 	}
 
-	//window.loadSongsFromServer = $scope.loadSongsFromServer;
+	window.loadSongsFromServer = $scope.loadSongsFromServer;
 	
     //Loads the current player state (song number, song position, song pause state) from the user cookies.
     $scope.loadSongDataFromCookies = function() {
@@ -288,11 +288,11 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         }
     }
 
-	/*$scope.pullIt = function(){
+	$scope.pullIt = function(){
 		return $scope.song_count;
-	}*/
+	}
 	
-	//window.getIt = $scope.pullIt;
+	window.getIt = $scope.pullIt;
 	
     //Logout of Intunity
     $scope.logout = function() {
@@ -456,7 +456,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
 	// this is for updating home song after profile removal of song
 	$scope.updateProfileSong = function(){
-		$scope.loadSongsFromServer();
+		$scope.updateTrackSongs();
 	}
 	window.updateProfileSong = $scope.updateProfileSong;
 
@@ -602,7 +602,7 @@ loopOuter:
 						var numberOfDaysToAdd = 10;
 						expirationDate.setDate(expirationDate.getDate() + numberOfDaysToAdd);
 
-							$http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/song', {
+							$http.post('http://localhost:3001/secured/account/id/song', {
 								data: song
 							}, {
 								headers: {
@@ -653,7 +653,7 @@ loopOuter:
 				});
 
 
-				$http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/song', {
+				$http.post('http://localhost:3001/secured/account/id/song', {
 					data: song
 				}, {
 					headers: {
@@ -753,7 +753,7 @@ loopOuter:
 		  }
 		  else{
               var numClicked = 0;
-			  var confirmButton = document.getElementById("playerConfirm");
+			  var confirmButton = document.getElementById("confirmButtonOBJ");
 			  confirmButton.onclick = function() {
 
                 // this is to prevent button smashing (i.e. getting like 5 same songs)
@@ -767,7 +767,7 @@ loopOuter:
 				
 			  }
 			  
-			  var confirmButton = document.getElementById("playerConfirm");
+			  var confirmButton = document.getElementById("confirmButtonOBJ");
 			  confirmButton.style.visibility = "visible";
 			  
 			  var confirmTitle = document.getElementById("confirmTitle");
@@ -860,13 +860,7 @@ loopOuter:
 			
                 if (length == globalPlayer.currentTime()) {
 					//Return to Pause Mode for addsong + profile
-					
-					if ((pagetype == "profile") && $location.path() != "/"){
-						globalPlayer.seek(0); //Do this before startStream
-						window.autoSlideNextSong(-1);
-					}
-					
-					else if ((pagetype == "addsong") && $location.path() != "/"){
+					if ((pagetype == "addsong" || pagetype == "profile") && $location.path() != "/"){
 						var pauseButton = document.getElementById('pauseButton');
 						pauseButton.innerHTML = "";
 
@@ -923,11 +917,146 @@ loopOuter:
 		//Currently Playing Song
 		if ($scope.trackID == trackID){
 			//Continue playing previous song. ($scope.song_count) instead of ($scope.song_count + 1)
-			$scope.loadSongsFromServer();
+			$scope.updateTrackSongs();
 		}
 	}
 	
 	window.nextSong = $scope.nextSong;
+	
+	//Update the Mainfeed TrackSongs
+	//Load Track Data
+	$scope.updateTrackSongs = function(){
+		    $http({
+         url: 'http://localhost:3001/secured/account',
+        method: 'GET'
+    }).then(function(response) {
+        var users = response["data"]["songs"];
+		
+		//Deterministically calculate the total number of users who have a song!
+		var total_num_possible = 0;
+		
+        for (var i = 0; i < users.length; i++) {
+            if (users[i]["today_song"].length > 0) {
+				total_num_possible +=1;
+			}
+		}
+		
+		//No songs available on the newsfeed.
+		if (total_num_possible == 0){
+			 //STOP SOUND PLAYER
+			if (window.globalPlayer != null) {
+				artworkUrl = "";
+				myTitle =  "";
+				songDuration = "";
+				userDisplay = "";
+				
+				$scope.setGraphics(userDisplay,artworkUrl,myTitle,songDuration);
+				window.globalPlayer.pause();
+				$scope.startStream = null;
+				window.globalPlayer = null;
+			}
+			return;
+		}
+		
+        // this array has users who only have songs for today with it
+        $scope.correctUsers = [];
+		$scope.trackarray = [];
+		
+        // makes sure we only show users who have songs #GAINS
+        for (var i = 0; i < users.length; i++) {
+            if (users[i]["today_song"].length > 0) {
+				//Pull Song from 
+				var songid = users[i]["today_song"][0];
+				
+				$http({
+				 url: 'http://localhost:3001/secured/song/id',
+				 params: {song_id: songid, userNum: i},
+				 method: 'GET'
+				}).then(function(responseSong) {
+					userNumber = responseSong["data"]["userNumber"];
+					responseSong = responseSong["data"]["user"];
+					var date = new Date(responseSong["unix_time"] * 1000);
+					var year = date.getFullYear();
+					var month = date.getMonth();
+					var day = date.getDate();
+					var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+					var formmatedDay = monthNames[month] + " " + day + ", " + year;
+					var hours = date.getHours();
+					var minutes = "0" + date.getMinutes();
+					var am_pm = "AM";
+					if (hours == 12) {
+						am_pm = "PM";
+					}
+					if (hours > 12) {
+						hours = hours - 12;
+						am_pm = "PM";
+					}
+					if (hours == 0) {
+						hours = 12;
+					}
+					
+					var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
+					$scope.correctUsers.push({
+						user: new Array(users[userNumber]),
+						formattedTime: formattedTime,
+						formmatedDay: formmatedDay,
+						unix_time: responseSong["unix_time"] * 1000,
+						user_song: responseSong
+					});
+					
+					$scope.trackarray.push(new Array(responseSong["track_id"], responseSong["song_album_pic"], responseSong["song_title"], responseSong["song_duration"]));
+						
+					if ($scope.trackarray.length == total_num_possible){
+						//Auto Start Song
+						
+						$scope.TOGETHER = [];
+						
+						for (var j =0;j < $scope.correctUsers.length;j++){
+							$scope.TOGETHER.push({"song":$scope.trackarray[j],"user":$scope.correctUsers[j]})
+						}
+						
+						//Sort by Unix Time
+						$scope.TOGETHER.sort(function(a, b) {
+								return new Date(b.user.unix_time) - new Date(a.user.unix_time);
+								
+						});
+						
+						for (var j =0;j < $scope.correctUsers.length;j++){
+							$scope.trackarray[j] = $scope.TOGETHER[j].song;
+							$scope.correctUsers[j] = $scope.TOGETHER[j].user;
+						}
+
+						//Different song
+						var newSong = false;
+						if ($scope.trackarray[$scope.song_count][0] != $scope.trackID){
+							$scope.song_count = ($scope.song_count) % $scope.trackarray.length;
+							musicStatus.setStatus($scope.song_count, 0, false);
+							newSong = true;
+						}
+						
+						//If currently playing start stream
+						if (window.globalPlayer._isPlaying)
+						{
+							//If a different song needs to be played
+							if (newSong){
+								globalPlayer.seek(0);
+								$scope.startStream($scope.song_count,0);
+							}
+						}
+						else
+						{
+							$scope.startStream($scope.song_count,-2000);
+						}
+					}
+					
+				});
+
+            }
+        } // end of for loop
+
+		
+    });
+	}
 	
     //Starts the player on Page Load
     $scope.autoStart = function() {
