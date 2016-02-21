@@ -131,13 +131,23 @@ angular.module('inTunity.profile', [
     			});
 				
 				
-			if ($scope.my_profile_songs.length == songCollectionArray.length){
+				
 				$scope.my_profile_songs.sort(function(a, b) {
 					// Turn your strings into dates, and then subtract them
 					// to get a value that is either negative, positive, or zero.
 					return new Date(a.unix_time) - new Date(b.unix_time);
 				});
 				
+				
+			if ($scope.my_profile_songs.length == songCollectionArray.length){
+				
+				$scope.my_profile_songs.sort(function(a, b) {
+					// Turn your strings into dates, and then subtract them
+					// to get a value that is either negative, positive, or zero.
+					return new Date(a.unix_time) - new Date(b.unix_time);
+				});
+				
+				//GAINS UPON GAINS!				
 			   $http({
 				url: 'http://localhost:3001/secured/account/id',
 				method: 'GET',
@@ -171,16 +181,33 @@ angular.module('inTunity.profile', [
 					}
 				}); // end of http get
 			}
-             
+          
     		});
 
             
 		}
 		
-		
-        $scope.startStreamingProfileSong = function(songUrl, artworkUrl, myTitle, trackid, duration) {
-            window.startStreamCustom(songUrl, artworkUrl, myTitle, trackid, duration, $scope.owner,"profile",false);
+		$scope.current_profile_song = 0;
+        $scope.startStreamingProfileSong = function(itemNum) {
+			//-1 means on profile list
+			if (itemNum == -1){	
+				itemNum = $scope.current_profile_song;
+			}
+			
+			//Un-Highlight the rest
+			for (var i = 0;i < $scope.my_profile_songs.length;i++){
+				$("#songBackground" + i)[0].style.background = "";
+			}
+			
+			//Highlight the button
+			$("#songBackground" + itemNum)[0].style.background = "rgb(255, 228, 196)";
+			
+			var item = $scope.my_profile_songs[itemNum];
+			$scope.current_profile_song = (itemNum +1) % $scope.my_profile_songs.length;
+            window.startStreamCustom(item.song_url, item.song_album_pic, item.song_title, item.track_id, item.song_duration, $scope.owner,"profile",false);
         }
+		
+		window.autoSlideNextSong = $scope.startStreamingProfileSong;
 
     });
 	}
@@ -207,18 +234,7 @@ angular.module('inTunity.profile', [
 	
     $scope.loadSongsOnProfile(0);
 
-
-
-
-
-
-
- 
-
-
-
-
-      // for deleting a particular song on your own account
+    // for deleting a particular song on your own account
     $scope.deleteSong = function(userid, songid, song_track_id) {
 
         $http({
