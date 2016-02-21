@@ -9,9 +9,9 @@ angular.module('inTunity.addSong', [
         var globalPlayer;
 
 
-        $scope.findGenre = function(searchartist) {
+       $scope.findGenre = function(searchartist) {
             $http({
-                url: 'http://localhost:3001/secured/search-genre',
+                url: 'http://localhost:3001/secured/artist/search-genre',
                 method: 'GET',
                 params: {
                     artist: searchartist
@@ -23,9 +23,7 @@ angular.module('inTunity.addSong', [
             }); // end of http get
         }
         
-
-
-		console.log($scope.findGenre("Drake"));
+        $scope.findGenre("Drake");
 
 		
         var prof = (store.get('profile'));
