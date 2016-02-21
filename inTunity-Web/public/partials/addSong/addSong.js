@@ -266,7 +266,7 @@ angular.module('inTunity.addSong', [
 
             $("#confirmSong").on("click", function(){ 
                 alert("test");
-                $scope.selectSong(obj["permalink_url"], obj["artwork_url"], obj["title"], id, obj["duration"]);
+                $scope.selectSong(obj["permalink_url"], obj["artwork_url"], obj["title"], obj["id"], obj["duration"]);
 				$('#genreModal').modal('hide');
             });
           
