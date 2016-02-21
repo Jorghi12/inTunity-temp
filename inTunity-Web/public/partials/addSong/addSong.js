@@ -241,7 +241,9 @@ angular.module('inTunity.addSong', [
 
         $scope.selectSong = function(url, artwork, title, trackid, duration) {
 				var confirmButtonOBJ = document.getElementById("confirmButtonOBJ");
-				confirmButtonOBJ.parentNode.removeChild(confirmButtonOBJ);
+				if (confirmButtonOBJ != null){
+					confirmButtonOBJ.parentNode.removeChild(confirmButtonOBJ);
+				}
 					
                 if (artwork != null) {
                     var index = artwork.indexOf("large");
