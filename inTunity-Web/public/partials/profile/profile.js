@@ -116,7 +116,7 @@ angular.module('inTunity.profile', [
     			}
 
     			var formattedTime = hours + ':' + minutes.substr(-2) + " " + am_pm;
-       
+        
 
 
     			$scope.my_profile_songs.push({
@@ -267,19 +267,19 @@ angular.module('inTunity.profile', [
 
 					
 
-					for (var i =0;i<$scope.correctPerson["song_history"].length;i++){
-						if ($scope.correctPerson["song_history"][i] == songid){
-							songHtmlObj = document.getElementById($scope.correctPerson["song_history"][i]);
+					for (var i =0;i<$scope.my_profile_songs.length;i++){
+						if ($scope.my_profile_songs[i]._id == songid){
+							songHtmlObj = document.getElementById("songBackground" + i);
 							console.log("SWAG");
 							console.log(songHtmlObj);
 							$(songHtmlObj).remove();
 							
-                            $scope.numPosts = $scope.correctPerson["song_history"].length;
+                            $scope.numPosts = $scope.my_profile_songs.length;
 
-							$scope.correctPerson["song_history"].splice(i,1);
-							
+							$scope.my_profile_songs.splice(i,1);
+							  
 							//Do this in order to delete the first occurance (in case the id hashing fails - not likely)
-							i = $scope.correctPerson["song_history"].length;
+							i = $scope.my_profile_songs.length;
 							
 							//Update Number of Posts
 							var postObj = document.getElementById("numPostsObject");

@@ -51,7 +51,7 @@
     </div>
 
 
-
+ 
 
     <!-- <h4 id="numPostsObject">{{numPosts}} posts</h4> -->
   </div>
@@ -61,7 +61,7 @@
       <li role="presentation" id = "history" class="active"><a href="#" ng-click = "getHistory()">History</a></li>
       <li role="presentation" id = "favorites"><a href="#" ng-click = "getFavorited()">Favorited</a></li>
     </ul>
-  </div>
+  </div>  
    
   <div id = "contentsongs">
     <div id = "song-grid" align="center" ng-repeat = "(index,item) in my_profile_songs | orderBy:'-unix_time' " >
@@ -72,7 +72,7 @@
           
             <img class="song-image" ng-src="{{item.song_album_pic}}">
             <h4>{{item.song_title}}</h4>
-            <h5>Posted: {{item.formmatedDay}}</h5>
+            <h5>Posted: {{item.formmatedDay}}</h5> 
             <h5>Likes: {{item.likes}}</h5>
             <!--<h5>100 Views | 15 Likes</h5>-->
           

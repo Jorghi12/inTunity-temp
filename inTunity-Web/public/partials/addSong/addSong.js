@@ -7,11 +7,11 @@ angular.module('inTunity.addSong', [
         $scope.search = "";
 		
         var globalPlayer;
-
+ 
 
         $scope.findGenre = function(searchartist) {
             console.log(searchartist);
-            $http({
+            $http({ 
                 url: 'http://localhost:3001/secured/artist/search-genre',
                 method: 'GET',
                 params: {

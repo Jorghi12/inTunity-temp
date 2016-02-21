@@ -12,7 +12,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     $scope.fullname;
 	$scope.suggestedFriends = [];
     
-	if (auth.profile.context != null){
+	if (auth.profile.context != null){  
 		$scope.suggestedFriends = auth.profile.context.mutual_friends.data;
 	}
 
