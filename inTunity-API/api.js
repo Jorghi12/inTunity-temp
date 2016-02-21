@@ -34,6 +34,8 @@ app.get('/secured/ping', function(req, res) {
   res.send(200, {text: "All good. You only get this message if you're authenticated"});
 });
 
+
+// search for a particular artist
 app.get('/secured/artist/search-genre', function(req, res) {
  request({
       url: "https://api.spotify.com/v1/search", //URL to hit
@@ -41,9 +43,30 @@ app.get('/secured/artist/search-genre', function(req, res) {
       'Content-Type': 'application/json'
       },
       method: 'GET', //Specify the method,
-      qs: {q: "Drake", type: "artist"}
+      qs: {q: req.query["artist"], type: "artist"}
   }, function(error, response, body){
-    console.log(response.body)
+      if(error) {
+          console.log(error);
+      } else {
+        if (response.statusCode == 200) {
+          var data = JSON.parse(response.body);
+          res.send(200, {result: data});
+        }
+      }
+  });
+});
+
+
+// search for a particular track
+app.get('/secured/search/track/', function(req, res) {
+ request({
+      url: "https://api.spotify.com/v1/search", //URL to hit
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      method: 'GET', //Specify the method,
+      qs: {query: req.query["title"], type: "track"}
+  }, function(error, response, body){
       if(error) {
           console.log(error);
       } else {

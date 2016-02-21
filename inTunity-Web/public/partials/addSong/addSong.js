@@ -7,9 +7,9 @@ angular.module('inTunity.addSong', [
         $scope.search = "";
 		
         var globalPlayer;
+
 		
-        $scope.findGenre = function(searchartist) {
-            console.log(searchartist);
+        $scope.findGenreFromArtist = function(searchartist) {
             $http({ 
                 url: 'http://localhost:3001/secured/artist/search-genre',
                 method: 'GET',
@@ -17,13 +17,34 @@ angular.module('inTunity.addSong', [
                     artist: searchartist
                 }
             }).then(function(response) {
-                console.log(response);
-               
-
+                var obj = response["data"]["result"]["artists"]["items"];
+                console.log(obj);
+                for (var i = 0; i < obj.length; i++) {
+                    if (obj[i]["name"] == searchartist) {
+                        console.log(obj[i]["genres"]);
+                    }
+                }
             }); // end of http get
         }
-        
-        $scope.findGenre("Drake");
+
+         $scope.findArtistFromTitle = function(title) {
+            $http({ 
+                url: 'http://localhost:3001/secured/search/track/',
+                method: 'GET',
+                params: {
+                    title: title
+                }
+            }).then(function(response) {
+                console.log(response);
+                var obj = response["data"]["result"]["tracks"]["items"][0]["artists"][0]["name"];
+                $scope.findGenreFromArtist(obj);
+            }); // end of http get
+        }
+
+
+
+
+
 
 		
         var prof = (store.get('profile'));
@@ -197,10 +218,11 @@ angular.module('inTunity.addSong', [
 
                                 var selectedSong = obj[this.id];
                                 var id = (selectedSong["id"]);
-                                numClicked += 1;
-                                if (numClicked == 1) {
-                                    $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
-                                }
+                                // numClicked += 1;
+                                // if (numClicked == 1) {
+                                    $scope.confirmGenre(selectedSong);
+                                    //$scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
+                                // }
 
                               
 
@@ -235,6 +257,21 @@ angular.module('inTunity.addSong', [
         var expirationDate = new Date();
         var numberOfDaysToAdd = 10;
         expirationDate.setDate(expirationDate.getDate() + numberOfDaysToAdd);
+
+
+        $scope.confirmGenre = function(obj) {
+            $scope.findArtistFromTitle(obj["title"]);
+
+            $("#genreModal").modal();
+
+            $("#confirmButton").on("click", function(){ 
+                alert("test");
+                $scope.selectSong(obj["permalink_url"], obj["artwork_url"], obj["title"], id, obj["duration"]);
+            });
+          
+
+        }
+        
 
 
 
