@@ -21,7 +21,7 @@ angular.module('inTunity.addSong', [
                 console.log(obj);
                 for (var i = 0; i < obj.length; i++) {
                     if (obj[i]["name"] == searchartist) {
-                        console.log(obj[i]["genres"]);
+                        return (obj[i]["genres"]);
                     }
                 }
             }); // end of http get
@@ -35,9 +35,11 @@ angular.module('inTunity.addSong', [
                     title: title
                 }
             }).then(function(response) {
-                console.log(response);
-                var obj = response["data"]["result"]["tracks"]["items"][0]["artists"][0]["name"];
-                $scope.findGenreFromArtist(obj);
+                var obj = response["data"]["result"]["tracks"]["items"][0]["artists"];
+                for (var i = 0; i < obj.length; i++) {
+                     $scope.findGenreFromArtist(obj[i]["name"]);
+                }
+               
             }); // end of http get
         }
 
@@ -260,12 +262,11 @@ angular.module('inTunity.addSong', [
 
 
         $scope.confirmGenre = function(obj) {
+ 
             $scope.findArtistFromTitle(obj["title"]);
 
             $("#genreModal").modal();
-
             $("#confirmSong").on("click", function(){ 
-                alert("test");
                 $scope.selectSong(obj["permalink_url"], obj["artwork_url"], obj["title"], obj["id"], obj["duration"]);
 				$('#genreModal').modal('hide');
             });
