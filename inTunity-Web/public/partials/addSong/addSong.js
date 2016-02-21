@@ -264,9 +264,10 @@ angular.module('inTunity.addSong', [
 
             $("#genreModal").modal();
 
-            $("#confirmButton").on("click", function(){ 
+            $("#confirmSong").on("click", function(){ 
                 alert("test");
                 $scope.selectSong(obj["permalink_url"], obj["artwork_url"], obj["title"], id, obj["duration"]);
+				$('#genreModal').modal('hide');
             });
           
 
