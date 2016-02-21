@@ -12,6 +12,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         console.log("test");
 		var prof = (store.get('profile'));
 		var id = prof["identities"][0]["user_id"];
+		
         $http({
             url: 'http://localhost:3001/secured/account/id',
             method: 'GET',
@@ -30,7 +31,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
         $location.path('/');
     }
 
-    $scope.addSong = function() {
+    $scope.addSong = function($event) {
         $location.path('/add-song');
     }
 	
@@ -41,7 +42,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 	$scope.loadSongsFromServer = function(){
 		var prof = (store.get('profile'));
 		var userID = prof["identities"][0]["user_id"];
-		
+
 		SC.initialize({
 			client_id: 'a17d2904e0284ac32f1b5f9957fd7c3f'
 		});
@@ -263,11 +264,12 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     //Updates cookie data if Angular detects movement to another page (within Intunity).
     $rootScope.$on('$routeChangeStart', function(event, next, current) {	 
 	  //Check if logged in first to prevent accidently showing these buttons
-	 var prof = (store.get('profile'));
-	 if (prof){
+	 
+	 if (auth["isAuthenticated"]){
 		$("#footer1").show();
 		$("#footer1").children().show();
 		
+		var prof = (store.get('profile'));
 		var userID = prof["identities"][0]["user_id"];
 		$scope.loadSongsFromServer();
 	 }
@@ -276,7 +278,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 		$("#footer1").children().hide();
 	 }
 	 
-	 if (prof){
+	 if (auth["isAuthenticated"]){
 		  var prevButton = document.getElementById("prevButton");
 		  prevButton.style.visibility = "visible";
 

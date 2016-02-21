@@ -208,6 +208,9 @@ router.get('/api/account/id/search' , function (req, res, next) {
 		}
 
 		User.find({"user_id": { $in: ids}}, function(err, suggestedFriends) {
+			if ((typeof req.query["searchString"]) != "string"){
+				req.query["searchString"] = "";
+			}
 			User.find({"nickname" : { "$regex": req.query["searchString"], "$options": "i" }}, function(err, userObj) {
 				  if (err) {
 					console.log(err);
