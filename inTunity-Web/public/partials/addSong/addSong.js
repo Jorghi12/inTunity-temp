@@ -8,6 +8,44 @@ angular.module('inTunity.addSong', [
 		
         var globalPlayer;
 
+		$scope.pullSongInfo_FromEchoNest = function(songObj){
+			var song_title = songObj["title"];
+			var song_artist = songObj["name"];
+			
+			//songObj["tag_list"] may provide information about the artist that we could parse.
+			
+			
+			$http({ 
+                url: 'http://localhost:3001/secured/EchoNest/SearchSong',
+                method: 'GET',
+                params: {
+					api_key: "V1RYZWZCKQTDXGWAB",
+                    artist: song_artist,
+					title: song_title
+                }
+            }).then(function(response) {
+				var songs = response["data"]["result"]["response"]["songs"];
+				//Making the assumption that EchoNest's searching system is perfect, so results are in order of likelihood being correct.
+				//So for now just use the first matching result. Maybe let user verify or add other checking measures in the future.
+				window.outputX = songs;
+				var matchingSong = songs[0];
+				var songId = songs[0]["id"];
+				
+				//Pull the Song's Genre and Other information
+				$http({ 
+                url: 'http://localhost:3001/secured/EchoNest/PullSongInfo',
+                method: 'GET',
+                params: {
+					api_key: "V1RYZWZCKQTDXGWAB",
+                    song_id: songId
+                }
+				}).then(function(response2) {
+					var song = response2["data"]["result"]["response"]["songs"][0];
+					var song_genre = song["song_type"];
+					alert(song_genre);
+				})
+            }); // end of http get
+		}
 		
         $scope.findGenreFromArtist = function(searchartist) {
             $http({ 
@@ -264,7 +302,8 @@ angular.module('inTunity.addSong', [
         $scope.confirmGenre = function(obj) {
  
             $scope.findArtistFromTitle(obj["title"]);
-
+			$scope.pullSongInfo_FromEchoNest(obj);
+				
             $("#genreModal").modal();
             $("#confirmSong").on("click", function(){ 
                 $scope.selectSong(obj["permalink_url"], obj["artwork_url"], obj["title"], obj["id"], obj["duration"]);

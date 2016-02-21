@@ -34,6 +34,48 @@ app.get('/secured/ping', function(req, res) {
   res.send(200, {text: "All good. You only get this message if you're authenticated"});
 });
 
+//api_key=V1RYZWZCKQTDXGWAB&format=json&id=SOCZMFK12AC468668F&bucket=audio_summary
+//Pull Song info from EchoNest
+app.get('/secured/EchoNest/PullSongInfo', function(req, res) {
+ request({
+      url: "http://developer.echonest.com/api/v4/song/profile", //URL to hit
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      method: 'GET', //Specify the method,
+      qs: {api_key: req.query["api_key"],id: req.query["song_id"], format:"json", bucket:"song_type"} //"audio_summary"
+  }, function(error, response, body){
+      if(error) {
+          console.log(error);
+      } else {
+        if (response.statusCode == 200) {
+          var data = JSON.parse(response.body);
+          res.send(200, {result: data});
+        }
+      }
+  });
+});
+
+//Search a song on EchoNest
+app.get('/secured/EchoNest/SearchSong', function(req, res) {
+ request({
+      url: "http://developer.echonest.com/api/v4/song/search", //URL to hit
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      method: 'GET', //Specify the method,                          Allowing artist makes results more accurate. But if our artist query is wrong.. we end up with nothing.
+      qs: {api_key: req.query["api_key"],title: req.query["title"]}//,artist: req.query["artist"]}
+  }, function(error, response, body){
+      if(error) {
+          console.log(error);
+      } else {
+        if (response.statusCode == 200) {
+          var data = JSON.parse(response.body);
+          res.send(200, {result: data});
+        }
+      }
+  });
+});
 
 // search for a particular artist
 app.get('/secured/artist/search-genre', function(req, res) {
