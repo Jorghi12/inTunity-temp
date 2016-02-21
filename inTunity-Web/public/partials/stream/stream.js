@@ -3,7 +3,38 @@ app = angular.module('inTunity.stream', [
 ]);
 
 app.controller('StreamCtrl', function StreamController($scope, auth, $http, $location, store, $compile, musicStatus, $cookies, $rootScope) {
-    //Load player Paused state
+    $scope.logout = function(){
+		//Calls the logout code inside stream.js
+		window.logout();
+	}
+		
+    $scope.profile = function() {
+        console.log("test");
+		var prof = (store.get('profile'));
+		var id = prof["identities"][0]["user_id"];
+        $http({
+            url: 'http://localhost:3001/secured/account/id',
+            method: 'GET',
+            params: {
+                id: id
+            }
+        }).then(function(response) {
+            console.log("hit");
+            username_url = response["data"]["user"]["url_username"];
+            store.set('username_clicked', username_url);
+            $location.path('/profile/' + username_url);
+        }); // end of http get
+    }
+
+    $scope.home = function() {
+        $location.path('/');
+    }
+
+    $scope.addSong = function() {
+        $location.path('/add-song');
+    }
+	
+	//Load player Paused state
     var paused = (musicStatus.getStatus()[2] != null) ? musicStatus.getStatus()[2] : false;
     $scope.song_count = 0;
 	

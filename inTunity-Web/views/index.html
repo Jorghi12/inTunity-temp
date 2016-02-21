@@ -67,7 +67,22 @@
 
 
   <!--This loads the view for our page-->
+  <!--NAVBAR-->
   <body style = "margin:0" ng-controller="StreamCtrl">
+<nav class="navbar navbar-default navbar-fixed-top" style = "border:1px solid black;">
+  <div class="container">
+    <div class="logo">
+      <a ng-click = "home()" href = ""><img src="images/logo.png" height="50px"></a>
+      <div class="navbar-links">
+        <a ng-click = "logout()" href = ""><h4>Logout, {{owner}}</h4></a>
+        <a ng-click = "profile()" href = ""><h4>My Profile</h4></a>
+        <a ng-click = "addSong()" href = "" id="LEGEND"><h4>Add a Song</h4></a>
+        <a ng-click="home()" href = "" id="selected-link"><h4>Home</h4></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
     <div ng-view></div>
 
 

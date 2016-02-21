@@ -258,9 +258,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 			
 		});
 	}
-	
-	$scope.loadFollower_Following_Lists();
-	
+
 	//Same as "Add Followers" code.. but literally just pulling from your followers list
 	$scope.pullPeople = function(people){
 		if (people == "followers"){
@@ -283,8 +281,6 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		$scope.updateResults(); 
 	});
-	
-	$scope.loadFollower_Following_Lists();
 
 	$scope.updateResults = function(){
 		//Find which choice has been tabbed
@@ -370,9 +366,10 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 		//Calls the logout code inside stream.js
 		window.logout();
 	}
-	
+		
     $scope.profile = function() {
         console.log("test");
+		var id = prof["identities"][0]["user_id"];
         $http({
             url: 'http://localhost:3001/secured/account/id',
             method: 'GET',
@@ -599,6 +596,7 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
 
       $scope.getUserInfo();
       $scope.getAllLocations();
+	  $scope.loadFollower_Following_Lists();
 
 
 
