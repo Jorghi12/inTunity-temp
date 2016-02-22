@@ -8,9 +8,24 @@ angular.module('inTunity.addSong', [
 		
         var globalPlayer;
 
+        
+
+       
+
 		$scope.pullSongInfo_FromEchoNest = function(songObj){
-			var song_title = songObj["title"];
+
+           
+			var title = songObj["title"];
+
+            // convert punctuations to spaces
+            var title2 = title.replace(/['";:,~\/?\\-]/g, ' ');
+
+            // convert multiple white space to single white space
+            var song_title = title2.replace(/\s\s+/g, ' ');
+
+
 			var song_artist = songObj["name"];
+
 			
 			//songObj["tag_list"] may provide information about the artist that we could parse.
 			
@@ -24,26 +39,65 @@ angular.module('inTunity.addSong', [
 					title: song_title
                 }
             }).then(function(response) {
+                console.log(response);
+
 				var songs = response["data"]["result"]["response"]["songs"];
 				//Making the assumption that EchoNest's searching system is perfect, so results are in order of likelihood being correct.
 				//So for now just use the first matching result. Maybe let user verify or add other checking measures in the future.
 				window.outputX = songs;
 				var matchingSong = songs[0];
 				var songId = songs[0]["id"];
+
+
+                var energy = songs[0]["audio_summary"]["energy"];
+                var danceability = songs[0]["audio_summary"]["danceability"];
+                var tempo = songs[0]["audio_summary"]["tempo"];
 				
 				//Pull the Song's Genre and Other information
 				$http({ 
-                url: 'http://localhost:3001/secured/EchoNest/PullSongInfo',
-                method: 'GET',
-                params: {
-					api_key: "V1RYZWZCKQTDXGWAB",
-                    song_id: songId
-                }
+                    url: 'http://localhost:3001/secured/EchoNest/PullSongInfo',
+                    method: 'GET',
+                    params: {
+    					api_key: "V1RYZWZCKQTDXGWAB",
+                        song_id: songId
+                    }
 				}).then(function(response2) {
+
+                    var c = document.getElementById("genre-body");
+                    c.innerHTML = "";
+
 					var song = response2["data"]["result"]["response"]["songs"][0];
 					var song_genre = song["song_type"];
-					alert(song_genre);
-				})
+
+                    var info = document.createElement("p");
+                    info.innerHTML = "Energy: " + energy + ", Dance: " + danceability + ", Tempo: " + tempo;
+                    c.appendChild(info);
+
+                    for (var i = 0; i < song_genre.length; i++) {
+
+                        var row = document.createElement("div");
+                        row.className = "row";
+
+                        var e = document.createElement("input");
+                        e.setAttribute("type", "radio");
+                        e.setAttribute("value", song_genre[i]);
+                        e.setAttribute("checked", true);
+                        e.setAttribute("name", song_genre[i]);
+
+                        var txt = document.createElement("span");
+                        txt.innerHTML = song_genre[i];
+                       
+                 
+
+                
+                        row.appendChild(e);
+                        row.appendChild(txt);
+                        c.appendChild(row);
+                    }
+             
+				});
+
+
             }); // end of http get
 		}
 		
@@ -301,10 +355,13 @@ angular.module('inTunity.addSong', [
 
         $scope.confirmGenre = function(obj) {
  
-            $scope.findArtistFromTitle(obj["title"]);
+            //$scope.findArtistFromTitle(obj["title"]);
 			$scope.pullSongInfo_FromEchoNest(obj);
 				
             $("#genreModal").modal();
+            var c = document.getElementById("genre-body");
+            c.innerHTML = "";
+
             $("#confirmSong").on("click", function(){ 
                 $scope.selectSong(obj["permalink_url"], obj["artwork_url"], obj["title"], obj["id"], obj["duration"]);
 				$('#genreModal').modal('hide');

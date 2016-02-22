@@ -56,6 +56,10 @@ app.get('/secured/EchoNest/PullSongInfo', function(req, res) {
   });
 });
 
+
+
+
+
 //Search a song on EchoNest
 app.get('/secured/EchoNest/SearchSong', function(req, res) {
  request({
@@ -64,7 +68,7 @@ app.get('/secured/EchoNest/SearchSong', function(req, res) {
       'Content-Type': 'application/json'
       },
       method: 'GET', //Specify the method,                          Allowing artist makes results more accurate. But if our artist query is wrong.. we end up with nothing.
-      qs: {api_key: req.query["api_key"],title: req.query["title"]}//,artist: req.query["artist"]}
+      qs: {api_key: req.query["api_key"],title: req.query["title"], bucket: "audio_summary"}//,artist: req.query["artist"]}
   }, function(error, response, body){
       if(error) {
           console.log(error);
