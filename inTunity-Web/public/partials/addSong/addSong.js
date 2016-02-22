@@ -44,60 +44,63 @@ angular.module('inTunity.addSong', [
 				var songs = response["data"]["result"]["response"]["songs"];
 				//Making the assumption that EchoNest's searching system is perfect, so results are in order of likelihood being correct.
 				//So for now just use the first matching result. Maybe let user verify or add other checking measures in the future.
-				window.outputX = songs;
-				var matchingSong = songs[0];
-				var songId = songs[0]["id"];
-
-
-                var energy = songs[0]["audio_summary"]["energy"];
-                var danceability = songs[0]["audio_summary"]["danceability"];
-                var tempo = songs[0]["audio_summary"]["tempo"];
 				
-				//Pull the Song's Genre and Other information
-				$http({ 
-                    url: 'http://localhost:3001/secured/EchoNest/PullSongInfo',
-                    method: 'GET',
-                    params: {
-    					api_key: "V1RYZWZCKQTDXGWAB",
-                        song_id: songId
-                    }
-				}).then(function(response2) {
+				
+				
 
-                    var c = document.getElementById("genre-body");
-                    c.innerHTML = "";
+                if (songs.length > 0) {
+                    window.outputX = songs;
+                    var matchingSong = songs[0];
+                    var songId = songs[0]["id"];
+                    var energy = songs[0]["audio_summary"]["energy"];
+                    var danceability = songs[0]["audio_summary"]["danceability"];
+                    var tempo = songs[0]["audio_summary"]["tempo"];
 
-					var song = response2["data"]["result"]["response"]["songs"][0];
-					var song_genre = song["song_type"];
 
-                    var info = document.createElement("p");
-                    info.innerHTML = "Energy: " + energy + ", Dance: " + danceability + ", Tempo: " + tempo;
-                    c.appendChild(info);
+                    //Pull the Song's Genre and Other information
+                    $http({ 
+                        url: 'http://localhost:3001/secured/EchoNest/PullSongInfo',
+                        method: 'GET',
+                        params: {
+                            api_key: "V1RYZWZCKQTDXGWAB",
+                            song_id: songId
+                        }
+                    }).then(function(response2) {
 
-                    for (var i = 0; i < song_genre.length; i++) {
+                        var c = document.getElementById("genre-body");
+                        c.innerHTML = "";
 
-                        var row = document.createElement("div");
-                        row.className = "row";
+                        var song = response2["data"]["result"]["response"]["songs"][0];
+                        var song_genre = song["song_type"];
 
-                        var e = document.createElement("input");
-                        e.setAttribute("type", "radio");
-                        e.setAttribute("value", song_genre[i]);
-                        e.setAttribute("checked", true);
-                        e.setAttribute("name", song_genre[i]);
+                        var info = document.createElement("p");
+                        info.innerHTML = "Energy: " + energy + ", Dance: " + danceability + ", Tempo: " + tempo;
+                        c.appendChild(info);
 
-                        var txt = document.createElement("span");
-                        txt.innerHTML = song_genre[i];
-                       
+                        for (var i = 0; i < song_genre.length; i++) {
+
+                            var row = document.createElement("div");
+                            row.className = "row";
+
+                            var e = document.createElement("input");
+                            e.setAttribute("type", "radio");
+                            e.setAttribute("value", song_genre[i]);
+                            e.setAttribute("checked", true);
+                            e.setAttribute("name", song_genre[i]);
+
+                            var txt = document.createElement("span");
+                            txt.innerHTML = song_genre[i];
+                           
+                     
+
+                    
+                            row.appendChild(e);
+                            row.appendChild(txt);
+                            c.appendChild(row);
+                        }
                  
-
-                
-                        row.appendChild(e);
-                        row.appendChild(txt);
-                        c.appendChild(row);
-                    }
-             
-				});
-
-
+                    });
+                }
             }); // end of http get
 		}
 		
@@ -359,8 +362,12 @@ angular.module('inTunity.addSong', [
 			$scope.pullSongInfo_FromEchoNest(obj);
 				
             $("#genreModal").modal();
+
+
             var c = document.getElementById("genre-body");
             c.innerHTML = "";
+
+            
 
             $("#confirmSong").on("click", function(){ 
                 $scope.selectSong(obj["permalink_url"], obj["artwork_url"], obj["title"], obj["id"], obj["duration"]);
