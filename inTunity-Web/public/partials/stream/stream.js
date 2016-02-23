@@ -239,7 +239,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
 
         //Update the route change information
         $cookies.put('routeChange', false);
-
+	
         //Return information
         return startSpecific;
     }
@@ -264,7 +264,11 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
     //Updates cookie data if Angular detects movement to another page (within Intunity).
     $rootScope.$on('$routeChangeStart', function(event, next, current) {	 
 	  //Check if logged in first to prevent accidently showing these buttons
-	 
+	 var confirmButtonOBJ = document.getElementById("confirmButtonOBJ");
+	if (confirmButtonOBJ != null){
+		confirmButtonOBJ.parentNode.removeChild(confirmButtonOBJ);
+	}
+				
 	 if (auth["isAuthenticated"]){
 		$("#footer1").show();
 		$("#footer1").children().show();
@@ -973,6 +977,11 @@ loopOuter:
         if (startSpecific == true) {
             return;
         }
+		
+		//If state is paused
+		if (window.globalPlayer != null && window.globalPlayer._isPlaying == false){
+	        return;
+	    }
 
         var songNum = songData[0];
         var songPos = songData[1];
