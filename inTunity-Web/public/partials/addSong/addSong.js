@@ -8,7 +8,11 @@ angular.module('inTunity.addSong', [
 		
         var globalPlayer;
 
-        
+        SC.get('/resolve', {
+		  url: 'http://api.soundcloud.com/tracks/49931'
+		}, function(user) {
+		  alert(user);
+		});
 
        
 
@@ -27,16 +31,17 @@ angular.module('inTunity.addSong', [
 			var song_artist = songObj["name"];
 
 			
-			//songObj["tag_list"] may provide information about the artist that we could parse.
+			//permalink better
 			
-			
+			//alert(songObj["permalink"].replace(/-/g, " "));
+			//alert(song_title);
 			$http({ 
                 url: 'http://localhost:3001/secured/EchoNest/SearchSong',
                 method: 'GET',
                 params: {
 					api_key: "V1RYZWZCKQTDXGWAB",
                     artist: song_artist,
-					title: song_title
+					title: songObj["permalink"].replace(/-/g, " ")
                 }
             }).then(function(response) {
                 console.log(response);
