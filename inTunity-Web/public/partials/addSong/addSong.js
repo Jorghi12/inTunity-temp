@@ -35,7 +35,7 @@ angular.module('inTunity.addSong', [
 			
 			//alert(songObj["permalink"].replace(/-/g, " "));
 			//alert(song_title);
-			$http({ 
+			return $http({ 
                 url: 'http://localhost:3001/secured/EchoNest/SearchSong',
                 method: 'GET',
                 params: {
@@ -60,7 +60,7 @@ angular.module('inTunity.addSong', [
 
 
                     //Pull the Song's Genre and Other information
-                    $http({ 
+                    return $http({ 
                         url: 'http://localhost:3001/secured/EchoNest/PullSongInfo',
                         method: 'GET',
                         params: {
@@ -372,27 +372,27 @@ angular.module('inTunity.addSong', [
 
         $scope.confirmGenre = function(obj) {
  
-            //$scope.findArtistFromTitle(obj["title"]);
-			var bool = $scope.pullSongInfo_FromEchoNest(obj);
-            console.log(bool);
-            if (bool == false) {
-                alert("no results");
-            }
+			var c = document.getElementById("genre-body");
+			c.innerHTML = "";
 				
-            $("#genreModal").modal();
+            //$scope.findArtistFromTitle(obj["title"]);
+			$scope.pullSongInfo_FromEchoNest(obj).then(function(bool) {
+				if (bool == false) {
+					alert("no results");
+				}
+					
+				$("#genreModal").modal();
 
 
-            var c = document.getElementById("genre-body");
-            c.innerHTML = "";
 
-            
+				
 
-            $("#confirmSong").on("click", function(){ 
-                $scope.selectSong(obj["permalink_url"], obj["artwork_url"], obj["title"], obj["id"], obj["duration"]);
-				$('#genreModal').modal('hide');
-            });
+				$("#confirmSong").on("click", function(){ 
+					$scope.selectSong(obj["permalink_url"], obj["artwork_url"], obj["title"], obj["id"], obj["duration"]);
+					$('#genreModal').modal('hide');
+				});
           
-
+			});
         }
         
 
