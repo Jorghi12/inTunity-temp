@@ -41,7 +41,7 @@ angular.module('inTunity.addSong', [
                 params: {
 					api_key: "V1RYZWZCKQTDXGWAB",
                     artist: song_artist,
-					title: songObj["permalink"].replace(/-/g, " ")
+					title: song_title
                 }
             }).then(function(response) {
 
