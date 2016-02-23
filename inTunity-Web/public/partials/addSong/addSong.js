@@ -120,34 +120,34 @@ angular.module('inTunity.addSong', [
 		
         $scope.findGenreFromArtist = function(searchartist) {
             $http({ 
-                url: 'http://localhost:3001/secured/artist/search-genre',
+                url: 'http://localhost:3001/secured/artist/search-genre/spotify',
                 method: 'GET',
                 params: {
                     artist: searchartist
                 }
             }).then(function(response) {
                 var obj = response["data"]["result"]["artists"]["items"];
-                console.log(obj);
-                for (var i = 0; i < obj.length; i++) {
-                    if (obj[i]["name"] == searchartist) {
-                        return (obj[i]["genres"]);
-                    }
+                if (obj.length > 0) {
+                   console.log(obj[0]["genres"]);
                 }
+               
             }); // end of http get
         }
 
-         $scope.findArtistFromTitle = function(title) {
+         $scope.findArtistFromTitleSpotify = function(obj) {
             $http({ 
-                url: 'http://localhost:3001/secured/search/track/',
+                url: 'http://localhost:3001/secured/search/track/spotify',
                 method: 'GET',
                 params: {
-                    title: title
+                    title: obj["title"]
                 }
             }).then(function(response) {
-                var obj = response["data"]["result"]["tracks"]["items"][0]["artists"];
-                for (var i = 0; i < obj.length; i++) {
-                     $scope.findGenreFromArtist(obj[i]["name"]);
+
+                var result = response["data"]["result"]["tracks"]["items"];
+                if (result.length > 0) {
+                    $scope.findGenreFromArtist(result[0]["artists"][0]["name"]);
                 }
+               
                
             }); // end of http get
         }
@@ -378,8 +378,8 @@ angular.module('inTunity.addSong', [
             //$scope.findArtistFromTitle(obj["title"]);
 			$scope.pullSongInfo_FromEchoNest(obj).then(function(bool) {
 				if (bool == false) {
-					alert("no results");
-				}
+					$scope.findArtistFromTitleSpotify(obj);
+				} 
 					
 				$("#genreModal").modal();
 

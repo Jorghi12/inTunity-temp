@@ -82,7 +82,7 @@ app.get('/secured/EchoNest/SearchSong', function(req, res) {
 });
 
 // search for a particular artist
-app.get('/secured/artist/search-genre', function(req, res) {
+app.get('/secured/artist/search-genre/spotify', function(req, res) {
  request({
       url: "https://api.spotify.com/v1/search", //URL to hit
       headers: {
@@ -104,7 +104,7 @@ app.get('/secured/artist/search-genre', function(req, res) {
 
 
 // search for a particular track
-app.get('/secured/search/track/', function(req, res) {
+app.get('/secured/search/track/spotify', function(req, res) {
  request({
       url: "https://api.spotify.com/v1/search", //URL to hit
       headers: {
