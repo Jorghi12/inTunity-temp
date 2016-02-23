@@ -44,14 +44,11 @@ angular.module('inTunity.addSong', [
 					title: songObj["permalink"].replace(/-/g, " ")
                 }
             }).then(function(response) {
-                console.log(response);
 
 				var songs = response["data"]["result"]["response"]["songs"];
 				//Making the assumption that EchoNest's searching system is perfect, so results are in order of likelihood being correct.
 				//So for now just use the first matching result. Maybe let user verify or add other checking measures in the future.
-				
-				
-				
+					
 
                 if (songs.length > 0) {
                     window.outputX = songs;
@@ -75,36 +72,48 @@ angular.module('inTunity.addSong', [
                         var c = document.getElementById("genre-body");
                         c.innerHTML = "";
 
-                        var song = response2["data"]["result"]["response"]["songs"][0];
-                        var song_genre = song["song_type"];
+                        var songs2 = response2["data"]["result"]["response"]["songs"];
 
-                        var info = document.createElement("p");
-                        info.innerHTML = "Energy: " + energy + ", Dance: " + danceability + ", Tempo: " + tempo;
-                        c.appendChild(info);
+                        if (songs2.length > 0) {
+                            var song = songs2[0];
+                            var song_genre = song["song_type"];
 
-                        for (var i = 0; i < song_genre.length; i++) {
+                            var info = document.createElement("p");
+                            info.innerHTML = "Energy: " + energy + ", Dance: " + danceability + ", Tempo: " + tempo;
+                            c.appendChild(info);
 
-                            var row = document.createElement("div");
-                            row.className = "row";
+                            for (var i = 0; i < song_genre.length; i++) {
 
-                            var e = document.createElement("input");
-                            e.setAttribute("type", "radio");
-                            e.setAttribute("value", song_genre[i]);
-                            e.setAttribute("checked", true);
-                            e.setAttribute("name", song_genre[i]);
+                                var row = document.createElement("div");
+                                row.className = "row";
 
-                            var txt = document.createElement("span");
-                            txt.innerHTML = song_genre[i];
-                           
-                     
+                                var e = document.createElement("input");
+                                e.setAttribute("type", "radio");
+                                e.setAttribute("value", song_genre[i]);
+                                e.setAttribute("checked", true);
+                                e.setAttribute("name", song_genre[i]);
 
-                    
-                            row.appendChild(e);
-                            row.appendChild(txt);
-                            c.appendChild(row);
+                                var txt = document.createElement("span");
+                                txt.innerHTML = song_genre[i];
+                               
+                         
+
+                        
+                                row.appendChild(e);
+                                row.appendChild(txt);
+                                c.appendChild(row);
+                            }
+                            return true;
+                        } else {
+                            return false;
                         }
+
+
+                       
                  
                     });
+                } else {
+                    return false;
                 }
             }); // end of http get
 		}
@@ -364,7 +373,11 @@ angular.module('inTunity.addSong', [
         $scope.confirmGenre = function(obj) {
  
             //$scope.findArtistFromTitle(obj["title"]);
-			$scope.pullSongInfo_FromEchoNest(obj);
+			var bool = $scope.pullSongInfo_FromEchoNest(obj);
+            console.log(bool);
+            if (bool == false) {
+                alert("no results");
+            }
 				
             $("#genreModal").modal();
 
