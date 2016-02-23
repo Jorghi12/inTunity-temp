@@ -21,12 +21,28 @@ angular.module('inTunity.addSong', [
            
 			var title = songObj["title"];
 
-            // convert punctuations to spaces
-            var title2 = title.replace(/['";:,~\/?\\-]/g, ' ');
+			//1.Remove the (inner bracket text) [inner bracket text]
+			title = title.replace(/ *\([^)]*\) */g, "");
+			title = title.replace(/ *\[[^)]*\] */g, "");
+			
+			//2.Remove the leading artist info "Artist - "
+			if (title.indexOf("-") > -1){
+				title = title.slice(title.indexOf("-")+1);
+				title = title.trim();
+			}
+			
+			if (title.indexOf("~") > -1){
+				title = title.slice(title.indexOf("~")+1);
+				title = title.trim();
+			}
+			
+            //3.convert punctuations to spaces
+            title = title.replace(/['";:,~\/?\\-]/g, ' ');
 
             // convert multiple white space to single white space
-            var song_title = title2.replace(/\s\s+/g, ' ');
+            var song_title = title.replace(/\s\s+/g, ' ');
 
+			alert(song_title);
 
 			var song_artist = songObj["name"];
 
