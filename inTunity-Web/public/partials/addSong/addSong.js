@@ -12,7 +12,7 @@ angular.module('inTunity.addSong', [
 
 
 	$scope.pullSongInfo_FromEchoNest = function(songObj) {
-
+		//GAINS
 
        
 		var title = songObj["title"];
