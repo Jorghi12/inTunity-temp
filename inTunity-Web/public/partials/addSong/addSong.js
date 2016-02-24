@@ -14,9 +14,10 @@ angular.module('inTunity.addSong', [
 		  alert(user);
 		});
 
-       
 
-		$scope.pullSongInfo_FromEchoNest = function(songObj){
+
+		$scope.pullSongInfo_FromEchoNest = function(songObj) {
+
 
            
 			var title = songObj["title"];
@@ -42,7 +43,7 @@ angular.module('inTunity.addSong', [
             // convert multiple white space to single white space
             var song_title = title.replace(/\s\s+/g, ' ');
 
-			alert(song_title);
+	
 
 			var song_artist = songObj["name"];
 
@@ -86,7 +87,7 @@ angular.module('inTunity.addSong', [
                     }).then(function(response2) {
 
                         var c = document.getElementById("genre-body");
-                        c.innerHTML = "";
+                    
 
                         var songs2 = response2["data"]["result"]["response"]["songs"];
 
@@ -134,7 +135,8 @@ angular.module('inTunity.addSong', [
             }); // end of http get
 		}
 		
-        $scope.findGenreFromArtist = function(searchartist) {
+        // Spotify - find genres associated with that arist
+        $scope.findGenreFromArtistSpotify = function(searchartist) {
             $http({ 
                 url: 'http://localhost:3001/secured/artist/search-genre/spotify',
                 method: 'GET',
@@ -150,7 +152,8 @@ angular.module('inTunity.addSong', [
             }); // end of http get
         }
 
-         $scope.findArtistFromTitleSpotify = function(obj) {
+        // Spotify - find artist based off title
+        $scope.findArtistFromTitleSpotify = function(obj) {
             $http({ 
                 url: 'http://localhost:3001/secured/search/track/spotify',
                 method: 'GET',
@@ -161,7 +164,7 @@ angular.module('inTunity.addSong', [
 
                 var result = response["data"]["result"]["tracks"]["items"];
                 if (result.length > 0) {
-                    $scope.findGenreFromArtist(result[0]["artists"][0]["name"]);
+                    $scope.findGenreFromArtistSpotify(result[0]["artists"][0]["name"]);
                 }
                
                
@@ -286,7 +289,6 @@ angular.module('inTunity.addSong', [
 
                         var obj = (streamableSongs);
                         for (var i = 0; i < obj.length; i++) {
-							console.log("LEGENDARY");
 							window.swag = obj;
                             var albumArtwork;
                             if (obj[i]['artwork_url'] != null) {
@@ -340,10 +342,25 @@ angular.module('inTunity.addSong', [
                             confirmSong.innerHTML = "<h4>Confirm</h4>";
 
 
+
                             var numClicked = 0;
+                           
+
+
+                            confirmSong.className = 'intunity-button play-button confirmSong';
+                            playbutton.id = i;
+                            confirmSong.id = i;
+
+                            
+
                             confirmSong.onclick = function() {
 
+
+                            
                                 var selectedSong = obj[this.id];
+                                console.log(selectedSong);
+
+
                                 var id = (selectedSong["id"]);
                                 // numClicked += 1;
                                 // if (numClicked == 1) {
@@ -354,11 +371,6 @@ angular.module('inTunity.addSong', [
                               
 
                             }
-
-
-                            confirmSong.className = 'intunity-button play-button confirmSong';
-                            playbutton.id = i;
-                            confirmSong.id = i;
 
                             var playElement = $compile(playbutton)($scope)[0];
 							
@@ -387,34 +399,44 @@ angular.module('inTunity.addSong', [
 
 
         $scope.confirmGenre = function(obj) {
+
+            console.log(obj);
+            $("#genreModal").modal();
  
 			var c = document.getElementById("genre-body");
 			c.innerHTML = "";
+
+            var button_row = document.getElementById("confirm-row-genre");
+            button_row.innerHTML = "";
+
+
+            var b = document.createElement("button");
+            b.innerHTML = "Confirm";
+            button_row.appendChild(b);
 				
-            //$scope.findArtistFromTitle(obj["title"]);
+
 			$scope.pullSongInfo_FromEchoNest(obj).then(function(bool) {
 				if (bool == false) {
 					$scope.findArtistFromTitleSpotify(obj);
 				} 
-					
-				$("#genreModal").modal();
-
-
-
-				
-
-				$("#confirmSong").on("click", function(){ 
-					$scope.selectSong(obj["permalink_url"], obj["artwork_url"], obj["title"], obj["id"], obj["duration"]);
-					$('#genreModal').modal('hide');
-				});
-          
+                $(b).on("click", function(){ 
+                    $('#genreModal').modal('hide');
+                    $scope.selectSong(obj["permalink_url"], obj["artwork_url"], obj["title"], obj["id"], obj["duration"]);
+                    
+                });
 			});
+
+          
         }
         
 
 
 
         $scope.selectSong = function(url, artwork, title, trackid, duration) {
+
+                
+
+
 				var confirmButtonOBJ = document.getElementById("confirmButtonOBJ");
 				if (confirmButtonOBJ != null){
 					confirmButtonOBJ.parentNode.removeChild(confirmButtonOBJ);
@@ -474,7 +496,7 @@ loopOuter:
 									}
 								}
 								
-                                var song = JSON.stringify({
+                                var song_json = JSON.stringify({
                                     user_id: id,
                                     song_url: url,
                                     song_artwork: updatedSongPic,
@@ -488,11 +510,12 @@ loopOuter:
                                  
                                 });
 
-
+                                
+                          
 
 
                                 $http.post('http://localhost:3001/secured/account/id/song', {
-                                    data: song
+                                    data: song_json
                                 }, {
                                     headers: {
                                         'Accept': '*/*',
@@ -530,7 +553,7 @@ loopOuter:
                     });
                 } else {
                     // there is location error
-                    var song = JSON.stringify({
+                    var song_json = JSON.stringify({
                         user_id: id,
                         song_url: url,
                         song_artwork: updatedSongPic,
@@ -543,7 +566,7 @@ loopOuter:
 
 
                     $http.post('http://localhost:3001/secured/account/id/song', {
-                        data: song
+                        data: song_json
                     }, {
                         headers: {
                             'Accept': '*/*',

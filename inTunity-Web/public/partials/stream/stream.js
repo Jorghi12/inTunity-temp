@@ -754,7 +754,7 @@ loopOuter:
 				selectedBy.style.visibility = "hidden";
 			  }
 
-
+			
 
 			  var playerButtons = document.getElementById("playerButtons");
 
