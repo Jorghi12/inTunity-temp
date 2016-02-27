@@ -92,3 +92,97 @@
 	padding: 15px;
 }
 
+
+
+
+
+#profile {
+	height: 100px;
+	border-radius: 100px;
+}
+
+#wallfeed {
+	width:100%;
+	margin:0px;
+}
+
+#navbar-link {
+	padding: 0px 10px;
+	border: 1px solid black;
+	transition: all 0.2s;
+	border-radius: 15px;
+}
+
+#navbar-link:hover {
+	color:black;
+	background-color: #ffe4c4;
+	-moz-box-shadow: 1px 1px 5px #999;
+ 	-webkit-box-shadow: 1px 1px 5px #999;
+ 	box-shadow: 1px 1px 5px #999;
+}
+
+#logout {
+	padding: 0px 10px;
+	border: 1px solid black;
+	background-color: #ffe4c4;
+	border-radius: 15px;
+	transition: all 0.2s;
+}
+
+#logout:hover {
+	color:black;
+	background-color: salmon;
+	-moz-box-shadow: 1px 1px 5px #999;
+ 	-webkit-box-shadow: 1px 1px 5px #999;
+ 	box-shadow: 1px 1px 5px #999;
+}
+
+
+#time{
+	width: 100%;
+	height: 7px;
+	background: #707070;
+	display: inline-block;
+	float:left;
+	margin:10px 0px 0px 0px;
+	margin-top: 5px;
+	border-radius: 15px;
+	transition: height 0.2s;
+}
+
+#time:hover {
+	height: 15px;
+	cursor: pointer;
+}
+
+#time:hover #playHead {
+	height: 15px;
+}
+
+#playHead {
+	width: 0px;
+	height: 7px;
+	margin-top: 0px;
+	background: orange;
+	border-radius: 15px;
+	transition: height 0.2s;
+}
+
+#playerButtons {
+	padding-bottom: 0px;
+}
+
+#selected-link {
+	border-bottom: 5px solid #333;
+}
+
+#selected-link h4 {
+	color: #333;
+}
+
+#playerConfirm {
+	margin-left: -100px;
+	margin-right: 50px;
+}
+
+
