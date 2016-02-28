@@ -83,39 +83,19 @@ angular.module('inTunity.addSong', [
 
                     var c = document.getElementById("genre-body");
                 
-
                     var songs2 = response2["data"]["result"]["response"]["songs"];
 
                     if (songs2.length > 0) {
                         var song = songs2[0];
                         var song_genre = song["song_type"];
-
-                        var info = document.createElement("p");
-                        info.innerHTML = "Energy: " + energy + ", Dance: " + danceability + ", Tempo: " + tempo;
-                        c.appendChild(info);
-
+					
+                        var info = {"energy":energy, "dance":danceability,"tempo":tempo};
+                        
                         for (var i = 0; i < song_genre.length; i++) {
-
-                            var row = document.createElement("div");
-                            row.className = "row";
-
-                            var e = document.createElement("input");
-                            e.setAttribute("type", "radio");
-                            e.setAttribute("value", song_genre[i]);
-                            e.setAttribute("checked", true);
-                            e.setAttribute("name", song_genre[i]);
-
-                            var txt = document.createElement("span");
-                            txt.innerHTML = song_genre[i];
-                           
-                     
-
-                    
-                            row.appendChild(e);
-                            row.appendChild(txt);
-                            c.appendChild(row);
+							info[song_genre[i]] = "1";
                         }
-                        return true;
+						
+                        return info;
                     } else {
                         return false;
                     }
@@ -148,7 +128,7 @@ angular.module('inTunity.addSong', [
     }
 
     // Spotify - find artist based off title
-    $scope.findArtistFromTitleSpotify = function(obj) {
+    /*$scope.findArtistFromTitleSpotify = function(obj) {
         $http({ 
             url: 'http://localhost:3001/secured/search/track/spotify',
             method: 'GET',
@@ -164,7 +144,7 @@ angular.module('inTunity.addSong', [
            
            
         }); // end of http get
-    }
+    }*/
 
 
     var prof = (store.get('profile'));
@@ -276,8 +256,8 @@ angular.module('inTunity.addSong', [
                 }
 
                 var obj = (streamableSongs);
+				window.songsListOBJ = obj;
                 for (var i = 0; i < obj.length; i++) {
-					window.swag = obj;
                     var albumArtwork;
                     if (obj[i]['artwork_url'] != null) {
                         var album = obj[i]['artwork_url'];
@@ -323,17 +303,13 @@ angular.module('inTunity.addSong', [
                         var id = (selectedSong["id"]);
 
                         $scope.startStreamingAddSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
-
-                    }
+					};
+						
 
                     var confirmSong = document.createElement("div");
                     confirmSong.innerHTML = "<h4>Confirm</h4>";
 
-
-
                     var numClicked = 0;
-                   
-
 
                     confirmSong.className = 'intunity-button play-button confirmSong';
                     playbutton.id = i;
@@ -344,9 +320,14 @@ angular.module('inTunity.addSong', [
                     confirmSong.onclick = function() {
                         var selectedSong = obj[this.id];
                         var id = (selectedSong["id"]);
+					
+                        //Pull Song Information + Load!
+						$scope.pullSongInfo_FromEchoNest(selectedSong).then(function(echoNest_SongInfo) {
+								console.log("LEGEND JORG!");
+								console.log(echoNest_SongInfo);
 
-                        // this pops up the modal
-                        $scope.confirmGenre(selectedSong);
+								$scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], selectedSong["id"], selectedSong["duration"]);
+						});
                     }
 
                     var playElement = $compile(playbutton)($scope)[0];
@@ -367,44 +348,26 @@ angular.module('inTunity.addSong', [
     } // end of findSong
 
 
-
     var expirationDate = new Date();
     var numberOfDaysToAdd = 10;
     expirationDate.setDate(expirationDate.getDate() + numberOfDaysToAdd);
 
 
-    $scope.confirmGenre = function(obj) {
-        $("#genreModal").modal();
-
-        // clears out the main content
-		var c = document.getElementById("genre-body");
-		c.innerHTML = "";
-
-        // renews the button
-        var button_row = document.getElementById("confirm-row-genre");
-        button_row.innerHTML = "";
-            var b = document.createElement("button");
-            b.innerHTML = "Confirm";
-        button_row.appendChild(b);
-			
-
-		$scope.pullSongInfo_FromEchoNest(obj).then(function(bool) {
-			if (bool == false) {
-				$scope.findArtistFromTitleSpotify(obj);
-			} 
-            $(b).on("click", function(){ 
-                $('#genreModal').modal('hide');
-                $scope.selectSong(obj["permalink_url"], obj["artwork_url"], obj["title"], obj["id"], obj["duration"]);
-                
-            });
+    $scope.selectSong = function(url, artwork, title, trackid, duration,echoInfo) {
+		var songs = window.songsListOBJ;
+		
+		for (var i =0;i < songs.length;i++){
+			if (songs[i]["id"] == trackid){
+				songObject = songs[i];
+				break;
+			}
+		}
+		
+		//Pull Song Information from EchoNest
+		$scope.pullSongInfo_FromEchoNest(songObject).then(function(echoNest_SongInfo) {
+			;
 		});
-    }
-        
-
-
-
-    $scope.selectSong = function(url, artwork, title, trackid, duration) {
-
+		
 		var confirmButtonOBJ = document.getElementById("confirmButtonOBJ");
 		if (confirmButtonOBJ != null){
 			confirmButtonOBJ.parentNode.removeChild(confirmButtonOBJ);
@@ -561,8 +524,8 @@ angular.module('inTunity.addSong', [
 
 
 
-            } // end of selectSong()
+    } // end of selectSong()
 
-
+     window.selectSong = $scope.selectSong;
 
     });
