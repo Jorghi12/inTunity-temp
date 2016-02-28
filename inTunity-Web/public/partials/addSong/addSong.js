@@ -52,7 +52,7 @@ angular.module('inTunity.addSong', [
 		//alert(songObj["permalink"].replace(/-/g, " "));
 		//alert(song_title);
 		return $http({ 
-            url: 'http://localhost:3001/secured/EchoNest/SearchSong',
+            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/EchoNest/SearchSong',
             method: 'GET',
             params: {
 				api_key: "V1RYZWZCKQTDXGWAB",
@@ -77,7 +77,7 @@ angular.module('inTunity.addSong', [
 
                 //Pull the Song's Genre and Other information
                 return $http({ 
-                    url: 'http://localhost:3001/secured/EchoNest/PullSongInfo',
+                    url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/EchoNest/PullSongInfo',
                     method: 'GET',
                     params: {
                         api_key: "V1RYZWZCKQTDXGWAB",
@@ -127,7 +127,7 @@ angular.module('inTunity.addSong', [
     // Spotify - find genres associated with that arist
     $scope.findGenreFromArtistSpotify = function(searchartist) {
         $http({ 
-            url: 'http://localhost:3001/secured/artist/search-genre/spotify',
+            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/artist/search-genre/spotify',
             method: 'GET',
             params: {
                 artist: searchartist
@@ -144,7 +144,7 @@ angular.module('inTunity.addSong', [
     // Spotify - find artist based off title
     /*$scope.findArtistFromTitleSpotify = function(obj) {
         $http({ 
-            url: 'http://localhost:3001/secured/search/track/spotify',
+            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/search/track/spotify',
             method: 'GET',
             params: {
                 title: obj["title"]
@@ -221,7 +221,7 @@ angular.module('inTunity.addSong', [
 
     $scope.profile = function() {
         $http({
-            url: 'http://localhost:3001/secured/account/id',
+            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
             method: 'GET',
             params: {
                 id: id
@@ -452,7 +452,7 @@ angular.module('inTunity.addSong', [
 							  //echoSongInfo
 
 
-							$http.post('http://localhost:3001/secured/account/id/song', {
+							$http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/song', {
 								data: song_json
 							}, {
 								headers: {
@@ -504,7 +504,7 @@ angular.module('inTunity.addSong', [
 				});
 
 
-				$http.post('http://localhost:3001/secured/account/id/song', {
+				$http.post('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/song', {
 					data: song_json
 				}, {
 					headers: {
