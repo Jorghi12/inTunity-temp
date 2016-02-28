@@ -273,7 +273,9 @@ router.post('/api/account/id/song' , function (req, res, next) {
 			track_id: req.body.track_id,
 			song_duration: req.body.song_duration,
 			likes: 0,
-			who_posted: userObj.id
+			who_posted: userObj.id,
+			echoStats: req.body.echoStats,
+			echoGenre: req.body.echoGenre
 	    });
 	  	// Save it to Song Table
 	    song.save(function(err) {

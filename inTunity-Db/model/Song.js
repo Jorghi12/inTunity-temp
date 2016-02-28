@@ -14,7 +14,9 @@ var Song = new Schema({
 	comments: {type: Array,'default': []},
 	who_liked: {type: Array,'default': []},
 	who_favorited: {type: Array,'default': []},
-	who_saved:{type: Array,'default': []}
+	who_saved:{type: Array,'default': []},
+	echoStats:{type: Array,'default': []}, //[energy, danceability, tempo]
+	echoGenre:{type: Array,'default': []}
 });
 
 module.exports = mongoose.model('Song', Song);

@@ -8,13 +8,17 @@ angular.module('inTunity.addSong', [
 	
     var globalPlayer;
 
+	$scope.lastStreamedSong = "";
+	$scope.lastStreamedInfo = "";
     
 
 
 	$scope.pullSongInfo_FromEchoNest = function(songObj) {
-		//GAINS
-
-       
+		//Check if last played song matches the one we're confirming. Helps speed up EchoNest http gets.
+		if (songObj["id"] == $scope.lastStreamedSong){
+			return $scope.lastStreamedInfo;
+		}
+		
 		var title = songObj["title"];
 
 		//1.Remove the (inner bracket text) [inner bracket text]
@@ -89,14 +93,21 @@ angular.module('inTunity.addSong', [
                         var song = songs2[0];
                         var song_genre = song["song_type"];
 					
-                        var info = {"energy":energy, "dance":danceability,"tempo":tempo};
-                        
+                        var info = [energy, danceability, tempo];
+                        var genres = [];
+						
                         for (var i = 0; i < song_genre.length; i++) {
-							info[song_genre[i]] = "1";
+							genres.push(song_genre[i]);
                         }
 						
-                        return info;
+						$scope.lastStreamedSong = (songObject["id"])
+						$scope.lastStreamedInfo = [info,genres];
+		
+                        return [info,genres];
                     } else {
+						$scope.lastStreamedSong = (songObject["id"])
+						$scope.lastStreamedInfo = false;
+
                         return false;
                     }
 
@@ -105,6 +116,9 @@ angular.module('inTunity.addSong', [
              
                 });
             } else {
+				$scope.lastStreamedSong = (songObject["id"])
+				$scope.lastStreamedInfo = false;
+						
                 return false;
             }
         }); // end of http get
@@ -303,6 +317,7 @@ angular.module('inTunity.addSong', [
                         var id = (selectedSong["id"]);
 
                         $scope.startStreamingAddSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
+						$scope.pullSongInfo_FromEchoNest(selectedSong);
 					};
 						
 
@@ -321,13 +336,7 @@ angular.module('inTunity.addSong', [
                         var selectedSong = obj[this.id];
                         var id = (selectedSong["id"]);
 					
-                        //Pull Song Information + Load!
-						$scope.pullSongInfo_FromEchoNest(selectedSong).then(function(echoNest_SongInfo) {
-								console.log("LEGEND JORG!");
-								console.log(echoNest_SongInfo);
-
-								$scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], selectedSong["id"], selectedSong["duration"]);
-						});
+                        $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], selectedSong["id"], selectedSong["duration"]);
                     }
 
                     var playElement = $compile(playbutton)($scope)[0];
@@ -353,7 +362,7 @@ angular.module('inTunity.addSong', [
     expirationDate.setDate(expirationDate.getDate() + numberOfDaysToAdd);
 
 
-    $scope.selectSong = function(url, artwork, title, trackid, duration,echoInfo) {
+    $scope.selectSong = function(url, artwork, title, trackid, duration) {
 		var songs = window.songsListOBJ;
 		
 		for (var i =0;i < songs.length;i++){
@@ -364,163 +373,164 @@ angular.module('inTunity.addSong', [
 		}
 		
 		//Pull Song Information from EchoNest
+		//Figure out how to speed this up later...
 		$scope.pullSongInfo_FromEchoNest(songObject).then(function(echoNest_SongInfo) {
-			;
-		});
-		
-		var confirmButtonOBJ = document.getElementById("confirmButtonOBJ");
-		if (confirmButtonOBJ != null){
-			confirmButtonOBJ.parentNode.removeChild(confirmButtonOBJ);
-		}
-			
-        if (artwork != null) {
-            var index = artwork.indexOf("large");
-            updatedSongPic = artwork.substring(0, index) + "t500x500.jpg";
-        } else {
-            updatedSongPic = "/images/no-art.png";
-        }
+
+			var confirmButtonOBJ = document.getElementById("confirmButtonOBJ");
+			if (confirmButtonOBJ != null){
+				confirmButtonOBJ.parentNode.removeChild(confirmButtonOBJ);
+			}
+				
+			if (artwork != null) {
+				var index = artwork.indexOf("large");
+				updatedSongPic = artwork.substring(0, index) + "t500x500.jpg";
+			} else {
+				updatedSongPic = "/images/no-art.png";
+			}
 
 
-        var today = new Date();
-        var location_error = localStorage.getItem("location-error");
-        var latitude = parseFloat(localStorage.getItem("latitude"));
-        var longitude = parseFloat(localStorage.getItem("longitude"));
+			var today = new Date();
+			var location_error = localStorage.getItem("location-error");
+			var latitude = parseFloat(localStorage.getItem("latitude"));
+			var longitude = parseFloat(localStorage.getItem("longitude"));
 
-        if (location_error == "NO_ERROR" && localStorage.getItem("latitude") != "" && localStorage.getItem("longitude") != "") {
+			if (location_error == "NO_ERROR" && localStorage.getItem("latitude") != "" && localStorage.getItem("longitude") != "") {
 
-            var geocoder = new google.maps.Geocoder;
-            var latlng = {
-                lat: parseFloat(latitude),
-                lng: parseFloat(longitude)
-            };
+				var geocoder = new google.maps.Geocoder;
+				var latlng = {
+					lat: parseFloat(latitude),
+					lng: parseFloat(longitude)
+				};
 
-            geocoder.geocode({
-                'location': latlng
-            }, function(results, status) {
-                if (status === google.maps.GeocoderStatus.OK) {
-                    if (results[1]) {
-						var city = "";
-						var state = "";
-						var country = "";
+				geocoder.geocode({
+					'location': latlng
+				}, function(results, status) {
+					if (status === google.maps.GeocoderStatus.OK) {
+						if (results[1]) {
+							var city = "";
+							var state = "";
+							var country = "";
 
-                        loopOuter:
-                        
-						for (var objN = 0; objN < results.length; objN++){
-							for (var ab = 0;ab < results[objN]["address_components"].length; ab++){
-								if (results[objN]["address_components"][ab]["types"].indexOf("locality") > -1){
-									city = results[objN]["address_components"][ab]["short_name"];
-								}
-								
-								else if (results[objN]["address_components"][ab]["types"].indexOf("administrative_area_level_1") > -1){
-									state = results[objN]["address_components"][ab]["short_name"];
-								}
-								
-								else if (results[objN]["address_components"][ab]["types"].indexOf("country") > -1){
-									country = results[objN]["address_components"][ab]["short_name"];
-								}
-								
-								if (city != "" && state != "" && country != ""){
-									break loopOuter;
+							loopOuter:
+							
+							for (var objN = 0; objN < results.length; objN++){
+								for (var ab = 0;ab < results[objN]["address_components"].length; ab++){
+									if (results[objN]["address_components"][ab]["types"].indexOf("locality") > -1){
+										city = results[objN]["address_components"][ab]["short_name"];
+									}
+									
+									else if (results[objN]["address_components"][ab]["types"].indexOf("administrative_area_level_1") > -1){
+										state = results[objN]["address_components"][ab]["short_name"];
+									}
+									
+									else if (results[objN]["address_components"][ab]["types"].indexOf("country") > -1){
+										country = results[objN]["address_components"][ab]["short_name"];
+									}
+									
+									if (city != "" && state != "" && country != ""){
+										break loopOuter;
+									}
 								}
 							}
+							
+							var song_json = JSON.stringify({
+								user_id: id,
+								song_url: url,
+								song_artwork: updatedSongPic,
+								song_title: title,
+								unix_time: today.getTime() / 1000,
+								track_id: trackid,
+								song_duration: duration,
+								state: state,
+								city: city,
+								locationFlag: true,
+								echoStats: echoNest_SongInfo[0],
+								echoGenre: echoNest_SongInfo[1]
+							});
+
+									
+							  //echoSongInfo
+
+
+							$http.post('http://localhost:3001/secured/account/id/song', {
+								data: song_json
+							}, {
+								headers: {
+									'Accept': '*/*',
+									'Content-Type': 'application/json'
+								}
+							}).success(function(data, status, headers, config) {
+
+								musicStatus.confirmSong();
+								curStats = musicStatus.getStatus();
+								$cookies.put('songNum', curStats[0], {
+									expires: expirationDate
+								});
+								$cookies.put('songPos', curStats[1], {
+									expires: expirationDate
+								});
+								$location.path('/');
+
+
+							}).error(function(data, status, headers, config) {
+								console.log(status);
+							});
+
+							localStorage.removeItem("latitude");
+							localStorage.removeItem("longitude");
+							localStorage.removeItem("location-error");
+
+
+
+						} else {
+							window.alert('No results found');
 						}
-						
-                        var song_json = JSON.stringify({
-                            user_id: id,
-                            song_url: url,
-                            song_artwork: updatedSongPic,
-                            song_title: title,
-                            unix_time: today.getTime() / 1000,
-                            track_id: trackid,
-                            song_duration: duration,
-                            state: state,
-                            city: city,
-                            locationFlag: true
-                         
-                        });
-
-                                
-                          
-
-
-                        $http.post('http://localhost:3001/secured/account/id/song', {
-                            data: song_json
-                        }, {
-                            headers: {
-                                'Accept': '*/*',
-                                'Content-Type': 'application/json'
-                            }
-                        }).success(function(data, status, headers, config) {
-
-                            musicStatus.confirmSong();
-                            curStats = musicStatus.getStatus();
-                            $cookies.put('songNum', curStats[0], {
-                                expires: expirationDate
-                            });
-                            $cookies.put('songPos', curStats[1], {
-                                expires: expirationDate
-                            });
-                            $location.path('/');
+					} else {
+						window.alert('Geocoder failed due to: ' + status);
+					}
+				});
+			} else {
+				// there is location error
+				var song_json = JSON.stringify({
+					user_id: id,
+					song_url: url,
+					song_artwork: updatedSongPic,
+					song_title: title,
+					unix_time: today.getTime() / 1000,
+					track_id: trackid,
+					song_duration: duration,
+					locationFlag: false,
+					echoSongInfo: echoNest_SongInfo
+				});
 
 
-                        }).error(function(data, status, headers, config) {
-                            console.log(status);
-                        });
-
-                        localStorage.removeItem("latitude");
-                        localStorage.removeItem("longitude");
-                        localStorage.removeItem("location-error");
-
-
-
-                    } else {
-                        window.alert('No results found');
-                    }
-                } else {
-                    window.alert('Geocoder failed due to: ' + status);
-                }
-            });
-        } else {
-            // there is location error
-            var song_json = JSON.stringify({
-                user_id: id,
-                song_url: url,
-                song_artwork: updatedSongPic,
-                song_title: title,
-                unix_time: today.getTime() / 1000,
-                track_id: trackid,
-                song_duration: duration,
-                locationFlag: false
-            });
+				$http.post('http://localhost:3001/secured/account/id/song', {
+					data: song_json
+				}, {
+					headers: {
+						'Accept': '*/*',
+						'Content-Type': 'application/json'
+					}
+				}).success(function(data, status, headers, config) {
+					console.log(status);
+					localStorage.removeItem("location-error");
+					musicStatus.confirmSong();
+					curStats = musicStatus.getStatus();
+					$cookies.put('songNum', curStats[0], {
+						expires: expirationDate
+					});
+					$cookies.put('songPos', curStats[1], {
+						expires: expirationDate
+					});
+					$location.path('/');
 
 
-            $http.post('http://localhost:3001/secured/account/id/song', {
-                data: song_json
-            }, {
-                headers: {
-                    'Accept': '*/*',
-                    'Content-Type': 'application/json'
-                }
-            }).success(function(data, status, headers, config) {
-                console.log(status);
-                localStorage.removeItem("location-error");
-                musicStatus.confirmSong();
-                curStats = musicStatus.getStatus();
-                $cookies.put('songNum', curStats[0], {
-                    expires: expirationDate
-                });
-                $cookies.put('songPos', curStats[1], {
-                    expires: expirationDate
-                });
-                $location.path('/');
+				}).error(function(data, status, headers, config) {
+					console.log(status);
+				});
 
-
-            }).error(function(data, status, headers, config) {
-                console.log(status);
-            });
-
-        } // end of else statement
-
+			} // end of else statement
+	});
 
 
 
