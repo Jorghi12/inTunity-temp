@@ -611,7 +611,7 @@ app.controller('StreamCtrl', function StreamController($scope, auth, $http, $loc
                 if (numClicked == 1) {
 					var confirmButtonOBJ = document.getElementById("confirmButtonOBJ");
 					confirmButtonOBJ.parentNode.removeChild(confirmButtonOBJ);
-                    window.selectSong(songUrl, artworkUrl, myTitle, trackid, songDuration,null);
+                    window.selectSong(songUrl, artworkUrl, myTitle, trackid, songDuration);
                 }
 				
 			  }
