@@ -91,21 +91,51 @@ angular.module('inTunity.addSong', [
 
                     if (songs2.length > 0) {
                         var song = songs2[0];
+
+
                         var song_genre = song["song_type"];
 					
                         var info = [energy, danceability, tempo];
                         var genres = [];
+
+                        var stats = document.createElement("p");
+                        stats.innerHTML = "Energy: " + energy + ", Dance: " + danceability + ", Tempo: " + tempo;
+                        c.appendChild(stats);
 						
                         for (var i = 0; i < song_genre.length; i++) {
 							genres.push(song_genre[i]);
+
+
+                            var row = document.createElement("div");
+                            row.className = "row";
+
+                            var e = document.createElement("input");
+                            e.setAttribute("type", "radio");
+                            e.setAttribute("value", song_genre[i]);
+                            e.setAttribute("checked", true);
+                            e.setAttribute("name", song_genre[i]);
+
+                            var txt = document.createElement("span");
+                            txt.innerHTML = song_genre[i];
+                           
+                     
+
+                    
+                            row.appendChild(e);
+                            row.appendChild(txt);
+                            c.appendChild(row);
                         }
 						
-						$scope.lastStreamedSong = (songObject["id"])
+						// $scope.lastStreamedSong = (songObject["id"])
+
+
+
+
 						$scope.lastStreamedInfo = [info,genres];
 		
                         return [info,genres];
                     } else {
-						$scope.lastStreamedSong = (songObject["id"])
+						// $scope.lastStreamedSong = (songObject["id"])
 						$scope.lastStreamedInfo = false;
 
                         return false;
@@ -116,7 +146,7 @@ angular.module('inTunity.addSong', [
              
                 });
             } else {
-				$scope.lastStreamedSong = (songObject["id"])
+				// $scope.lastStreamedSong = (songObject["id"])
 				$scope.lastStreamedInfo = false;
 						
                 return false;
@@ -317,7 +347,7 @@ angular.module('inTunity.addSong', [
                         var id = (selectedSong["id"]);
 
                         $scope.startStreamingAddSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], id, selectedSong["duration"]);
-						$scope.pullSongInfo_FromEchoNest(selectedSong);
+						//$scope.pullSongInfo_FromEchoNest(selectedSong);
 					};
 						
 
@@ -335,8 +365,8 @@ angular.module('inTunity.addSong', [
                     confirmSong.onclick = function() {
                         var selectedSong = obj[this.id];
                         var id = (selectedSong["id"]);
-					
-                        $scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], selectedSong["id"], selectedSong["duration"]);
+					    $scope.confirmGenre(selectedSong);
+                        //$scope.selectSong(selectedSong["permalink_url"], selectedSong["artwork_url"], selectedSong["title"], selectedSong["id"], selectedSong["duration"]);
                     }
 
                     var playElement = $compile(playbutton)($scope)[0];
@@ -355,6 +385,36 @@ angular.module('inTunity.addSong', [
             });
         }
     } // end of findSong
+
+
+    $scope.confirmGenre = function(obj) {
+        $("#genreModal").modal();
+
+        var c = document.getElementById("genre-body");
+        c.innerHTML = "";
+
+        var button_row = document.getElementById("confirm-row-genre");
+        button_row.innerHTML = "";
+
+
+        var b = document.createElement("button");
+        b.innerHTML = "Confirm";
+        button_row.appendChild(b);
+            
+
+        $scope.pullSongInfo_FromEchoNest(obj).then(function(bool) {
+            if (bool == false) {
+                $scope.findArtistFromTitleSpotify(obj);
+            } 
+            $(b).on("click", function(){ 
+                $('#genreModal').modal('hide');
+                $scope.selectSong(obj["permalink_url"], obj["artwork_url"], obj["title"], obj["id"], obj["duration"]);
+                
+            });
+        });    
+    }
+
+
 
 
     var expirationDate = new Date();
