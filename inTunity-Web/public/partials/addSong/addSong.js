@@ -1,4 +1,4 @@
-localhostangular.module('inTunity.addSong', [
+angular.module('inTunity.addSong', [
     'auth0'
 ])
 .controller('AddSongCtrl', function AddSongController($scope, auth, $location, store, $http, $compile, musicStatus, $cookies) {
