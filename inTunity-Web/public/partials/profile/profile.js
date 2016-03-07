@@ -42,7 +42,7 @@ angular.module('inTunity.profile', [
 
     $scope.profile = function() {
         $http({
-            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+            url: 'http://localhost:3001/secured/account/id',
             method: 'GET',
             params: {
                 id: id
@@ -57,7 +57,7 @@ angular.module('inTunity.profile', [
 	$scope.loadSongsOnProfile = function(historyORfav){
 		//historyORfav .. history = 0, favorite = 1
 	$http({
-		url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/url_username',
+		url: 'http://localhost:3001/secured/account/url_username',
 		method: 'GET',
 		params: {
 			url_username: $routeParams.itemId
@@ -87,7 +87,7 @@ angular.module('inTunity.profile', [
 		var songCollectionArray = ((historyORfav == 0) ? $scope.correctPerson.song_history : $scope.correctPerson.favorited_songs);
 	
 		$http({
-			 url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/song/id_multiple',
+			 url: 'http://localhost:3001/secured/song/id_multiple',
 			 params: {song_ids: songCollectionArray},
 			 method: 'GET'
 			}).then(function(responseSongs) {
@@ -140,7 +140,7 @@ angular.module('inTunity.profile', [
 				
 					//GAINS UPON GAINS!				
 				   $http({
-					url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+					url: 'http://localhost:3001/secured/account/id',
 					method: 'GET',
 					params: {
 						id: id
@@ -225,7 +225,7 @@ angular.module('inTunity.profile', [
     $scope.deleteSong = function(userid, songid, song_track_id) {
 
         $http({
-            url: 'http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id',
+            url: 'http://localhost:3001/secured/account/id',
             method: 'GET',
             params: {
                 id: id
@@ -236,7 +236,7 @@ angular.module('inTunity.profile', [
 
             if (username_clicked == ownpersonalusername) {
                 console.log("about to delete...");
-                $http.delete('http://ec2-52-33-107-31.us-west-2.compute.amazonaws.com:3001/secured/account/id/song/id', {
+                $http.delete('http://localhost:3001/secured/account/id/song/id', {
                     headers: {
                         'Accept': '*/*',
                         'Content-Type': 'application/json'
