@@ -1,7 +1,6 @@
 app = angular.module('inTunity.home', [
     'auth0', 
     'ngCookies'
-
 ]);
 
 app.controller('HomeCtrl', function HomeController($scope, auth, $http, $location, store, $compile, musicStatus,$cookies, $rootScope, $q) {
