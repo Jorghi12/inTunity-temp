@@ -57,6 +57,52 @@ app.get('/secured/EchoNest/PullSongInfo', function(req, res) {
 });
 
 
+app.get('/secured/EchoNest/PullGenreList', function(req, res) {
+ request({
+      url: "http://developer.echonest.com/api/v4/song/search", //URL to hit
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      method: 'GET', //Specify the method,
+      qs: {api_key: req.query["api_key"]}
+  }, function(error, response, body){
+      if(error) {
+          console.log(error);
+      } else {
+        if (response.statusCode == 200) {
+          var data = JSON.parse(response.body);
+          res.send(200, {result: data});
+        }
+      }
+  });
+});
+
+
+
+app.get('/secured/EchoNest/PullGenreArtist', function(req, res) {
+  console.log("hit");
+ request({
+      url: "http://developer.echonest.com/api/v4/artist/profile", //URL to hit
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      method: 'GET', //Specify the method,
+      qs: {api_key: req.query["api_key"], name: "Drake", bucket: "genre", format:"json"  }
+  }, function(error, response, body){
+       
+      if(error) {
+          console.log(error);
+      } else {
+        if (response.statusCode == 200) {
+          var data = JSON.parse(response.body);
+          res.send(200, {result: data});
+        }
+      }
+  });
+});
+
+
+
 
 
 

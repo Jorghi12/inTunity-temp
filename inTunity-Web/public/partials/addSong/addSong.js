@@ -10,10 +10,30 @@ angular.module('inTunity.addSong', [
 
 	$scope.lastStreamedSong = "";
 	$scope.lastStreamedInfo = "";
+
+
+
+
+    $http({ 
+        url: 'http://localhost:3001/secured/EchoNest/PullGenreArtist',
+        method: 'GET',
+        params: {
+            api_key: "V1RYZWZCKQTDXGWAB"
+        }
+    }).then(function(response) {
+        console.log("Hit");
+        console.log(response);
+
+    });   
+
+
     
 
 
 	$scope.pullSongInfo_FromEchoNest = function(songObj) {
+
+
+
 		//Check if last played song matches the one we're confirming. Helps speed up EchoNest http gets.
 		if (songObj["id"] == $scope.lastStreamedSong){
 			return $scope.lastStreamedInfo;
@@ -61,7 +81,12 @@ angular.module('inTunity.addSong', [
             }
         }).then(function(response) {
 
+
+
 			var songs = response["data"]["result"]["response"]["songs"];
+
+            console.log(songs);
+
 			//Making the assumption that EchoNest's searching system is perfect, so results are in order of likelihood being correct.
 			//So for now just use the first matching result. Maybe let user verify or add other checking measures in the future.
 				
@@ -85,9 +110,13 @@ angular.module('inTunity.addSong', [
                     }
                 }).then(function(response2) {
 
+                    console.log(response2);
+
                     var c = document.getElementById("genre-body");
                 
                     var songs2 = response2["data"]["result"]["response"]["songs"];
+
+                    console.log(songs);
 
                     if (songs2.length > 0) {
                         var song = songs2[0];
