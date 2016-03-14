@@ -13,21 +13,20 @@ angular.module('inTunity.addSong', [
 
 
 
-
+    // testing purposes to make sure genres are working
     $http({ 
         url: 'http://localhost:3001/secured/EchoNest/PullGenreArtist',
         method: 'GET',
         params: {
-            api_key: "V1RYZWZCKQTDXGWAB"
+            api_key: "V1RYZWZCKQTDXGWAB",
+            artist: "Hunter Hayes"
         }
-    }).then(function(response) {
-        console.log("Hit");
-        console.log(response);
+    }).then(function(response3) {
+        console.log(response3);
 
     });   
 
 
-    
 
 
 	$scope.pullSongInfo_FromEchoNest = function(songObj) {
@@ -66,17 +65,23 @@ angular.module('inTunity.addSong', [
 
 		var song_artist = songObj["name"];
 
+
+
 		
 		//permalink better
 		
 		//alert(songObj["permalink"].replace(/-/g, " "));
 		//alert(song_title);
+
+
+
+
+
 		return $http({ 
             url: 'http://localhost:3001/secured/EchoNest/SearchSong',
             method: 'GET',
             params: {
-				api_key: "V1RYZWZCKQTDXGWAB",
-                artist: song_artist,
+				api_key: "V1RYZWZCKQTDXGWAB"
 				title: song_title
             }
         }).then(function(response) {
@@ -95,9 +100,25 @@ angular.module('inTunity.addSong', [
                 window.outputX = songs;
                 var matchingSong = songs[0];
                 var songId = songs[0]["id"];
-                var energy = songs[0]["audio_summary"]["energy"];
-                var danceability = songs[0]["audio_summary"]["danceability"];
-                var tempo = songs[0]["audio_summary"]["tempo"];
+
+                console.log(songs[0]["artist_name"])
+
+                // var energy = songs[0]["audio_summary"]["energy"];
+                // var danceability = songs[0]["audio_summary"]["danceability"];
+                // var tempo = songs[0]["audio_summary"]["tempo"];
+
+                $http({ 
+                    url: 'http://localhost:3001/secured/EchoNest/PullGenreArtist',
+                    method: 'GET',
+                    params: {
+                        api_key: "V1RYZWZCKQTDXGWAB",
+                        artist: songs[0]["artist_name"]
+                    }
+                }).then(function(response3) {
+                    console.log(response3);
+
+                });   
+
 
 
                 //Pull the Song's Genre and Other information
@@ -110,7 +131,6 @@ angular.module('inTunity.addSong', [
                     }
                 }).then(function(response2) {
 
-                    console.log(response2);
 
                     var c = document.getElementById("genre-body");
                 

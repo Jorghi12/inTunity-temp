@@ -11,10 +11,10 @@ app.controller('HomeCtrl', function HomeController($scope, auth, $http, $locatio
     $scope.fullname;
 	$scope.suggestedFriends = [];
     
-	if (auth.profile.context != null){
+	if (auth.profile.context != null) {
      if(auth.profile.context.mutual_friends.length <= 0){
          $scope.suggestedFriends = auth.profile.context.mutual_friends.data;
-     }else{
+     } else{
          $scope.suggestedFriends = [];
      }
 	}

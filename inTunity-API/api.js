@@ -87,7 +87,7 @@ app.get('/secured/EchoNest/PullGenreArtist', function(req, res) {
       'Content-Type': 'application/json'
       },
       method: 'GET', //Specify the method,
-      qs: {api_key: req.query["api_key"], name: "Drake", bucket: "genre", format:"json"  }
+      qs: {api_key: req.query["api_key"], name: req.query["artist"], bucket: "genre", format:"json"  }
   }, function(error, response, body){
        
       if(error) {
