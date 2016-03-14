@@ -81,7 +81,7 @@ angular.module('inTunity.addSong', [
             url: 'http://localhost:3001/secured/EchoNest/SearchSong',
             method: 'GET',
             params: {
-				api_key: "V1RYZWZCKQTDXGWAB"
+				api_key: "V1RYZWZCKQTDXGWAB",
 				title: song_title
             }
         }).then(function(response) {
